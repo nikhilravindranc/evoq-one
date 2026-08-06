@@ -154,35 +154,59 @@ export function SectionTeams() {
               <div className="apps-card">
                 <div className="apps-hd">
                   <span>Apps installed</span>
-                  <span className="count">8 / 12</span>
+                  <span className="count">10 / 10</span>
                 </div>
-                <div className="apps-grid" style={{gridTemplateColumns: "repeat(6, 1fr)"}}>
+                <div className="apps-grid" style={{gridTemplateColumns: "repeat(5, 1fr)"}}>
                   <div className="app-tile">
                     <div className="ic">C</div>
                     <div className="nm">CRM</div>
                     <div className="st">Active</div>
                   </div>
                   <div className="app-tile">
-                    <div className="ic bright">So</div>
+                    <div className="ic bright">Ca</div>
+                    <div className="nm">Campaigns</div>
+                    <div className="st">Active</div>
+                  </div>
+                  <div className="app-tile">
+                    <div className="ic mid">So</div>
                     <div className="nm">ServiceOps</div>
                     <div className="st">Active</div>
                   </div>
                   <div className="app-tile">
-                    <div className="ic mid">Co</div>
-                    <div className="nm">Commerce</div>
-                    <div className="st">Add-on</div>
+                    <div className="ic deep">D</div>
+                    <div className="nm">Desk</div>
+                    <div className="st">Active</div>
                   </div>
                   <div className="app-tile">
-                    <div className="ic deep">P</div>
+                    <div className="ic charcoal">P</div>
                     <div className="nm">Projects</div>
-                    <div className="st">Live</div>
+                    <div className="st">Active</div>
                   </div>
                   <div className="app-tile">
-                    <div className="ic charcoal">I</div>
-                    <div className="nm">Integrations</div>
-                    <div className="st">12 apps</div>
+                    <div className="ic">Sy</div>
+                    <div className="nm">Sync</div>
+                    <div className="st">Active</div>
                   </div>
-                  <div className="app-tile ghost">+</div>
+                  <div className="app-tile">
+                    <div className="ic bright">H</div>
+                    <div className="nm">HRMS</div>
+                    <div className="st">Active</div>
+                  </div>
+                  <div className="app-tile">
+                    <div className="ic mid">Pa</div>
+                    <div className="nm">Payroll</div>
+                    <div className="st">Active</div>
+                  </div>
+                  <div className="app-tile">
+                    <div className="ic deep">H+</div>
+                    <div className="nm">HRMS Plus</div>
+                    <div className="st">Active</div>
+                  </div>
+                  <div className="app-tile">
+                    <div className="ic charcoal">Sk</div>
+                    <div className="nm">Skillberry</div>
+                    <div className="st">Active</div>
+                  </div>
                 </div>
               </div>
             </div>

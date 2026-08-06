@@ -8,7 +8,7 @@ import { ArrowRight } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 
 const GRADIENT =
-  `radial-gradient(120% 80% at 60% 0%, #BDBDFF 0%, #8484FF 22%, #5C5CFF 48%, #3333CC 72%, #000099 100%),
+  `radial-gradient(120% 80% at 60% 0%, #BDBDFF 0%, #8484FF 22%, #5C5CFF 65%, #4747E0 90%, #7C3AED 100%),
    radial-gradient(60% 50% at 20% 35%, rgba(242,242,255,0.55) 0%, rgba(242,242,255,0) 60%),
    radial-gradient(22% 30% at 6% 8%, rgba(242,242,255,0.5) 0%, rgba(242,242,255,0) 65%)`;
 
@@ -79,12 +79,21 @@ export function HeroSection() {
               position: "relative",
               zIndex: 2,
               flex: "1 1 0",
+              display: "flex",
+              justifyContent: "center",
+              padding: "0 80px 48px",
+              minHeight: 0, // needed for flex children with overflow
+            }}
+          >
+          {/* Inner container -- capped to match the width used by sections below the hero */}
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 1168,
               display: "grid",
               gridTemplateColumns: "1.05fr 1fr",
               alignItems: "stretch",
               gap: 32,
-              padding: "0 80px 48px",
-              minHeight: 0, // needed for flex children with overflow
             }}
           >
             {/* Left column */}
@@ -196,6 +205,7 @@ export function HeroSection() {
             >
               <Collage tileRadius="30%" />
             </motion.section>
+          </div>
           </div>
         </div>
       </div>

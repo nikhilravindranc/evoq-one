@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Chevron, EvoqMonogram } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
+import { useRegion } from "@/components/shared/RegionContext";
 
 const PRODUCTS = [
   { name: "CRM", sub: "Sales & customer relationships" },
@@ -17,7 +18,10 @@ const PRODUCTS = [
 export function Topbar({ darkCTA = true, constrained = false, light = false }: { darkCTA?: boolean; constrained?: boolean; light?: boolean }) {
   const [open, setOpen] = useState(false);
   const [showGetStarted, setShowGetStarted] = useState(false);
+  const [regionOpen, setRegionOpen] = useState(false);
+  const { region, setRegion } = useRegion();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const regionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -36,22 +40,42 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!regionOpen) return;
+    const onDoc = (e: MouseEvent) => {
+      if (regionRef.current && !regionRef.current.contains(e.target as Node))
+        setRegionOpen(false);
+    };
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setRegionOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onEsc);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, [regionOpen]);
+
   return (
     <header className="relative z-10">
-      <div className={`flex items-center justify-between py-5 lg:py-7 ${
+      <div className={
         constrained
-          ? "max-w-[1320px] mx-auto px-5 sm:px-[40px] lg:px-[60px]"
+          ? "px-5 sm:px-[40px] lg:px-[60px]"
           : "px-5 sm:px-8 lg:px-20"
+      }>
+      <div className={`flex items-center justify-between py-5 lg:py-7 ${
+        constrained ? "max-w-[1200px] mx-auto" : "max-w-[1168px] mx-auto"
       }`}>
       {/* Brand */}
       <Link href="/" className="inline-flex items-center no-underline">
         <Image
           src={light ? "/black-logo.png" : "/white-logo.png"}
           alt="EVOQ"
-          height={22}
-          width={22 * (1127 / 230)}
+          height={28}
+          width={28 * (1127 / 230)}
           priority
-          style={{ height: 22, width: "auto" }}
+          style={{ height: 28, width: "auto" }}
         />
       </Link>
 
@@ -144,6 +168,12 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
         >
           Why EVOQ?
         </Link>
+        <Link
+          href="/implementation"
+          className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 no-underline transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
+        >
+          Implementation
+        </Link>
         <a
           href="#"
           className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
@@ -158,8 +188,8 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
         </a>
       </nav>
 
-      {/* Log in + CTA */}
-      <div className="flex items-center gap-6">
+      {/* Log in + Region + CTA */}
+      <div className="flex items-center gap-4">
         <Link
           href="/login"
           className={`inline-flex cursor-pointer text-sm font-semibold no-underline transition-colors ${
@@ -168,6 +198,66 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
         >
           Log in
         </Link>
+
+        {/* Region selector */}
+        <div className="relative" ref={regionRef}>
+          <button
+            type="button"
+            onClick={() => setRegionOpen(!regionOpen)}
+            className={`inline-flex items-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium transition-colors ${
+              light
+                ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]"
+                : "text-white/88 hover:bg-white/8 hover:text-white"
+            }`}
+            aria-expanded={regionOpen}
+            aria-haspopup="menu"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              <path d="M2 12h20" />
+            </svg>
+            <span>{region}</span>
+          </button>
+
+          {regionOpen && (
+            <div
+              role="menu"
+              className={`absolute right-0 top-[calc(100%+8px)] w-[160px] rounded-[16px] p-2 shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)] ${
+                light ? "bg-white/96 text-[#1F2430]" : "bg-white/96 text-[#1F2430]"
+              }`}
+              style={{ animation: "menuIn 0.15s ease forwards" }}
+            >
+              <style>{`
+                @keyframes menuIn {
+                  from { opacity: 0; transform: translateY(-6px); }
+                  to   { opacity: 1; transform: translateY(0); }
+                }
+              `}</style>
+              <button
+                role="menuitem"
+                onClick={() => {
+                  setRegion("India");
+                  setRegionOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 rounded-[10px] text-sm font-medium hover:bg-[#F2F2FF] transition-colors"
+              >
+                India
+              </button>
+              <button
+                role="menuitem"
+                onClick={() => {
+                  setRegion("USA");
+                  setRegionOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 rounded-[10px] text-sm font-medium hover:bg-[#F2F2FF] transition-colors"
+              >
+                USA
+              </button>
+            </div>
+          )}
+        </div>
+
         <button
           type="button"
           onClick={() => setShowGetStarted(true)}
@@ -182,6 +272,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
             <ArrowRight color="currentColor" />
           </span>
         </button>
+      </div>
       </div>
       </div>
       <GetStartedModal isOpen={showGetStarted} onClose={() => setShowGetStarted(false)} />

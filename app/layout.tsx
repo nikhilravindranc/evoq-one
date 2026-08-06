@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Figtree, DM_Sans } from "next/font/google";
 import "./globals.css";
 import "./sections.css";
+import { RegionProvider } from "@/components/shared/RegionContext";
 
 const figtree = Figtree({
   variable: "--font-display",
@@ -32,7 +33,7 @@ export default function RootLayout({
       className={`${figtree.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-white font-[var(--font-sans)]">
-        {children}
+        <RegionProvider>{children}</RegionProvider>
       </body>
     </html>
   );
