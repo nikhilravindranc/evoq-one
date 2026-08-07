@@ -125,10 +125,15 @@ const CRM_LIKE_SCOPE_CATEGORIES: ScopeCategory[] = [
     ],
   },
   {
-    name: "Go-Live & Support",
+    name: "Go-Live",
     rows: [
       { activity: "Production Deployment", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Go-live Validation", values: ["✓", "✓", "✓", "✓"] },
+    ],
+  },
+  {
+    name: "Post-Launch Support",
+    rows: [
       { activity: "Email Support", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Priority Support", values: ["—", "—", "✓", "✓"] },
       { activity: "Post-launch Optimization Review", values: ["—", "—", "✓", "✓"] },
@@ -843,11 +848,17 @@ const CATEGORY_PATHS: Record<string, React.ReactNode> = {
       <path d="M6.4 10.8v4.9c0 1.6 2.5 2.9 5.6 2.9s5.6-1.3 5.6-2.9v-4.9" />
     </>
   ),
-  "Go-Live & Support": (
+  "Go-Live": (
     <>
       <path d="M12 2.6c2.8 2.1 4.6 5.8 4.6 9.5L12 16 7.4 12.1c0-3.7 1.8-7.4 4.6-9.5z" />
       <circle cx="12" cy="9.4" r="1.9" />
       <path d="M7.6 15.6 5.4 21l4.6-2M16.4 15.6 18.6 21 14 19" />
+    </>
+  ),
+  "Post-Launch Support": (
+    <>
+      <path d="M12 21.5s-7.6-4.4-7.6-10.4a4.6 4.6 0 0 1 7.6-3.5 4.6 4.6 0 0 1 7.6 3.5c0 6-7.6 10.4-7.6 10.4z" />
+      <path d="M9.4 12.2l1.7 1.7 3.5-3.5" />
     </>
   ),
   "Pricing & Plan Details": (
@@ -928,12 +939,10 @@ export function ImplementationPage() {
       <section className="s-why-changes">
         <div className="s-why-changes-inner">
           <motion.div {...fadeUp(0)} className="evoq-section-head" style={{ textAlign: "center" }}>
-            <h2 className="evoq-h2">Why Choose <span className="accent">Professional Implementation</span>?</h2>
-            <p className="why-body" style={{ margin: "16px auto 0", textAlign: "center", maxWidth: "62ch" }}>
-              A successful implementation goes beyond software setup. We work
-              alongside your team to reduce deployment risks, accelerate
-              adoption, and ensure EVOQ is configured around the way your
-              business operates.
+            <h2 className="evoq-h2">Why Choose <span className="accent">Expert Implementation</span>?</h2>
+            <p className="why-body" style={{ margin: "16px auto 0", textAlign: "center", maxWidth: "82ch" }}>
+              A successful implementation goes beyond software setup. We work alongside your team to
+              reduce deployment risks, accelerate adoption, and ensure EVOQ is configured around the way your business operates.
             </p>
           </motion.div>
 
@@ -949,10 +958,10 @@ export function ImplementationPage() {
       <section className="s-why-flexible">
         <div className="s-why-flexible-inner">
           <motion.div {...fadeUp(0)} className="evoq-section-head" style={{ textAlign: "center" }}>
-            <div style={{ ...eyebrowStyle, marginBottom: 16 }}>Choose Your Implementation Package</div>
+            <div style={{ ...eyebrowStyle, marginBottom: 16 }}>Choose Your Package</div>
             <h2 className="evoq-h2">Implementation <span className="accent">Packages &amp; Scope</span></h2>
-            <p className="why-body" style={{ margin: "16px auto 0", textAlign: "center", maxWidth: "56ch" }}>
-              Select a product to compare implementation packages, pricing,
+            <p className="why-body" style={{ margin: "16px auto 0", textAlign: "center", maxWidth: "48ch" }}>
+              Select a product to compare packages, pricing,
               timelines, and included services.
             </p>
           </motion.div>
@@ -1111,7 +1120,7 @@ export function ImplementationPage() {
                   ))}
 
                   {visibleCategories.flatMap((cat, ci) => {
-                    const isOngoing = cat.name === "Go-Live & Support";
+                    const isOngoing = cat.name === "Post-Launch Support";
                     const tint = isOngoing ? { bg: PASTEL.green, ink: GREEN_INK, faint: "#F2FAF5" } : CATEGORY_TINT;
                     const label = cat.name.replace("{product}", product.label);
                     return cat.rows.map((row, ri) => (

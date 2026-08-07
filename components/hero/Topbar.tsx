@@ -70,6 +70,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
       {/* Brand */}
       <Link href="/" className="inline-flex items-center no-underline">
         <Image
+          id="hero-topbar-logo"
           src={light ? "/black-logo.png" : "/white-logo.png"}
           alt="EVOQ"
           height={28}

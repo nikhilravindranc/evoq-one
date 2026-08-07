@@ -1,21 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Topbar } from "./Topbar";
 import { Collage } from "./Collage";
 import { ArrowRight } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 
+/* The "logo halo" layer (3rd in the stack) is positioned via --logo-x/--logo-y,
+ * CSS custom properties kept in sync with the logo tile's actual on-screen
+ * position (see the resize/observer effect below). The layout that places the
+ * logo tile is width-capped (max-width: 1168) and centered, while this
+ * gradient paints across the full-bleed hero -- so the logo's position as a
+ * fraction of hero width is NOT constant across viewport widths. Percentages
+ * alone drift out of alignment on large screens; measuring the real DOM
+ * position is the only way to keep the halo locked to the logo at every size.
+ */
 const GRADIENT =
-  `radial-gradient(120% 80% at 60% 0%, #BDBDFF 0%, #8484FF 22%, #5C5CFF 65%, #4747E0 90%, #7C3AED 100%),
-   radial-gradient(60% 50% at 20% 35%, rgba(242,242,255,0.55) 0%, rgba(242,242,255,0) 60%),
-   radial-gradient(22% 30% at 6% 8%, rgba(242,242,255,0.5) 0%, rgba(242,242,255,0) 65%)`;
+  `radial-gradient(85% 70% at 100% 100%, #7C3AED 0%, rgba(124,58,237,0.65) 35%, rgba(124,58,237,0) 70%),
+   radial-gradient(120% 80% at 60% 0%, #BDBDFF 0%, #8484FF 22%, #5C5CFF 65%, #4747E0 100%),
+   radial-gradient(46% 42% at var(--logo-x, 69%) var(--logo-y, 51%), rgba(242,242,255,0.55) 0%, rgba(242,242,255,0) 62%),
+   radial-gradient(18% 22% at var(--topbar-logo-x, 6%) var(--topbar-logo-y, 8%), rgba(242,242,255,0.6) 0%, rgba(242,242,255,0) 65%)`;
 
 const GRAIN_SVG = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")`;
 
 export function HeroSection() {
   const [showGetStarted, setShowGetStarted] = useState(false);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [logoPos, setLogoPos] = useState<{ x: string; y: string }>({ x: "69%", y: "51%" });
+  const [topbarLogoPos, setTopbarLogoPos] = useState<{ x: string; y: string }>({ x: "6%", y: "8%" });
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    const measure = () => {
+      const frameRect = frame.getBoundingClientRect();
+
+      const logo = document.getElementById("hero-logo-anchor");
+      if (logo) {
+        const logoRect = logo.getBoundingClientRect();
+        const x = logoRect.left + logoRect.width / 2 - frameRect.left;
+        const y = logoRect.top + logoRect.height / 2 - frameRect.top;
+        setLogoPos({ x: `${x}px`, y: `${y}px` });
+      }
+
+      const topbarLogo = document.getElementById("hero-topbar-logo");
+      if (topbarLogo) {
+        const tRect = topbarLogo.getBoundingClientRect();
+        const x = tRect.left + tRect.width / 2 - frameRect.left;
+        const y = tRect.top + tRect.height / 2 - frameRect.top;
+        setTopbarLogoPos({ x: `${x}px`, y: `${y}px` });
+      }
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(frame);
+    // logo tile fades/scales in via framer-motion, so re-measure once that settles too
+    const t = setTimeout(measure, 550);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      clearTimeout(t);
+    };
+  }, []);
 
   return (
     <div className="w-full">
@@ -27,6 +77,7 @@ export function HeroSection() {
          * fills the exact remainder -- no hardcoded topbar constant needed.
          */}
         <div
+          ref={frameRef}
           style={{
             position: "relative",
             width: "100%",
@@ -43,7 +94,12 @@ export function HeroSection() {
               position: "absolute",
               inset: 0,
               background: GRADIENT,
-              backgroundBlendMode: "screen, normal, normal",
+              backgroundBlendMode: "screen, screen, normal, normal",
+              // @ts-expect-error -- CSS custom properties aren't in CSSProperties
+              "--logo-x": logoPos.x,
+              "--logo-y": logoPos.y,
+              "--topbar-logo-x": topbarLogoPos.x,
+              "--topbar-logo-y": topbarLogoPos.y,
             }}
           />
           {/* Film grain */}

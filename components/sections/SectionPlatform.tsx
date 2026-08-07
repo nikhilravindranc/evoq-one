@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, type Easing } from "framer-motion";
-import { Person, SyncIc, Check } from "./shared";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -12,27 +11,35 @@ const fadeUp = (delay = 0) => ({
 
 const CATEGORIES = [
   {
-    key: "v-growth",
+    key: "growth",
+    tone: "violet",
     label: "Growth",
     title: "Drive revenue and scale your business",
-    icon: <Person size={9} color="#fff" />,
-    products: ["CRM", "Campaigns"],
+    apps: ["CRM", "Campaigns"],
   },
   {
-    key: "v-operations",
+    key: "operations",
+    tone: "blue",
     label: "Operations",
     title: "Streamline workflows and automate the busywork",
-    icon: <SyncIc size={9} color="#fff" />,
-    products: ["ServiceOps", "Desk", "Projects", "Sync"],
+    apps: ["ServiceOps", "Desk", "Projects", "Sync"],
   },
   {
-    key: "v-people",
+    key: "people",
+    tone: "green",
     label: "People",
     title: "Build and manage high-performing teams",
-    icon: <Check size={9} color="#fff" />,
-    products: ["HRMS", "Payroll", "HRMS Plus", "Skillberry"],
+    apps: ["HRMS", "Payroll", "HRMS Plus", "Skillberry"],
   },
 ];
+
+function CheckGlyph({ color }: { color: string }) {
+  return (
+    <svg width="13" height="13" viewBox="0 0 20 20" fill="none" aria-hidden style={{ flexShrink: 0 }}>
+      <path d="M4.5 10.4 8.2 14.1 15.5 6.4" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 export function SectionPlatform() {
   return (
@@ -51,25 +58,18 @@ export function SectionPlatform() {
           {CATEGORIES.map((category, idx) => (
             <motion.div
               key={category.key}
-              className={`product-card ${category.key}`}
+              className={`platform-card tone-${category.tone}`}
               {...fadeUp(0.05 + idx * 0.08)}
             >
-              <div className="product-eyebrow">
-                <span className="swatch">{category.icon}</span>
-                <span>{category.label}</span>
-              </div>
-              <h3 className="product-title">{category.title}</h3>
-              <div className="pc-mock">
-                <div className="pc-mock-hd">
-                  <span>Included apps</span>
-                  <span>{category.products.length}</span>
-                </div>
-                {category.products.map((product) => (
-                  <div className="pc-row" key={product}>
-                    <div className="lead">
-                      <span className="name">{product}</span>
-                    </div>
-                    <span className="pill tint">Included</span>
+              <span className="platform-label">{category.label}</span>
+              <h3 className="platform-title">{category.title}</h3>
+              <span className="platform-count">{category.apps.length} apps included</span>
+
+              <div className="platform-mock">
+                {category.apps.map((app) => (
+                  <div className="platform-mock-row" key={app}>
+                    <span className="platform-mock-name">{app}</span>
+                    <CheckGlyph color="var(--platform-tone-ink)" />
                   </div>
                 ))}
               </div>

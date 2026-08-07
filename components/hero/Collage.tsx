@@ -198,6 +198,7 @@ export function Collage({ tileRadius = "30%" }: { tileRadius?: string }) {
           return (
             <motion.div
               key={tile.key}
+              id="hero-logo-anchor"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
