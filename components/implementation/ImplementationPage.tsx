@@ -31,26 +31,31 @@ const eyebrowStyle: React.CSSProperties = {
 
 /* ── data ── */
 
-type Pkg = { name: string; price: string; hours: string; timeline: string; recommendedFor: string };
+type Pkg = { name: string; price: string; users: string; hours: string; timeline: string; recommendedFor: string };
 
 const CRM_LIKE_INDIA: Pkg[] = [
-  { name: "Essential", price: "₹45,000", hours: "20 Hours", timeline: "10 Business Days", recommendedFor: "Small businesses" },
-  { name: "Standard", price: "₹90,000", hours: "40 Hours", timeline: "1 Week", recommendedFor: "Growing teams" },
-  { name: "Premium", price: "₹1,80,000", hours: "80 Hours", timeline: "2 Weeks", recommendedFor: "Mid-sized organizations" },
-  { name: "Enterprise", price: "₹3,60,000", hours: "160 Hours", timeline: "4 Weeks", recommendedFor: "Large enterprises" },
+  { name: "Essential", price: "₹45,000", users: "Up to 5", hours: "20 Hours", timeline: "10 Business Days", recommendedFor: "Small businesses" },
+  { name: "Standard", price: "₹90,000", users: "Up to 20", hours: "40 Hours", timeline: "1 Week", recommendedFor: "Growing teams" },
+  { name: "Premium", price: "₹1,80,000", users: "Up to 50", hours: "80 Hours", timeline: "2 Weeks", recommendedFor: "Mid-sized organizations" },
+  { name: "Enterprise", price: "₹3,60,000+", users: "50+", hours: "160 Hours", timeline: "4 Weeks", recommendedFor: "Large organizations" },
 ];
 const CRM_LIKE_INTL: Pkg[] = [
-  { name: "Standard", price: "$999", hours: "40 Hours", timeline: "1 Week", recommendedFor: "Growing teams" },
-  { name: "Premium", price: "$1,999", hours: "80 Hours", timeline: "2 Weeks", recommendedFor: "Mid-sized organizations" },
-  { name: "Custom", price: "Custom", hours: "Custom", timeline: "Custom", recommendedFor: "Large enterprises" },
+  { name: "Launch", price: "$1,999", users: "Up to 20", hours: "40 Hours", timeline: "1 Week", recommendedFor: "Small & growing businesses" },
+  { name: "Growth", price: "$3,999", users: "Up to 50", hours: "80 Hours", timeline: "2 Weeks", recommendedFor: "Mid-sized organizations" },
+  { name: "Enterprise", price: "Custom Pricing", users: "50+", hours: "160+ Hours", timeline: "Custom Project Timeline", recommendedFor: "Large organizations" },
 ];
 const SERVICEOPS_INDIA: Pkg[] = CRM_LIKE_INDIA.slice(1);
 const SERVICEOPS_INTL: Pkg[] = CRM_LIKE_INTL;
 
-type ScopeCategory = { name: string; rows: { activity: string; values: string[] }[] };
+/* Most categories break down per-service; a couple of US-market categories
+ * ("Project Planning", "Organization Setup") are identical across every
+ * tier, so they're shown as a single note row instead of a repeated ✓ row
+ * per service. */
+type ScopeCategory =
+  | { name: string; rows: { activity: string; values: string[] }[]; note?: undefined }
+  | { name: string; note: string; rows?: undefined };
 
-const CRM_LIKE_TIERS = ["Essential", "Standard", "Premium", "Enterprise"];
-const CRM_LIKE_SCOPE_CATEGORIES: ScopeCategory[] = [
+const CRM_LIKE_SCOPE_CATEGORIES_INDIA: ScopeCategory[] = [
   {
     name: "Project Planning",
     rows: [
@@ -74,15 +79,15 @@ const CRM_LIKE_SCOPE_CATEGORIES: ScopeCategory[] = [
     rows: [
       { activity: "Standard Module Configuration", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Custom Module Configuration", values: ["—", "✓", "✓", "✓"] },
-      { activity: "Custom Fields", values: ["Basic", "Standard", "Advanced", "Enterprise-scale"] },
+      { activity: "Custom Fields", values: ["Basic", "Business-specific", "Advanced", "Organization-wide"] },
       { activity: "Layout Configuration", values: ["✓", "✓", "✓", "✓"] },
-      { activity: "Validation Rules", values: ["Basic", "Standard", "Advanced", "Enterprise-scale"] },
+      { activity: "Validation Rules", values: ["Basic", "Business-specific", "Advanced", "Organization-wide"] },
     ],
   },
   {
     name: "Workflow Automation",
     rows: [
-      { activity: "Workflow Rules", values: ["Basic", "Standard", "Advanced", "Enterprise-scale"] },
+      { activity: "Workflow Rules", values: ["Basic", "Business-specific", "Advanced", "Organization-wide"] },
       { activity: "Email Notifications", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Assignment Rules", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Approval Workflows", values: ["—", "✓", "✓", "✓"] },
@@ -92,8 +97,8 @@ const CRM_LIKE_SCOPE_CATEGORIES: ScopeCategory[] = [
     name: "Data Migration",
     rows: [
       { activity: "Spreadsheet Import", values: ["✓", "✓", "✓", "✓"] },
-      { activity: "Existing {product} Migration", values: ["—", "✓", "✓", "✓"] },
-      { activity: "Data Validation", values: ["—", "✓", "✓", "✓"] },
+      { activity: "Existing {product} Migration", values: ["—", "—", "✓", "✓"] },
+      { activity: "Data Validation", values: ["—", "—", "✓", "✓"] },
       { activity: "Migration Planning & Cutover", values: ["—", "—", "✓", "✓"] },
     ],
   },
@@ -102,8 +107,8 @@ const CRM_LIKE_SCOPE_CATEGORIES: ScopeCategory[] = [
     rows: [
       { activity: "Email Integration", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Calendar Integration", values: ["✓", "✓", "✓", "✓"] },
-      { activity: "Third-party Integrations", values: ["—", "Optional", "✓", "Complex & Multiple"] },
-      { activity: "API Configuration", values: ["—", "—", "✓", "Advanced"] },
+      { activity: "Third-party Integrations", values: ["—", "Optional", "✓", "Multiple Integrations"] },
+      { activity: "API Integration", values: ["—", "—", "✓", "Advanced API Integration"] },
     ],
   },
   {
@@ -111,7 +116,7 @@ const CRM_LIKE_SCOPE_CATEGORIES: ScopeCategory[] = [
     rows: [
       { activity: "Standard Reports", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Custom Reports", values: ["—", "✓", "✓", "✓"] },
-      { activity: "Dashboards", values: ["Standard", "Business", "Operational", "Executive & Departmental"] },
+      { activity: "Dashboards", values: ["Standard", "Management", "Operational", "Executive"] },
     ],
   },
   {
@@ -122,38 +127,124 @@ const CRM_LIKE_SCOPE_CATEGORIES: ScopeCategory[] = [
       { activity: "Recorded Sessions", values: ["—", "✓", "✓", "✓"] },
       { activity: "Role-based Training", values: ["—", "—", "✓", "✓"] },
       { activity: "Department-specific Training", values: ["—", "—", "—", "✓"] },
+      { activity: "Train-the-Trainer Session", values: ["—", "—", "—", "✓"] },
     ],
   },
   {
-    name: "Go-Live",
+    name: "Deployment & Go-Live",
     rows: [
       { activity: "Production Deployment", values: ["✓", "✓", "✓", "✓"] },
       { activity: "Go-live Validation", values: ["✓", "✓", "✓", "✓"] },
     ],
   },
+];
+
+const CRM_LIKE_SCOPE_CATEGORIES_INTL: ScopeCategory[] = [
+  { name: "Project Planning", note: "Included in all packages" },
+  { name: "Organization Setup", note: "Included in all packages" },
   {
-    name: "Post-Launch Support",
+    name: "{product} Configuration",
     rows: [
-      { activity: "Email Support", values: ["✓", "✓", "✓", "✓"] },
-      { activity: "Priority Support", values: ["—", "—", "✓", "✓"] },
-      { activity: "Post-launch Optimization Review", values: ["—", "—", "✓", "✓"] },
-      { activity: "Dedicated Implementation Consultant", values: ["—", "—", "—", "✓"] },
-      { activity: "Extended Hypercare", values: ["—", "—", "—", "✓"] },
+      { activity: "Standard Module Configuration", values: ["✓", "✓", "✓"] },
+      { activity: "Custom Module Configuration", values: ["✓", "✓", "✓"] },
+      { activity: "Custom Fields", values: ["Business-specific", "Advanced", "Organization-wide"] },
+      { activity: "Layout Configuration", values: ["✓", "✓", "✓"] },
+      { activity: "Validation Rules", values: ["Business-specific", "Advanced", "Organization-wide"] },
+    ],
+  },
+  {
+    name: "Workflow Automation",
+    rows: [
+      { activity: "Workflow Rules", values: ["Business-specific", "Advanced", "Organization-wide"] },
+      { activity: "Assignment Rules", values: ["✓", "✓", "✓"] },
+      { activity: "Approval Workflows", values: ["✓", "✓", "✓"] },
+    ],
+  },
+  {
+    name: "Data Migration",
+    rows: [
+      { activity: "Spreadsheet Import", values: ["✓", "✓", "✓"] },
+      { activity: "Existing {product} Migration", values: ["—", "✓", "✓"] },
+      { activity: "Data Validation", values: ["—", "✓", "✓"] },
+      { activity: "Migration Planning & Cutover", values: ["—", "✓", "✓"] },
+    ],
+  },
+  {
+    name: "Integrations",
+    rows: [
+      { activity: "Email & Calendar Integration", values: ["✓", "✓", "✓"] },
+      { activity: "Third-party Integrations", values: ["Optional", "✓", "Multiple Integrations"] },
+      { activity: "API Integration", values: ["—", "✓", "Advanced API Integration"] },
+    ],
+  },
+  {
+    name: "Reports & Dashboards",
+    rows: [
+      { activity: "Standard Reports", values: ["✓", "✓", "✓"] },
+      { activity: "Custom Reports", values: ["✓", "✓", "✓"] },
+      { activity: "Dashboards", values: ["Management", "Operational", "Executive"] },
+    ],
+  },
+  {
+    name: "Training",
+    rows: [
+      { activity: "Administrator Training", values: ["✓", "✓", "✓"] },
+      { activity: "End User Training", values: ["✓", "✓", "✓"] },
+      { activity: "Recorded Sessions", values: ["✓", "✓", "✓"] },
+      { activity: "Role-based Training", values: ["—", "✓", "✓"] },
+      { activity: "Department-specific Training", values: ["—", "—", "✓"] },
+      { activity: "Train-the-Trainer Session", values: ["—", "—", "✓"] },
+    ],
+  },
+  {
+    name: "Deployment & Go-Live",
+    rows: [
+      { activity: "Production Deployment", values: ["✓", "✓", "✓"] },
+      { activity: "Go-live Validation", values: ["✓", "✓", "✓"] },
     ],
   },
 ];
-const SERVICEOPS_TIERS = ["Standard", "Premium", "Enterprise"];
-const SERVICEOPS_SCOPE_CATEGORIES: ScopeCategory[] = CRM_LIKE_SCOPE_CATEGORIES.map((cat) => ({
-  ...cat,
-  rows: cat.rows.map((r) => ({ ...r, values: r.values.slice(1) })),
-}));
+
+/* Ongoing (post-launch, hourly) support — shown as its own callout below
+ * the table rather than as table rows, since it isn't tied to a package tier. */
+const ONGOING_SUPPORT: Record<"india" | "international", { rate: string; idealFor: string[] }> = {
+  india: {
+    rate: "₹2,500/hour",
+    idealFor: [
+      "Additional consulting",
+      "Workflow enhancements",
+      "Additional reports & dashboards",
+      "User training",
+      "{product} optimization",
+      "API & integration assistance",
+    ],
+  },
+  international: {
+    rate: "$35/hour",
+    idealFor: [
+      "Additional consulting",
+      "Workflow enhancements",
+      "User training",
+      "{product} optimization",
+      "Reports & dashboards",
+      "API & integration assistance",
+    ],
+  },
+};
+
+function sliceCategory(cat: ScopeCategory, drop: number): ScopeCategory {
+  if (cat.note !== undefined) return cat;
+  return { ...cat, rows: cat.rows.map((r) => ({ ...r, values: r.values.slice(drop) })) };
+}
+const SERVICEOPS_SCOPE_CATEGORIES_INDIA: ScopeCategory[] = CRM_LIKE_SCOPE_CATEGORIES_INDIA.map((cat) => sliceCategory(cat, 1));
+const SERVICEOPS_SCOPE_CATEGORIES_INTL: ScopeCategory[] = CRM_LIKE_SCOPE_CATEGORIES_INTL;
 
 const PRODUCTS = [
-  { key: "crm", label: "CRM", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, tiers: CRM_LIKE_TIERS, scopeCategories: CRM_LIKE_SCOPE_CATEGORIES },
-  { key: "desk", label: "Desk", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, tiers: CRM_LIKE_TIERS, scopeCategories: CRM_LIKE_SCOPE_CATEGORIES },
-  { key: "hrms", label: "HRMS", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, tiers: CRM_LIKE_TIERS, scopeCategories: CRM_LIKE_SCOPE_CATEGORIES },
-  { key: "skillberry", label: "Skillberry", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, tiers: CRM_LIKE_TIERS, scopeCategories: CRM_LIKE_SCOPE_CATEGORIES },
-  { key: "serviceops", label: "ServiceOps", india: SERVICEOPS_INDIA, international: SERVICEOPS_INTL, tiers: SERVICEOPS_TIERS, scopeCategories: SERVICEOPS_SCOPE_CATEGORIES },
+  { key: "crm", label: "CRM", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
+  { key: "desk", label: "Desk", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
+  { key: "hrms", label: "HRMS", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
+  { key: "skillberry", label: "Skillberry", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
+  { key: "serviceops", label: "ServiceOps", india: SERVICEOPS_INDIA, international: SERVICEOPS_INTL, scopeCategoriesIndia: SERVICEOPS_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: SERVICEOPS_SCOPE_CATEGORIES_INTL },
 ];
 
 /* ── Why-section illustrations ──
@@ -571,11 +662,16 @@ const WHY_CARDS: WhyCard[] = [
 ];
 
 const FAQS = [
-  { q: "Is professional implementation required?", a: "No. EVOQ can be configured independently. Professional implementation is recommended for organizations requiring configuration, migration, integrations, or guided onboarding." },
-  { q: "Can implementation be customized?", a: "Yes. Additional implementation hours and custom services can be added based on your project requirements." },
-  { q: "Can you migrate data from another system?", a: "Yes. We support data migration from spreadsheets and selected business applications, depending on the implementation package." },
-  { q: "Can implementation be completed remotely?", a: "Yes. Most implementation projects are delivered remotely. On-site implementation may be available for enterprise engagements." },
-  { q: "How long does implementation take?", a: "The timeline depends on the selected package and project complexity." },
+  { q: "Is professional implementation required?", a: "No. You can configure EVOQ CRM yourself. Professional implementation is recommended for businesses that need data migration, workflow automation, integrations, custom configuration, or guided onboarding." },
+  { q: "Are EVOQ CRM software licenses included?", a: "No. Implementation services and EVOQ CRM software subscriptions are billed separately." },
+  { q: "Can I purchase additional implementation hours?", a: "Yes. Additional implementation and consulting hours can be purchased at any stage of your project or after go-live." },
+  { q: "Can you migrate data from another application?", a: "Yes. We support importing data from spreadsheets and migrating from selected CRM and business applications, depending on your implementation package." },
+  { q: "Can implementation be completed remotely?", a: "Yes. Most implementations are delivered remotely using secure online collaboration and training sessions. On-site implementation may be available for enterprise engagements." },
+  { q: "How long does implementation take?", a: "Implementation timelines vary based on the selected package and project scope. Estimated timelines are provided with each package and may vary depending on customer feedback, data readiness, and project complexity." },
+  { q: "Can I upgrade my implementation package later?", a: "Yes. If your project requirements change, you can upgrade your implementation package or add additional implementation services at any time." },
+  { q: "What is not included in implementation?", a: "Implementation packages do not include custom software development, third-party software licenses, or hardware. If additional work is required, we'll provide a separate estimate before proceeding." },
+  { q: "What happens after implementation?", a: "Once your implementation is complete, your team can continue using standard product support or purchase additional implementation and consulting services for system optimization, user training, workflow enhancements, integrations, and reporting." },
+  { q: "Do you provide post-implementation support?", a: "Yes. Ongoing implementation and consulting services are available at our published hourly rates for customers who need additional assistance after deployment." },
 ];
 
 /* ── small building blocks ── */
@@ -727,10 +823,11 @@ type Accent = { bg: string; ink: string; faint: string };
 
 const TIER_ACCENT: Record<string, Accent> = {
   Essential: { bg: PASTEL.green, ink: GREEN_INK, faint: "#F2FAF5" },
+  Launch: { bg: PASTEL.green, ink: GREEN_INK, faint: "#F2FAF5" },
   Standard: { bg: PASTEL.slate, ink: "#4747E0", faint: "#F4F6FA" },
+  Growth: { bg: PASTEL.slate, ink: "#4747E0", faint: "#F4F6FA" },
   Premium: { bg: PASTEL.lavender, ink: VIOLET_INK, faint: "#F8F5FD" },
   Enterprise: { bg: PASTEL.peach, ink: AMBER_INK, faint: "#FDF8EF" },
-  Custom: { bg: PASTEL.peach, ink: AMBER_INK, faint: "#FDF8EF" },
 };
 const NEUTRAL_ACCENT: Accent = { bg: PASTEL.slate, ink: "var(--interactive)", faint: "#F4F6FA" };
 const tierAccent = (name: string): Accent => TIER_ACCENT[name] ?? NEUTRAL_ACCENT;
@@ -744,7 +841,8 @@ const CATEGORY_TINT: Accent = { bg: "var(--soft)", ink: "var(--interactive)", fa
  * separate card strip — reuses the same tier columns as the scope rows. */
 const PLAN_ROWS: { label: string; value: (pkg: Pkg) => string; emphasize?: boolean }[] = [
   { label: "Price", value: (pkg) => pkg.price, emphasize: true },
-  { label: "Implementation Hours", value: (pkg) => pkg.hours },
+  { label: "Recommended Users", value: (pkg) => pkg.users },
+  { label: "Implementation Effort", value: (pkg) => pkg.hours },
   { label: "Estimated Timeline", value: (pkg) => pkg.timeline },
   { label: "Recommended For", value: (pkg) => pkg.recommendedFor },
 ];
@@ -757,18 +855,16 @@ const VALUE_STYLE: Record<string, { bg: string; ink: string; outlined?: boolean 
   Optional: { bg: "#fff", ink: "var(--muted)", outlined: true },
   // tier 2 — standard
   Standard: { bg: PASTEL.slate, ink: INK },
-  Expanded: { bg: PASTEL.slate, ink: INK },
-  Business: { bg: PASTEL.slate, ink: INK },
+  Management: { bg: PASTEL.slate, ink: INK },
+  "Business-specific": { bg: PASTEL.slate, ink: INK },
   // tier 3 — advanced
   Advanced: { bg: PASTEL.lavender, ink: VIOLET_INK },
   Operational: { bg: PASTEL.lavender, ink: VIOLET_INK },
+  "Advanced API Integration": { bg: PASTEL.lavender, ink: VIOLET_INK },
   // tier 4 — top/unlimited
-  Unlimited: { bg: PASTEL.green, ink: GREEN_INK },
-  Priority: { bg: PASTEL.green, ink: GREEN_INK },
-  Dedicated: { bg: PASTEL.green, ink: GREEN_INK },
-  "Enterprise-scale": { bg: PASTEL.green, ink: GREEN_INK },
-  "Complex & Multiple": { bg: PASTEL.green, ink: GREEN_INK },
-  "Executive & Departmental": { bg: PASTEL.green, ink: GREEN_INK },
+  Executive: { bg: PASTEL.green, ink: GREEN_INK },
+  "Organization-wide": { bg: PASTEL.green, ink: GREEN_INK },
+  "Multiple Integrations": { bg: PASTEL.green, ink: GREEN_INK },
 };
 
 function CheckMark({ size = 17 }: { size?: number }) {
@@ -848,7 +944,7 @@ const CATEGORY_PATHS: Record<string, React.ReactNode> = {
       <path d="M6.4 10.8v4.9c0 1.6 2.5 2.9 5.6 2.9s5.6-1.3 5.6-2.9v-4.9" />
     </>
   ),
-  "Go-Live": (
+  "Deployment & Go-Live": (
     <>
       <path d="M12 2.6c2.8 2.1 4.6 5.8 4.6 9.5L12 16 7.4 12.1c0-3.7 1.8-7.4 4.6-9.5z" />
       <circle cx="12" cy="9.4" r="1.9" />
@@ -898,8 +994,10 @@ export function ImplementationPage() {
   const product = useMemo(() => PRODUCTS.find((p) => p.key === productKey) ?? PRODUCTS[0], [productKey]);
   const packages = region === "india" ? product.india : product.international;
   const tierNames = packages.map((p) => p.name);
-  const visibleCategories = showAllScope ? product.scopeCategories : product.scopeCategories.slice(0, 3);
-  const hiddenCount = product.scopeCategories.length - visibleCategories.length;
+  const scopeCategories = region === "india" ? product.scopeCategoriesIndia : product.scopeCategoriesIntl;
+  const visibleCategories = showAllScope ? scopeCategories : scopeCategories.slice(0, 3);
+  const hiddenCount = scopeCategories.length - visibleCategories.length;
+  const support = ONGOING_SUPPORT[region];
 
   return (
     <div className="why-evoq-page">
@@ -939,7 +1037,7 @@ export function ImplementationPage() {
       <section className="s-why-changes">
         <div className="s-why-changes-inner">
           <motion.div {...fadeUp(0)} className="evoq-section-head" style={{ textAlign: "center" }}>
-            <h2 className="evoq-h2">Why Choose <span className="accent">Expert Implementation</span>?</h2>
+            <h2 className="evoq-h2">Why Choose <span className="accent">Expert Guidance</span>?</h2>
             <p className="why-body" style={{ margin: "16px auto 0", textAlign: "center", maxWidth: "82ch" }}>
               A successful implementation goes beyond software setup. We work alongside your team to
               reduce deployment risks, accelerate adoption, and ensure EVOQ is configured around the way your business operates.
@@ -960,9 +1058,8 @@ export function ImplementationPage() {
           <motion.div {...fadeUp(0)} className="evoq-section-head" style={{ textAlign: "center" }}>
             <div style={{ ...eyebrowStyle, marginBottom: 16 }}>Choose Your Package</div>
             <h2 className="evoq-h2">Implementation <span className="accent">Packages &amp; Scope</span></h2>
-            <p className="why-body" style={{ margin: "16px auto 0", textAlign: "center", maxWidth: "48ch" }}>
-              Select a product to compare packages, pricing,
-              timelines, and included services.
+            <p className="why-body" style={{ margin: "16px auto 0", textAlign: "center", maxWidth: "62ch" }}>
+              Select a product to compare packages, pricing, timelines, and included services.
             </p>
           </motion.div>
 
@@ -1120,29 +1217,18 @@ export function ImplementationPage() {
                   ))}
 
                   {visibleCategories.flatMap((cat, ci) => {
-                    const isOngoing = cat.name === "Post-Launch Support";
-                    const tint = isOngoing ? { bg: PASTEL.green, ink: GREEN_INK, faint: "#F2FAF5" } : CATEGORY_TINT;
+                    const tint = CATEGORY_TINT;
                     const label = cat.name.replace("{product}", product.label);
-                    return cat.rows.map((row, ri) => (
-                      <tr
-                        key={`${cat.name}-${row.activity}`}
-                        style={{
-                          borderTop:
-                            ri === 0
-                              ? isOngoing
-                                ? `2px dashed ${GREEN_INK}66`
-                                : `2px solid var(--border)`
-                              : `1px solid ${HAIRLINE}`,
-                        }}
-                      >
-                        {ri === 0 && (
+
+                    if (cat.note !== undefined) {
+                      return (
+                        <tr key={cat.name} style={{ borderTop: `2px solid var(--border)` }}>
                           <td
-                            rowSpan={cat.rows.length}
                             style={{
                               verticalAlign: "middle",
                               padding: "16px 20px",
                               background: tint.faint,
-                              borderRight: `1px solid ${isOngoing ? PASTEL.green : "var(--border)"}`,
+                              borderRight: "1px solid var(--border)",
                               borderTop: ci === 0 ? "2px solid var(--border)" : "none",
                             }}
                           >
@@ -1163,65 +1249,57 @@ export function ImplementationPage() {
                             <span style={{ fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 700, color: tint.ink, lineHeight: 1.3 }}>
                               {label}
                             </span>
-                            {isOngoing && (
-                              <span
-                                style={{
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                  gap: 4,
-                                  marginTop: 8,
-                                  padding: "3px 8px 3px 6px",
-                                  borderRadius: 999,
-                                  background: "#fff",
-                                  border: `1px solid ${PASTEL.green}`,
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    width: 5,
-                                    height: 5,
-                                    borderRadius: "50%",
-                                    background: GREEN_INK,
-                                    flexShrink: 0,
-                                  }}
-                                />
-                                <span
-                                  style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontSize: 10,
-                                    fontWeight: 700,
-                                    letterSpacing: "0.03em",
-                                    textTransform: "uppercase",
-                                    color: GREEN_INK,
-                                  }}
-                                >
-                                  Ongoing
-                                </span>
-                              </span>
-                            )}
                           </td>
-                        )}
-                        <td
-                          style={{
-                            padding: "11px 20px",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: 13.5,
-                            color: INK,
-                            background: isOngoing ? tint.faint : "transparent",
-                          }}
-                        >
-                          {row.activity.replace("{product}", product.label)}
-                        </td>
-                        {row.values.slice(row.values.length - tierNames.length).map((v, vi) => (
+                          <td colSpan={1 + tierNames.length} style={{ padding: "16px 20px", textAlign: "center" }}>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "var(--font-sans)", fontSize: 13.5, fontWeight: 600, color: GREEN_INK }}>
+                              <CheckMark size={16} />
+                              {cat.note}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    }
+
+                    return cat.rows.map((row, ri) => (
+                      <tr
+                        key={`${cat.name}-${row.activity}`}
+                        style={{ borderTop: ri === 0 ? `2px solid var(--border)` : `1px solid ${HAIRLINE}` }}
+                      >
+                        {ri === 0 && (
                           <td
-                            key={vi}
+                            rowSpan={cat.rows.length}
                             style={{
-                              padding: "11px 18px",
-                              textAlign: "center",
-                              borderLeft: "1px solid var(--border)",
-                              background: isOngoing ? tint.faint : "transparent",
+                              verticalAlign: "middle",
+                              padding: "16px 20px",
+                              background: tint.faint,
+                              borderRight: "1px solid var(--border)",
+                              borderTop: ci === 0 ? "2px solid var(--border)" : "none",
                             }}
                           >
+                            <span
+                              style={{
+                                width: 34,
+                                height: 34,
+                                borderRadius: 10,
+                                background: tint.bg,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginBottom: 10,
+                              }}
+                            >
+                              <CategoryIcon name={cat.name} color={tint.ink} />
+                            </span>
+                            <span style={{ fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 700, color: tint.ink, lineHeight: 1.3 }}>
+                              {label}
+                            </span>
+                          </td>
+                        )}
+                        <td style={{ padding: "11px 20px", fontFamily: "var(--font-sans)", fontSize: 13.5, color: INK }}>
+                          {row.activity.replace("{product}", product.label)}
+                        </td>
+                        {row.values.map((v, vi) => (
+                          <td key={vi} style={{ padding: "11px 18px", textAlign: "center", borderLeft: "1px solid var(--border)" }}>
                             <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                               <ScopeValue value={v} />
                             </span>
@@ -1267,6 +1345,69 @@ export function ImplementationPage() {
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
+            </div>
+          </motion.div>
+
+          {/* Ongoing, hourly support — decoupled from the package tiers above,
+              so it lives in its own callout instead of a table row-group. */}
+          <motion.div
+            {...fadeUp(0.15)}
+            style={{
+              marginTop: 24,
+              background: "#fff",
+              border: `1px solid ${PASTEL.green}`,
+              borderRadius: 20,
+              padding: "32px 36px",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 28,
+              alignItems: "center",
+              justifyContent: "space-between",
+              boxShadow: "0 1px 2px rgba(31,36,48,0.04), 0 18px 40px -30px rgba(31,36,48,0.25)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 16, minWidth: 260 }}>
+              <span style={{ width: 48, height: 48, borderRadius: 14, background: PASTEL.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <CategoryIcon name="Post-Launch Support" color={GREEN_INK} />
+              </span>
+              <div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: GREEN_INK, marginBottom: 4 }}>
+                  Need Additional Help?
+                </div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 700, color: INK }}>
+                  Ongoing Implementation Support
+                </div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 800, color: GREEN_INK, marginTop: 4 }}>
+                  {support.rate}
+                </div>
+              </div>
+            </div>
+            <div style={{ flex: 1, minWidth: 280 }}>
+              <div style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 10 }}>
+                Ideal for:
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {support.idealFor.map((item) => (
+                  <span
+                    key={item}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      padding: "6px 12px",
+                      borderRadius: 999,
+                      background: "#F2FAF5",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: 12.5,
+                      fontWeight: 600,
+                      color: INK,
+                    }}
+                  >
+                    <CheckMark size={13} />
+                    {item.replace("{product}", product.label)}
+                  </span>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
