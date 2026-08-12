@@ -730,26 +730,22 @@ export function AboutPage() {
         <div className="s-why-stands-inner">
           <div>
             <motion.div {...fadeUp(0)} style={{ ...eyebrowStyle, marginBottom: 20 }}>
-              From an idea to EVOQ
+              The EVOQ Suite
             </motion.div>
             <motion.div {...fadeUp(0.06)} className="evoq-h2" style={{ marginBottom: 16 }}>
-              Start with the work. <span className="accent">Build from there.</span>
+              One platform for all your <span className="accent">teams.</span>
             </motion.div>
             <motion.p {...fadeUp(0.12)} className="evoq-sub" style={{ marginTop: 0 }}>
-              EVOQ began with focused apps solving real problems.
+              Growth. Operations. People. Every department has unique challenges and workflows. EVOQ built specialized apps for each, then connected them so your entire organization moves as one.
             </motion.p>
             <motion.p {...fadeUp(0.16)} className="evoq-sub" style={{ marginTop: 12 }}>
-              Each one was built to do a single job well. As those jobs turned
-              out to be connected, so were the products — growing into a
-              suite instead of a pile of separate tools. There are more ideas
-              to explore, more experiences to rethink, and more ways to make
-              everyday work feel better — EVOQ will keep evolving.
+              Your sales team closes deals faster. Your operations run smoother. Your people team stays organized. All while sharing data, insights, and real-time visibility across the platform. No more context switching between tools. No more manual data entry. Just better work.
             </motion.p>
             <motion.p
               {...fadeUp(0.22)}
               style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--interactive)", margin: "18px 0 0" }}
             >
-              Then the ideas grew.
+              And we&apos;re still building.
             </motion.p>
           </div>
 
