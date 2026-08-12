@@ -204,21 +204,49 @@ export function Collage({ tileRadius = "30%" }: { tileRadius?: string }) {
               transition={{ duration: 0.5, delay: 0.2 }}
               style={{
                 ...tileStyle,
-                background: "#F2F2FF",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                padding: 30,
-                overflow: "hidden",
-                boxShadow:
-                  "0 30px 60px -22px rgba(31,36,48,0.55), inset 0 0 0 1px rgba(255,255,255,0.7)",
+                overflow: "visible",
               }}
             >
-              <img
-                src="/symbol-color.png"
-                alt="EVOQ"
-                style={{ width: "100%", height: "auto", position: "relative" }}
+              {/* Soft blurred glow, larger than the card and sitting behind it,
+                  so the white card reads as glowing out of the gradient rather
+                  than a sharp-edged patch dropped on top of it. */}
+              <span
+                aria-hidden
+                style={{
+                  position: "absolute",
+                  inset: "-38%",
+                  borderRadius: "50%",
+                  background:
+                    "radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(242,242,255,0.4) 45%, rgba(242,242,255,0) 72%)",
+                  filter: "blur(22px)",
+                  zIndex: 0,
+                }}
               />
+              <span
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: tileRadius,
+                  background: "#F2F2FF",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 30,
+                  zIndex: 1,
+                  boxShadow:
+                    "0 30px 60px -22px rgba(31,36,48,0.5), inset 0 0 0 1px rgba(255,255,255,0.7)",
+                }}
+              >
+                <img
+                  src="/symbol-color.png"
+                  alt="EVOQ"
+                  style={{ width: "100%", height: "auto", position: "relative" }}
+                />
+              </span>
             </motion.div>
           );
         }
