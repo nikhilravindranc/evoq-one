@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EVOQ — Every team. Every workflow. Finally connected.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    /* Brand */
+    --deep:        #000099;
+    --mid:         #3333CC;
+    --interactive: #4747E0;
+    --primary:     #5C5CFF;
+    --bright:      #8484FF;
+    --tint:        #BDBDFF;
+    --soft:        #F2F2FF;
+
+    /* Neutrals */
+    --charcoal:    #1F2430;
+    --muted:       #667085;
+    --body-text:   #5F6B7A;
+    --subtle:      #9BA8B7;
+    --border:      #E6EAF0;
+    --background:  #F8FAFC;
+    --white:       #FFFFFF;
+
+    --display: "Figtree", system-ui, -apple-system, Segoe UI, sans-serif;
+    --sans:    "DM Sans", system-ui, -apple-system, Segoe UI, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #FFFFFF; font-family: var(--sans); color: var(--charcoal); }
+  body { min-height: 100vh; overflow-x: hidden; }
+
+  /* Page is a fixed 1360-wide canvas, scaled to fit viewport */
+  .scaler {
+    width: 1360px;
+    transform-origin: top left;
+  }
+  .page {
+    width: 1360px;
+    background: #FFFFFF;
+  }
+  .hero-wrap {
+    padding: 16px 16px 0;
+  }
+  .hero-frame {
+    width: 1328px;
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    box-shadow: 0 30px 80px -40px rgba(0, 0, 153, 0.35);
+  }
+</style>
+</head>
+<body>
+
+<div class="scaler">
+  <div class="page">
+    <div class="hero-wrap"><div id="hero-mount"></div></div>
+    <div id="sections-mount"></div>
+  </div>
+</div>
+
+<script>
+  // Scale the fixed 1360-wide canvas to fit the viewport and center it.
+  function fitPage() {
+    const scaler = document.querySelector('.scaler');
+    const page   = document.querySelector('.page');
+    if (!scaler || !page) return;
+    const pad = 24;
+    const vw = window.innerWidth;
+    const scale = Math.min(1, (vw - pad * 2) / 1360);
+    const tx = Math.max(pad, (vw - 1360 * scale) / 2);
+    scaler.style.transform = `translate(${tx}px, ${pad}px) scale(${scale})`;
+    const pageH = page.offsetHeight || 860;
+    document.body.style.minHeight = (pageH * scale + pad * 2) + 'px';
+  }
+  window.addEventListener('resize', fitPage);
+  const fitObserver = new MutationObserver(fitPage);
+  fitObserver.observe(document.body, { childList: true, subtree: true });
+  setTimeout(fitPage, 50);
+  setTimeout(fitPage, 400);
+  setTimeout(fitPage, 1500);
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="hero.jsx"></script>
+<script type="text/babel" src="sections-shared.jsx"></script>
+<script type="text/babel" src="sections-styles.jsx"></script>
+<script type="text/babel" src="sections.jsx"></script>
+
+</body>
+</html>
