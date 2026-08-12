@@ -17,10 +17,10 @@ import { GetStartedModal } from "@/components/shared/GetStartedModal";
  * position is the only way to keep the halo locked to the logo at every size.
  */
 const GRADIENT =
-  `radial-gradient(85% 70% at 100% 100%, #7C3AED 0%, rgba(124,58,237,0.65) 35%, rgba(124,58,237,0) 70%),
-   radial-gradient(120% 80% at 60% 0%, #BDBDFF 0%, #8484FF 22%, #5C5CFF 65%, #4747E0 100%),
+  `radial-gradient(90% 75% at 100% 15%, #9333EA 0%, rgba(147,51,234,0.7) 40%, rgba(147,51,234,0) 72%),
    radial-gradient(46% 42% at var(--logo-x, 69%) var(--logo-y, 51%), rgba(242,242,255,0.55) 0%, rgba(242,242,255,0) 62%),
-   radial-gradient(18% 22% at var(--topbar-logo-x, 6%) var(--topbar-logo-y, 8%), rgba(242,242,255,0.6) 0%, rgba(242,242,255,0) 65%)`;
+   radial-gradient(32% 40% at var(--topbar-logo-x, 6%) var(--topbar-logo-y, 8%), rgba(242,242,255,0.32) 0%, rgba(242,242,255,0.14) 40%, rgba(242,242,255,0) 75%),
+   linear-gradient(96deg, #6366F6 0%, #6658F2 32%, #6D4AE8 58%, #7C3AED 78%, #9333EA 100%)`;
 
 const GRAIN_SVG = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")`;
 
@@ -94,7 +94,7 @@ export function HeroSection() {
               position: "absolute",
               inset: 0,
               background: GRADIENT,
-              backgroundBlendMode: "screen, screen, normal, normal",
+              backgroundBlendMode: "screen, normal, normal, normal",
               // @ts-expect-error -- CSS custom properties aren't in CSSProperties
               "--logo-x": logoPos.x,
               "--logo-y": logoPos.y,
