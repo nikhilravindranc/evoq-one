@@ -39,6 +39,21 @@
   --sops-surface: #FAF2DB;
 }
 
+/* Hero "Get Started" CTA */
+.hero-cta-btn {
+  transition: transform .18s cubic-bezier(.22,1,.36,1), box-shadow .18s ease, background .18s ease;
+}
+.hero-cta-btn:hover {
+  transform: translateY(-1px);
+  background: #5757F0 !important;
+  box-shadow:
+    0 14px 34px -10px rgba(0,0,153,0.65),
+    inset 0 0 0 1px rgba(255,255,255,0.14) !important;
+}
+.hero-cta-btn:active {
+  transform: translateY(0);
+}
+
 /* Shared eyebrow pill */
 .evoq-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
@@ -79,181 +94,354 @@
 .evoq-section-head .evoq-eyebrow { margin-bottom: 20px; }
 
 /* ============================================================
-   SECTION 1 -- One Unified Platform
+   SECTION 1 -- One Unified Platform (product carousel)
    ============================================================
-   All three cards share one visual language — a soft gradient wash
-   (not a 100%-saturated fill) in a distinct hue per category, with a
-   white inset panel layered on top for the app list. No product
-   logos here; those already appear in the "Apps installed" section
-   further down the page, so this uses plain check rows instead.
+   A horizontally-scrolling fan of tilted cards, one per product,
+   instead of three category cards competing for equal height. Two
+   soft blob washes sit behind the track. Category lives in the
+   filter row below the track (.pf-filters), not on the card, so
+   cards spend their full visual area on the product itself.
+
+   Cards alternate between two styles, one-for-one down the product
+   list (see PRODUCTS in SectionPlatform.tsx) rather than randomised:
+   "window" (an app screenshot in browser chrome) and "editorial"
+   (full-bleed gradient + a pattern themed to the product + one big
+   icon + a floating stat chip). The alternation is what keeps ten
+   cards in a row from reading as one template repeated -- a big part
+   of why someone keeps scrolling instead of stopping at card two.
 */
 .s-platform {
+  position: relative;
+  background: #FAFAFC;
+  padding: 120px 0;
+  overflow: hidden;
+}
+.s-platform-inner { width: 100%; max-width: 1168px; margin: 0 auto; padding: 0 80px; }
+.pf-head { text-align: center; margin-left: auto; margin-right: auto; }
+.pf-head .evoq-eyebrow { margin: 0 auto 20px; }
+.pf-head .evoq-sub { margin: 16px auto 0; }
+
+/* Two large soft-edged washes peeking from opposite corners, in the
+   site's own lavender/mint tones rather than the reference's flat
+   colour blobs -- radial-gradient's own falloff does the blur, which
+   is far cheaper than filter:blur over an area this large. */
+.pf-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+.pf-blob-a {
+  top: -180px; right: -160px;
+  width: 560px; height: 560px;
+  background: radial-gradient(circle, rgba(124,110,240,0.22) 0%, rgba(124,110,240,0) 70%);
+}
+.pf-blob-b {
+  bottom: -220px; left: -180px;
+  width: 620px; height: 620px;
+  background: radial-gradient(circle, rgba(59,174,130,0.2) 0%, rgba(59,174,130,0) 70%);
+}
+
+.pf-track {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 26px;
+  margin-top: 64px;
+  padding: 44px 0 32px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.pf-track::-webkit-scrollbar { display: none; }
+/* first/last cards get real scroll-into-view space instead of
+   sitting flush against the viewport edge */
+.pf-track-pad { flex: 0 0 1px; width: max(5vw, 32px); }
+
+.pf-card {
+  scroll-snap-align: start;
+  /* Sized so ~4-5 land in view on a typical desktop viewport (the
+     track is full-bleed, not capped to the 1168px content column) --
+     large enough for the visual to actually read, without ballooning
+     to where only two or three fit and the "carousel" stops feeling
+     like one. */
+  flex: 0 0 312px;
+  display: block;
   background: #FFFFFF;
-  padding: 120px 80px;
+  border-radius: 24px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 24px 48px -28px rgba(31,36,48,0.3);
+  /* --pf-rotate/--pf-lift default to flat until the arc effect's first
+     rAF tick sets real values (see updateArc in SectionPlatform) --
+     without a fallback, var() referencing an unset property makes the
+     whole `transform` declaration invalid, so cards would render with
+     no transform at all for that first frame. */
+  transform: rotate(var(--pf-rotate, 0deg)) translateY(var(--pf-lift, 0px));
+  /* Short and linear: this now updates on every scroll frame (not just
+     on hover), so a slow/eased transition would make cards visibly
+     lag behind the pointer. Just enough duration to smooth sub-frame
+     jitter between rAF ticks. */
+  transition: transform .1s linear, box-shadow .3s ease;
 }
-.s-platform-inner { width: 100%; max-width: 1168px; margin: 0 auto; }
-.platform-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+.pf-card:hover,
+.pf-card:focus-visible {
+  transform: rotate(0deg) translateY(calc(var(--pf-lift, 0px) - 10px));
+  box-shadow: 0 34px 60px -26px rgba(31,36,48,0.4);
+  z-index: 2;
+  transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
 }
+.pf-card-inner { display: flex; flex-direction: column; height: 100%; }
+
+.pf-visual {
+  position: relative;
+  height: 264px;
+}
+/* Window style gets a 14px mat around the screenshot; editorial fills
+   the whole area itself. Explicit modifier class rather than :has() --
+   one less thing riding on selector support. */
+.pf-visual.mat { padding: 14px; }
+
+/* Once a product's real clip lands in /public/videos/products/, it
+   fills the same box either mockup style used and needs no mat --
+   the footage itself is the "screenshot", no chrome required. */
+.pf-visual-video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* -- window chrome: the detail that reads "screenshot", not "diagram" -- */
+.pf-window {
+  position: relative;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  background: #F4F5F9;
+  border-radius: 13px;
+  overflow: hidden;
+  box-shadow:
+    0 12px 26px -12px rgba(15,20,30,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+}
+.pf-window-bar {
+  display: flex; align-items: center; gap: 5px;
+  flex-shrink: 0;
+  padding: 9px 10px;
+  background: #F2F3F6;
+  border-bottom: 1px solid rgba(31,36,48,0.06);
+}
+.pf-window-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pf-window-tab {
+  margin-left: 6px;
+  font-family: var(--sans); font-size: 8.5px; font-weight: 600;
+  color: rgba(31,36,48,0.4);
+  background: #fff;
+  border-radius: 4px;
+  padding: 2px 8px;
+  border: 1px solid rgba(31,36,48,0.05);
+}
+.pf-window-body {
+  position: relative;
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 18px;
+  /* faint dot texture reads as UI depth rather than a flat fill */
+  background-image: radial-gradient(rgba(31,36,48,0.05) 1px, transparent 1.4px);
+  background-size: 12px 12px;
+}
+
+/* -- cursor accent: implies a live pointer inside the window -- */
+.pf-cursor {
+  position: absolute;
+  z-index: 4;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));
+  pointer-events: none;
+}
+.pf-cursor-top-right    { top: 56px;  right: 26px; }
+.pf-cursor-bottom-left  { bottom: 24px; left: 32px; transform: rotate(-8deg); }
+.pf-cursor-top-left     { top: 60px;  left: 36px; transform: rotate(6deg); }
+.pf-cursor-bottom-right { bottom: 28px; right: 30px; transform: rotate(-4deg); }
+
+/* -- editorial style: full-bleed gradient, pattern, icon, chip -- */
+.pf-editorial {
+  position: relative;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden;
+  color: #fff;
+}
+.pf-editorial-pattern { position: absolute; inset: 0; opacity: 0.5; }
+.pf-editorial-dots {
+  background-image: radial-gradient(rgba(255,255,255,0.55) 1.4px, transparent 1.8px);
+  background-size: 16px 16px;
+  -webkit-mask-image: radial-gradient(80% 70% at 50% 40%, black 0%, transparent 85%);
+          mask-image: radial-gradient(80% 70% at 50% 40%, black 0%, transparent 85%);
+}
+.pf-editorial-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(75% 65% at 50% 42%, black 0%, transparent 88%);
+          mask-image: radial-gradient(75% 65% at 50% 42%, black 0%, transparent 88%);
+}
+.pf-editorial-rings {
+  background-image:
+    repeating-radial-gradient(circle at 50% 38%, transparent 0 20px, rgba(255,255,255,0.22) 20px 21.5px);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 38%, black 0%, transparent 82%);
+          mask-image: radial-gradient(70% 60% at 50% 38%, black 0%, transparent 82%);
+}
+.pf-editorial-orbit {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0.9;
+}
+.pf-editorial-icon {
+  position: relative; z-index: 1;
+  width: 62px; height: 62px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 14px 28px -14px rgba(0,0,0,0.4);
+}
+.pf-editorial-chip {
+  position: absolute;
+  left: 14px; right: 14px; bottom: 14px;
+  z-index: 2;
+  background: rgba(255,255,255,0.95);
+  color: #1F2430;
+  border-radius: 11px;
+  padding: 9px 12px;
+  font-family: var(--sans); font-size: 11px; font-weight: 700;
+  box-shadow: 0 10px 20px -12px rgba(0,0,0,0.4);
+}
+
+.pf-body {
+  padding: 20px 20px 22px;
+  display: flex; flex-direction: column;
+  flex: 1;
+}
+.pf-name {
+  font-family: var(--display); font-weight: 700;
+  font-size: 19px; letter-spacing: -0.015em;
+  color: #1F2430;
+}
+.pf-desc {
+  font-family: var(--sans); font-size: 13px; line-height: 1.6;
+  color: rgba(31,36,48,0.62);
+  margin: 9px 0 0;
+}
+.pf-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 18px;
+  font-family: var(--sans); font-size: 12.5px; font-weight: 700;
+  transition: gap .18s ease;
+}
+.pf-card:hover .pf-link { gap: 9px; }
+
+.pf-nav {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center; gap: 10px;
+  margin-top: 8px;
+}
+.pf-nav-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  color: var(--charcoal);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, transform .15s ease;
+}
+.pf-nav-btn:hover { background: var(--soft); border-color: var(--tint); transform: translateY(-1px); }
+.pf-nav-btn:active { transform: translateY(0); }
+
+/* -- mini illustrations (window style) -- */
+.pf-mock { width: 100%; }
+
+.pf-mock-list { display: flex; flex-direction: column; gap: 9px; }
+.pf-mock-row {
+  display: flex; align-items: center; gap: 9px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 2px rgba(31,36,48,0.04);
+}
+.pf-mock-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pf-mock-row-label {
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  color: #1F2430;
+  flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pf-mock-pill {
+  font-family: var(--sans); font-size: 9.5px; font-weight: 700;
+  padding: 3px 8px; border-radius: 999px;
+  white-space: nowrap;
+}
+
+.pf-mock-kanban { display: flex; gap: 10px; }
+.pf-kanban-col {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 12px;
+  padding: 14px 6px 12px;
+}
+.pf-kanban-bar { width: 24px; height: 3.5px; border-radius: 2px; }
+.pf-kanban-count { font-family: var(--display); font-weight: 700; font-size: 20px; color: #1F2430; }
+.pf-kanban-label { font-family: var(--sans); font-size: 9.5px; font-weight: 600; color: rgba(31,36,48,0.55); text-align: center; }
+
+.pf-mock-stat { text-align: center; }
+.pf-stat-value { font-family: var(--display); font-weight: 800; font-size: 32px; color: #1F2430; letter-spacing: -0.02em; }
+.pf-stat-label { font-family: var(--sans); font-size: 11.5px; color: rgba(31,36,48,0.55); margin-top: 3px; }
+.pf-stat-bars {
+  display: flex; align-items: flex-end; justify-content: center; gap: 5px;
+  height: 44px; margin-top: 16px;
+}
+.pf-stat-bar { width: 9px; border-radius: 3px 3px 0 0; }
+
+/* -- category filter row -- lives below the carousel now instead of
+   as a tag on every card, so switching category is a real control
+   rather than a corner label. */
+.pf-filters {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+  margin-top: 20px;
+}
+.pf-filter {
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  color: var(--body-text);
+  font-family: var(--sans); font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .15s ease;
+}
+.pf-filter:hover { border-color: var(--tint); color: var(--charcoal); transform: translateY(-1px); }
+.pf-filter.active {
+  background: var(--interactive);
+  border-color: var(--interactive);
+  color: #fff;
+}
+
 @media (max-width: 1024px) {
-  .s-platform { padding: 100px 40px; }
-}
-@media (max-width: 900px) {
-  .platform-grid { grid-template-columns: 1fr; }
+  .s-platform { padding: 100px 0; }
+  .s-platform-inner { padding: 0 40px; }
+  .pf-card { flex: 0 0 280px; }
+  .pf-visual { height: 236px; }
 }
 @media (max-width: 640px) {
-  .s-platform { padding: 72px 20px; }
-  .platform-card { padding: 22px; min-height: 0; }
-}
-
-.platform-card {
-  border-radius: 28px;
-  padding: 28px;
-  display: flex; flex-direction: column; gap: 4px;
-  min-height: 420px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(31,36,48,0.05), 0 26px 48px -26px rgba(31,36,48,0.34);
-  transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease;
-}
-.platform-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 10px rgba(31,36,48,0.06), 0 36px 64px -26px rgba(31,36,48,0.4);
-}
-
-/* Soft gradient washes -- one hue family per category, none at full
-   saturation, all fading toward white so the card never reads as a
-   flat color block -- a faint dot-grid pattern layered on top for
-   texture, and a soft radial glow/highlight (top-right, echoing the
-   hero card's halo) so the card reads as lit rather than flat. */
-.platform-card.tone-violet {
-  background:
-    radial-gradient(52% 46% at 88% 6%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 62%),
-    radial-gradient(rgba(79,63,174,0.16) 1.2px, transparent 1.2px) -4px -4px / 20px 20px,
-    linear-gradient(165deg, #EDEBFD 0%, #D6CFF7 45%, #B7ACF0 100%);
-  --platform-tone-ink: #4F3FAE;
-}
-.platform-card.tone-blue {
-  background:
-    radial-gradient(52% 46% at 88% 6%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 62%),
-    radial-gradient(rgba(44,99,176,0.16) 1.2px, transparent 1.2px) -4px -4px / 20px 20px,
-    linear-gradient(165deg, #E9F1FD 0%, #C9DEF8 45%, #9FC1F0 100%);
-  --platform-tone-ink: #2C63B0;
-}
-.platform-card.tone-green {
-  background:
-    radial-gradient(52% 46% at 88% 6%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 62%),
-    radial-gradient(rgba(33,129,90,0.16) 1.2px, transparent 1.2px) -4px -4px / 20px 20px,
-    linear-gradient(165deg, #E9F8F0 0%, #C9ECD8 45%, #9DDBB9 100%);
-  --platform-tone-ink: #21815A;
-}
-
-.platform-label {
-  font-family: var(--sans); font-size: 12px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--platform-tone-ink);
-}
-.platform-title {
-  font-family: var(--display); font-weight: 700;
-  font-size: 24px; line-height: 1.22; letter-spacing: -0.02em;
-  color: #1F2430;
-  margin: 10px 0 0;
-}
-.platform-count {
-  font-family: var(--sans); font-size: 12.5px; font-weight: 600;
-  color: rgba(31,36,48,0.55);
-  margin-top: 8px;
-}
-
-.platform-mock {
-  margin-top: auto;
-  background: rgba(255,255,255,0.82);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,0.9);
-  border-radius: 18px;
-  padding: 16px 18px;
-  box-shadow: 0 1px 2px rgba(31,36,48,0.03), 0 14px 28px -20px rgba(31,36,48,0.35);
-}
-
-/* Growth mock: chat question + answer + tiny bar chart */
-.pm-chat-q {
-  font-family: var(--sans); font-size: 12px; font-weight: 600;
-  color: rgba(31,36,48,0.62);
-  background: rgba(31,36,48,0.05);
-  border-radius: 10px;
-  padding: 8px 10px;
-  line-height: 1.35;
-}
-.pm-chat-a {
-  font-family: var(--display); font-size: 13px; font-weight: 500;
-  color: #1F2430;
-  line-height: 1.4;
-  margin-top: 8px;
-}
-.pm-chat-a strong { color: var(--platform-tone-ink); }
-.pm-bars {
-  display: flex; align-items: flex-end; gap: 5px;
-  height: 34px;
-  margin-top: 12px;
-}
-.pm-bar {
-  flex: 1;
-  border-radius: 3px 3px 0 0;
-  background: var(--platform-tone-ink);
-  opacity: 0.75;
-}
-
-/* Operations mock: two-step node flow */
-.pm-flow-row {
-  display: flex; align-items: center; gap: 8px;
-}
-.pm-flow-row.indent { margin-top: 8px; margin-left: 18px; }
-.pm-node {
-  font-family: var(--display); font-size: 12px; font-weight: 700;
-  color: var(--platform-tone-ink);
-  background: rgba(255,255,255,0.9);
-  border: 1px solid rgba(31,36,48,0.08);
-  border-radius: 999px;
-  padding: 6px 12px;
-}
-.pm-flow-arrow {
-  font-size: 13px;
-  color: rgba(31,36,48,0.35);
-}
-.pm-flow-caption {
-  font-family: var(--sans); font-size: 11.5px; font-weight: 600;
-  color: rgba(31,36,48,0.5);
-  margin-top: 12px;
-}
-
-/* People mock: vertical onboarding timeline */
-.pm-tl-row {
-  position: relative;
-  display: flex; align-items: center; gap: 10px;
-  padding: 7px 0;
-}
-.pm-tl-dot {
-  position: relative;
-  width: 9px; height: 9px; border-radius: 50%;
-  background: rgba(31,36,48,0.18);
-  flex-shrink: 0;
-}
-.pm-tl-dot.done { background: var(--platform-tone-ink); }
-.pm-tl-dot.active {
-  background: var(--platform-tone-ink);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--platform-tone-ink) 25%, transparent);
-}
-.pm-tl-line {
-  position: absolute;
-  left: 4px; top: 20px;
-  width: 1px; height: 18px;
-  background: rgba(31,36,48,0.15);
-}
-.pm-tl-label {
-  font-family: var(--display); font-size: 12.5px; font-weight: 600;
-  color: #1F2430;
+  .s-platform { padding: 72px 0; }
+  .s-platform-inner { padding: 0 20px; }
+  .pf-card { flex: 0 0 250px; }
+  .pf-visual { height: 210px; }
+  .pf-track { margin-top: 44px; gap: 18px; }
+  .pf-editorial-icon { width: 52px; height: 52px; border-radius: 15px; }
 }
 
 /* Projects checklist */
@@ -293,25 +481,49 @@
    ============================================================ */
 .s-ai {
   background: #FFFFFF;
-  padding: 0 80px 120px;
+  /* Top padding was 0 -- the heading started right at the section's own
+     edge, which sits exactly where the platform carousel's green blob
+     above fades out (its background is clipped by that section's own
+     overflow:hidden, not by any gap). With no whitespace buffer between
+     them the two sections read as glued together / overlapping rather
+     than as two distinct sections in sequence. */
+  padding: 100px 80px 120px;
 }
 .s-ai-head {
   width: 100%; max-width: 1168px; margin: 0 auto 32px;
 }
-.s-ai-head .evoq-h2 { margin-top: 16px; white-space: nowrap; }
-.s-ai-frame {
+.s-ai-head .evoq-h2 { margin-top: 16px; }
+
+/* Shell paints the light bezel + outer bloom; the frame nested inside
+   is the actual dark panel, so the rim reads as a lit screen edge
+   rather than a border drawn on top of the gradient. */
+.s-ai-shell {
   position: relative;
   width: 100%; max-width: 1168px; margin: 0 auto;
-  border-radius: 32px;
+  border-radius: 40px;
+  padding: 12px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.9) 0%, rgba(206,220,255,0.5) 50%, rgba(255,255,255,0.85) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.7),
+    0 0 70px 10px rgba(140,170,255,0.35),
+    0 40px 90px -40px rgba(0,0,120,0.45);
+}
+.s-ai-frame {
+  position: relative;
+  width: 100%;
+  border-radius: 30px;
   background:
-    linear-gradient(225deg, #8484FF 0%, #5C5CFF 65%, #4747E0 90%, #7C3AED 100%),
-    radial-gradient(60%  50% at 80% 70%,  rgba(189,189,255,0.35) 0%, rgba(189,189,255,0) 60%);
-  background-blend-mode: screen, normal;
-  padding: 80px 64px;
+    radial-gradient(90% 75% at 100% 15%, #9333EA 0%, rgba(147,51,234,0.7) 40%, rgba(147,51,234,0) 72%),
+    radial-gradient(46% 42% at 50% 51%, rgba(242,242,255,0.55) 0%, rgba(242,242,255,0) 62%),
+    linear-gradient(96deg, #6366F6 0%, #6658F2 32%, #6D4AE8 58%, #7C3AED 78%, #9333EA 100%);
+  background-blend-mode: screen, normal, normal;
+  padding: 72px 56px;
   overflow: hidden;
   isolation: isolate;
   color: #fff;
-  box-shadow: 0 40px 80px -34px rgba(0,0,153,0.4);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.15),
+    inset 0 0 60px rgba(120,160,255,0.18);
 }
 .s-ai .grain {
   position: absolute; inset: 0;
@@ -322,32 +534,53 @@
 }
 .s-ai .vignette {
   position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(120% 80% at 50% 110%, rgba(0,0,153,0.75) 0%, rgba(0,0,153,0) 55%);
+  background: radial-gradient(125% 85% at 50% 112%, rgba(0,0,80,0.7) 0%, rgba(0,0,80,0) 58%);
 }
 .s-ai-inner {
   position: relative; z-index: 2;
   width: 100%; margin: 0 auto;
-  display: grid; grid-template-columns: 0.86fr 1fr 0.98fr;
-  gap: 36px; align-items: center;
-}
-.ai-copy .lead {
-  font-family: var(--sans); font-size: 16px; font-weight: 500;
-  line-height: 1.55; color: rgba(255,255,255,0.92);
-  margin: 0; max-width: 34ch;
-}
-.ai-copy p.body {
-  font-family: var(--sans); font-size: 14.5px; line-height: 1.65;
-  color: rgba(255,255,255,0.7);
-  margin: 14px 0 0; max-width: 34ch;
+  display: grid; grid-template-columns: 0.98fr 1.06fr 0.9fr;
+  gap: 20px; align-items: center;
 }
 
-/* Mascot column -- center figure with a soft radial glow behind it so it
-   sits inside the gradient rather than looking like a cut-out sticker. */
+/* Copy sits in a lit glass panel rather than as bare text, matching
+   the chat card's weight so the two flank the mascot evenly. */
+.ai-copy {
+  position: relative;
+  border-radius: 16px;
+  padding: 22px 24px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.22);
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 26px rgba(0,0,0,0.08),
+    inset 0 0 22px rgba(255,255,255,0.06);
+}
+.ai-copy .lead {
+  font-family: var(--sans); font-size: 15.5px; font-weight: 600;
+  line-height: 1.55; color: #fff;
+  margin: 0;
+}
+.ai-copy p.body {
+  font-family: var(--sans); font-size: 13.5px; line-height: 1.65;
+  color: rgba(255,255,255,0.74);
+  margin: 14px 0 0;
+}
+
+/* Mascot occupies the centre grid column, flanked by the copy panel
+   and the chat card. It overflows its own column slightly so it reads
+   as a large presence the two panels are tucked against. */
 .ai-mascot {
   position: relative;
+  z-index: 1;
   display: flex; align-items: center; justify-content: center;
-  height: 100%;
-  min-height: 360px;
+  pointer-events: none;
+}
+.ai-mascot-inner {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 78%;
+  margin: 0 auto;
 }
 .ai-mascot-glow {
   position: absolute;
@@ -357,43 +590,72 @@
   filter: blur(6px);
   z-index: 0;
 }
+/* The source SVG sits in a wide 1.95:1 canvas with the character
+   centred in it, so rendering it at width:100% makes the character
+   look small and short. A square window that clips the empty side
+   margins lets the character itself fill the space. The source
+   asset also bakes in a solid rectangular backdrop behind the
+   character (not transparent), which reads as a pasted-on "patch"
+   against this section's colour gradient -- a radial mask fades
+   that hard edge into the card background instead of clipping it
+   as a visible rectangle. */
 .ai-mascot-crop {
   position: relative;
   z-index: 1;
-  display: block;
-  width: 96%;
-  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+          mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
 }
 .ai-mascot-img {
   position: relative;
   display: block;
-  width: 100%;
+  width: 150%;
+  max-width: none;
   height: auto;
-  filter: drop-shadow(0 30px 50px rgba(0,0,153,0.45));
+  filter: drop-shadow(0 30px 50px rgba(0,0,90,0.5));
 }
 
 .ai-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 360px;
+  /* pulled left so it tucks over the mascot's arm, as in the reference */
+  margin-left: -26px;
   background: #FFFFFF;
-  border-radius: 22px;
-  padding: 16px;
+  border-radius: 18px;
+  padding: 13px;
   box-shadow:
-    0 40px 70px -30px rgba(0, 0, 153, 0.5),
+    0 40px 70px -30px rgba(0, 0, 90, 0.65),
     inset 0 0 0 1px rgba(255,255,255,0.4);
-  display: flex; flex-direction: column; gap: 12px;
+  display: flex; flex-direction: column; gap: 9px;
 }
 .ai-card-hd {
-  display: flex; align-items: center; gap: 10px;
-  padding: 2px 2px 10px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 2px 2px 8px;
   border-bottom: 1px solid var(--border);
 }
 .ai-card-avatar {
-  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
   background: linear-gradient(135deg, var(--bright), var(--primary));
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
 }
-.ai-card-name { font-family: var(--sans); font-size: 13.5px; font-weight: 700; color: var(--charcoal); }
+.ai-card-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 50% 8%;
+  transform: scale(2.6);
+}
+.ai-card-name { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--charcoal); }
 .ai-card-status {
   display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--sans); font-size: 11.5px; color: var(--muted); margin-top: 1px;
+  font-family: var(--sans); font-size: 10.5px; color: var(--muted); margin-top: 1px;
 }
 .ai-card-status .dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -401,14 +663,14 @@
 }
 
 .ai-thread {
-  display: flex; flex-direction: column; gap: 8px;
-  max-height: 260px;
+  display: flex; flex-direction: column; gap: 6px;
+  max-height: 190px;
   overflow: hidden;
 }
 .ai-bubble {
-  padding: 10px 13px;
-  border-radius: 14px;
-  font-family: var(--sans); font-size: 12.5px; line-height: 1.5;
+  padding: 8px 11px;
+  border-radius: 12px;
+  font-family: var(--sans); font-size: 11.5px; line-height: 1.45;
   max-width: 88%;
 }
 .ai-bubble.bot {
@@ -425,49 +687,63 @@
 }
 
 .ai-chips {
-  display: flex; flex-wrap: wrap; gap: 8px;
+  display: flex; flex-wrap: wrap; gap: 6px;
 }
 .ai-chip {
-  padding: 7px 12px;
+  padding: 6px 10px;
   border-radius: 999px;
   background: #FFFFFF;
   border: 1px solid var(--border);
-  font-family: var(--sans); font-size: 11.5px; font-weight: 500; color: var(--body-text);
+  font-family: var(--sans); font-size: 10.5px; font-weight: 500; color: var(--body-text);
   cursor: pointer;
   transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
 .ai-chip:hover { background: var(--soft); border-color: var(--tint); color: var(--charcoal); }
 
 .ai-cta-plan {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 8px 8px 8px 16px;
-  background: var(--charcoal); color: #fff;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 7px 7px 14px;
+  background: linear-gradient(135deg, #6D4FEB 0%, #4B32B8 100%); color: #fff;
   border-radius: 999px;
-  font-family: var(--sans); font-size: 12.5px; font-weight: 600;
+  font-family: var(--sans); font-size: 11.5px; font-weight: 600;
   border: 0; cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.ai-cta-plan:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px -10px rgba(75,50,184,0.55);
 }
 .ai-cta-plan.wide {
   justify-content: space-between;
   width: 100%;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 .ai-cta-plan .ic {
-  width: 22px; height: 22px; border-radius: 50%;
+  width: 20px; height: 20px; border-radius: 50%;
   background: rgba(255,255,255,0.16);
   display: inline-flex; align-items: center; justify-content: center;
 }
 
 @media (max-width: 1024px) {
-  .s-ai { padding: 0 40px 100px; }
-  .s-ai-frame { padding: 56px 40px; border-radius: 26px; }
-  .s-ai-inner { grid-template-columns: 1fr; gap: 48px; }
-  .ai-mascot { order: -1; min-height: 260px; }
-  .ai-mascot-crop { max-width: 220px; }
+  .s-ai { padding: 80px 40px 100px; }
+  .s-ai-shell { border-radius: 32px; padding: 10px; }
+  .s-ai-frame { padding: 52px 36px; border-radius: 24px; }
+  /* stack: copy, mascot, card -- mascot no longer needs to bleed into
+     neighbours once each row owns the full width */
+  .s-ai-inner { grid-template-columns: 1fr; gap: 32px; justify-items: center; }
+  .ai-copy { max-width: 520px; }
+  .ai-mascot-inner { width: 340px; max-width: 100%; }
+  .ai-card { margin-left: 0; }
 }
 @media (max-width: 640px) {
-  .s-ai { padding: 0 20px 72px; }
-  .s-ai-frame { padding: 40px 24px; border-radius: 22px; }
-  .s-ai-head .evoq-h2 { white-space: normal; }
+  .s-ai { padding: 64px 20px 72px; }
+  .s-ai-shell { border-radius: 26px; padding: 8px; }
+  .s-ai-frame { padding: 36px 20px; border-radius: 20px; }
+  /* keeps "Your AI assistant for work." from dropping "work." alone
+     onto a third line at narrow widths */
+  .s-ai-head .evoq-h2 { text-wrap: balance; }
+  .ai-copy { padding: 18px 18px; }
+  .ai-mascot-inner { width: 250px; }
 }
 
 /* ============================================================
@@ -504,7 +780,36 @@
 }
 .team-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 1px 2px rgba(31,36,48,0.08), 0 30px 48px -22px var(--team-shadow, rgba(31,36,48,0.32));
+  box-shadow:
+    0 1px 2px rgba(31,36,48,0.08),
+    0 30px 48px -22px var(--team-shadow, rgba(31,36,48,0.32)),
+    inset 0 1px 0 rgba(255,255,255,0.85);
+}
+/* Shared accent motif with the platform cards above: a top sheen plus
+   concentric arcs sweeping out of the bottom-right corner, tinted from
+   each card's own shadow hue so it stays in-tone. */
+.team-card::before,
+.team-card::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+.team-card::before {
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0) 28%);
+}
+.team-card::after {
+  bottom: -130px; right: -130px; width: 330px; height: 330px;
+  background-image: repeating-radial-gradient(
+    circle at 50% 50%,
+    transparent 0 27px,
+    var(--team-shadow, rgba(31,36,48,0.25)) 27px 28.4px
+  );
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 0%, black 40%, transparent 76%);
+          mask-image: radial-gradient(circle at 50% 50%, black 0%, black 40%, transparent 76%);
 }
 
 /* Card tones -- all five use the same light complementary palette (given
@@ -625,8 +930,18 @@
 
 /* Card 3: per-row dot timelines with a floating tooltip on the active
    row, riding along the track on a loop */
-.tc-tasks { width: 100%; display: flex; flex-direction: column; gap: 11px; }
-.tc-task-row { display: flex; align-items: center; gap: 8px; }
+.tc-tasks { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+/* Same white-card treatment as .tc-stat in the card next to it -- rows
+   floated bare on the peach gradient read as loose/unfinished next to
+   that card's boxed stats. */
+.tc-task-row {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.95);
+  border-radius: 12px;
+  padding: 8px 10px;
+  box-shadow: 0 1px 2px rgba(31,36,48,0.03), 0 10px 20px -16px rgba(31,36,48,0.3);
+}
 .tc-task-icon {
   width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0; color: #fff;
   display: flex; align-items: center; justify-content: center;
@@ -933,35 +1248,64 @@
 .stat {
   text-align: center;
   position: relative;
-  padding: 24px 16px;
+  padding: 26px 18px;
   border-radius: 18px;
   cursor: default;
-  transition: background .25s ease, transform .25s ease;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(31,36,48,0.03);
+  transition:
+    transform .28s cubic-bezier(.22,1,.36,1),
+    box-shadow .28s ease,
+    border-color .28s ease;
 }
+/* Brand wash that blooms up from the base on hover. The section sits on
+   a near-white ground, so the old white-on-white hover was invisible --
+   the fill now shifts to a tinted gradient instead. */
 .stat::before {
   content: "";
   position: absolute; inset: 0;
   border-radius: inherit;
-  background: radial-gradient(120% 80% at 50% 0%, rgba(189,189,255,0.35) 0%, rgba(189,189,255,0) 60%);
+  background: linear-gradient(180deg, rgba(242,242,255,0.55) 0%, rgba(189,189,255,0.45) 100%);
   opacity: 0;
-  transition: opacity .25s ease;
+  transition: opacity .28s ease;
+  pointer-events: none;
+}
+/* accent rule that draws in along the top edge */
+.stat::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  width: 0; height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, var(--primary), var(--mid));
+  transform: translateX(-50%);
+  transition: width .3s cubic-bezier(.22,1,.36,1);
   pointer-events: none;
 }
 .stat > * { position: relative; z-index: 1; }
-.stat:hover { background: #FFFFFF; transform: translateY(-3px); box-shadow: 0 20px 40px -20px rgba(0,0,153,0.18); }
+.stat:hover {
+  transform: translateY(-6px);
+  border-color: var(--tint);
+  box-shadow: 0 26px 48px -22px rgba(0,0,153,0.32);
+}
 .stat:hover::before { opacity: 1; }
-.stat:hover .v { color: var(--mid); transform: scale(1.04); }
+.stat:hover::after { width: 56%; }
+.stat:hover .v { color: var(--deep); transform: scale(1.07); }
+.stat:hover .l { color: var(--charcoal); }
 .stat .v {
   font-family: var(--display); font-weight: 800;
   font-size: 40px; line-height: 1; letter-spacing: -0.03em;
   color: var(--primary);
-  transition: color .25s ease, transform .25s ease;
+  transition: color .28s ease, transform .28s cubic-bezier(.22,1,.36,1);
   transform-origin: center bottom;
 }
 .stat .l {
   font-family: var(--sans); font-size: 13.5px; line-height: 1.5;
   color: var(--body-text); margin: 10px auto 0;
   max-width: 24ch;
+  transition: color .28s ease;
 }
 
 /* ============================================================

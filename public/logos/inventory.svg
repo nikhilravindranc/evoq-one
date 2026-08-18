@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 214 56" width="214" height="56" role="img" aria-label="Inventory">
+  <!-- Placeholder wordmark: matches the icon-plus-name shape of the real
+       product logos (crm.png etc.) so layout/sizing behaves identically.
+       Swap for the final asset when it exists. -->
+  <rect x="3" y="5" width="46" height="46" rx="13" fill="#0E8C9E"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M14 20 L26 13.5 L38 20 L38 34 L26 40.5 L14 34 Z"/>
+    <path d="M14 20 L26 26.5 L38 20"/>
+    <path d="M26 26.5 L26 40.5"/>
+  </g>
+  <text x="60" y="38" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="30" font-weight="700" fill="#1F2430">Inventory</text>
+</svg>

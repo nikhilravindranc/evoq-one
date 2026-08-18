@@ -1,11 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Topbar } from "./Topbar";
-import { Collage } from "./Collage";
 import { ArrowRight } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
+
+type HeroTab = "growth" | "operations" | "people";
+
+const HERO_TABS: { key: HeroTab; label: string; video: string }[] = [
+  { key: "growth", label: "Growth", video: "/videos/Growth.mp4" },
+  { key: "operations", label: "Operations", video: "/videos/Operations.mp4" },
+  { key: "people", label: "People", video: "/videos/People.mp4" },
+];
 
 /* The "logo halo" layer (3rd in the stack) is positioned via --logo-x/--logo-y,
  * CSS custom properties kept in sync with the logo tile's actual on-screen
@@ -26,9 +33,37 @@ const GRAIN_SVG = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/20
 
 export function HeroSection() {
   const [showGetStarted, setShowGetStarted] = useState(false);
+  const [activeTab, setActiveTab] = useState<HeroTab>("growth");
+  // 'checking' -> 'ok' | 'missing', resolved via a HEAD request rather than
+  // the <video> element's own error event: that event races with hydration
+  // (a fast local 404 can fire before React attaches its listener), so it
+  // isn't reliable enough to gate what renders.
+  const [videoStatus, setVideoStatus] = useState<Record<HeroTab, "checking" | "ok" | "missing">>({
+    growth: "checking",
+    operations: "checking",
+    people: "checking",
+  });
   const frameRef = useRef<HTMLDivElement>(null);
   const [logoPos, setLogoPos] = useState<{ x: string; y: string }>({ x: "69%", y: "51%" });
   const [topbarLogoPos, setTopbarLogoPos] = useState<{ x: string; y: string }>({ x: "6%", y: "8%" });
+
+  useEffect(() => {
+    let cancelled = false;
+    HERO_TABS.forEach((tab) => {
+      fetch(tab.video, { method: "HEAD" })
+        .then((res) => {
+          if (cancelled) return;
+          setVideoStatus((prev) => ({ ...prev, [tab.key]: res.ok ? "ok" : "missing" }));
+        })
+        .catch(() => {
+          if (cancelled) return;
+          setVideoStatus((prev) => ({ ...prev, [tab.key]: "missing" }));
+        });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const frame = frameRef.current;
@@ -157,8 +192,8 @@ export function HeroSection() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "flex-start",
-                padding: "300px 24px 0 0",
+                justifyContent: "center",
+                padding: "0 24px 0 0",
               }}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
@@ -176,11 +211,9 @@ export function HeroSection() {
                     margin: 0,
                   }}
                 >
-                  Every team.
+                  Every part of your business.
                   <br />
-                  Every workflow.
-                  <br />
-                  <span style={{ color: "#BDBDFF" }}>Finally connected.</span>
+                  <span style={{ color: "#BDBDFF" }}>Working together.</span>
                 </h1>
 
                 <p
@@ -193,23 +226,62 @@ export function HeroSection() {
                     color: "rgba(255,255,255,0.75)",
                   }}
                 >
-                  Your sales, service, operations, and support teams share one
-                  workspace. Data flows between them automatically. Handoffs
-                  never get missed.
+                  From growth and customer relationships to daily operations
+                  and people management, EVOQ gives your business the tools
+                  to work better together.
                 </p>
               </div>
 
               <div>
                 <div
+                  role="tablist"
+                  aria-label="Hero product focus"
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    alignItems: "center",
+                    marginTop: 32,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {HERO_TABS.map((tab) => {
+                    const isActive = tab.key === activeTab;
+                    return (
+                      <button
+                        key={tab.key}
+                        role="tab"
+                        aria-selected={isActive}
+                        onClick={() => setActiveTab(tab.key)}
+                        style={{
+                          padding: "9px 18px",
+                          borderRadius: 999,
+                          fontFamily: "var(--font-sans)",
+                          fontSize: 13.5,
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          transition: "background .18s ease, color .18s ease, border-color .18s ease",
+                          border: isActive ? "1px solid rgba(255,255,255,0)" : "1px solid rgba(255,255,255,0.28)",
+                          background: isActive ? "#fff" : "transparent",
+                          color: isActive ? "#4747E0" : "rgba(255,255,255,0.85)",
+                        }}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div
                   style={{
                     display: "flex",
                     gap: 14,
                     alignItems: "center",
-                    marginTop: 40,
+                    marginTop: 20,
                   }}
                 >
                   <button
                     onClick={() => setShowGetStarted(true)}
+                    className="hero-cta-btn"
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -246,11 +318,17 @@ export function HeroSection() {
               </div>
             </motion.section>
 
-            {/* Right column: collage fills full column height */}
+            {/* Right column: video swaps per selected tab. Until a
+                category's video file is uploaded to /public/videos, this
+                renders an empty placeholder frame (see videoStatus / the
+                HEAD-check effect above) instead of a static graphic. */}
             <motion.section
               style={{
                 position: "relative",
                 height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 overflow: "visible",
                 marginTop: "40px",
               }}
@@ -259,7 +337,130 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
               aria-label="Product showcase"
             >
-              <Collage tileRadius="30%" />
+              {/* Decorative backdrop -- soft glow + thin geometric accents,
+                  echoing the halo/gradient language used elsewhere in the
+                  hero so the frame reads as "premium" rather than bare. */}
+              <div
+                aria-hidden
+                style={{
+                  position: "absolute",
+                  inset: "-14% -10%",
+                  pointerEvents: "none",
+                  zIndex: 0,
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "-6%",
+                    right: "4%",
+                    width: "58%",
+                    height: "58%",
+                    borderRadius: "50%",
+                    background:
+                      "radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(189,189,255,0.22) 45%, rgba(189,189,255,0) 75%)",
+                    filter: "blur(6px)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "-4%",
+                    left: "2%",
+                    width: "42%",
+                    height: "42%",
+                    borderRadius: "50%",
+                    background:
+                      "radial-gradient(circle, rgba(147,51,234,0.45) 0%, rgba(147,51,234,0) 70%)",
+                    filter: "blur(4px)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "6%",
+                    left: "-2%",
+                    width: 120,
+                    height: 120,
+                    borderRadius: "50%",
+                    border: "1px solid rgba(255,255,255,0.22)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "10%",
+                    left: "-4%",
+                    width: 64,
+                    height: 64,
+                    borderRadius: 16,
+                    border: "1px solid rgba(255,255,255,0.16)",
+                    transform: "rotate(18deg)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "8%",
+                    right: "-2%",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 5px)",
+                    gap: 6,
+                    opacity: 0.35,
+                  }}
+                >
+                  {Array.from({ length: 16 }).map((_, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        width: 3,
+                        height: 3,
+                        borderRadius: "50%",
+                        background: "#fff",
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {videoStatus[activeTab] === "ok" ? (
+                  <motion.video
+                    key={activeTab}
+                    src={HERO_TABS.find((t) => t.key === activeTab)!.video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      width: "100%",
+                      aspectRatio: "16 / 9",
+                      objectFit: "cover",
+                      borderRadius: 24,
+                      boxShadow: "0 40px 80px -34px rgba(0,0,153,0.5)",
+                    }}
+                  />
+                ) : (
+                  <motion.div
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    style={{
+                      width: "100%",
+                      aspectRatio: "16 / 9",
+                      borderRadius: 24,
+                      border: "1px dashed rgba(255,255,255,0.25)",
+                      background: "rgba(255,255,255,0.04)",
+                    }}
+                  />
+                )}
+              </AnimatePresence>
             </motion.section>
           </div>
           </div>

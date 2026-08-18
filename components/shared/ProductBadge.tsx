@@ -3,8 +3,13 @@ import Image from "next/image";
 /* ── product logo marks ──
  * Real product logos, cropped to icon-only (see public/logos/*-icon.png).
  * CRM/Desk/ServiceOps ship their own colored badge baked into the PNG.
- * HRMS/Skillberry are bare glyphs (their wordmark is white-on-transparent,
- * unusable on a white tab), so they get a matching color-tinted wrapper here.
+ * HRMS/Skillberry are bare glyphs with their OWN ink color (dark green /
+ * multicolor berries respectively, not white), so they get a wrapper here
+ * -- but the wrapper must contrast with that ink, not match it. hrms used
+ * to wrap its dark-green glyph in an equally dark-green circle, which made
+ * the icon nearly disappear into its own background (confirmed by
+ * compositing the pixels); it now gets the same light-tint treatment as
+ * skillberry.
  *
  * Campaigns/Sync/Projects only shipped as full wordmark lockups (icon +
  * text), no separate icon-only crop. Their icon square sits flush at the
@@ -17,7 +22,7 @@ import Image from "next/image";
 export const PRODUCT_BRAND: Record<string, { bg: string; solid: boolean }> = {
   crm: { bg: "#2554EB", solid: true },
   desk: { bg: "#0E8C82", solid: true },
-  hrms: { bg: "#1F7A4D", solid: true },
+  hrms: { bg: "#D5EDE0", solid: false },
   skillberry: { bg: "var(--soft)", solid: false },
   serviceops: { bg: "#F5A123", solid: true },
   campaigns: { bg: "#6D4FEB", solid: true },

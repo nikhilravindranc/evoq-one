@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 181 56" width="181" height="56" role="img" aria-label="Billing">
+  <!-- Placeholder wordmark: matches the icon-plus-name shape of the real
+       product logos (crm.png etc.) so layout/sizing behaves identically.
+       Swap for the final asset when it exists. -->
+  <rect x="3" y="5" width="46" height="46" rx="13" fill="#7C6EF0"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="13" y="17" width="26" height="19" rx="3.5"/>
+    <path d="M13 24 H39"/>
+    <path d="M18 31 H24"/>
+  </g>
+  <text x="60" y="38" font-family="Inter, 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="30" font-weight="700" fill="#1F2430">Billing</text>
+</svg>

@@ -22,65 +22,76 @@ export function SectionAI() {
   return (
     <section className="s-ai">
       <motion.div className="s-ai-head" {...fadeUp(0)}>
-        <Eyebrow>&#9733; EVOQ AI Assist</Eyebrow>
+        <Eyebrow noDot>EVI</Eyebrow>
         <h2 className="evoq-h2">
-          Intelligence is built into{" "}
-          <span className="accent">every workflow.</span>
+          Meet EVI
+          <br />
+          {/* nbsp keeps "for work." together so the line breaks as
+              "Your AI assistant / for work." on narrow screens rather
+              than orphaning "work." on a line of its own */}
+          <span className="accent">Your AI assistant for&nbsp;work.</span>
         </h2>
       </motion.div>
 
-      <div className="s-ai-frame">
-      <div className="grain" />
-      <div className="vignette" />
-      <div className="s-ai-inner">
-        <motion.div className="ai-copy" {...fadeUp(0.04)}>
-          <p className="lead">
-            Meet Evoq AI Assist, a context-aware AI that thinks across your entire
-            suite, and executes work at scale.
-          </p>
-          <p className="body">
-            Most tools give you data. EVOQ Assist gives you decisions. It reads across
-            your CRM, service jobs, and projects, then tells you what needs attention,
-            what can wait, and what it handles for you.
-          </p>
-        </motion.div>
+      {/* Shell paints the glowing bezel; the frame inside is the panel */}
+      <div className="s-ai-shell">
+        <div className="s-ai-frame">
+          <div className="grain" />
+          <div className="vignette" />
 
-        <motion.div className="ai-mascot" {...fadeUp(0.08)} aria-hidden="true">
-          <div className="ai-mascot-glow" />
-          <span className="ai-mascot-crop">
-            <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
-          </span>
-        </motion.div>
+          <div className="s-ai-inner">
+            <motion.div className="ai-copy" {...fadeUp(0.04)}>
+              <p className="lead">
+                EE-vee, your intelligent assistant across EVOQ.
+              </p>
+              <p className="body">
+                Most tools give you data. EVI gives you decisions. It reads across
+                your CRM, service jobs, and projects, then tells you what needs attention,
+                what can wait, and what it handles for you.
+              </p>
+            </motion.div>
 
-        <motion.div className="ai-card" {...fadeUp(0.16)}>
-          <div className="ai-card-hd">
-            <span className="ai-card-avatar" />
-            <div>
-              <div className="ai-card-name">EVOQ AI Assist</div>
-              <div className="ai-card-status"><span className="dot" />AI &middot; Online</div>
+            <div className="ai-mascot" aria-hidden="true">
+              <motion.div className="ai-mascot-inner" {...fadeUp(0.08)}>
+                <div className="ai-mascot-glow" />
+                <span className="ai-mascot-crop">
+                  <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
+                </span>
+              </motion.div>
             </div>
-          </div>
 
-          <div className="ai-thread">
-            {THREAD.map((m, i) => (
-              <div key={i} className={`ai-bubble ${m.from}`}>
-                {m.text}
+            <motion.div className="ai-card" {...fadeUp(0.16)}>
+              <div className="ai-card-hd">
+                <span className="ai-card-avatar">
+                  <img src="/ai-assist-mascot.svg" alt="" />
+                </span>
+                <div>
+                  <div className="ai-card-name">EVI</div>
+                  <div className="ai-card-status"><span className="dot" />AI &middot; Online</div>
+                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="ai-chips">
-            {CHIPS.map((c) => (
-              <span key={c} className="ai-chip">{c}</span>
-            ))}
-          </div>
+              <div className="ai-thread">
+                {THREAD.map((m, i) => (
+                  <div key={i} className={`ai-bubble ${m.from}`}>
+                    {m.text}
+                  </div>
+                ))}
+              </div>
 
-          <button className="ai-cta-plan wide">
-            <span>Explore AI Assist in Action</span>
-            <span className="ic"><ArrowRt size={11} color="#fff" /></span>
-          </button>
-        </motion.div>
-      </div>
+              <div className="ai-chips">
+                {CHIPS.map((c) => (
+                  <span key={c} className="ai-chip">{c}</span>
+                ))}
+              </div>
+
+              <button className="ai-cta-plan wide">
+                <span>Explore EVI in Action</span>
+                <span className="ic"><ArrowRt size={11} color="#fff" /></span>
+              </button>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );
