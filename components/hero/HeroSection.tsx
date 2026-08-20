@@ -902,6 +902,31 @@ export function HeroSection() {
   const [logoPos, setLogoPos] = useState<{ x: string; y: string }>({ x: "69%", y: "51%" });
   const [topbarLogoPos, setTopbarLogoPos] = useState<{ x: string; y: string }>({ x: "6%", y: "8%" });
 
+  // Auto-advance growth -> operations -> people -> growth, looping.
+  // Restarted (not just cleared) on every manual tab click below so a
+  // click doesn't get overridden a moment later by a timer that was
+  // already mid-flight -- the visitor's own choice gets a full fresh
+  // interval before the loop resumes.
+  const tabTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const AUTO_TAB_MS = 6000;
+
+  const startTabTimer = () => {
+    if (tabTimerRef.current) clearInterval(tabTimerRef.current);
+    tabTimerRef.current = setInterval(() => {
+      setActiveTab((prev) => {
+        const i = HERO_TABS.findIndex((t) => t.key === prev);
+        return HERO_TABS[(i + 1) % HERO_TABS.length].key;
+      });
+    }, AUTO_TAB_MS);
+  };
+
+  useEffect(() => {
+    startTabTimer();
+    return () => {
+      if (tabTimerRef.current) clearInterval(tabTimerRef.current);
+    };
+  }, []);
+
   useEffect(() => {
     const frame = frameRef.current;
     if (!frame) return;
@@ -1088,7 +1113,10 @@ export function HeroSection() {
                         key={tab.key}
                         role="tab"
                         aria-selected={isActive}
-                        onClick={() => setActiveTab(tab.key)}
+                        onClick={() => {
+                          setActiveTab(tab.key);
+                          startTabTimer();
+                        }}
                         style={{
                           padding: "9px 18px",
                           borderRadius: 999,
