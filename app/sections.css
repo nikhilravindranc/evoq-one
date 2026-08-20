@@ -147,26 +147,43 @@
   z-index: 1;
   display: flex;
   align-items: flex-start;
-  gap: 26px;
+  gap: 40px;
   margin-top: 64px;
   padding: 44px 0 32px;
   overflow-x: auto;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
 }
+/* When a category filter leaves few enough cards to fit inside the
+   viewport without scrolling, the row centers instead of hugging the
+   left edge -- toggled imperatively in the arc effect (see
+   updateArc in SectionPlatform.tsx), not via a media query, since
+   "fits" depends on how many cards survived the filter, not on
+   viewport width alone. `safe` keeps this from breaking the normal
+   10-card case: plain `center` on an OVERFLOWING flex row centers
+   the overflow symmetrically, which makes the first card unreachable
+   by scrolling all the way left. `safe center` falls back to
+   flex-start alignment whenever the content doesn't fit, so the
+   10-card row is unaffected and only the short filtered rows centre. */
+.pf-track.pf-track-fit { justify-content: safe center; }
 .pf-track::-webkit-scrollbar { display: none; }
 /* first/last cards get real scroll-into-view space instead of
    sitting flush against the viewport edge */
 .pf-track-pad { flex: 0 0 1px; width: max(5vw, 32px); }
 
 .pf-card {
+  /* Card width and mat inset are unitless so .pf-art-stage can divide
+     them into a scale factor. Change them per breakpoint and the art,
+     the mat and the body padding all follow together. */
+  --pf-card-w: 312;
+  --pf-mat: 16;
   scroll-snap-align: start;
   /* Sized so ~4-5 land in view on a typical desktop viewport (the
      track is full-bleed, not capped to the 1168px content column) --
      large enough for the visual to actually read, without ballooning
      to where only two or three fit and the "carousel" stops feeling
      like one. */
-  flex: 0 0 312px;
+  flex: 0 0 calc(var(--pf-card-w) * 1px);
   display: block;
   background: #FFFFFF;
   border-radius: 24px;
@@ -194,132 +211,531 @@
 }
 .pf-card-inner { display: flex; flex-direction: column; height: 100%; }
 
+/* -- card visual -----------------------------------------------------
+   A square, full-bleed art panel -- or the product's own clip once one
+   lands in /public/videos/products/. Square rather than landscape
+   because every composition below leads with either a graphic or a
+   line of display type, and neither has room in a 4:3 letterbox. */
 .pf-visual {
   position: relative;
-  height: 264px;
+  margin: calc(var(--pf-mat) * 1px);
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
 }
-/* Window style gets a 14px mat around the screenshot; editorial fills
-   the whole area itself. Explicit modifier class rather than :has() --
-   one less thing riding on selector support. */
-.pf-visual.mat { padding: 14px; }
 
 /* Once a product's real clip lands in /public/videos/products/, it
-   fills the same box either mockup style used and needs no mat --
-   the footage itself is the "screenshot", no chrome required. */
+   fills the same square box the art occupies -- the footage itself is
+   the illustration, so no chrome or mat around it. */
 .pf-visual-video {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
 }
 
-/* -- window chrome: the detail that reads "screenshot", not "diagram" -- */
-.pf-window {
-  position: relative;
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column;
-  background: #F4F5F9;
-  border-radius: 13px;
+/* ====================================================================
+   ART TOOLKIT
+   ====================================================================
+   Ten cards, ten different compositions -- but all built from the same
+   few primitives below, so "different" costs layout rather than a new
+   styling system per card.
+
+   Each product supplies two inline custom properties:
+     --art-ink   its hue at full strength (numbers, bars, accents)
+     --art-tint  the same hue at low alpha (chip icons, shaded cells)
+   plus a `background` mesh composed inline from overlapping radial
+   gradients. Radial falloff does the softening -- no filter: blur(),
+   the same trick as .pf-blob above, which matters when ten of these
+   are on screen at once.
+
+   The governing rule: each card leads with EXACTLY one thing -- a
+   graphic, a display line, or a floating panel -- plus at most three
+   chips. Never all three. At 312px a card that leads with two things
+   reads as clutter, which is the failure mode the previous
+   window/editorial templates fell into. */
+.pf-art {
+  position: absolute; inset: 0;
   overflow: hidden;
-  box-shadow:
-    0 12px 26px -12px rgba(15,20,30,0.45),
-    inset 0 0 0 1px rgba(255,255,255,0.5);
+  font-family: var(--sans);
+  color: #141824;
 }
-.pf-window-bar {
-  display: flex; align-items: center; gap: 5px;
-  flex-shrink: 0;
-  padding: 9px 10px;
-  background: #F2F3F6;
-  border-bottom: 1px solid rgba(31,36,48,0.06);
-}
-.pf-window-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.pf-window-tab {
-  margin-left: 6px;
-  font-family: var(--sans); font-size: 8.5px; font-weight: 600;
-  color: rgba(31,36,48,0.4);
-  background: #fff;
-  border-radius: 4px;
-  padding: 2px 8px;
-  border: 1px solid rgba(31,36,48,0.05);
-}
-.pf-window-body {
-  position: relative;
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  padding: 18px;
-  /* faint dot texture reads as UI depth rather than a flat fill */
-  background-image: radial-gradient(rgba(31,36,48,0.05) 1px, transparent 1.4px);
-  background-size: 12px 12px;
+.pf-art.dark { color: #FFFFFF; }
+
+/* The abstract vector field -- soft organic shapes in the product's own
+   tint/soft tones, pushed through one heavy Gaussian blur (see
+   VectorField in SectionPlatform.tsx). Sits under the stage, above the
+   surface colour. Blurred vector shapes rather than stacked radial
+   gradients: a radial gradient's falloff is always radially symmetric,
+   so it can only ever make soft circles -- these read as ribbons and
+   pooled colour, which is the quality the reference cards have. */
+.pf-vec {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
 }
 
-/* -- cursor accent: implies a live pointer inside the window -- */
+/* Real photography, on the cards whose subject is genuinely a person.
+   The scrim is not decoration: portraits vary far more than a flat
+   wash, so overlaid chips need a predictable floor to stay legible
+   against whatever the image is doing underneath. */
+.pf-photo {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pf-photo-scrim { position: absolute; inset: 0; pointer-events: none; }
+
+/* The floating card used over photos -- glassier and softer-edged than
+   .pf-art-panel, which is meant to read as app chrome. */
+.pf-float {
+  position: absolute;
+  background: rgba(255,255,255,0.94);
+  border-radius: 13px;
+  padding: 11px 13px;
+  box-shadow: 0 16px 34px -14px rgba(10,15,30,0.5), 0 0 0 1px rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+}
+.pf-float.dark {
+  /* Was rgba(14,20,26,0.7) with only a 14%-opacity hairline to define
+     its edge -- against a photo already darkened toward near-black by
+     .pf-photo-scrim, that background measured as visually
+     indistinguishable from its own backdrop (sampled: photo pixel
+     rgb(78,78,78) composited under the scrim lands within a few
+     values of this panel's own colour). Lighter and more opaque, plus
+     a visible border and a defined ambient shadow, so the panel reads
+     as a raised card rather than dissolving into the photo. */
+  background: rgba(26,34,42,0.92);
+  border: 1px solid rgba(255,255,255,0.26);
+  box-shadow: 0 18px 36px -12px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,0,0,0.3);
+}
+.pf-float-hd {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: rgba(31,36,48,0.5);
+  white-space: nowrap;
+}
+.pf-float.dark .pf-float-hd { color: rgba(255,255,255,0.66); }
+.pf-float-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.pf-float-nm {
+  font-size: 12px; font-weight: 700; color: #1F2430;
+  margin-top: 3px; white-space: nowrap;
+}
+.pf-float.dark .pf-float-nm { color: #FFFFFF; }
+.pf-float-amt {
+  font-family: var(--display); font-weight: 700;
+  font-size: 19px; letter-spacing: -0.025em;
+  margin-top: 1px;
+}
+
+/* The line sitting directly on a photo, under the floating card. */
+.pf-art-caption {
+  position: absolute;
+  font-family: var(--display); font-weight: 600;
+  font-size: 13px; letter-spacing: -0.015em;
+  color: #FFFFFF;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.45);
+  white-space: nowrap;
+}
+.pf-art-caption.light { color: rgba(255,255,255,0.94); }
+
+/* -- Sync's hub + endpoint cards --
+   Reproduces evoq.one/sync's own hero at card scale: the product's
+   node mark in the centre, dashed connectors, all four of the real
+   hero's own system categories (CRM, ERP, Ecommerce, Business Apps)
+   as endpoint cards in the same 2x2 quadrant layout. */
+.pf-sync-hub {
+  position: absolute;
+  width: 52px; height: 52px;
+  border-radius: 15px;
+  background: #FFFFFF;
+  display: grid; place-items: center;
+  box-shadow: 0 14px 30px -12px rgba(6,78,59,0.35), 0 0 0 1px rgba(6,78,59,0.06);
+}
+.pf-sync-endpoint {
+  position: absolute;
+  width: 76px;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  text-align: center;
+}
+.pf-sync-endpoint .ic {
+  width: 32px; height: 32px; border-radius: 9px;
+  display: grid; place-items: center;
+  background: #FFFFFF;
+  box-shadow: 0 10px 22px -10px rgba(6,78,59,0.3), 0 0 0 1px rgba(6,78,59,0.06);
+}
+.pf-sync-endpoint .lb { font-size: 9.5px; font-weight: 700; color: #1F2430; white-space: nowrap; }
+
+/* All inner geometry is authored against a fixed 312x312 design size
+   and scaled as a single unit. A narrower card therefore shrinks the
+   whole composition uniformly instead of reflowing it -- reflowing is
+   what makes 9px labels wrap onto two lines or collide with a chip
+   sitting at a fixed offset. */
+.pf-art-stage {
+  position: absolute; top: 50%; left: 50%;
+  width: 312px; height: 312px;
+  transform: translate(-50%, -50%)
+             scale(calc((var(--pf-card-w) - 2 * var(--pf-mat)) / 312));
+}
+
+/* -- primitive: the display line -- */
+.pf-art-head {
+  position: absolute;
+  margin: 0;
+  font-family: var(--display); font-weight: 500;
+  font-size: 26px; line-height: 1.14; letter-spacing: -0.025em;
+  color: #141824;
+}
+.pf-art.dark .pf-art-head { color: #FFFFFF; }
+
+/* -- primitive: the floating chip --
+   A small labelled pill, drop-shadowed so it reads as hovering above
+   the mesh. Positioned per instance from the JSX. */
+.pf-art-chip {
+  position: absolute;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px 6px 6px;
+  background: #FFFFFF;
+  border-radius: 10px;
+  box-shadow:
+    0 6px 16px -6px rgba(16,20,32,0.22),
+    0 0 0 1px rgba(16,20,32,0.04);
+  font-size: 9.5px; font-weight: 600;
+  color: #1F2430;
+  white-space: nowrap;
+}
+.pf-art-chip .ic {
+  width: 14px; height: 14px; border-radius: 4.5px;
+  background: var(--art-tint);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.pf-art-chip .ic::after {
+  content: "";
+  width: 5px; height: 5px; border-radius: 1.5px;
+  background: var(--art-ink);
+}
+.pf-art.dark .pf-art-chip {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: none;
+  color: rgba(255,255,255,0.92);
+}
+.pf-art.dark .pf-art-chip .ic { background: rgba(255,255,255,0.16); }
+.pf-art.dark .pf-art-chip .ic::after { background: #FFFFFF; }
+
+/* -- primitive: the floating panel --
+   Used by the two panel-led cards. On a dark card the panel can go
+   either way: Desk keeps it dark (it IS the app chrome), Billing goes
+   light (a paper invoice on a dark desk). */
+.pf-art-panel {
+  position: absolute;
+  background: #FFFFFF;
+  border-radius: 14px;
+  box-shadow:
+    0 18px 40px -18px rgba(16,20,32,0.35),
+    0 0 0 1px rgba(16,20,32,0.05);
+}
+.pf-art-panel.ink {
+  background: #171B24;
+  box-shadow:
+    0 24px 50px -20px rgba(0,0,0,0.7),
+    inset 0 0 0 1px rgba(255,255,255,0.09);
+}
+
+/* -- primitive: the small-caps label --
+   Not a display line; part of a graphic, naming what it shows. */
+.pf-art-eyebrow {
+  position: absolute;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(31,36,48,0.42);
+}
+.pf-art.dark .pf-art-eyebrow { color: rgba(255,255,255,0.5); }
+
+/* A filled cursor arrow with its own drop shadow -- used only by the
+   two cards depicting a live interaction (a deal mid-drag, a stop
+   being assigned), not sprinkled across every card. */
 .pf-cursor {
   position: absolute;
   z-index: 4;
   filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));
   pointer-events: none;
 }
-.pf-cursor-top-right    { top: 56px;  right: 26px; }
-.pf-cursor-bottom-left  { bottom: 24px; left: 32px; transform: rotate(-8deg); }
-.pf-cursor-top-left     { top: 60px;  left: 36px; transform: rotate(6deg); }
-.pf-cursor-bottom-right { bottom: 28px; right: 30px; transform: rotate(-4deg); }
 
-/* -- editorial style: full-bleed gradient, pattern, icon, chip -- */
-.pf-editorial {
-  position: relative;
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  overflow: hidden;
-  color: #fff;
+/* ---- 1. CRM -- deal pipeline ---- */
+.pf-pipe { position: absolute; left: 22px; right: 22px; top: 62px; display: flex; gap: 8px; }
+/* Columns are real, full-height board lanes rather than loose stacks --
+   a lane with a visible bottom is what makes the graphic read as a
+   pipeline someone works in, and it fills the square instead of
+   leaving the lower half of the card empty. */
+.pf-pipe-col {
+  flex: 1; min-width: 0;
+  height: 172px;
+  display: flex; flex-direction: column; gap: 8px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 9px 6px;
 }
-.pf-editorial-pattern { position: absolute; inset: 0; opacity: 0.5; }
-.pf-editorial-dots {
-  background-image: radial-gradient(rgba(255,255,255,0.55) 1.4px, transparent 1.8px);
-  background-size: 16px 16px;
-  -webkit-mask-image: radial-gradient(80% 70% at 50% 40%, black 0%, transparent 85%);
-          mask-image: radial-gradient(80% 70% at 50% 40%, black 0%, transparent 85%);
+.pf-pipe-hd {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: rgba(31,36,48,0.5);
+  white-space: nowrap;
 }
-.pf-editorial-grid {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
-  background-size: 22px 22px;
-  -webkit-mask-image: radial-gradient(75% 65% at 50% 42%, black 0%, transparent 88%);
-          mask-image: radial-gradient(75% 65% at 50% 42%, black 0%, transparent 88%);
+.pf-pipe-hd i { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.pf-pipe-card {
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 9px 9px;
+  box-shadow: 0 4px 12px -5px rgba(16,20,32,0.25), 0 0 0 1px rgba(16,20,32,0.04);
 }
-.pf-editorial-rings {
-  background-image:
-    repeating-radial-gradient(circle at 50% 38%, transparent 0 20px, rgba(255,255,255,0.22) 20px 21.5px);
-  -webkit-mask-image: radial-gradient(70% 60% at 50% 38%, black 0%, transparent 82%);
-          mask-image: radial-gradient(70% 60% at 50% 38%, black 0%, transparent 82%);
+.pf-pipe-card.drag {
+  transform: rotate(-5deg) translate(5px, -6px);
+  box-shadow: 0 16px 28px -10px rgba(16,20,32,0.45), 0 0 0 1px rgba(16,20,32,0.06);
 }
-.pf-editorial-orbit {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  opacity: 0.9;
+.pf-pipe-card.ghost {
+  background: transparent;
+  border: 1px dashed rgba(16,20,32,0.18);
+  box-shadow: none;
+  height: 47px;
 }
-.pf-editorial-icon {
-  position: relative; z-index: 1;
-  width: 62px; height: 62px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.16);
-  border: 1px solid rgba(255,255,255,0.3);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 14px 28px -14px rgba(0,0,0,0.4);
+.pf-pipe-name { font-size: 9px; font-weight: 700; color: #1F2430; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-pipe-amt {
+  font-family: var(--display); font-weight: 700;
+  font-size: 14px; letter-spacing: -0.02em;
+  color: var(--art-ink);
+  margin-top: 3px;
 }
-.pf-editorial-chip {
+
+/* ---- 2. Campaigns -- type-led send/open/convert ---- */
+.pf-spark { position: absolute; left: 0; right: 0; bottom: 0; height: 150px; }
+.pf-camp-metrics { position: absolute; left: 24px; bottom: 24px; display: flex; gap: 20px; }
+.pf-camp-metric .v {
+  font-family: var(--display); font-weight: 700;
+  font-size: 19px; letter-spacing: -0.02em;
+  color: var(--art-ink);
+}
+.pf-camp-metric .l {
+  font-size: 8.5px; font-weight: 600;
+  color: rgba(31,36,48,0.5);
+  margin-top: 1px;
+}
+
+/* ---- 4. Desk -- a real support floor, with the auto-assign live ----
+   Replaced the drawn ticket-thread panel with the same photo+panel
+   language CRM uses, matching the actual product thumbnail: a light
+   office photo, a "new ticket" chip landing top-left, and the
+   auto-assign panel picking it up bottom-right. Desk moves from a
+   dark card to a light one for this -- the photo is bright, and a
+   dark scrim over it would fight the "open, responsive team" feeling
+   the reference image has. */
+.pf-assign {
+  padding: 12px 13px;
+  display: flex; flex-direction: column; gap: 9px;
+}
+.pf-assign-hd {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pf-assign-lb {
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(31,36,48,0.45);
+}
+.pf-assign-live {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: #0D9488;
+  background: rgba(13,148,136,0.12);
+  padding: 3px 7px;
+  border-radius: 999px;
+}
+.pf-assign-live::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%;
+  background: #0D9488;
+}
+.pf-assign-agent { display: flex; align-items: center; gap: 9px; }
+.pf-assign-av {
+  width: 30px; height: 30px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 2px 8px rgba(16,20,32,0.18);
+}
+.pf-assign-nm { font-size: 11px; font-weight: 700; color: #1F2430; white-space: nowrap; }
+.pf-assign-role { font-size: 8.5px; font-weight: 600; color: rgba(31,36,48,0.5); white-space: nowrap; }
+.pf-assign-meta {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 8.5px; font-weight: 600; color: rgba(31,36,48,0.55);
+  padding-top: 8px; margin-top: 1px;
+  border-top: 1px solid rgba(16,20,32,0.07);
+}
+.pf-assign-ok {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 9.5px; font-weight: 700; color: #0D9488;
+}
+
+/* The dark stat pill bottom-left, matching the reference thumbnail's
+   own "8s / Average pickup time" chip. Reuses .pf-float's glass
+   treatment isn't right here -- that reads as app chrome sitting on
+   the photo, while this is a bold standalone metric callout, so it
+   gets its own solid near-black pill instead. */
+.pf-stat-pill {
   position: absolute;
-  left: 14px; right: 14px; bottom: 14px;
-  z-index: 2;
-  background: rgba(255,255,255,0.95);
-  color: #1F2430;
-  border-radius: 11px;
-  padding: 9px 12px;
-  font-family: var(--sans); font-size: 11px; font-weight: 700;
-  box-shadow: 0 10px 20px -12px rgba(0,0,0,0.4);
+  display: flex; align-items: center; gap: 9px;
+  background: rgba(15,22,26,0.92);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 16px 32px -14px rgba(0,0,0,0.6);
 }
+.pf-stat-pill-v {
+  font-family: var(--display); font-weight: 700;
+  font-size: 18px; color: #FFFFFF; letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.pf-stat-pill-l {
+  font-size: 8.5px; font-weight: 600; line-height: 1.25;
+  color: rgba(255,255,255,0.68);
+  max-width: 62px;
+}
+/* Desk's own pattern-card variant -- a solid near-black pill read as
+   app chrome floating over a photo, but sits heavy on a light mesh
+   background with nothing dark anywhere else on the card. White pill,
+   product-ink number, same shape otherwise. */
+.pf-stat-pill.light {
+  background: #FFFFFF;
+  box-shadow: 0 16px 32px -16px rgba(16,20,32,0.28), 0 0 0 1px rgba(16,20,32,0.05);
+}
+
+/* ---- 5. Projects -- sprint-progress panel over a real coding photo ----
+   Replaces a drawn Gantt chart with the same photo+floating-panel
+   language CRM/Sync already use, matching the actual product screen
+   (evoq.one/projects: a "Sprint Progress" ring card floating over a
+   photo of someone coding) rather than an illustrated timeline. */
+.pf-sprint { padding: 13px 14px; display: flex; align-items: center; gap: 12px; }
+.pf-sprint-ring { flex-shrink: 0; }
+.pf-sprint-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pf-sprint-lb { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.6); white-space: nowrap; }
+.pf-sprint-v { font-family: var(--display); font-weight: 700; font-size: 18px; color: #FFFFFF; letter-spacing: -0.02em; }
+.pf-sprint-sub { font-size: 8.5px; font-weight: 600; color: rgba(255,255,255,0.5); white-space: nowrap; }
+
+/* ---- 6. Sync -- connection orbit ---- */
+.pf-orbit { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ---- 7. Inventory -- type-led stock readout ---- */
+.pf-stock-v {
+  position: absolute; left: 24px; top: 48px;
+  font-family: var(--display); font-weight: 700;
+  font-size: 52px; line-height: 1; letter-spacing: -0.04em;
+  color: #141824;
+}
+.pf-stock-l {
+  position: absolute; left: 26px; top: 107px;
+  font-size: 11px; font-weight: 600;
+  color: rgba(31,36,48,0.5);
+  white-space: nowrap;
+}
+.pf-stock-chart { position: absolute; left: 24px; right: 24px; bottom: 32px; height: 100px; }
+.pf-stock-bars { position: absolute; inset: 0; display: flex; align-items: flex-end; gap: 7px; }
+.pf-stock-bar { flex: 1; border-radius: 4px 4px 0 0; background: var(--art-ink); }
+.pf-stock-line { position: absolute; left: 0; right: 0; border-top: 2px dashed rgba(16,20,32,0.42); }
+.pf-stock-line span {
+  position: absolute; right: 0; top: -13px;
+  font-size: 7.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: rgba(31,36,48,0.42);
+  white-space: nowrap;
+}
+
+/* ---- 8. Billing -- paper invoice on a dark desk ---- */
+.pf-inv { position: relative; padding: 15px 16px; height: 100%; }
+.pf-inv-hd {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(16,20,32,0.08);
+}
+.pf-inv-t { font-family: var(--display); font-weight: 700; font-size: 12px; letter-spacing: -0.01em; color: #1F2430; }
+.pf-inv-n { font-size: 8.5px; font-weight: 600; color: rgba(31,36,48,0.45); white-space: nowrap; }
+.pf-inv-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 7px 0;
+  font-size: 9px;
+  color: rgba(31,36,48,0.66);
+  white-space: nowrap;
+}
+.pf-inv-row + .pf-inv-row { border-top: 1px solid rgba(16,20,32,0.05); }
+.pf-inv-row b { font-weight: 700; color: #1F2430; }
+.pf-inv-total {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-top: 8px; padding-top: 9px;
+  border-top: 1.5px solid rgba(16,20,32,0.1);
+}
+.pf-inv-total .l { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(31,36,48,0.45); }
+.pf-inv-total .v { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: -0.02em; color: var(--art-ink); }
+/* Bottom-LEFT, not right: the total amount is right-aligned, and a
+   stamp in that corner lands straight on top of it. */
+.pf-inv-stamp {
+  position: absolute; left: 16px; bottom: 13px;
+  transform: rotate(-11deg);
+  padding: 3px 9px;
+  border: 1.5px solid #16A34A;
+  border-radius: 5px;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0.16em;
+  color: #16A34A;
+}
+
+/* ---- 9. HRMS -- roster + leave strip ---- */
+.pf-roster { position: absolute; left: 24px; right: 24px; top: 54px; display: flex; flex-direction: column; gap: 7px; }
+.pf-roster-row {
+  display: flex; align-items: center; gap: 8px;
+  background: #FFFFFF;
+  border-radius: 10px;
+  padding: 7px 9px;
+  box-shadow: 0 3px 10px -5px rgba(16,20,32,0.2), 0 0 0 1px rgba(16,20,32,0.04);
+}
+.pf-av {
+  width: 21px; height: 21px; border-radius: 50%;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  font-size: 8px; font-weight: 700; color: #FFFFFF;
+}
+.pf-roster-nm { flex: 1; min-width: 0; font-size: 9.5px; font-weight: 600; color: #1F2430; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-roster-pill { font-size: 8px; font-weight: 700; padding: 3px 7px; border-radius: 999px; white-space: nowrap; }
+.pf-days { position: absolute; left: 24px; right: 24px; bottom: 28px; display: flex; gap: 5px; }
+.pf-day {
+  flex: 1; height: 30px; border-radius: 7px;
+  background: rgba(16,20,32,0.05);
+  display: grid; place-items: center;
+  font-size: 8px; font-weight: 700;
+  color: rgba(31,36,48,0.4);
+}
+.pf-day.off { background: var(--art-tint); color: var(--art-ink); }
+/* HRMS now renders dark -- the default day cell above was a near-black
+   fill at 5% alpha, which is essentially invisible against a card
+   that's already near-black. The roster rows/pills stay unchanged:
+   they're solid white regardless of card background, so they were
+   never affected by this. */
+.pf-art.dark .pf-day { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.92); font-size: 9.5px; }
+/* Same specificity as .pf-day.off (two classes each), so source order
+   decided the winner and the dark-mode rule above was silently
+   beating this one -- both "on leave" and "active" days rendered
+   identically once HRMS went dark. This re-asserts the tint. */
+.pf-art.dark .pf-day.off { background: var(--art-tint); color: var(--art-ink); }
+
+/* ---- 10. Skillberry -- upcoming live session panel ---- */
+.pf-workshop { padding: 16px 16px 15px; display: flex; flex-direction: column; gap: 3px; }
+.pf-workshop-title {
+  font-family: var(--display); font-weight: 700;
+  font-size: 16px; color: #1F2430; letter-spacing: -0.01em;
+  margin-top: 8px;
+}
+.pf-workshop-sub { font-size: 10px; font-weight: 600; color: rgba(31,36,48,0.55); }
+.pf-workshop-avatars { display: flex; align-items: center; margin-top: 9px; }
+.pf-workshop-avatars .pf-av { box-shadow: 0 0 0 2px #FFFFFF; margin-left: -7px; }
+.pf-workshop-avatars .pf-av:first-child { margin-left: 0; }
+.pf-workshop-count { margin-left: 8px; font-size: 9px; font-weight: 700; color: rgba(31,36,48,0.55); white-space: nowrap; }
+.pf-ring-mini { position: absolute; width: 64px; height: 64px; }
 
 .pf-body {
-  padding: 20px 20px 22px;
+  padding: 2px calc(var(--pf-mat) * 1px) calc(var(--pf-mat) * 1px);
   display: flex; flex-direction: column;
   flex: 1;
 }
@@ -359,51 +775,6 @@
 .pf-nav-btn:hover { background: var(--soft); border-color: var(--tint); transform: translateY(-1px); }
 .pf-nav-btn:active { transform: translateY(0); }
 
-/* -- mini illustrations (window style) -- */
-.pf-mock { width: 100%; }
-
-.pf-mock-list { display: flex; flex-direction: column; gap: 9px; }
-.pf-mock-row {
-  display: flex; align-items: center; gap: 9px;
-  background: rgba(255,255,255,0.9);
-  border-radius: 10px;
-  padding: 10px 12px;
-  box-shadow: 0 1px 2px rgba(31,36,48,0.04);
-}
-.pf-mock-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.pf-mock-row-label {
-  font-family: var(--sans); font-size: 12px; font-weight: 600;
-  color: #1F2430;
-  flex: 1;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.pf-mock-pill {
-  font-family: var(--sans); font-size: 9.5px; font-weight: 700;
-  padding: 3px 8px; border-radius: 999px;
-  white-space: nowrap;
-}
-
-.pf-mock-kanban { display: flex; gap: 10px; }
-.pf-kanban-col {
-  flex: 1;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.9);
-  border-radius: 12px;
-  padding: 14px 6px 12px;
-}
-.pf-kanban-bar { width: 24px; height: 3.5px; border-radius: 2px; }
-.pf-kanban-count { font-family: var(--display); font-weight: 700; font-size: 20px; color: #1F2430; }
-.pf-kanban-label { font-family: var(--sans); font-size: 9.5px; font-weight: 600; color: rgba(31,36,48,0.55); text-align: center; }
-
-.pf-mock-stat { text-align: center; }
-.pf-stat-value { font-family: var(--display); font-weight: 800; font-size: 32px; color: #1F2430; letter-spacing: -0.02em; }
-.pf-stat-label { font-family: var(--sans); font-size: 11.5px; color: rgba(31,36,48,0.55); margin-top: 3px; }
-.pf-stat-bars {
-  display: flex; align-items: flex-end; justify-content: center; gap: 5px;
-  height: 44px; margin-top: 16px;
-}
-.pf-stat-bar { width: 9px; border-radius: 3px 3px 0 0; }
-
 /* -- category filter row -- lives below the carousel now instead of
    as a tag on every card, so switching category is a real control
    rather than a corner label. */
@@ -429,52 +800,20 @@
   color: #fff;
 }
 
+/* Narrower cards scale the whole 312px art composition down as one
+   unit (see .pf-art-stage) rather than reflowing it. .pf-visual needs
+   no height override -- aspect-ratio keeps it square at every width. */
 @media (max-width: 1024px) {
   .s-platform { padding: 100px 0; }
   .s-platform-inner { padding: 0 40px; }
-  .pf-card { flex: 0 0 280px; }
-  .pf-visual { height: 236px; }
+  .pf-card { --pf-card-w: 280; --pf-mat: 14; }
 }
 @media (max-width: 640px) {
   .s-platform { padding: 72px 0; }
   .s-platform-inner { padding: 0 20px; }
-  .pf-card { flex: 0 0 250px; }
-  .pf-visual { height: 210px; }
-  .pf-track { margin-top: 44px; gap: 18px; }
-  .pf-editorial-icon { width: 52px; height: 52px; border-radius: 15px; }
+  .pf-card { --pf-card-w: 250; --pf-mat: 12; }
+  .pf-track { margin-top: 44px; gap: 24px; }
 }
-
-/* Projects checklist */
-.proj-hd {
-  display: flex; justify-content: space-between;
-  font-size: 10px; font-weight: 700; letter-spacing: .12em;
-  text-transform: uppercase;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2px;
-}
-.proj-hd .left { color: var(--muted); }
-.proj-hd .right { color: var(--primary); }
-.proj-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 7px 0;
-  font-size: 12px;
-}
-.proj-row + .proj-row { border-top: 1px solid var(--border); }
-.proj-row .task { flex: 1; color: var(--charcoal); font-weight: 500; }
-.proj-row .task.done { text-decoration: line-through; color: var(--subtle); }
-.proj-row .status { font-size: 10.5px; font-weight: 600; color: var(--muted); }
-
-/* ServiceOps tickets */
-.ticket { padding: 8px 0; border-top: 1px solid var(--border); }
-.ticket:first-child { border-top: 0; }
-.ticket-hd {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 10px; color: var(--muted); font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase;
-}
-.ticket-title { font-size: 12px; font-weight: 600; color: var(--charcoal); margin-top: 3px; }
-.ticket-sub   { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
 
 /* ============================================================
    SECTION 2 -- AI Assist (DARK MOMENT)
@@ -494,36 +833,27 @@
 }
 .s-ai-head .evoq-h2 { margin-top: 16px; }
 
-/* Shell paints the light bezel + outer bloom; the frame nested inside
-   is the actual dark panel, so the rim reads as a lit screen edge
-   rather than a border drawn on top of the gradient. */
+/* Reverted to the pre-redesign look at the user's request (a previous
+   screenshot showed this version): a single flat-ish purple panel, no
+   separate light bezel ring around it. .s-ai-shell is kept in the JSX
+   but neutralised to a no-op wrapper rather than removing the element,
+   so .s-ai-frame's own sizing/radius carries the whole visual again. */
 .s-ai-shell {
-  position: relative;
   width: 100%; max-width: 1168px; margin: 0 auto;
-  border-radius: 40px;
-  padding: 12px;
-  background: linear-gradient(160deg, rgba(255,255,255,0.9) 0%, rgba(206,220,255,0.5) 50%, rgba(255,255,255,0.85) 100%);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.7),
-    0 0 70px 10px rgba(140,170,255,0.35),
-    0 40px 90px -40px rgba(0,0,120,0.45);
 }
 .s-ai-frame {
   position: relative;
   width: 100%;
-  border-radius: 30px;
+  border-radius: 32px;
   background:
-    radial-gradient(90% 75% at 100% 15%, #9333EA 0%, rgba(147,51,234,0.7) 40%, rgba(147,51,234,0) 72%),
-    radial-gradient(46% 42% at 50% 51%, rgba(242,242,255,0.55) 0%, rgba(242,242,255,0) 62%),
-    linear-gradient(96deg, #6366F6 0%, #6658F2 32%, #6D4AE8 58%, #7C3AED 78%, #9333EA 100%);
-  background-blend-mode: screen, normal, normal;
-  padding: 72px 56px;
+    linear-gradient(225deg, #8484FF 0%, #5C5CFF 65%, #4747E0 90%, #7C3AED 100%),
+    radial-gradient(60% 50% at 80% 70%, rgba(189,189,255,0.35) 0%, rgba(189,189,255,0) 60%);
+  background-blend-mode: screen, normal;
+  padding: 80px 64px;
   overflow: hidden;
   isolation: isolate;
   color: #fff;
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.15),
-    inset 0 0 60px rgba(120,160,255,0.18);
+  box-shadow: 0 40px 80px -34px rgba(0,0,153,0.4);
 }
 .s-ai .grain {
   position: absolute; inset: 0;
@@ -534,7 +864,7 @@
 }
 .s-ai .vignette {
   position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(125% 85% at 50% 112%, rgba(0,0,80,0.7) 0%, rgba(0,0,80,0) 58%);
+  background: radial-gradient(120% 80% at 50% 110%, rgba(0,0,153,0.75) 0%, rgba(0,0,153,0) 55%);
 }
 .s-ai-inner {
   position: relative; z-index: 2;
@@ -570,17 +900,17 @@
 /* Mascot occupies the centre grid column, flanked by the copy panel
    and the chat card. It overflows its own column slightly so it reads
    as a large presence the two panels are tucked against. */
+/* Reverted to the pre-redesign mascot at the user's request, alongside
+   the background revert -- the "patch" fix and resize done earlier
+   this session (78%-width wrapper, radial mask, 150%-scaled image)
+   are gone; this is the original .ai-mascot/.ai-mascot-crop/.ai-mascot-img
+   from before either change, matching the JSX which no longer nests
+   a separate .ai-mascot-inner wrapper (see SectionAI.tsx). */
 .ai-mascot {
   position: relative;
-  z-index: 1;
   display: flex; align-items: center; justify-content: center;
-  pointer-events: none;
-}
-.ai-mascot-inner {
-  position: relative;
-  display: flex; align-items: center; justify-content: center;
-  width: 78%;
-  margin: 0 auto;
+  height: 100%;
+  min-height: 360px;
 }
 .ai-mascot-glow {
   position: absolute;
@@ -590,34 +920,19 @@
   filter: blur(6px);
   z-index: 0;
 }
-/* The source SVG sits in a wide 1.95:1 canvas with the character
-   centred in it, so rendering it at width:100% makes the character
-   look small and short. A square window that clips the empty side
-   margins lets the character itself fill the space. The source
-   asset also bakes in a solid rectangular backdrop behind the
-   character (not transparent), which reads as a pasted-on "patch"
-   against this section's colour gradient -- a radial mask fades
-   that hard edge into the card background instead of clipping it
-   as a visible rectangle. */
 .ai-mascot-crop {
   position: relative;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
-          mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+  display: block;
+  width: 96%;
+  max-width: 400px;
 }
 .ai-mascot-img {
   position: relative;
   display: block;
-  width: 150%;
-  max-width: none;
+  width: 100%;
   height: auto;
-  filter: drop-shadow(0 30px 50px rgba(0,0,90,0.5));
+  filter: drop-shadow(0 30px 50px rgba(0,0,153,0.45));
 }
 
 .ai-card {
@@ -726,24 +1041,25 @@
 
 @media (max-width: 1024px) {
   .s-ai { padding: 80px 40px 100px; }
-  .s-ai-shell { border-radius: 32px; padding: 10px; }
   .s-ai-frame { padding: 52px 36px; border-radius: 24px; }
   /* stack: copy, mascot, card -- mascot no longer needs to bleed into
      neighbours once each row owns the full width */
   .s-ai-inner { grid-template-columns: 1fr; gap: 32px; justify-items: center; }
   .ai-copy { max-width: 520px; }
-  .ai-mascot-inner { width: 340px; max-width: 100%; }
+  /* order:-1 pulls the mascot above copy/card in the stacked single-
+     column layout this breakpoint switches to -- same technique the
+     pre-redesign version used. */
+  .ai-mascot { order: -1; min-height: 260px; }
+  .ai-mascot-crop { max-width: 220px; }
   .ai-card { margin-left: 0; }
 }
 @media (max-width: 640px) {
   .s-ai { padding: 64px 20px 72px; }
-  .s-ai-shell { border-radius: 26px; padding: 8px; }
   .s-ai-frame { padding: 36px 20px; border-radius: 20px; }
   /* keeps "Your AI assistant for work." from dropping "work." alone
      onto a third line at narrow widths */
   .s-ai-head .evoq-h2 { text-wrap: balance; }
   .ai-copy { padding: 18px 18px; }
-  .ai-mascot-inner { width: 250px; }
 }
 
 /* ============================================================

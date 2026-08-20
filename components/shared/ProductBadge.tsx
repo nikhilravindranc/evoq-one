@@ -28,6 +28,8 @@ export const PRODUCT_BRAND: Record<string, { bg: string; solid: boolean }> = {
   campaigns: { bg: "#6D4FEB", solid: true },
   sync: { bg: "#0E9F6E", solid: true },
   projects: { bg: "#6D4FEB", solid: true },
+  inventory: { bg: "#0E8C9E", solid: true },
+  billing: { bg: "#7C6EF0", solid: true },
 };
 
 export const PRODUCT_LOGO_SRC: Record<string, string> = {
@@ -39,13 +41,15 @@ export const PRODUCT_LOGO_SRC: Record<string, string> = {
   campaigns: "/logos/campaigns.png",
   sync: "/logos/sync.png",
   projects: "/logos/projects.png",
+  inventory: "/logos/inventory.svg",
+  billing: "/logos/billing.svg",
 };
 
 // Products whose PNG is a bare glyph and needs a color wrapper drawn here.
 const NEEDS_WRAPPER = new Set(["hrms", "skillberry"]);
 
 // Products with no icon-only crop — get one via CSS from the full lockup.
-const CROP_ICON = new Set(["campaigns", "sync", "projects"]);
+const CROP_ICON = new Set(["campaigns", "sync", "projects", "inventory", "billing"]);
 
 export function hexToRgba(hex: string, alpha: number) {
   const h = hex.replace("#", "");

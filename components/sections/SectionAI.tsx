@@ -51,14 +51,12 @@ export function SectionAI() {
               </p>
             </motion.div>
 
-            <div className="ai-mascot" aria-hidden="true">
-              <motion.div className="ai-mascot-inner" {...fadeUp(0.08)}>
-                <div className="ai-mascot-glow" />
-                <span className="ai-mascot-crop">
-                  <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
-                </span>
-              </motion.div>
-            </div>
+            <motion.div className="ai-mascot" {...fadeUp(0.08)} aria-hidden="true">
+              <div className="ai-mascot-glow" />
+              <span className="ai-mascot-crop">
+                <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
+              </span>
+            </motion.div>
 
             <motion.div className="ai-card" {...fadeUp(0.16)}>
               <div className="ai-card-hd">
