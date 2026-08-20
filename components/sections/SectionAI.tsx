@@ -29,25 +29,26 @@ export function SectionAI() {
 
           <motion.div className="s-ai-head" {...fadeUp(0)}>
             <Eyebrow noDot dark>EVI</Eyebrow>
-            <h2 className="evoq-h2 dark">
-              Meet EVI
-              <br />
-              {/* nbsp keeps "for work." together so the line breaks as
-                  "Your AI assistant / for work." on narrow screens rather
-                  than orphaning "work." on a line of its own */}
-              <span className="accent">Your AI assistant for&nbsp;work.</span>
-            </h2>
+            <h2 className="evoq-h2 dark">Meet EVI</h2>
           </motion.div>
 
           <div className="s-ai-inner">
             <motion.div className="ai-copy" {...fadeUp(0.04)}>
+              <span className="ai-copy-label">EE-vee</span>
               <p className="lead">
-                EE-vee, your intelligent assistant across EVOQ.
+                Your AI assistant for work across&nbsp;EVOQ.
               </p>
               <p className="body">
-                Most tools give you data. EVI gives you decisions. It reads across
-                your CRM, service jobs, and projects, then tells you what needs attention,
-                what can wait, and what it handles for you.
+                Meet EVI, a context-aware AI assistant that understands what&rsquo;s
+                happening across your EVOQ apps, recommends what to do next, and
+                helps get the work done.
+              </p>
+              <p className="body strong">
+                Most tools give you data. EVI gives you decisions.
+              </p>
+              <p className="body">
+                It looks across your CRM, service jobs, and projects to surface
+                what needs attention, what can wait, and what you can act on next.
               </p>
             </motion.div>
 
