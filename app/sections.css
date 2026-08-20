@@ -877,9 +877,39 @@
   width: 100%; margin: 0 auto;
   /* Two columns, not three -- the mascot no longer occupies its own
      centre column (see .ai-right below), so copy gets more breathing
-     room and the chat card anchors the right side on its own. */
-  display: grid; grid-template-columns: 1.05fr 0.95fr;
-  gap: 32px; align-items: start;
+     room and the chat card anchors the right side on its own.
+     Right column got the bigger share (was 0.95fr, narrower than
+     copy) -- the chat card's own content (three chips, three chat
+     bubbles) needs more width to stop wrapping onto extra lines than
+     the copy panel's shorter paragraphs do, and a wider card is
+     shorter, which is what actually closes the gap below the copy
+     panel.
+     align-items: stretch (the grid default -- restated here since it
+     was explicitly overridden to "start" before) is what actually
+     forces the copy panel and the card column to the SAME height: each
+     column's track height is sized to the taller of the two, then
+     both grid items are stretched to fill it. That only works because
+     .ai-mascot below is now position:absolute (out of normal flow) --
+     with it still in-flow, .ai-right's natural height included the
+     mascot's own height on top of the card's, so it would always "win"
+     as the taller column even once the card and copy were themselves
+     close in height, and stretch would just add empty space under the
+     copy panel again instead of matching the card. */
+  /* Plain fr shares, both panels flush to the frame's own left/right
+     padding at every width -- same as on smaller screens.
+     A capped-track version of this (minmax(0, Xpx) columns +
+     justify-content: center) was tried to stop the card's max-width
+     (see .ai-card) from leaving a widening dead gap between the panels
+     on large screens, but centering a narrower-than-the-frame pair of
+     boxes just traded that problem for equally-wide empty margins on
+     both outer sides instead -- also not flush like the small-screen
+     layout. The actual fix is that .ai-card no longer has a max-width
+     tight enough to matter: .s-ai-shell already caps the whole frame at
+     1168px (see below), so plain fr columns can never grow the card
+     past roughly 560px regardless of viewport -- there's no separate
+     cap needed, and no dead gap or side margins at any width. */
+  display: grid; grid-template-columns: 0.88fr 1.12fr;
+  gap: 32px; align-items: stretch;
 }
 
 /* Copy sits in a lit glass panel rather than as bare text, matching
@@ -894,6 +924,16 @@
   box-shadow:
     0 0 26px rgba(0,0,0,0.08),
     inset 0 0 22px rgba(255,255,255,0.06);
+  /* Stretched to match the card column's height (see .s-ai-inner) --
+     centering the text block in that extra vertical room reads as a
+     deliberate quote-panel layout instead of top-aligned text with a
+     visibly empty band underneath it. box-sizing so the padding above
+     doesn't push the panel past 100% of the stretched grid track. */
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .ai-copy-label {
   display: block;
@@ -920,35 +960,34 @@
   font-weight: 600;
 }
 
-/* Right column: chat card on top, mascot tucked in below it and
-   pulled toward the right edge -- reads as EVI sitting in the box's
-   own bottom-right corner underneath its own chat card, rather than
-   as a third column competing with it for space. align-items:flex-end
-   is what actually pins the mascot to the right; the negative margin
-   on .ai-mascot below is what lets it tuck up under the card's corner
-   instead of just trailing it with a plain gap. */
+/* Right column wraps the card only -- the mascot (below) is
+   position:absolute, so it no longer adds to this column's own flow
+   height. That's what lets .ai-right end up EXACTLY the card's height
+   (needed for the equal-height stretch in .s-ai-inner to compare
+   apples to apples against the copy panel) while the mascot still
+   visually floats above the card as its own layer. */
 .ai-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  position: relative;
   width: 100%;
 }
 
 /* Previously the large centrepiece filling its own grid column
-   (min-height: 360px, up to 400px wide). Now a smaller corner accent
-   sitting below the card, right-aligned within .ai-right and pulled up
-   to overlap the card's own bottom-right corner slightly so the two
-   read as one composition instead of two stacked, unrelated blocks.
-   Sized and margined (not absolutely positioned) so it stays inside
-   .s-ai-frame's own padding and can never clip against the frame's
-   overflow:hidden edge regardless of viewport width. */
+   (min-height: 360px, up to 400px wide), then a smaller corner accent
+   still sitting in normal flow above the card. Now absolutely
+   positioned so it doesn't affect .ai-right's height at all: anchored
+   by its own bottom edge to the top of the card (bottom: 100%), then
+   nudged down by margin-bottom so its hands/arms -- the bottom third
+   of the artwork -- overlap the card's top edge, reading as EVI
+   resting its hands on its own chat card rather than hovering above
+   it with a gap. */
 .ai-mascot {
-  position: relative;
+  position: absolute;
   z-index: 1;
-  width: 58%;
-  max-width: 230px;
-  margin-top: -46px;
-  margin-right: -8px;
+  right: -4px;
+  bottom: 100%;
+  margin-bottom: -10px;
+  width: 44%;
+  max-width: 210px;
   pointer-events: none;
 }
 .ai-mascot-glow {
@@ -977,7 +1016,30 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 360px;
+  /* Raised from 440px -- .s-ai-shell's own 1168px cap already keeps
+     this from growing past ~560px at any viewport (see .s-ai-inner), so
+     a tighter cap here was redundant and, worse, was what caused a
+     widening dead gap (or, briefly, equally-wide empty side margins)
+     on large screens: once .ai-right's grid column grew past whatever
+     this max-width was, the card stopped growing with it. 600px is
+     just a hard ceiling in case that reasoning is ever wrong (e.g. this
+     card is reused somewhere without the shell's own cap) -- it should
+     never actually be reached in this section. */
+  max-width: 600px;
+  /* margin-left: auto still matters even though the card should now
+     always fill its column exactly -- it's what kept the card correctly
+     right-aligned under the mascot (see .ai-mascot) during the period
+     where the old 440px cap WAS smaller than the column, and costs
+     nothing to leave in as a safety net against the same class of bug
+     recurring. */
+  margin-left: auto;
+  /* Fills .ai-right, which is itself stretched to match the copy
+     panel's height (see .s-ai-inner) -- without this the visible white
+     card would stay its own natural (shorter) height while its
+     invisible wrapper grew around it, leaving the two panels still
+     visually mismatched despite being the "same" box height. */
+  height: 100%;
+  box-sizing: border-box;
   background: #FFFFFF;
   border-radius: 18px;
   padding: 13px;
@@ -1015,7 +1077,13 @@
 
 .ai-thread {
   display: flex; flex-direction: column; gap: 6px;
-  max-height: 190px;
+  /* flex:1 lets this absorb any extra height .ai-card picks up from
+     being stretched to match the copy panel (see .ai-card, .s-ai-inner)
+     -- reads as a taller chat window instead of leaving dead space
+     under the CTA button. min-height keeps the original 190px floor so
+     short thread content doesn't collapse below its old size. */
+  flex: 1;
+  min-height: 190px;
   overflow: hidden;
 }
 .ai-bubble {
@@ -1081,9 +1149,15 @@
   /* Stack: copy, then the card+mascot corner group -- each row owns
      the full width once there's no second column to share it with. */
   .s-ai-inner { grid-template-columns: 1fr; gap: 32px; justify-items: center; }
-  .ai-copy { max-width: 520px; }
-  .ai-right { width: auto; }
-  .ai-mascot { width: 46%; max-width: 190px; margin-top: -34px; margin-right: -8px; }
+  .ai-copy { max-width: 520px; height: auto; }
+  /* Extra top margin reserves room for the mascot poking up above the
+     card (it's position:absolute now, so it doesn't push .ai-right's
+     own box down the way it would in normal flow) -- without this the
+     32px row gap isn't enough clearance and the mascot's head
+     overlaps the copy panel's last line of text above it. */
+  .ai-right { width: auto; margin-top: 70px; }
+  .ai-card { height: auto; }
+  .ai-mascot { width: 46%; max-width: 190px; margin-bottom: -8px; right: -4px; }
 }
 @media (max-width: 640px) {
   .s-ai { padding: 64px 20px 72px; }

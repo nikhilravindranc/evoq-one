@@ -52,11 +52,18 @@ export function SectionAI() {
               </p>
             </motion.div>
 
-            {/* Card sits on top, mascot tucked in below it and pulled to
-                the right so it reads as sitting in the box's own bottom-
-                right corner rather than as a third, competing column. */}
+            {/* Mascot sits above the card, tucked into its top-right
+                corner, so it reads as EVI looking over its own chat card
+                rather than as a third, competing column. */}
             <div className="ai-right">
-              <motion.div className="ai-card" {...fadeUp(0.1)}>
+              <motion.div className="ai-mascot" {...fadeUp(0.08)} aria-hidden="true">
+                <div className="ai-mascot-glow" />
+                <span className="ai-mascot-crop">
+                  <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
+                </span>
+              </motion.div>
+
+              <motion.div className="ai-card" {...fadeUp(0.16)}>
                 <div className="ai-card-hd">
                   <span className="ai-card-avatar">
                     <img src="/ai-assist-mascot.svg" alt="" />
@@ -85,13 +92,6 @@ export function SectionAI() {
                   <span>Explore EVI in Action</span>
                   <span className="ic"><ArrowRt size={11} color="#fff" /></span>
                 </button>
-              </motion.div>
-
-              <motion.div className="ai-mascot" {...fadeUp(0.2)} aria-hidden="true">
-                <div className="ai-mascot-glow" />
-                <span className="ai-mascot-crop">
-                  <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
-                </span>
               </motion.div>
             </div>
           </div>
