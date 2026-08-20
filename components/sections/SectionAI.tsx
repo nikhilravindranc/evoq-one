@@ -52,43 +52,48 @@ export function SectionAI() {
               </p>
             </motion.div>
 
-            <motion.div className="ai-mascot" {...fadeUp(0.08)} aria-hidden="true">
-              <div className="ai-mascot-glow" />
-              <span className="ai-mascot-crop">
-                <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
-              </span>
-            </motion.div>
-
-            <motion.div className="ai-card" {...fadeUp(0.16)}>
-              <div className="ai-card-hd">
-                <span className="ai-card-avatar">
-                  <img src="/ai-assist-mascot.svg" alt="" />
-                </span>
-                <div>
-                  <div className="ai-card-name">EVI</div>
-                  <div className="ai-card-status"><span className="dot" />AI &middot; Online</div>
-                </div>
-              </div>
-
-              <div className="ai-thread">
-                {THREAD.map((m, i) => (
-                  <div key={i} className={`ai-bubble ${m.from}`}>
-                    {m.text}
+            {/* Card sits on top, mascot tucked in below it and pulled to
+                the right so it reads as sitting in the box's own bottom-
+                right corner rather than as a third, competing column. */}
+            <div className="ai-right">
+              <motion.div className="ai-card" {...fadeUp(0.1)}>
+                <div className="ai-card-hd">
+                  <span className="ai-card-avatar">
+                    <img src="/ai-assist-mascot.svg" alt="" />
+                  </span>
+                  <div>
+                    <div className="ai-card-name">EVI</div>
+                    <div className="ai-card-status"><span className="dot" />AI &middot; Online</div>
                   </div>
-                ))}
-              </div>
+                </div>
 
-              <div className="ai-chips">
-                {CHIPS.map((c) => (
-                  <span key={c} className="ai-chip">{c}</span>
-                ))}
-              </div>
+                <div className="ai-thread">
+                  {THREAD.map((m, i) => (
+                    <div key={i} className={`ai-bubble ${m.from}`}>
+                      {m.text}
+                    </div>
+                  ))}
+                </div>
 
-              <button className="ai-cta-plan wide">
-                <span>Explore EVI in Action</span>
-                <span className="ic"><ArrowRt size={11} color="#fff" /></span>
-              </button>
-            </motion.div>
+                <div className="ai-chips">
+                  {CHIPS.map((c) => (
+                    <span key={c} className="ai-chip">{c}</span>
+                  ))}
+                </div>
+
+                <button className="ai-cta-plan wide">
+                  <span>Explore EVI in Action</span>
+                  <span className="ic"><ArrowRt size={11} color="#fff" /></span>
+                </button>
+              </motion.div>
+
+              <motion.div className="ai-mascot" {...fadeUp(0.2)} aria-hidden="true">
+                <div className="ai-mascot-glow" />
+                <span className="ai-mascot-crop">
+                  <img src="/ai-assist-mascot.svg" alt="" className="ai-mascot-img" />
+                </span>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

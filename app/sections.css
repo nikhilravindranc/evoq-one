@@ -875,8 +875,11 @@
 .s-ai-inner {
   position: relative; z-index: 2;
   width: 100%; margin: 0 auto;
-  display: grid; grid-template-columns: 0.98fr 1.06fr 0.9fr;
-  gap: 20px; align-items: center;
+  /* Two columns, not three -- the mascot no longer occupies its own
+     centre column (see .ai-right below), so copy gets more breathing
+     room and the chat card anchors the right side on its own. */
+  display: grid; grid-template-columns: 1.05fr 0.95fr;
+  gap: 32px; align-items: start;
 }
 
 /* Copy sits in a lit glass panel rather than as bare text, matching
@@ -917,20 +920,36 @@
   font-weight: 600;
 }
 
-/* Mascot occupies the centre grid column, flanked by the copy panel
-   and the chat card. It overflows its own column slightly so it reads
-   as a large presence the two panels are tucked against. */
-/* Reverted to the pre-redesign mascot at the user's request, alongside
-   the background revert -- the "patch" fix and resize done earlier
-   this session (78%-width wrapper, radial mask, 150%-scaled image)
-   are gone; this is the original .ai-mascot/.ai-mascot-crop/.ai-mascot-img
-   from before either change, matching the JSX which no longer nests
-   a separate .ai-mascot-inner wrapper (see SectionAI.tsx). */
+/* Right column: chat card on top, mascot tucked in below it and
+   pulled toward the right edge -- reads as EVI sitting in the box's
+   own bottom-right corner underneath its own chat card, rather than
+   as a third column competing with it for space. align-items:flex-end
+   is what actually pins the mascot to the right; the negative margin
+   on .ai-mascot below is what lets it tuck up under the card's corner
+   instead of just trailing it with a plain gap. */
+.ai-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+}
+
+/* Previously the large centrepiece filling its own grid column
+   (min-height: 360px, up to 400px wide). Now a smaller corner accent
+   sitting below the card, right-aligned within .ai-right and pulled up
+   to overlap the card's own bottom-right corner slightly so the two
+   read as one composition instead of two stacked, unrelated blocks.
+   Sized and margined (not absolutely positioned) so it stays inside
+   .s-ai-frame's own padding and can never clip against the frame's
+   overflow:hidden edge regardless of viewport width. */
 .ai-mascot {
   position: relative;
-  display: flex; align-items: center; justify-content: center;
-  height: 100%;
-  min-height: 360px;
+  z-index: 1;
+  width: 58%;
+  max-width: 230px;
+  margin-top: -46px;
+  margin-right: -8px;
+  pointer-events: none;
 }
 .ai-mascot-glow {
   position: absolute;
@@ -944,15 +963,14 @@
   position: relative;
   z-index: 1;
   display: block;
-  width: 96%;
-  max-width: 400px;
+  width: 100%;
 }
 .ai-mascot-img {
   position: relative;
   display: block;
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 30px 50px rgba(0,0,153,0.45));
+  filter: drop-shadow(0 20px 34px rgba(0,0,153,0.45));
 }
 
 .ai-card {
@@ -960,8 +978,6 @@
   z-index: 2;
   width: 100%;
   max-width: 360px;
-  /* pulled left so it tucks over the mascot's arm, as in the reference */
-  margin-left: -26px;
   background: #FFFFFF;
   border-radius: 18px;
   padding: 13px;
@@ -1062,16 +1078,12 @@
 @media (max-width: 1024px) {
   .s-ai { padding: 80px 40px 100px; }
   .s-ai-frame { padding: 52px 36px; border-radius: 24px; }
-  /* stack: copy, mascot, card -- mascot no longer needs to bleed into
-     neighbours once each row owns the full width */
+  /* Stack: copy, then the card+mascot corner group -- each row owns
+     the full width once there's no second column to share it with. */
   .s-ai-inner { grid-template-columns: 1fr; gap: 32px; justify-items: center; }
   .ai-copy { max-width: 520px; }
-  /* order:-1 pulls the mascot above copy/card in the stacked single-
-     column layout this breakpoint switches to -- same technique the
-     pre-redesign version used. */
-  .ai-mascot { order: -1; min-height: 260px; }
-  .ai-mascot-crop { max-width: 220px; }
-  .ai-card { margin-left: 0; }
+  .ai-right { width: auto; }
+  .ai-mascot { width: 46%; max-width: 190px; margin-top: -34px; margin-right: -8px; }
 }
 @media (max-width: 640px) {
   .s-ai { padding: 64px 20px 72px; }
