@@ -763,6 +763,8 @@ function ProductCard({
 
 export function SectionPlatform() {
   const trackRef = useRef<HTMLDivElement>(null);
+  const bufferStartRef = useRef<HTMLDivElement>(null);
+  const bufferEndRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<CategoryFilter>("all");
   // 'checking' -> 'ok' | 'missing', resolved via a HEAD request rather
   // than each <video>'s own error event -- same reasoning as the hero
@@ -935,28 +937,40 @@ export function SectionPlatform() {
     const getRealCards = () =>
       Array.from(track.querySelectorAll<HTMLElement>(".pf-card:not([data-pf-clone])"));
 
+    // The clone cards need to be scrollable all the way to full
+    // flush-left alignment -- otherwise the teleport below fires while
+    // a clone is only partway into view (the real card behind it still
+    // partly visible), which is the "glitch" this buffer fixes: a
+    // visible jump between two frames that don't match. The browser's
+    // native scroll ceiling is scrollWidth - clientWidth, so there has
+    // to be at least clientWidth worth of content sitting after the
+    // clone-end card (and before clone-start) for that ceiling to ever
+    // reach the clone's own offsetLeft. A card is rarely that wide on
+    // its own (a wide desktop viewport shows 2-3+ cards at once), so a
+    // dedicated invisible spacer sized to the viewport is added at each
+    // end rather than relying on the cards/pad alone.
+    const bufferStart = bufferStartRef.current;
+    const bufferEnd = bufferEndRef.current;
+    const sizeBuffers = () => {
+      const w = `${track.clientWidth}px`;
+      if (bufferStart) bufferStart.style.width = w;
+      if (bufferEnd) bufferEnd.style.width = w;
+    };
+    sizeBuffers();
+
     // Start on the real first card, not on the leading clone.
     const initial = getRealCards();
     if (initial.length > 1) track.scrollLeft = initial[0].offsetLeft;
 
     let settleTimer: ReturnType<typeof setTimeout>;
-    const EPS = 30;
+    const EPS = 6;
 
     const settle = () => {
       const cards = getRealCards();
       if (cards.length < 2) return;
       const cloneStart = track.querySelector<HTMLElement>('[data-pf-clone="start"]');
-      // The trailing .pf-track-pad after the clone-end card is much
-      // narrower than a card, so the browser's real scroll ceiling
-      // (scrollWidth - clientWidth) is reached well BEFORE scrollLeft
-      // can ever equal the clone-end card's own offsetLeft -- comparing
-      // against that offsetLeft directly meant this branch never fired
-      // and Next dead-ended on the clone instead of looping. The
-      // leading pad before clone-start has no such shortfall (nothing
-      // stops scrollLeft from reaching all the way down to it), so that
-      // side can still compare against the clone's own offset.
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      if (track.scrollLeft >= maxScroll - EPS) {
+      const cloneEnd = track.querySelector<HTMLElement>('[data-pf-clone="end"]');
+      if (cloneEnd && track.scrollLeft >= cloneEnd.offsetLeft - EPS) {
         track.scrollLeft = cards[0].offsetLeft;
       } else if (cloneStart && track.scrollLeft <= cloneStart.offsetLeft + EPS) {
         track.scrollLeft = cards[cards.length - 1].offsetLeft;
@@ -972,8 +986,10 @@ export function SectionPlatform() {
     };
 
     track.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", sizeBuffers);
     return () => {
       track.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", sizeBuffers);
       clearTimeout(settleTimer);
     };
   }, [products, loopEnabled]);
@@ -1001,25 +1017,36 @@ export function SectionPlatform() {
       <div className="pf-track" ref={trackRef}>
         <div className="pf-track-pad" aria-hidden />
         {loopEnabled && products.length > 1 && (
-          <ProductCard
-            key={`clone-start-${products[products.length - 1].key}`}
-            product={products[products.length - 1]}
-            index={-1}
-            videoOk={videoStatus[products[products.length - 1].key] === "ok"}
-            clone="start"
-          />
+          <>
+            {/* Sized to the track's own clientWidth in the loop effect
+                above -- gives the clone card enough room after it to
+                actually reach full flush-left alignment, otherwise the
+                teleport below fires on a clone that's only partway into
+                view and the swap is visibly a jump. */}
+            <div className="pf-track-loop-buffer" ref={bufferStartRef} aria-hidden />
+            <ProductCard
+              key={`clone-start-${products[products.length - 1].key}`}
+              product={products[products.length - 1]}
+              index={-1}
+              videoOk={videoStatus[products[products.length - 1].key] === "ok"}
+              clone="start"
+            />
+          </>
         )}
         {products.map((p, i) => (
           <ProductCard key={p.key} product={p} index={i} videoOk={videoStatus[p.key] === "ok"} />
         ))}
         {loopEnabled && products.length > 1 && (
-          <ProductCard
-            key={`clone-end-${products[0].key}`}
-            product={products[0]}
-            index={products.length}
-            videoOk={videoStatus[products[0].key] === "ok"}
-            clone="end"
-          />
+          <>
+            <ProductCard
+              key={`clone-end-${products[0].key}`}
+              product={products[0]}
+              index={products.length}
+              videoOk={videoStatus[products[0].key] === "ok"}
+              clone="end"
+            />
+            <div className="pf-track-loop-buffer" ref={bufferEndRef} aria-hidden />
+          </>
         )}
         <div className="pf-track-pad" aria-hidden />
       </div>
