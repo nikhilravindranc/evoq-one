@@ -840,12 +840,19 @@ export function SectionPlatform() {
       // active filter left, not on either alone.
       track.classList.toggle("pf-track-fit", track.scrollWidth <= track.clientWidth + 1);
 
-      const trackRect = track.getBoundingClientRect();
-      const centerX = trackRect.left + trackRect.width / 2;
-      const half = trackRect.width / 2 || 1;
+      // Measured in the track's own scroll-local space via offsetLeft/
+      // offsetWidth, NOT getBoundingClientRect() -- a card's rect already
+      // reflects the transform this loop is about to overwrite (rotate +
+      // translateY), so reading it back would feed each tick's output
+      // into the next tick's input. That round-trip is small enough to
+      // hide during a slow scroll, but a window resize fires dozens of
+      // events while the user drags, and it compounds into visible
+      // shaking -- worst right at the 1024px/640px breakpoints where the
+      // card width itself jumps.
+      const centerX = track.scrollLeft + track.clientWidth / 2;
+      const half = track.clientWidth / 2 || 1;
       track.querySelectorAll<HTMLElement>(".pf-card").forEach((card) => {
-        const r = card.getBoundingClientRect();
-        const cardCenter = r.left + r.width / 2;
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
         const t = Math.max(-1, Math.min(1, (cardCenter - centerX) / half));
         const lift = 30 * Math.cos((t * Math.PI) / 2); // 30px at center, 0 at edges
         const rotate = t * 7; // leans outward toward the edges
