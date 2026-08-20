@@ -693,8 +693,8 @@ const PRODUCTS: Product[] = ([
 /* -- card + carousel ------------------------------------------------ */
 
 function ProductCard({
-  product, index, videoOk,
-}: { product: Product; index: number; videoOk: boolean }) {
+  product, index, videoOk, clone,
+}: { product: Product; index: number; videoOk: boolean; clone?: "start" | "end" }) {
   // Was CATEGORY_META[category].ink -- only three colours shared across
   // ten products, so Billing's Explore link was the same blue as CRM's
   // and Sync's, nothing to do with either product's own identity. Each
@@ -713,7 +713,19 @@ function ProductCard({
     // the fade-in settles, silently overwriting a CSS transform on the
     // same node. Splitting static positioning (this <a>) from animation
     // (the motion.div, opacity/y only) avoids that fight.
-    <a href="#" className="pf-card" aria-label={`Explore ${product.name}`}>
+    <a
+      href="#"
+      className="pf-card"
+      aria-label={`Explore ${product.name}`}
+      // Loop clones (a duplicate of the last card before the real run
+      // and a duplicate of the first after it -- see SectionPlatform)
+      // exist purely so the scroll can keep moving in one direction
+      // instead of snapping backward through the whole row. They're
+      // real DOM nodes so the browser has something to scroll onto,
+      // but they're not a second "Explore CRM" link for a screen
+      // reader or the tab order to land on.
+      {...(clone ? { "data-pf-clone": clone, "aria-hidden": true, tabIndex: -1 } : {})}
+    >
       <motion.div
         className="pf-card-inner"
         initial={{ opacity: 0, y: 30 }}
@@ -785,37 +797,37 @@ export function SectionPlatform() {
     // over-shoot the next card.
     const gap = parseFloat(getComputedStyle(track).columnGap) || 24;
     const step = card ? card.getBoundingClientRect().width + gap : 340;
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    // scroll-snap-type settles the "start" at the first .pf-card's own
-    // offset, not at scrollLeft 0 -- the leading .pf-track-pad spacer
-    // sits before it. Comparing against 0 directly under-detects "at
-    // the start" and the Prev wrap never fires; comparing against the
-    // card's real offset matches where proximity snapping actually
-    // parks it. The right edge has no equivalent spacer asymmetry, so
-    // maxScroll needs no such adjustment.
-    const startEdge = card ? card.offsetLeft : 0;
-
-    // Loop the arrows instead of dead-ending at either edge: a click
-    // that would arrive at (or is already sitting at) the boundary in
-    // the direction of travel jumps to the opposite end rather than
-    // doing nothing there. This only happens on click -- nothing moves
-    // on its own, so it isn't auto-scroll.
-    if (dir === 1 && track.scrollLeft >= maxScroll - 4) {
-      track.scrollTo({ left: 0, behavior: "smooth" });
-      return;
-    }
-    if (dir === -1 && track.scrollLeft <= startEdge + 4) {
-      track.scrollTo({ left: maxScroll, behavior: "smooth" });
-      return;
-    }
-
+    // No edge-detection here anymore -- always just moves one card in
+    // the given direction. Looping past either end (instead of
+    // dead-ending, and instead of the old jump-to-position-0 that
+    // played the whole row backward) is handled by the clone cards
+    // and the settle effect below.
     track.scrollBy({ left: dir * step, behavior: "smooth" });
   };
 
-  const setFilterAndReset = (key: CategoryFilter) => {
-    setFilter(key);
-    trackRef.current?.scrollTo({ left: 0, behavior: "smooth" });
-  };
+  const setFilterAndReset = (key: CategoryFilter) => setFilter(key);
+
+  // Runs after the DOM has actually committed the new filter's cards
+  // (and clones), unlike an imperative scrollTo inside the click
+  // handler above, which would still be reading the *previous*
+  // filter's card positions since React hasn't re-rendered yet.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const firstReal = track.querySelector<HTMLElement>(".pf-card:not([data-pf-clone])");
+    track.scrollTo({ left: firstReal?.offsetLeft ?? 0, behavior: "smooth" });
+  }, [filter]);
+
+  // Loop clones (see the .pf-card render below) only earn their keep
+  // once the real cards actually overflow the track -- with few enough
+  // cards left after a filter to fit the viewport there's nothing to
+  // scroll, so cloning would just force false overflow and fight the
+  // "few cards center themselves" behavior below. Written from a ref
+  // (not state) inside the arc effect's per-frame measurement and only
+  // promoted to state on an actual change, so this doesn't add a
+  // render every scroll tick.
+  const [loopEnabled, setLoopEnabled] = useState(true);
+  const loopEnabledRef = useRef(true);
 
   /* -- the arc: card lift/rotate as a function of scroll position -----
    * Recomputed imperatively on every scroll frame (rAF-throttled)
@@ -849,7 +861,24 @@ export function SectionPlatform() {
       // every scroll/resize tick alongside the arc math below, since
       // "fits" depends on viewport width AND on how many cards the
       // active filter left, not on either alone.
-      track.classList.toggle("pf-track-fit", track.scrollWidth <= track.clientWidth + 1);
+      //
+      // Measured off the real cards only (excludes the loop clones,
+      // which always add width of their own) -- otherwise a genuinely
+      // short filtered row would still measure as "overflowing" once
+      // clones were attached to it, and would never get to center.
+      const realCards = track.querySelectorAll<HTMLElement>(".pf-card:not([data-pf-clone])");
+      let overflow = false;
+      if (realCards.length) {
+        const firstReal = realCards[0];
+        const lastReal = realCards[realCards.length - 1];
+        const realWidth = lastReal.offsetLeft + lastReal.offsetWidth - firstReal.offsetLeft;
+        overflow = realWidth > track.clientWidth + 1;
+      }
+      track.classList.toggle("pf-track-fit", !overflow);
+      if (overflow !== loopEnabledRef.current) {
+        loopEnabledRef.current = overflow;
+        setLoopEnabled(overflow);
+      }
 
       // Measured in the track's own scroll-local space via offsetLeft/
       // offsetWidth, NOT getBoundingClientRect() -- a card's rect already
@@ -887,6 +916,68 @@ export function SectionPlatform() {
     };
   }, [products]);
 
+  /* -- seamless loop: clone-and-teleport --------------------------------
+   * Native scroll-snap can't loop by itself -- there's nothing past the
+   * last real card to scroll onto. The old fix scrollTo'd straight back
+   * to position 0 when Next was clicked at the end, which visibly played
+   * the whole row backward instead of continuing forward, and looked
+   * like the deck "restarted" rather than rotated. A duplicate of the
+   * last card sits before the real run and a duplicate of the first
+   * sits after it (rendered below, gated on loopEnabled), so scrolling
+   * past either end lands on a clone that's pixel-identical to the real
+   * card behind it. Once the scroll settles there, this effect
+   * teleports (scrollLeft set directly, no animation) onto the
+   * equivalent real card -- invisible, because the two look the same. */
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || !loopEnabled) return;
+
+    const getRealCards = () =>
+      Array.from(track.querySelectorAll<HTMLElement>(".pf-card:not([data-pf-clone])"));
+
+    // Start on the real first card, not on the leading clone.
+    const initial = getRealCards();
+    if (initial.length > 1) track.scrollLeft = initial[0].offsetLeft;
+
+    let settleTimer: ReturnType<typeof setTimeout>;
+    const EPS = 30;
+
+    const settle = () => {
+      const cards = getRealCards();
+      if (cards.length < 2) return;
+      const cloneStart = track.querySelector<HTMLElement>('[data-pf-clone="start"]');
+      // The trailing .pf-track-pad after the clone-end card is much
+      // narrower than a card, so the browser's real scroll ceiling
+      // (scrollWidth - clientWidth) is reached well BEFORE scrollLeft
+      // can ever equal the clone-end card's own offsetLeft -- comparing
+      // against that offsetLeft directly meant this branch never fired
+      // and Next dead-ended on the clone instead of looping. The
+      // leading pad before clone-start has no such shortfall (nothing
+      // stops scrollLeft from reaching all the way down to it), so that
+      // side can still compare against the clone's own offset.
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (track.scrollLeft >= maxScroll - EPS) {
+        track.scrollLeft = cards[0].offsetLeft;
+      } else if (cloneStart && track.scrollLeft <= cloneStart.offsetLeft + EPS) {
+        track.scrollLeft = cards[cards.length - 1].offsetLeft;
+      }
+    };
+
+    const onScroll = () => {
+      clearTimeout(settleTimer);
+      // Fires once scrolling has actually stopped rather than on every
+      // frame -- teleporting mid-scroll would cut the smooth animation
+      // short and be visible as a stutter instead of a clean loop.
+      settleTimer = setTimeout(settle, 120);
+    };
+
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      clearTimeout(settleTimer);
+    };
+  }, [products, loopEnabled]);
+
   return (
     <section className="s-platform">
       <div className="pf-blob pf-blob-a" aria-hidden />
@@ -909,9 +1000,27 @@ export function SectionPlatform() {
 
       <div className="pf-track" ref={trackRef}>
         <div className="pf-track-pad" aria-hidden />
+        {loopEnabled && products.length > 1 && (
+          <ProductCard
+            key={`clone-start-${products[products.length - 1].key}`}
+            product={products[products.length - 1]}
+            index={-1}
+            videoOk={videoStatus[products[products.length - 1].key] === "ok"}
+            clone="start"
+          />
+        )}
         {products.map((p, i) => (
           <ProductCard key={p.key} product={p} index={i} videoOk={videoStatus[p.key] === "ok"} />
         ))}
+        {loopEnabled && products.length > 1 && (
+          <ProductCard
+            key={`clone-end-${products[0].key}`}
+            product={products[0]}
+            index={products.length}
+            videoOk={videoStatus[products[0].key] === "ok"}
+            clone="end"
+          />
+        )}
         <div className="pf-track-pad" aria-hidden />
       </div>
 
