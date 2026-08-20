@@ -829,7 +829,13 @@
   padding: 100px 80px 120px;
 }
 .s-ai-head {
-  width: 100%; max-width: 1168px; margin: 0 auto 32px;
+  /* Now lives inside .s-ai-frame (moved from a standalone block above
+     the box), sitting over .grain/.vignette which are also absolutely
+     positioned inset:0 -- needs the same position+z-index treatment as
+     .s-ai-inner below it to actually render on top of them rather than
+     wherever paint order happens to land it. */
+  position: relative; z-index: 2;
+  width: 100%; max-width: 760px; margin: 0 0 40px;
 }
 .s-ai-head .evoq-h2 { margin-top: 16px; }
 

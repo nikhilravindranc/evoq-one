@@ -21,23 +21,23 @@ const CHIPS = ["Show jobs at risk", "What closed last week?", "Remind me about B
 export function SectionAI() {
   return (
     <section className="s-ai">
-      <motion.div className="s-ai-head" {...fadeUp(0)}>
-        <Eyebrow noDot>EVI</Eyebrow>
-        <h2 className="evoq-h2">
-          Meet EVI
-          <br />
-          {/* nbsp keeps "for work." together so the line breaks as
-              "Your AI assistant / for work." on narrow screens rather
-              than orphaning "work." on a line of its own */}
-          <span className="accent">Your AI assistant for&nbsp;work.</span>
-        </h2>
-      </motion.div>
-
       {/* Shell paints the glowing bezel; the frame inside is the panel */}
       <div className="s-ai-shell">
         <div className="s-ai-frame">
           <div className="grain" />
           <div className="vignette" />
+
+          <motion.div className="s-ai-head" {...fadeUp(0)}>
+            <Eyebrow noDot dark>EVI</Eyebrow>
+            <h2 className="evoq-h2 dark">
+              Meet EVI
+              <br />
+              {/* nbsp keeps "for work." together so the line breaks as
+                  "Your AI assistant / for work." on narrow screens rather
+                  than orphaning "work." on a line of its own */}
+              <span className="accent">Your AI assistant for&nbsp;work.</span>
+            </h2>
+          </motion.div>
 
           <div className="s-ai-inner">
             <motion.div className="ai-copy" {...fadeUp(0.04)}>
