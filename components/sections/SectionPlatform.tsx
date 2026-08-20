@@ -832,6 +832,17 @@ export function SectionPlatform() {
     let raf = 0;
 
     const update = () => {
+      // Chrome (and other browsers) report a momentary near-zero
+      // clientWidth while a window is animating into/out of the
+      // taskbar on minimize/restore. Without this guard, `half` falls
+      // back to a tiny divisor, every card's t collapses to the same
+      // +/-1 extreme at once, and as the width flickers through the
+      // animation the whole row snaps between extremes -- visible as
+      // violent shaking. A real layout never gets this narrow (cards
+      // have a fixed ~250px+ width), so bailing out here just holds
+      // the last good transform until the width recovers.
+      if (track.clientWidth < 50) return;
+
       // A filtered category can leave as few as two cards, which no
       // longer fill the track -- center them instead of leaving them
       // stranded against the left edge (the flex default). Checked on
