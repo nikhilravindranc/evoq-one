@@ -774,6 +774,12 @@
 }
 .pf-nav-btn:hover { background: var(--soft); border-color: var(--tint); transform: translateY(-1px); }
 .pf-nav-btn:active { transform: translateY(0); }
+.pf-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  color: var(--subtle);
+}
+.pf-nav-btn:disabled:hover { background: #FFFFFF; border-color: var(--border); transform: none; }
 
 /* -- category filter row -- lives below the carousel now instead of
    as a tag on every card, so switching category is a real control
