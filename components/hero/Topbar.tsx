@@ -69,15 +69,43 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
       }`}>
       {/* Brand */}
       <Link href="/" className="inline-flex items-center no-underline">
-        <Image
-          id="hero-topbar-logo"
-          src={light ? "/black-logo.png" : "/white-logo.png"}
-          alt="EVOQ"
-          height={28}
-          width={28 * (1127 / 230)}
-          priority
-          style={{ height: 28, width: "auto" }}
-        />
+        <span style={{ position: "relative", display: "inline-flex", alignItems: "center", height: 28 }}>
+          {/* The logo file is one flat image (icon + wordmark), and the
+              icon's own gradient is close enough in hue to the purple
+              hero background to nearly disappear into it -- unlike the
+              wordmark, which is plain white and already reads fine
+              against that background. A white disc sized to just the
+              icon's square (it's exactly as wide as the logo is tall,
+              flush at the left edge) restores its contrast without
+              putting anything behind the wordmark. Only needed on the
+              dark/hero variant -- the light variant's black-logo.png
+              already sits on a light background. */}
+          {!light && (
+            <span
+              aria-hidden
+              style={{
+                position: "absolute",
+                left: 0,
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: 26,
+                height: 26,
+                borderRadius: "9999px",
+                background: "#FFFFFF",
+                zIndex: 0,
+              }}
+            />
+          )}
+          <Image
+            id="hero-topbar-logo"
+            src={light ? "/black-logo.png" : "/white-logo.png"}
+            alt="EVOQ"
+            height={28}
+            width={28 * (1127 / 230)}
+            priority
+            style={{ height: 28, width: "auto", position: "relative", zIndex: 1 }}
+          />
+        </span>
       </Link>
 
       {/* Nav pill */}
