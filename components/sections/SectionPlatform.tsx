@@ -22,7 +22,6 @@ const fadeUp = (delay = 0) => ({
  * ------------------------------------------------------------- */
 
 type Category = "growth" | "operations" | "people";
-type CategoryFilter = "all" | Category;
 
 const CATEGORY_META: Record<Category, { label: string; ink: string }> = {
   growth:     { label: "Growth",     ink: "#4F3FAE" },
@@ -30,8 +29,11 @@ const CATEGORY_META: Record<Category, { label: string; ink: string }> = {
   people:     { label: "People",     ink: "#21815A" },
 };
 
-const FILTERS: { key: CategoryFilter; label: string }[] = [
-  { key: "all", label: "All" },
+// No "All" option -- the row now auto-advances through the three
+// categories on its own (see AUTO_FILTER_MS below), the same rhythm as
+// the hero's Growth/Operations/People tabs, so there's always exactly
+// one active category rather than a resting "everything" state.
+const FILTERS: { key: Category; label: string }[] = [
   { key: "growth", label: "Growth" },
   { key: "operations", label: "Operations" },
   { key: "people", label: "People" },
@@ -763,7 +765,7 @@ function ProductCard({
 
 export function SectionPlatform() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [filter, setFilter] = useState<CategoryFilter>("all");
+  const [filter, setFilter] = useState<Category>("growth");
   // 'checking' -> 'ok' | 'missing', resolved via a HEAD request rather
   // than each <video>'s own error event -- same reasoning as the hero
   // video swap: a fast local 404 can race React attaching its listener.
@@ -785,7 +787,33 @@ export function SectionPlatform() {
     return () => { cancelled = true; };
   }, []);
 
-  const products = filter === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.category === filter);
+  // Auto-advance growth -> operations -> people -> looping, exactly the
+  // hero's Growth/Operations/People rhythm (HeroSection.tsx). Restarted
+  // (not just cleared) on every manual filter click below, so a click
+  // doesn't get overridden a moment later by a timer already mid-flight
+  // -- the visitor's own choice gets a full fresh interval before the
+  // loop resumes.
+  const filterTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const AUTO_FILTER_MS = 6000;
+
+  const startFilterTimer = () => {
+    if (filterTimerRef.current) clearInterval(filterTimerRef.current);
+    filterTimerRef.current = setInterval(() => {
+      setFilter((prev) => {
+        const i = FILTERS.findIndex((f) => f.key === prev);
+        return FILTERS[(i + 1) % FILTERS.length].key;
+      });
+    }, AUTO_FILTER_MS);
+  };
+
+  useEffect(() => {
+    startFilterTimer();
+    return () => {
+      if (filterTimerRef.current) clearInterval(filterTimerRef.current);
+    };
+  }, []);
+
+  const products = PRODUCTS.filter((p) => p.category === filter);
 
   const scrollByCard = (dir: 1 | -1) => {
     const track = trackRef.current;
@@ -805,7 +833,10 @@ export function SectionPlatform() {
     track.scrollBy({ left: dir * step, behavior: "smooth" });
   };
 
-  const setFilterAndReset = (key: CategoryFilter) => setFilter(key);
+  const setFilterAndReset = (key: Category) => {
+    setFilter(key);
+    startFilterTimer();
+  };
 
   // Runs after the DOM has actually committed the new filter's cards
   // (and clones), unlike an imperative scrollTo inside the click
