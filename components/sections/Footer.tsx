@@ -31,6 +31,7 @@ export function Footer() {
           <h6>Learn</h6>
           <ul>
             <li><a href="#">Why EVOQ?</a></li>
+            <li><a href="/integrations">Integrations</a></li>
             <li><a href="#">Resources</a></li>
             <li><a href="#">Customers</a></li>
           </ul>

@@ -966,6 +966,23 @@ export function HeroSection() {
 
   return (
     <div className="w-full">
+      {/* Preload every figure photo across all three tabs, not just the
+          visible ones -- without this the browser only discovers each
+          <img> (below) once React mounts it, so the composite's card
+          shows its plain gradient backdrop first and the photo pops in
+          a moment later once the fetch finishes. React 19 hoists <link>
+          tags rendered anywhere in the tree to <head>, so these don't
+          need to live in a Server Component or use next/head.
+          fetchPriority is "high" only for Growth (the tab visible at
+          first paint, competing for the same bandwidth as everything
+          else LCP-critical); Operations/People just need to be well
+          ahead of the 6s auto-advance timer, not neck-and-neck with it. */}
+      {GROWTH_FIGURES.map((f) => (
+        <link key={f.src} rel="preload" as="image" href={f.src} fetchPriority="high" />
+      ))}
+      {[...OPERATIONS_FIGURES, ...PEOPLE_FIGURES].map((f) => (
+        <link key={f.src} rel="preload" as="image" href={f.src} />
+      ))}
       {/* Full-width hero — no max-width cap, no rounded card */}
       <div className="w-full">
         {/*
