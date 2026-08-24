@@ -1,4 +1,5 @@
-import { EvoqWord, IcLinkedIn, IcX, IcInsta, IcYT } from "./shared";
+import Image from "next/image";
+import { IcLinkedIn, IcX, IcInsta, IcYT } from "./shared";
 
 export function Footer() {
   return (
@@ -6,7 +7,15 @@ export function Footer() {
       <div className="grain"/>
       <div className="footer-grid">
         <div className="footer-brand">
-          <div className="wordmark"><EvoqWord height={20} color="#FFFFFF"/></div>
+          <div className="wordmark">
+            <Image
+              src="/white-logo.png"
+              alt="EVOQ"
+              height={20}
+              width={20 * (1127 / 230)}
+              style={{ height: 20, width: "auto" }}
+            />
+          </div>
           <div className="tagline">
             One Suite.<br/>
             <em>Endless Potential.</em>
