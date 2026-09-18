@@ -17,9 +17,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "EVOQ — Every team. Every workflow. Finally connected.",
+  title: "EVOQ Healthcare — Every team. Every workflow. Finally connected.",
   description:
-    "EVOQ is a unified business software ecosystem designed to connect sales, service, operations, support, and industry-specific workflows into one structured platform.",
+    "EVOQ Healthcare is a unified healthcare software ecosystem designed to connect clinical, administrative, and operational workflows into one structured platform.",
 };
 
 export default function RootLayout({

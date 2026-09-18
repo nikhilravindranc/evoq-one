@@ -15,12 +15,18 @@ const PRODUCTS = [
   { name: "ServiceOps", sub: "Field service & operations" },
 ];
 
+const SOLUTIONS = [
+  { name: "Healthcare", sub: "Connected care workflows", href: "/healthcare" },
+];
+
 export function Topbar({ darkCTA = true, constrained = false, light = false }: { darkCTA?: boolean; constrained?: boolean; light?: boolean }) {
   const [open, setOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [showGetStarted, setShowGetStarted] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
   const { region, setRegion } = useRegion();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const solutionsRef = useRef<HTMLDivElement>(null);
   const regionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,6 +45,23 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
       document.removeEventListener("keydown", onEsc);
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!solutionsOpen) return;
+    const onDoc = (e: MouseEvent) => {
+      if (solutionsRef.current && !solutionsRef.current.contains(e.target as Node))
+        setSolutionsOpen(false);
+    };
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSolutionsOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onEsc);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, [solutionsOpen]);
 
   useEffect(() => {
     if (!regionOpen) return;
@@ -169,24 +192,79 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
         >
           Why EVOQ?
         </Link>
-        <Link
-          href="/implementation"
-          className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 no-underline transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
-        >
-          Implementation
-        </Link>
-        <a
-          href="#"
-          className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
-        >
-          Customers
-        </a>
-        <a
-          href="#"
-          className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
-        >
-          Resources
-        </a>
+        {/* Solutions with dropdown */}
+        <div className="relative" ref={solutionsRef}>
+          <button
+            type="button"
+            className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-transparent px-4 py-2.5 font-[inherit] text-sm font-medium transition-colors ${
+              light
+                ? `text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430] ${solutionsOpen ? "bg-[#F2F2FF] text-[#4747E0]" : ""}`
+                : `text-white/88 hover:bg-white/8 hover:text-white ${solutionsOpen ? "bg-[#4747E0] text-white shadow-[0_4px_14px_-4px_rgba(0,0,153,0.5)]" : ""}`
+            }`}
+            aria-expanded={solutionsOpen}
+            aria-haspopup="menu"
+            onClick={() => setSolutionsOpen((o) => !o)}
+          >
+            {solutionsOpen && (
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#BDBDFF]" />
+            )}
+            <span>Solutions</span>
+            <span
+              className="inline-flex transition-transform duration-200"
+              style={{ transform: solutionsOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+            >
+              <Chevron />
+            </span>
+          </button>
+
+          {solutionsOpen && (
+            <div
+              role="menu"
+              className="absolute left-1/2 top-[calc(100%+14px)] w-[300px] -translate-x-1/2 rounded-[22px] bg-white/96 p-3.5 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
+              style={{ animation: "menuIn 0.15s ease forwards" }}
+            >
+              <style>{`
+                @keyframes menuIn {
+                  from { opacity: 0; transform: translateY(-6px); }
+                  to   { opacity: 1; transform: translateY(0); }
+                }
+              `}</style>
+              {/* Caret */}
+              <div className="absolute -top-[7px] left-1/2 h-3.5 w-3.5 -translate-x-1/2 rotate-45 rounded-sm bg-white/96 shadow-[-1px_-1px_0_rgba(31,36,48,0.04)]" />
+
+              <div className="px-2.5 pb-2.5 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#5F6B7A]">
+                Industry Solutions
+              </div>
+
+              <ul className="flex flex-col gap-0.5 p-0 list-none m-0">
+                {SOLUTIONS.map((s) => (
+                  <li key={s.name} role="menuitem">
+                    <Link
+                      href={s.href}
+                      onClick={() => setSolutionsOpen(false)}
+                      className="group flex items-center gap-3 rounded-xl p-2.5 no-underline text-[#1F2430] transition-colors hover:bg-[#F2F2FF]"
+                    >
+                      <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-content-center rounded-[9px] bg-[#F2F2FF] p-[6px]">
+                        <EvoqMonogram color="#000099" />
+                      </span>
+                      <span className="flex flex-1 flex-col leading-tight">
+                        <span className="text-[14px] font-semibold text-[#1F2430]">
+                          {s.name}
+                        </span>
+                        <span className="mt-px text-[12px] font-normal text-[#5F6B7A]">
+                          {s.sub}
+                        </span>
+                      </span>
+                      <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#4747E0] text-white opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
+                        <ArrowRight size={12} />
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </nav>
 
       {/* Log in + Region + CTA */}
