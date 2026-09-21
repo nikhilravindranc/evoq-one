@@ -37,7 +37,44 @@ the healthcare microsite lives at the `/healthcare` route.
 - `components/healthcare/HealthcareHero.tsx` — hero: eyebrow, H1, subcopy,
   "Get a demo" / "Talk to an expert" CTAs, 6 floating capability cards
   (`.hc-card`, `hcFloat` keyframes), 4-segment strip, tagline.
-- `components/healthcare/HealthcareLogo.tsx` — mint rounded square + teal
+- `components/healthcare/HealthcareOperations.tsx` — "Everything behind better
+  healthcare operations." section: left copy + 2×2 feature grid + CTAs, right
+  EVOQ dashboard mock (sidebar, stat cards, appointments table) over
+  `public/healthcare/operations-bg.jpg` (clinic photo, white gradient fade).
+- `components/healthcare/HealthcareCareSettings.tsx` — "Designed around the way
+  healthcare works." section: 3×2 card grid (clinics, dental, aesthetics,
+  hospitals, diagnostics, multi-location) with photos from
+  `public/healthcare/cards/*.jpg` (sourced from Unsplash), icon tiles, and a
+  footer row ("Healthcare for what's next" / "Explore all solutions").
+- `components/healthcare/HealthcareJourney.tsx` — white section (soft cyan/mint
+  gradient blobs) "From first enquiry to ongoing care.": 6-step journey row
+  (Capture → Re-engage) on a light-cyan dashed connector with alternating
+  cyan→mint / blue→cyan gradient icon badges, CTAs, and a photo card
+  (`public/healthcare/journey-consult.jpg`) with floating "Next Follow-up" /
+  "Appointment Confirmed" cards (hidden below lg).
+- `components/healthcare/HealthcareJourneyTogether.tsx` — white section "Bring
+  every part of the healthcare journey together.": 3 cards (Healthcare CRM,
+  Practice Management, Patient Engagement) each containing a mini app-window
+  mockup (Patients list / Appointments day schedule / Create Campaign form +
+  phone preview) clipped at the card bottom, linking to the in-page anchors,
+  with an lg-only header-right photo + floating card, connector flourish down
+  to an EVOQ-logo pill, and a 3-item benefits row.
+- `components/healthcare/HealthcareEnvironment.tsx` — cool-mist `#F1F5F7` section
+  "One healthcare environment. Different applications.": three white blocks
+  (Patient relationships, Practice operations, Patient journey with a 5-app
+  list) around a central circular "Healthcare" hub (cyan→mint gradient ring),
+  dotted connectors (lg-only), plus a 3-item stats row.
+- `components/healthcare/HealthcareModular.tsx` — light section "Start with
+  what you need. Add as you grow." over the diluted signature-gradient
+  environment: copy + "Explore EVOQ products" CTA, right side floating product
+  tiles (Practice Management, Healthcare CRM, Billing, Booking Engine,
+  Campaigns, Surveys, Loyalty, "Add more as you grow") over dotted connectors
+  with a "Healthcare" base bar; absolute positioning on lg, wrapping flex grid
+  below.
+- `components/healthcare/HealthcareCTA.tsx` — final CTA banner (clean white,
+  soft gradient blobs only): "Bring healthcare operations and patient
+  relationships together." with "Get a demo" / "Talk to an expert" CTAs.
+- `components/healthcare/HealthcareLogo.tsx` — mint icon-bg tile + cyan
   heart-pulse mark + "Healthcare" wordmark.
 - `public/healthcare/hero-bg.jpg` — hero background photo (optimized from the
   original PNG).
@@ -68,10 +105,12 @@ Recommended hero gradient direction: deep navy → healthcare teal → EVOQ blue
 
 ## Layout convention (important)
 
-Containers must match the main site grid: **outer div carries horizontal
-padding (`px-5 sm:px-8 lg:px-20`), inner div carries `max-w-[1168px] mx-auto`**.
-Never put the 80px padding inside the max-width box — that shifts content 80px
-on ≥lg screens (this bug was fixed once already).
+Containers must match the live evoq.one grid: **outer div carries horizontal
+padding (`px-5 sm:px-6 lg:px-6`), inner div carries `max-w-[1300px] mx-auto`**.
+Never put the padding inside the max-width box — that shifts content
+on ≥lg screens (this bug was fixed once already). Note: `Topbar` also has a
+`constrained` variant (`px-5 sm:px-[40px] lg:px-[60px]`, `max-w-[1200px]`) used
+by about/contact/implementation/integrations/why-evoq — leave that one as-is.
 
 ## Pending work / roadmap
 

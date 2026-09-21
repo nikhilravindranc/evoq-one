@@ -5,10 +5,10 @@ import { HealthcareLogo } from "./HealthcareLogo";
 
 const MENU = [
   { name: "Overview", href: "#overview", active: true },
-  { name: "Healthcare CRM", href: "#healthcare-crm", active: false },
+  { name: "Healthcare CRM", href: "/healthcare/crm", active: false },
   {
     name: "Healthcare Practice Management",
-    href: "#practice-management",
+    href: "/healthcare/practice-management",
     active: false,
   },
   { name: "Patient Engagement", href: "#patient-engagement", active: false },
@@ -16,9 +16,9 @@ const MENU = [
 
 export function HealthcareNav() {
   return (
-    <div className="border-b border-[#102A43]/8 bg-white/90 backdrop-blur-lg">
-      <div className="px-5 sm:px-8 lg:px-20">
-        <div className="mx-auto flex max-w-[1168px] items-center justify-between py-3">
+    <div className="border-b border-[#E2E8EC] bg-white/90 backdrop-blur-lg">
+      <div className="px-5 sm:px-6 lg:px-6">
+        <div className="mx-auto flex max-w-[1300px] items-center justify-between py-3">
         <Link href="/healthcare" className="no-underline">
           <HealthcareLogo />
         </Link>
@@ -33,13 +33,13 @@ export function HealthcareNav() {
               href={item.href}
               className={`relative rounded-full px-4 py-2.5 text-sm font-medium no-underline transition-colors ${
                 item.active
-                  ? "text-[#102A43]"
-                  : "text-[#102A43]/60 hover:bg-[#F4FBFA] hover:text-[#102A43]"
+                  ? "text-[#31465A]"
+                  : "text-[#64748B] hover:bg-[#F1F5F7] hover:text-[#31465A]"
               }`}
             >
               {item.name}
               {item.active && (
-                <span className="absolute inset-x-4 -bottom-[13px] h-[2.5px] rounded-full bg-[#0F766E]" />
+                <span className="absolute inset-x-4 -bottom-[13px] h-[2.5px] rounded-full bg-[#2064B6]" />
               )}
             </a>
           ))}
@@ -47,7 +47,7 @@ export function HealthcareNav() {
 
         <button
           type="button"
-          className="hidden cursor-pointer items-center gap-2 rounded-full border border-[#102A43]/15 bg-white px-5 py-2.5 text-sm font-semibold text-[#102A43] transition-all hover:-translate-y-px hover:border-[#0F766E]/40 hover:text-[#0F766E] sm:inline-flex"
+          className="hidden cursor-pointer items-center gap-2 rounded-full border border-[#2064B6] bg-white px-5 py-2.5 text-sm font-semibold text-[#2064B6] transition-all hover:-translate-y-px hover:bg-[#F1F5F7] sm:inline-flex"
         >
           Talk to an expert
           <svg

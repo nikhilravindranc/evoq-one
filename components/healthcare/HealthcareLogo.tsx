@@ -1,13 +1,13 @@
-export function HealthcareLogo() {
+export function HealthcareLogo({ label = "Healthcare" }: { label?: string }) {
   return (
     <span className="inline-flex items-center gap-2.5">
-      <span className="flex h-9 w-9 items-center justify-center rounded-[11px] bg-[#DDF5F0]">
+      <span className="flex h-9 w-9 items-center justify-center rounded-[11px] bg-[#E7F7F5]">
         <svg
           width="20"
           height="20"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#0F766E"
+          stroke="#18B8D1"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -17,8 +17,8 @@ export function HealthcareLogo() {
           <path d="M12 21c-2-1.2-4-2.8-5.5-4.5M12 21c2-1.2 4-2.8 5.5-4.5" />
         </svg>
       </span>
-      <span className="text-[17px] font-bold tracking-[-0.01em] text-[#102A43]">
-        Healthcare
+      <span className="text-[17px] font-bold tracking-[-0.01em] text-[#31465A]">
+        {label}
       </span>
     </span>
   );

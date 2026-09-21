@@ -2,6 +2,13 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { HealthcareNav } from "./HealthcareNav";
 import { HealthcareHero } from "./HealthcareHero";
+import { HealthcareConnected } from "./HealthcareConnected";
+import { HealthcareCareSettings } from "./HealthcareCareSettings";
+import { HealthcareJourney } from "./HealthcareJourney";
+import { HealthcareJourneyTogether } from "./HealthcareJourneyTogether";
+import { HealthcareEnvironment } from "./HealthcareEnvironment";
+import { HealthcareModular } from "./HealthcareModular";
+import { HealthcareCTA } from "./HealthcareCTA";
 
 export function HealthcarePage() {
   return (
@@ -10,7 +17,7 @@ export function HealthcarePage() {
         style={{
           background: "var(--white)",
           position: "relative",
-          zIndex: 10,
+          zIndex: 60,
           borderBottom: "1px solid rgba(16,42,67,0.08)",
         }}
       >
@@ -18,6 +25,13 @@ export function HealthcarePage() {
       </div>
       <HealthcareNav />
       <HealthcareHero />
+      <HealthcareConnected />
+      <HealthcareCareSettings />
+      <HealthcareJourney />
+      <HealthcareJourneyTogether />
+      <HealthcareEnvironment />
+      <HealthcareModular />
+      <HealthcareCTA />
       <Footer />
     </div>
   );
