@@ -190,7 +190,7 @@ export function HealthcareHero() {
           <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#18B8D1]">
             Healthcare Solutions
           </p>
-          <h1 className="mt-4 font-[var(--font-display)] text-[44px] font-extrabold leading-[1.06] tracking-[-0.02em] text-[#31465A] sm:text-[56px]">
+          <h1 className="mt-4 font-[var(--font-display)] text-[48px] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#31465A]">
             Manage healthcare operations. Grow patient relationships.
           </h1>
           <p className="mt-5 text-[17px] leading-[1.65] text-[#64748B]">

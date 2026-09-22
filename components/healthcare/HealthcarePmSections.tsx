@@ -52,8 +52,8 @@ const Arrow = ({ size = 16 }: { size?: number }) => (
   </svg>
 );
 
-const H2 = "font-[var(--font-display)] text-[34px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#26384B] sm:text-[46px]";
-const H3 = "font-[var(--font-display)] text-[30px] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#26384B] sm:text-[36px]";
+const H2 = "font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#26384B]";
+const H3 = "font-[var(--font-display)] text-[24px] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#26384B]";
 const LEAD = "text-[16.5px] leading-[1.65] text-[#64748B]";
 const WRAP = "px-5 sm:px-6 lg:px-6";
 const INNER = "mx-auto max-w-[1300px]";
@@ -153,7 +153,7 @@ export function HealthcarePmWorkflow() {
                   </span>
                   <span className="font-[var(--font-display)] text-[28px] font-extrabold text-[#26384B]/10">{String(i + 1).padStart(2, "0")}</span>
                 </div>
-                <h3 className="mt-5 text-[18px] font-bold text-[#26384B]">{s.title}</h3>
+                <h3 className="mt-5 text-[24px] font-bold text-[#26384B]">{s.title}</h3>
                 <p className="mt-2 text-[14px] leading-[1.6] text-[#64748B]">{s.desc}</p>
               </li>
             ))}
@@ -553,7 +553,7 @@ export function HealthcarePmPractices() {
                       <Arrow size={15} />
                     </span>
                   </div>
-                  <h3 className="mt-5 text-[19px] font-bold text-[#26384B]">{p.title}</h3>
+                  <h3 className="mt-5 text-[24px] font-bold text-[#26384B]">{p.title}</h3>
                   <p className="mt-2 text-[14px] leading-[1.6] text-[#64748B]">{p.desc}</p>
                 </article>
               ))}
@@ -655,13 +655,13 @@ export function HealthcarePmGrow() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
                     { icon: "users", title: "Healthcare CRM", body: "Manage enquiries, referrals, patient relationships, follow-ups, and conversion before the patient reaches the appointment stage.", tile: "bg-[#E7F7F5]", stroke: "#3FA99B", href: "/healthcare/crm" },
-                    { icon: "heart", title: "Patient Journey", body: "Extend the experience with Booking Engine, Billing, Campaigns, Surveys, and Loyalty.", tile: "bg-[#FFF3DF]", stroke: "#D98E1F", href: "/healthcare" },
+                    { icon: "heart", title: "Patient Engagement", body: "Extend the experience with Booking Engine, Billing, Campaigns, Surveys, and Loyalty.", tile: "bg-[#FFF3DF]", stroke: "#D98E1F", href: "/healthcare" },
                   ].map((c) => (
                     <Link key={c.title} href={c.href} className="block rounded-[22px] bg-white p-6 no-underline shadow-[0_22px_50px_-34px_rgba(38,56,75,0.4)] ring-1 ring-[#E2E7EB] transition-all hover:-translate-y-1">
                       <span className={`flex h-12 w-12 items-center justify-center rounded-full ${c.tile}`}>
                         <Ic n={c.icon as IconName} size={24} stroke={c.stroke} />
                       </span>
-                      <h3 className="mt-4 text-[17px] font-bold text-[#26384B]">{c.title}</h3>
+                      <h3 className="mt-4 text-[24px] font-bold text-[#26384B]">{c.title}</h3>
                       <p className="mt-2 text-[13.5px] leading-[1.6] text-[#64748B]">{c.body}</p>
                     </Link>
                   ))}
@@ -681,67 +681,97 @@ export function HealthcarePmGrow() {
 
 /* ---------- 6. ready for your market ---------- */
 
-const MARKET = [
-  { icon: "code", label: "Supported integrations", tile: "bg-[#E5F8FB]", stroke: "#2867B2" },
-  { icon: "shield", label: "Security controls", tile: "bg-[#E7F7F5]", stroke: "#3FA99B" },
-  { icon: "chat", label: "Communication services", tile: "bg-[#EEEFFA]", stroke: "#5B5FC7" },
-  { icon: "card", label: "Payment services", tile: "bg-[#FFF3DF]", stroke: "#D98E1F" },
-  { icon: "globe", label: "Regional capabilities", tile: "bg-[#E5F8FB]", stroke: "#26B9CF" },
-] as const;
+type MarketCountry = {
+  code: string;
+  name: string;
+  accent: string;
+  tile: string;
+  heading: string;
+  desc: string;
+  badges: string[];
+};
 
-const DOTS = {
-  backgroundImage: "radial-gradient(#2867B2 1.3px, transparent 1.6px)",
-  backgroundSize: "14px 14px",
-} as const;
+const MARKET_COUNTRIES: MarketCountry[] = [
+  {
+    code: "US",
+    name: "USA",
+    accent: "#2867B2",
+    tile: "bg-[#E5F8FB]",
+    heading: "US healthcare privacy & practice operations",
+    desc: "Practice Management deployments serving US healthcare organizations can be structured around applicable HIPAA requirements, including appropriate access controls, information handling, security measures, and contractual arrangements where protected health information is involved.",
+    badges: ["HIPAA"],
+  },
+  {
+    code: "IN",
+    name: "India",
+    accent: "#26B9CF",
+    tile: "bg-[#E5F8FB]",
+    heading: "Indian healthcare privacy & digital health",
+    desc: "Practice Management deployments can be configured around India's DPDP requirements and, where applicable, digital-health ecosystems such as ABDM. Supported integrations, communication services, and workflows can be aligned with the systems and requirements applicable to each practice.",
+    badges: ["DPDP", "ABDM"],
+  },
+  {
+    code: "AE",
+    name: "UAE",
+    accent: "#5B5FC7",
+    tile: "bg-[#EEEFFA]",
+    heading: "UAE privacy & healthcare interoperability",
+    desc: "Practice Management deployments can be configured around applicable UAE PDPL requirements and, where relevant, healthcare interoperability ecosystems such as Riayati, NABIDH, and Malaffi. Integrations and workflows can be aligned with the systems and requirements applicable to each practice.",
+    badges: ["PDPL", "Riayati", "NABIDH", "Malaffi"],
+  },
+];
 
 export function HealthcarePmMarket() {
   return (
     <section className="bg-[#F2F4F6]">
       <div className={WRAP}>
-        <div className={`${INNER} grid items-center gap-14 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20 lg:py-24`}>
-          {/* visual first: a dotted globe behind a single capability card */}
-          <div className="relative mx-auto w-full max-w-[560px]">
-            <div
-              className="pointer-events-none absolute -inset-6 rounded-full opacity-[0.18]"
-              style={{ ...DOTS, WebkitMaskImage: "radial-gradient(circle at 50% 50%, #000 40%, transparent 72%)", maskImage: "radial-gradient(circle at 50% 50%, #000 40%, transparent 72%)" }}
-            />
-            <div className="pointer-events-none absolute -left-4 top-6 h-24 w-24 rounded-full bg-[#7ACFC5]/35" />
-            <div className="pointer-events-none absolute -right-2 bottom-8 h-5 w-5 rounded-full bg-[#FFDFAE]" />
-
-            <div className={`${CARD} relative p-6 sm:p-8`}>
-              <div className="flex items-center gap-4">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#2867B2] to-[#26B9CF]">
-                  <Ic n="globe" size={26} stroke="#fff" />
-                </span>
-                <div>
-                  <p className="text-[17px] font-bold text-[#26384B]">Introduced by market</p>
-                  <p className="text-[13px] text-[#64748B]">According to the practice and systems involved</p>
-                </div>
-              </div>
-              <ul className="mt-6 flex flex-col gap-2.5">
-                {MARKET.map((m) => (
-                  <li key={m.label} className="flex items-center gap-4 rounded-2xl bg-[#F6F8FA] px-4 py-3.5 ring-1 ring-[#E2E7EB]/70">
-                    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${m.tile}`}>
-                      <Ic n={m.icon} size={20} stroke={m.stroke} />
-                    </span>
-                    <span className="flex-1 text-[14px] font-semibold text-[#26384B]">{m.label}</span>
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E7F7F5]">
-                      <Ic n="check" size={13} stroke="#3FA99B" />
-                    </span>
-                  </li>
-                ))}
-              </ul>
+        <div className={`${INNER} py-16 lg:py-24`}>
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-[640px]">
+              <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-[#26B9CF]">Privacy &amp; compliance</p>
+              <h2 className={`mt-4 ${H2}`}>Global practice operations. Regional relevance.</h2>
+              <p className={`mt-5 ${LEAD}`}>
+                Healthcare practices may operate differently across countries, with local requirements affecting
+                patient information, privacy, communication, payments, and integrations. EVOQ Practice Management
+                provides a common operational foundation that can be configured around the way practices operate in
+                different regions.
+              </p>
             </div>
+            <span className="flex h-[64px] w-[64px] shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2867B2] to-[#26B9CF] lg:mt-1">
+              <Ic n="globe" size={28} stroke="#fff" />
+            </span>
           </div>
 
-          <div>
-            <h2 className={H2}>Ready for the requirements of your market.</h2>
-            <p className={`mt-6 max-w-[600px] ${LEAD}`}>
-              Practice Management provides a consistent operational foundation while allowing the practice environment
-              to reflect local requirements. Supported integrations, security controls, communication services, payment
-              services, and regional capabilities can be introduced according to the market, practice, and systems
-              involved.
-            </p>
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            {MARKET_COUNTRIES.map((c) => (
+              <div key={c.code} className={`${CARD} flex flex-col p-6`}>
+                <div className="flex items-center gap-3">
+                  <span
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[12px] font-extrabold text-white"
+                    style={{ background: c.accent }}
+                  >
+                    {c.code}
+                  </span>
+                  <span className="font-[var(--font-display)] text-[16px] font-bold text-[#26384B]">{c.name}</span>
+                </div>
+
+                <p className="mt-4 text-[14.5px] font-bold leading-[1.35] text-[#26384B]">{c.heading}</p>
+                <p className="mt-2.5 flex-1 text-[13.5px] leading-[1.6] text-[#64748B]">{c.desc}</p>
+
+                <div className="mt-5 flex flex-wrap gap-2 border-t border-[#E2E7EB] pt-4">
+                  {c.badges.map((b) => (
+                    <span
+                      key={b}
+                      className={`inline-flex items-center gap-1.5 rounded-full ${c.tile} px-3 py-1.5 text-[12px] font-semibold`}
+                      style={{ color: c.accent }}
+                    >
+                      <Ic n="shield" size={13} stroke={c.accent} />
+                      {b}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -761,7 +791,7 @@ export function HealthcarePmCTA() {
             <div className="pointer-events-none absolute -right-10 top-10 h-[300px] w-[300px] rounded-full border border-white/25" />
             <div className="pointer-events-none absolute bottom-8 right-24 h-5 w-5 rounded-full bg-[#FFDFAE]" />
             <div className="relative mx-auto text-center">
-              <h2 className="font-[var(--font-display)] text-[34px] font-extrabold leading-[1.06] tracking-[-0.025em] text-white sm:text-[40px] lg:whitespace-nowrap lg:text-[50px]">
+              <h2 className="font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-white">
                 Give your practice a clearer way to work.
               </h2>
               <p className="mx-auto mt-5 max-w-[680px] text-[17px] leading-[1.6] text-white/90">

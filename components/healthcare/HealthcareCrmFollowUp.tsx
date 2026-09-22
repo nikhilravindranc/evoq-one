@@ -117,7 +117,7 @@ export function HealthcareCrmFollowUp() {
               <p className="text-[12.5px] font-medium uppercase tracking-[0.24em] text-[#2064B6]">
                 Stay connected. At the right time.
               </p>
-              <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.04] tracking-[-0.025em] text-[#102A43] sm:text-[46px]">
+              <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.04] tracking-[-0.025em] text-[#102A43]">
                 Keep every follow-up within reach.
               </h2>
               <div className="mt-6 text-[15.5px] leading-[1.6] text-[#31465A]/75">

@@ -176,7 +176,7 @@ export function HealthcareCrmJourney() {
               <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-[#31465A]/55">
                 From enquiry to ongoing care
               </p>
-              <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#102A43] sm:text-[50px]">
+              <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#102A43]">
                 Keep the patient journey connected.
               </h2>
               <div className="mt-6 max-w-[700px] text-[16.5px] leading-[1.6] text-[#31465A]/75">
@@ -197,7 +197,7 @@ export function HealthcareCrmJourney() {
                 {FEATURES.map((f) => (
                   <div key={f.title[0]}>
                     <span className={`flex h-[60px] w-[60px] items-center justify-center rounded-full ${f.tile}`}>{f.icon}</span>
-                    <h3 className="mt-4 text-[16px] font-bold leading-[1.25] text-[#102A43]">
+                    <h3 className="mt-4 text-[24px] font-bold leading-[1.25] text-[#102A43]">
                       {f.title[0]}
                       <br />
                       {f.title[1]}

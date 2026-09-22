@@ -155,7 +155,7 @@ export function HealthcareCrmConnected() {
                 <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-[#18A0B8]">
                   Connected across your practice
                 </p>
-                <h2 className="mt-4 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#102A43] sm:text-[46px]">
+                <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#102A43]">
                   Connect patient relationships with the rest of your practice.
                 </h2>
                 <p className="mt-6 max-w-[560px] text-[16px] leading-[1.6] text-[#31465A]/75">
@@ -181,7 +181,7 @@ export function HealthcareCrmConnected() {
                 >
                   <div className="flex items-center gap-4">
                     <span className={`flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full ${a.tile}`}>{a.icon}</span>
-                    <h3 className="text-[17px] font-bold leading-[1.25] text-[#102A43]">{a.title}</h3>
+                    <h3 className="text-[24px] font-bold leading-[1.25] text-[#102A43]">{a.title}</h3>
                   </div>
                   <p className="mt-4 text-[14px] leading-[1.55] text-[#31465A]/70">{a.desc}</p>
                   <span className="mt-auto pt-5">

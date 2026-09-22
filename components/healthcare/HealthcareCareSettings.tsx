@@ -63,48 +63,54 @@ const MapPinIcon = ({ stroke }: IconProps) => (
 
 const CARDS = [
   {
-    img: "/healthcare/cards/clinics.jpg",
-    alt: "Doctor's desk with stethoscope and laptop",
+    img: "/healthcare/stock/care-clinics-2.jpg",
+    pos: "50% 30%",
+    alt: "Doctor consulting with a patient in a clinic office",
     icon: <StethoscopeIcon stroke="#2064B6" />,
     tile: "bg-[#E8F1FA]",
     title: "Medical clinics and specialty practices",
     desc: "Manage patients, appointments, providers, services, visits, follow-ups, and everyday practice activity.",
   },
   {
-    img: "/healthcare/cards/dental.jpg",
-    alt: "Modern dental practice treatment room",
+    img: "/healthcare/stock/care-dental-2.jpg",
+    pos: "50% 55%",
+    alt: "Dentist examining a patient in a bright dental clinic",
     icon: <ToothIcon stroke="#18B8D1" />,
     tile: "bg-[#E5F8FB]",
     title: "Dental practices",
     desc: "Coordinate appointments, patient relationships, treatment-related activity, follow-ups, and billing.",
   },
   {
-    img: "/healthcare/cards/aesthetics.jpg",
-    alt: "Aesthetic wellness treatment in progress",
+    img: "/healthcare/stock/care-aesthetics.jpg",
+    pos: "50% 30%",
+    alt: "Aesthetician giving a patient a facial treatment",
     icon: <LotusIcon stroke="#6DCCC3" />,
     tile: "bg-[#E7F7F5]",
     title: "Medical aesthetics and wellness",
     desc: "Manage enquiries, consultations, appointments, treatments, returning patients, and ongoing engagement.",
   },
   {
-    img: "/healthcare/cards/hospitals.jpg",
-    alt: "Bright hospital ward with beds",
+    img: "/healthcare/stock/care-hospitals-2.jpg",
+    pos: "50% 40%",
+    alt: "Doctor and nurse attending to a patient in a hospital room",
     icon: <HospitalIcon stroke="#2064B6" />,
     tile: "bg-[#E8F1FA]",
     title: "Hospitals and healthcare networks",
     desc: "Manage patient enquiries, referrals, relationships, and follow-ups across departments, facilities, teams, and locations.",
   },
   {
-    img: "/healthcare/cards/diagnostics.jpg",
-    alt: "Diagnostic laboratory with analyzers",
+    img: "/healthcare/stock/care-diagnostics-2.jpg",
+    pos: "50% 35%",
+    alt: "Lab technician examining a sample in a diagnostic laboratory",
     icon: <FlaskIcon stroke="#18B8D1" />,
     tile: "bg-[#E5F8FB]",
     title: "Diagnostic centers",
     desc: "Organize enquiries, referrals, patient communication, and follow-ups throughout the diagnostic journey.",
   },
   {
-    img: "/healthcare/cards/multilocation.jpg",
-    alt: "Medical center building exterior",
+    img: "/healthcare/stock/care-multilocation.jpg",
+    pos: "50% 60%",
+    alt: "Modern medical center building exterior",
     icon: <MapPinIcon stroke="#6DCCC3" />,
     tile: "bg-[#E7F7F5]",
     title: "Multi-location healthcare organizations",
@@ -127,9 +133,9 @@ export function HealthcareCareSettings() {
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-[680px]">
               <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#2064B6]">
-                Industries and care settings
+                Built for every care setting
               </p>
-              <h2 className="mt-4 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A] sm:text-[48px]">
+              <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A]">
                 Designed around the way healthcare works.
               </h2>
               <p className="mt-5 max-w-[720px] text-[15.5px] leading-[1.7] text-[#64748B]">
@@ -163,13 +169,14 @@ export function HealthcareCareSettings() {
                     fill
                     sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    style={{ objectPosition: c.pos }}
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-6">
                   <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${c.tile}`}>
                     {c.icon}
                   </span>
-                  <h3 className="mt-4 font-[var(--font-display)] text-[17px] font-bold leading-snug text-[#31465A]">
+                  <h3 className="mt-4 font-[var(--font-display)] text-[24px] font-bold leading-snug text-[#31465A]">
                     {c.title}
                   </h3>
                   <p className="mt-2 text-[13.5px] leading-[1.6] text-[#64748B]">

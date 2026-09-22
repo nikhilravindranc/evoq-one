@@ -179,7 +179,7 @@ function MapPanel() {
 
 export function HealthcareCrmOrganizations() {
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative isolate overflow-hidden bg-white">
       <div className="pointer-events-none absolute -left-40 top-0 h-[420px] w-[420px] rounded-full bg-[#E3F2FA] blur-3xl" />
       <div className="pointer-events-none absolute right-0 top-40 h-[380px] w-[380px] rounded-full bg-[#E1F6F3]/70 blur-3xl" />
 
@@ -191,7 +191,7 @@ export function HealthcareCrmOrganizations() {
               <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-[#18A0B8]">
                 Across specialties. At every scale.
               </p>
-              <h2 className="mt-4 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#102A43] sm:text-[44px]">
+              <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#102A43]">
                 Built for the way healthcare organizations work.
               </h2>
               <p className="mt-6 text-[16px] leading-[1.6] text-[#31465A]/75">
@@ -243,7 +243,7 @@ export function HealthcareCrmOrganizations() {
                 <div className="relative z-10 flex w-full flex-col px-6 py-6 sm:w-[58%]">
                   <div className="flex items-center gap-4">
                     <span className={`flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full ${o.tile}`}>{o.icon}</span>
-                    <h3 className="text-[17px] font-bold leading-[1.25] text-[#102A43]">
+                    <h3 className="text-[24px] font-bold leading-[1.25] text-[#102A43]">
                       {o.title[0]}
                       {o.title[1] && (
                         <>

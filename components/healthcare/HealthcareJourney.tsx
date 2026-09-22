@@ -124,7 +124,7 @@ export function HealthcareJourney() {
           <div className="grid items-center gap-14 lg:grid-cols-[1fr_440px] lg:gap-20">
             <div>
               <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#18B8D1]">The patient journey</p>
-              <h2 className="mt-4 max-w-[640px] font-[var(--font-display)] text-[36px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A] sm:text-[50px]">
+              <h2 className="mt-4 max-w-[640px] font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A]">
                 From first enquiry to ongoing care.
               </h2>
               <p className="mt-5 max-w-[560px] text-[16.5px] leading-[1.7] text-[#64748B]">

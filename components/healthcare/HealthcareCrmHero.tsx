@@ -124,7 +124,7 @@ export function HealthcareCrmHero() {
             <p className="text-[12.5px] font-bold uppercase tracking-[0.3em] text-[#0F9488]">
               Patient relationships that last
             </p>
-            <h1 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43] sm:text-[46px] lg:text-[54px]">
+            <h1 className="mt-4 font-[var(--font-display)] text-[48px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43]">
               Turn every patient interaction<br className="hidden sm:block" /> into a lasting relationship.
             </h1>
             <p className="mx-auto mt-6 max-w-[760px] text-[16.5px] leading-[1.65] text-[#102A43]/70">

@@ -181,7 +181,7 @@ function Script({ lines, className = "" }: { lines: string[]; className?: string
 
 const EYEBROW = "text-[12px] font-bold uppercase tracking-[0.28em] text-[#18A0B8]";
 const H2 =
-  "mt-4 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43] sm:text-[44px]";
+  "mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43]";
 
 export function HealthcareCrmSplit() {
   return (

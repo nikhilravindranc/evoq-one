@@ -113,7 +113,7 @@ export function HealthcareCrmEnquiry() {
             <p className="text-[12.5px] font-bold uppercase tracking-[0.26em] text-[#0F9488]">
               From first interaction to lasting relationships
             </p>
-            <h2 className="mt-4 max-w-[640px] font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43] sm:text-[50px]">
+            <h2 className="mt-4 max-w-[640px] font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43]">
               Every patient relationship starts somewhere.
             </h2>
             <div className="mt-8 max-w-[560px] text-[17px] leading-[1.6] text-[#102A43]/65">

@@ -10,6 +10,7 @@ import { HealthcareCrmFollowUp } from "./HealthcareCrmFollowUp";
 import { HealthcareCrmConnected } from "./HealthcareCrmConnected";
 import { HealthcareCrmSecurity } from "./HealthcareCrmSecurity";
 import { HealthcareCrmCTA } from "./HealthcareCrmCTA";
+import { HealthcareCrmStackedScroll } from "./HealthcareCrmStackedScroll";
 
 export function HealthcareCrmPage() {
   return (
@@ -27,11 +28,20 @@ export function HealthcareCrmPage() {
       <HealthcareCrmNav />
       <HealthcareCrmHero />
       <HealthcareCrmEnquiry />
-      <HealthcareCrmJourney />
-      <HealthcareCrmSplit />
+
+      {/* Stacked scroll sequence: each panel pins full-screen for a stretch
+          of scrolling, then the next one takes over. Driven by JS (see
+          HealthcareCrmStackedScroll) rather than CSS `position: sticky`. */}
+      <HealthcareCrmStackedScroll
+        panels={[
+          <HealthcareCrmJourney key="journey" />,
+          <HealthcareCrmSplit key="split" />,
+          <HealthcareCrmFollowUp key="followup" />,
+          <HealthcareCrmConnected key="connected" />,
+        ]}
+      />
+
       <HealthcareCrmOrganizations />
-      <HealthcareCrmFollowUp />
-      <HealthcareCrmConnected />
       <HealthcareCrmSecurity />
       <HealthcareCrmCTA />
       <Footer />

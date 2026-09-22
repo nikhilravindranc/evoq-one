@@ -30,7 +30,7 @@ export function HealthcareCTA() {
                 <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#B7ECF5]">
                   Ready to build your healthcare environment?
                 </p>
-                <h2 className="mt-4 max-w-[640px] font-[var(--font-display)] text-[34px] font-extrabold leading-[1.08] tracking-[-0.02em] text-white sm:text-[48px]">
+                <h2 className="mt-4 max-w-[640px] font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-white">
                   Bring healthcare operations and patient relationships together.
                 </h2>
                 <p className="mt-5 max-w-[540px] text-[16.5px] leading-[1.7] text-white/80">

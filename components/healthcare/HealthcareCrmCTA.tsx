@@ -8,7 +8,7 @@ const ArrowRight = () => (
 
 export function HealthcareCrmCTA() {
   return (
-    <section id="expert" className="bg-white">
+    <section id="expert" className="isolate bg-white">
       <div className="px-5 sm:px-6 lg:px-6">
         <div className="mx-auto max-w-[1300px] pb-16 pt-6 lg:pb-24">
           <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#123B5E] via-[#2064B6] to-[#18B8D1] px-6 py-12 sm:px-10 lg:px-14 lg:py-16">
@@ -18,7 +18,7 @@ export function HealthcareCrmCTA() {
 
             <div className="relative grid items-center gap-10 lg:grid-cols-[1.25fr_0.75fr]">
               <div>
-                <h2 className="max-w-[680px] font-[var(--font-display)] text-[36px] font-extrabold leading-[1.06] tracking-[-0.025em] text-white sm:text-[48px]">
+                <h2 className="max-w-[680px] font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-white">
                   One patient relationship. Every interaction in context.
                 </h2>
                 <div className="mt-6 max-w-[620px] text-[16px] leading-[1.6] text-white/80">

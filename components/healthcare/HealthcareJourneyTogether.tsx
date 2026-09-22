@@ -22,26 +22,25 @@ function Ic({ n, size = 20, stroke = "#2064B6" }: { n: keyof typeof PATHS; size?
 
 /* ---------- mini UI cards laid over each photo ---------- */
 
-const FLOAT = "absolute rounded-2xl bg-white shadow-[0_22px_50px_-22px_rgba(49,70,90,0.45)] ring-1 ring-[#31465A]/5";
+const FLOAT = "absolute rounded-2xl bg-white/94 shadow-[0_22px_50px_-22px_rgba(49,70,90,0.5)] ring-1 ring-white/60 backdrop-blur-sm";
 
 function CrmVisual() {
   const rows = [
     { i: "OC", n: "Olivia Carter", s: "Follow-up", pill: "bg-[#E7F7F5] text-[#2F8A7F]", av: "bg-[#E8F1FA] text-[#2064B6]" },
     { i: "LB", n: "Liam Brooks", s: "Consultation", pill: "bg-[#E5F8FB] text-[#0E8FA5]", av: "bg-[#E7F7F5] text-[#2F8A7F]" },
-    { i: "NP", n: "Noah Patel", s: "New enquiry", pill: "bg-[#E8F1FA] text-[#2064B6]", av: "bg-[#E5F8FB] text-[#0E8FA5]" },
   ];
   return (
-    <div className={`${FLOAT} bottom-4 left-4 right-4 p-3.5 sm:right-auto sm:w-[78%]`}>
+    <div className={`${FLOAT} bottom-3.5 left-3.5 w-[62%] p-3`}>
       <div className="flex items-center justify-between">
-        <p className="text-[12px] font-bold text-[#31465A]">Patients</p>
-        <span className="rounded-full bg-[#2064B6] px-2.5 py-1 text-[9.5px] font-semibold text-white">+ Add patient</span>
+        <p className="text-[11.5px] font-bold text-[#31465A]">Patients</p>
+        <span className="rounded-full bg-[#2064B6] px-2 py-[3px] text-[9px] font-semibold text-white">+ Add</span>
       </div>
-      <ul className="mt-2.5 flex flex-col gap-2">
+      <ul className="mt-2 flex flex-col gap-1.5">
         {rows.map((r) => (
-          <li key={r.n} className="flex items-center gap-2.5">
-            <span className={`flex h-7 w-7 items-center justify-center rounded-full text-[9.5px] font-bold ${r.av}`}>{r.i}</span>
-            <span className="flex-1 text-[11.5px] font-semibold text-[#31465A]">{r.n}</span>
-            <span className={`rounded-md px-2 py-1 text-[9.5px] font-semibold ${r.pill}`}>{r.s}</span>
+          <li key={r.n} className="flex items-center gap-2">
+            <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[8.5px] font-bold ${r.av}`}>{r.i}</span>
+            <span className="min-w-0 flex-1 truncate text-[10.5px] font-semibold text-[#31465A]">{r.n}</span>
+            <span className={`shrink-0 rounded-md px-1.5 py-0.5 text-[8.5px] font-semibold ${r.pill}`}>{r.s}</span>
           </li>
         ))}
       </ul>
@@ -53,20 +52,19 @@ function PmVisual() {
   const rows = [
     { t: "9:00 AM", n: "Sarah Mitchell", s: "Consultation", pill: "bg-[#E8F1FA] text-[#2064B6]" },
     { t: "10:30 AM", n: "James Carter", s: "Treatment", pill: "bg-[#E7F7F5] text-[#2F8A7F]" },
-    { t: "12:00 PM", n: "Priya Sharma", s: "Follow-up", pill: "bg-[#E5F8FB] text-[#0E8FA5]" },
   ];
   return (
-    <div className={`${FLOAT} left-4 right-4 top-4 p-3.5 sm:left-auto sm:w-[78%]`}>
+    <div className={`${FLOAT} right-3.5 top-3.5 w-[62%] p-3`}>
       <div className="flex items-center justify-between">
-        <p className="text-[12px] font-bold text-[#31465A]">Today</p>
-        <span className="text-[10px] text-[#64748B]">Tue, Sep 16</span>
+        <p className="text-[11.5px] font-bold text-[#31465A]">Today</p>
+        <span className="text-[9.5px] text-[#64748B]">Tue, Sep 16</span>
       </div>
-      <ul className="mt-2.5 flex flex-col gap-2">
+      <ul className="mt-2 flex flex-col gap-1.5">
         {rows.map((r) => (
-          <li key={r.t} className="grid grid-cols-[52px_1fr_auto] items-center gap-2">
-            <span className="text-[10px] text-[#64748B]">{r.t}</span>
-            <span className="text-[11.5px] font-semibold text-[#31465A]">{r.n}</span>
-            <span className={`rounded-md px-2 py-1 text-[9.5px] font-semibold ${r.pill}`}>{r.s}</span>
+          <li key={r.t} className="grid grid-cols-[46px_1fr_auto] items-center gap-1.5">
+            <span className="text-[9.5px] text-[#64748B]">{r.t}</span>
+            <span className="min-w-0 truncate text-[10.5px] font-semibold text-[#31465A]">{r.n}</span>
+            <span className={`shrink-0 rounded-md px-1.5 py-0.5 text-[8.5px] font-semibold ${r.pill}`}>{r.s}</span>
           </li>
         ))}
       </ul>
@@ -76,19 +74,19 @@ function PmVisual() {
 
 function PeVisual() {
   return (
-    <div className={`${FLOAT} bottom-4 left-4 right-4 p-3.5 sm:right-auto sm:w-[80%]`}>
+    <div className={`${FLOAT} bottom-3.5 right-3.5 w-[66%] p-3`}>
       <div className="flex items-center gap-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FDEAF3]">
-          <Ic n="megaphone" size={14} stroke="#C2477F" />
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#FDEAF3]">
+          <Ic n="megaphone" size={12} stroke="#C2477F" />
         </span>
-        <p className="text-[12px] font-bold text-[#31465A]">Wellness follow-up</p>
-        <span className="ml-auto rounded-md bg-[#E7F7F5] px-2 py-1 text-[9.5px] font-semibold text-[#2F8A7F]">SMS</span>
+        <p className="min-w-0 flex-1 truncate text-[11px] font-bold text-[#31465A]">Wellness follow-up</p>
+        <span className="shrink-0 rounded-md bg-[#E7F7F5] px-1.5 py-0.5 text-[8.5px] font-semibold text-[#2F8A7F]">SMS</span>
       </div>
-      <p className="mt-2.5 rounded-xl rounded-tl-sm bg-[#F1F5F7] p-2.5 text-[11px] leading-[1.5] text-[#31465A]">
-        Hi Sarah, it&apos;s time for your follow-up appointment. Book your visit in a few taps.
+      <p className="mt-2 rounded-xl rounded-tl-sm bg-[#F1F5F7] p-2 text-[10px] leading-[1.45] text-[#31465A]">
+        Hi Sarah, it&apos;s time for your follow-up appointment.
       </p>
-      <span className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-[#2064B6] px-3.5 py-1.5 text-[10.5px] font-semibold text-white">
-        Book now <Ic n="arrow" size={11} stroke="#fff" />
+      <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#2064B6] px-3 py-1 text-[9.5px] font-semibold text-white">
+        Book now <Ic n="arrow" size={10} stroke="#fff" />
       </span>
     </div>
   );
@@ -123,7 +121,7 @@ const CARDS = [
     alt: "Patient using her phone",
     title: "Patient Engagement",
     desc: "Extend the patient experience with booking, billing, campaigns, feedback, and loyalty.",
-    link: "Explore patient journey",
+    link: "Explore patient engagement",
     href: "#patient-engagement",
     tint: "bg-[#E7F7F5]",
     visual: <PeVisual />,
@@ -150,7 +148,7 @@ export function HealthcareJourneyTogether() {
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-[720px]">
               <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#18B8D1]">A complete care journey</p>
-              <h2 className="mt-4 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A] sm:text-[48px]">
+              <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A]">
                 Bring every part of the healthcare journey together.
               </h2>
               <p className="mt-5 text-[16.5px] leading-[1.7] text-[#64748B]">
@@ -184,13 +182,13 @@ export function HealthcareJourneyTogether() {
                 key={c.title}
                 className="group flex flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_2px_16px_rgba(49,70,90,0.06)] ring-1 ring-[#31465A]/6 transition-all hover:-translate-y-1 hover:shadow-[0_24px_50px_-20px_rgba(49,70,90,0.28)]"
               >
-                <div className={`relative h-[250px] overflow-hidden ${c.tint}`}>
+                <div className={`relative h-[300px] overflow-hidden ${c.tint}`}>
                   <Image src={c.photo} alt={c.alt} fill sizes="(min-width: 768px) 420px, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" style={{ objectPosition: c.pos }} />
-                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#31465A]/35 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#31465A]/25 to-transparent" />
                   {c.visual}
                 </div>
                 <div className="flex flex-1 flex-col px-6 pb-6 pt-6">
-                  <h3 className="font-[var(--font-display)] text-[19px] font-bold leading-snug text-[#31465A]">{c.title}</h3>
+                  <h3 className="font-[var(--font-display)] text-[24px] font-bold leading-snug text-[#31465A]">{c.title}</h3>
                   <p className="mt-3 text-[14px] leading-[1.65] text-[#64748B]">{c.desc}</p>
                   <a href={c.href} className="mt-auto inline-flex items-center gap-2 pt-5 text-[14px] font-semibold text-[#2064B6] no-underline transition-colors hover:text-[#185596]">
                     {c.link}

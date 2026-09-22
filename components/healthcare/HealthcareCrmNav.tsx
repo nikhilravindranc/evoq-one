@@ -3,7 +3,7 @@ import { HealthcareLogo } from "./HealthcareLogo";
 
 const MENU = [
   { name: "Overview", href: "#overview" },
-  { name: "Features", href: "#features" },
+  { name: "Features", href: "/healthcare/crm/features" },
   { name: "Pricing", href: "#pricing" },
   { name: "Resources", href: "#resources" },
 ];
@@ -19,13 +19,13 @@ export function HealthcareCrmNav() {
 
           <nav className="hidden items-center gap-2 md:flex" aria-label="Healthcare CRM">
             {MENU.map((item) => (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className="rounded-full px-4 py-2.5 text-sm font-medium text-[#102A43]/70 no-underline transition-colors hover:bg-[#F4FBFA] hover:text-[#102A43]"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </nav>
 

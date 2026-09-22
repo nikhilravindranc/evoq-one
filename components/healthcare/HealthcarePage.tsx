@@ -2,12 +2,10 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { HealthcareNav } from "./HealthcareNav";
 import { HealthcareHero } from "./HealthcareHero";
-import { HealthcareConnected } from "./HealthcareConnected";
 import { HealthcareCareSettings } from "./HealthcareCareSettings";
 import { HealthcareJourney } from "./HealthcareJourney";
 import { HealthcareJourneyTogether } from "./HealthcareJourneyTogether";
-import { HealthcareEnvironment } from "./HealthcareEnvironment";
-import { HealthcareModular } from "./HealthcareModular";
+import { HealthcareIntegrations } from "./HealthcareIntegrations";
 import { HealthcareCTA } from "./HealthcareCTA";
 
 export function HealthcarePage() {
@@ -25,12 +23,10 @@ export function HealthcarePage() {
       </div>
       <HealthcareNav />
       <HealthcareHero />
-      <HealthcareConnected />
-      <HealthcareCareSettings />
       <HealthcareJourney />
       <HealthcareJourneyTogether />
-      <HealthcareEnvironment />
-      <HealthcareModular />
+      <HealthcareCareSettings />
+      <HealthcareIntegrations />
       <HealthcareCTA />
       <Footer />
     </div>
