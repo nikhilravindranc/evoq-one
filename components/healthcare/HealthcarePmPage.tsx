@@ -3,7 +3,6 @@ import { Footer } from "@/components/sections/Footer";
 import { HealthcarePmNav } from "./HealthcarePmNav";
 import { HealthcarePmHero } from "./HealthcarePmHero";
 import {
-  HealthcarePmDay,
   HealthcarePmWorkflow,
   HealthcarePmFeatures,
   HealthcarePmPractices,
@@ -27,8 +26,7 @@ export function HealthcarePmPage() {
       </div>
       <HealthcarePmNav />
       <HealthcarePmHero />
-      <HealthcarePmDay />
-      <HealthcarePmWorkflow />
+      <HealthcarePmWorkflow />
       <HealthcarePmFeatures />
       <HealthcarePmPractices />
       <HealthcarePmGrow />
