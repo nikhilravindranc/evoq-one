@@ -17,7 +17,7 @@ export function HealthcareLogo({ label = "Healthcare" }: { label?: string }) {
           <path d="M12 21c-2-1.2-4-2.8-5.5-4.5M12 21c2-1.2 4-2.8 5.5-4.5" />
         </svg>
       </span>
-      <span className="text-[17px] font-bold tracking-[-0.01em] text-[#31465A]">
+      <span className="whitespace-nowrap text-[17px] font-bold tracking-[-0.01em] text-[#31465A]">
         {label}
       </span>
     </span>

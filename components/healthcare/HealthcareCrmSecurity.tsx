@@ -5,10 +5,12 @@ const I = ({ size = 24, stroke = "#2064B6", children }: IP & { children: React.R
   </svg>
 );
 
-const GlobeIcon = ({ size = 32, stroke = "#18B8D1" }: IP) => (
+const NetworkIcon = ({ size = 32, stroke = "#18B8D1" }: IP) => (
   <I size={size} stroke={stroke}>
-    <circle cx="12" cy="12" r="9" />
-    <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+    <circle cx="12" cy="5" r="2.5" />
+    <circle cx="5" cy="19" r="2.5" />
+    <circle cx="19" cy="19" r="2.5" />
+    <path d="M12 7.5v4M12 11.5 6.7 17M12 11.5l5.3 5.5" />
   </I>
 );
 const ShieldCheckIcon = ({ size = 20, stroke = "#2064B6" }: IP) => (
@@ -17,44 +19,59 @@ const ShieldCheckIcon = ({ size = 20, stroke = "#2064B6" }: IP) => (
     <path d="m9 12 2 2 4-4" />
   </I>
 );
+const GlobeIcon = ({ size = 32, stroke = "#7C6BE0" }: IP) => (
+  <I size={size} stroke={stroke}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+  </I>
+);
+const ShieldNetworkIcon = ({ size = 32, stroke = "#2064B6" }: IP) => (
+  <I size={size} stroke={stroke}>
+    <path d="M12 2.6 4.5 5.4v5.7c0 4.9 3.2 8.7 7.5 9.9 4.3-1.2 7.5-5 7.5-9.9V5.4z" />
+    <circle cx="12" cy="8.6" r="1.35" fill={stroke} stroke="none" />
+    <circle cx="9" cy="13.6" r="1.35" fill={stroke} stroke="none" />
+    <circle cx="15" cy="13.6" r="1.35" fill={stroke} stroke="none" />
+    <path d="M11.3 9.8 9.6 12.4M12.7 9.8l1.7 2.6M10.3 13.6h3.4" strokeWidth="1.4" />
+  </I>
+);
 
-type Country = {
-  code: string;
-  name: string;
+type Category = {
+  key: string;
+  icon: (p: IP) => React.ReactNode;
   accent: string;
   tile: string;
-  heading: string;
+  title: string;
+  standards: string[];
   desc: string;
-  badges: string[];
 };
 
-const COUNTRIES: Country[] = [
+const CATEGORIES: Category[] = [
   {
-    code: "US",
-    name: "USA",
+    key: "interop",
+    icon: (p) => <NetworkIcon {...p} />,
     accent: "#2064B6",
     tile: "bg-[#E8F1FA]",
-    heading: "US healthcare privacy & security",
-    desc: "Healthcare CRM deployments serving US healthcare organizations can be structured around applicable HIPAA requirements, including appropriate access controls, information handling, security measures, and contractual arrangements where protected health information is involved.",
-    badges: ["HIPAA"],
+    title: "Interoperability",
+    standards: ["HL7", "FHIR"],
+    desc: "Support standards-based exchange of healthcare information between connected applications and systems.",
   },
   {
-    code: "IN",
-    name: "India",
+    key: "privacy",
+    icon: (p) => <ShieldCheckIcon {...p} />,
     accent: "#18B8D1",
     tile: "bg-[#E1F6F8]",
-    heading: "Indian healthcare privacy & digital health",
-    desc: "Support deployments around India's DPDP requirements and, where applicable, digital-health ecosystems such as ABDM. Integrations and interoperability can be configured according to the systems, standards, and requirements applicable to each organization.",
-    badges: ["DPDP", "ABDM"],
+    title: "Privacy & security",
+    standards: ["HIPAA", "Regional privacy requirements"],
+    desc: "Support applicable privacy and security requirements based on the organization, location, and deployment.",
   },
   {
-    code: "AE",
-    name: "UAE",
+    key: "ecosystems",
+    icon: (p) => <GlobeIcon {...p} />,
     accent: "#7C6BE0",
     tile: "bg-[#ECE8FB]",
-    heading: "UAE privacy & healthcare interoperability",
-    desc: "Support deployments around applicable UAE PDPL requirements and healthcare interoperability ecosystems such as Riayati, NABIDH, and Malaffi, where relevant to the organization and deployment.",
-    badges: ["PDPL", "Riayati", "NABIDH", "Malaffi"],
+    title: "Digital health ecosystems",
+    standards: ["ABDM", "NABIDH", "Riayati", "Malaffi"],
+    desc: "Support relevant digital-health and health-information exchange requirements where applicable to the organization and deployment.",
   },
 ];
 
@@ -70,56 +87,54 @@ export function HealthcareCrmSecurity() {
             <div className="relative px-6 py-10 sm:px-10 lg:px-14 lg:py-16">
               {/* header */}
               <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                <div className="max-w-[640px]">
+                <div className="max-w-[720px]">
                   <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-[#18A0B8]">
-                    Privacy &amp; compliance
+                    Interoperability, privacy &amp; healthcare standards
                   </p>
                   <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.025em] text-[#102A43]">
-                    Global by design. Relevant to your market.
+                    Built to work across healthcare systems.
                   </h2>
                   <p className="mt-5 text-[16px] leading-[1.65] text-[#31465A]/75">
-                    Healthcare organizations operate within different privacy, security, data-handling, and healthcare
-                    interoperability requirements. EVOQ Healthcare CRM provides a common relationship-management
-                    foundation that can be configured around the requirements of different markets and deployments.
+                    Healthcare organizations rely on a growing network of clinical, operational, billing,
+                    communication, and health-information systems. EVOQ Healthcare CRM provides a
+                    relationship-management foundation that can work alongside this ecosystem through relevant
+                    interoperability standards, privacy requirements, integrations, and regional digital-health
+                    frameworks.
                   </p>
                 </div>
-                <span className="flex h-[64px] w-[64px] shrink-0 items-center justify-center rounded-full bg-[#E1F6F8] lg:mt-1">
-                  <GlobeIcon />
+                <span className="flex h-[64px] w-[64px] shrink-0 items-center justify-center rounded-full bg-[#E8F1FA] lg:mt-1">
+                  <ShieldNetworkIcon />
                 </span>
               </div>
 
-              {/* country cards */}
+              {/* category cards */}
               <div className="mt-10 grid gap-5 lg:grid-cols-3">
-                {COUNTRIES.map((c) => (
+                {CATEGORIES.map((c) => (
                   <div
-                    key={c.code}
+                    key={c.key}
                     className="flex flex-col rounded-[20px] bg-white p-6 shadow-[0_18px_44px_-28px_rgba(32,100,182,0.4)] ring-1 ring-[#31465A]/6"
                   >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[12px] font-extrabold text-white"
-                        style={{ background: c.accent }}
-                      >
-                        {c.code}
-                      </span>
-                      <span className="font-[var(--font-display)] text-[16px] font-bold text-[#102A43]">{c.name}</span>
-                    </div>
+                    <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${c.tile}`}>
+                      {c.icon({ size: 22, stroke: c.accent })}
+                    </span>
 
-                    <p className="mt-4 text-[14.5px] font-bold leading-[1.35] text-[#102A43]">{c.heading}</p>
-                    <p className="mt-2.5 flex-1 text-[13.5px] leading-[1.6] text-[#31465A]/70">{c.desc}</p>
+                    <p className="mt-4 font-[var(--font-display)] text-[17px] font-bold leading-[1.3] text-[#102A43]">
+                      {c.title}
+                    </p>
 
-                    <div className="mt-5 flex flex-wrap gap-2 border-t border-[#31465A]/8 pt-4">
-                      {c.badges.map((b) => (
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {c.standards.map((s) => (
                         <span
-                          key={b}
-                          className={`inline-flex items-center gap-1.5 rounded-full ${c.tile} px-3 py-1.5 text-[12px] font-semibold`}
+                          key={s}
+                          className={`inline-flex items-center rounded-full ${c.tile} px-2.5 py-1 text-[11.5px] font-semibold`}
                           style={{ color: c.accent }}
                         >
-                          <ShieldCheckIcon size={13} stroke={c.accent} />
-                          {b}
+                          {s}
                         </span>
                       ))}
                     </div>
+
+                    <p className="mt-4 flex-1 text-[13.5px] leading-[1.6] text-[#31465A]/70">{c.desc}</p>
                   </div>
                 ))}
               </div>

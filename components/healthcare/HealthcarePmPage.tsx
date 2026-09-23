@@ -26,7 +26,7 @@ export function HealthcarePmPage() {
       </div>
       <HealthcarePmNav />
       <HealthcarePmHero />
-      <HealthcarePmWorkflow />
+      <HealthcarePmWorkflow />
       <HealthcarePmFeatures />
       <HealthcarePmPractices />
       <HealthcarePmGrow />
