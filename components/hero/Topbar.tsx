@@ -15,12 +15,42 @@ const PRODUCTS = [
   { name: "ServiceOps", sub: "Field service & operations" },
 ];
 
+const SOLUTIONS: {
+  name: string;
+  sub: string;
+  href: string;
+  children?: { name: string; href: string }[];
+}[] = [
+  {
+    name: "Healthcare",
+    sub: "Connected care workflows",
+    href: "/healthcare",
+    children: [
+      { name: "Healthcare CRM", href: "/healthcare/crm" },
+      { name: "Healthcare Practice Management", href: "/healthcare/practice-management" },
+    ],
+  },
+];
+
+const HealthcareMark = () => (
+  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#E7F7F5]">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18B8D1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 14c1.5-1.5 3-3.5 3-5.5A4.5 4.5 0 0 0 17.5 4c-1.8 0-3.4 1-4.5 2.5C11.9 5 10.3 4 8.5 4A4.5 4.5 0 0 0 4 8.5c0 2 1.5 4 3 5.5" />
+      <path d="M3.5 12h3l1.5-2.5 2 5 2-6.5 1.5 2h3" />
+      <path d="M12 21c-2-1.2-4-2.8-5.5-4.5M12 21c2-1.2 4-2.8 5.5-4.5" />
+    </svg>
+  </span>
+);
+
 export function Topbar({ darkCTA = true, constrained = false, light = false }: { darkCTA?: boolean; constrained?: boolean; light?: boolean }) {
   const [open, setOpen] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const [subOpen, setSubOpen] = useState(false);
   const [showGetStarted, setShowGetStarted] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
   const { region, setRegion } = useRegion();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const solutionsRef = useRef<HTMLDivElement>(null);
   const regionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,6 +71,27 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
   }, [open]);
 
   useEffect(() => {
+    setSubOpen(solutionsOpen);
+  }, [solutionsOpen]);
+
+  useEffect(() => {
+    if (!solutionsOpen) return;
+    const onDoc = (e: MouseEvent) => {
+      if (solutionsRef.current && !solutionsRef.current.contains(e.target as Node))
+        setSolutionsOpen(false);
+    };
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSolutionsOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onEsc);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, [solutionsOpen]);
+
+  useEffect(() => {
     if (!regionOpen) return;
     const onDoc = (e: MouseEvent) => {
       if (regionRef.current && !regionRef.current.contains(e.target as Node))
@@ -58,14 +109,14 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
   }, [regionOpen]);
 
   return (
-    <header className="relative z-10">
+    <header className="relative z-50">
       <div className={
         constrained
           ? "px-5 sm:px-[40px] lg:px-[60px]"
-          : "px-5 sm:px-8 lg:px-20"
+          : "px-5 sm:px-6 lg:px-6"
       }>
       <div className={`flex items-center justify-between py-5 lg:py-7 ${
-        constrained ? "max-w-[1200px] mx-auto" : "max-w-[1168px] mx-auto"
+        constrained ? "max-w-[1200px] mx-auto" : "max-w-[1300px] mx-auto"
       }`}>
       {/* Brand */}
       <Link href="/" className="inline-flex items-center no-underline">
@@ -118,7 +169,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
           {open && (
             <div
               role="menu"
-              className="absolute left-1/2 top-[calc(100%+14px)] w-[340px] -translate-x-1/2 rounded-[22px] bg-white/96 p-3.5 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
+              className="absolute left-1/2 top-[calc(100%+14px)] w-[340px] -translate-x-1/2 rounded-[22px] bg-white p-3.5 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
               style={{ animation: "menuIn 0.15s ease forwards" }}
             >
               <style>{`
@@ -128,7 +179,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
                 }
               `}</style>
               {/* Caret */}
-              <div className="absolute -top-[7px] left-1/2 h-3.5 w-3.5 -translate-x-1/2 rotate-45 rounded-sm bg-white/96 shadow-[-1px_-1px_0_rgba(31,36,48,0.04)]" />
+              <div className="absolute -top-[7px] left-1/2 h-3.5 w-3.5 -translate-x-1/2 rotate-45 rounded-sm bg-white shadow-[-1px_-1px_0_rgba(31,36,48,0.04)]" />
 
               <div className="px-2.5 pb-2.5 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#5F6B7A]">
                 EVOQ Suite
@@ -163,30 +214,121 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
           )}
         </div>
 
+        {/* Solutions with dropdown */}
+        <div className="relative" ref={solutionsRef}>
+          <button
+            type="button"
+            className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-transparent px-4 py-2.5 font-[inherit] text-sm font-medium transition-colors ${
+              light
+                ? `text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430] ${solutionsOpen ? "bg-[#F2F2FF] text-[#4747E0]" : ""}`
+                : `text-white/88 hover:bg-white/8 hover:text-white ${solutionsOpen ? "bg-[#4747E0] text-white shadow-[0_4px_14px_-4px_rgba(0,0,153,0.5)]" : ""}`
+            }`}
+            aria-expanded={solutionsOpen}
+            aria-haspopup="menu"
+            onClick={() => setSolutionsOpen((o) => !o)}
+          >
+            {solutionsOpen && (
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#BDBDFF]" />
+            )}
+            <span>Solutions</span>
+            <span
+              className="inline-flex transition-transform duration-200"
+              style={{ transform: solutionsOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+            >
+              <Chevron />
+            </span>
+          </button>
+
+          {solutionsOpen && (
+            <div
+              role="menu"
+              className="absolute left-1/2 top-[calc(100%+14px)] w-[360px] -translate-x-1/2 rounded-[22px] bg-white p-3.5 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
+              style={{ animation: "menuIn 0.15s ease forwards" }}
+            >
+              <style>{`
+                @keyframes menuIn {
+                  from { opacity: 0; transform: translateY(-6px); }
+                  to   { opacity: 1; transform: translateY(0); }
+                }
+              `}</style>
+              {/* Caret */}
+              <div className="absolute -top-[7px] left-1/2 h-3.5 w-3.5 -translate-x-1/2 rotate-45 rounded-sm bg-white shadow-[-1px_-1px_0_rgba(31,36,48,0.04)]" />
+
+              <div className="px-2.5 pb-2.5 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#5F6B7A]">
+                Industry Solutions
+              </div>
+
+              <ul className="flex flex-col gap-0.5 p-0 list-none m-0">
+                {SOLUTIONS.map((s) => (
+                  <li key={s.name} role="menuitem" onMouseEnter={() => s.children && setSubOpen(true)}>
+                    <div className="flex items-center">
+                      <Link
+                        href={s.href}
+                        onClick={() => setSolutionsOpen(false)}
+                        className="group flex flex-1 items-center gap-3 rounded-xl p-2.5 no-underline text-[#1F2430] transition-colors hover:bg-[#F2F2FF]"
+                      >
+                        {s.name === "Healthcare" ? (
+                          <HealthcareMark />
+                        ) : (
+                          <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-content-center rounded-[9px] bg-[#F2F2FF] p-[6px]">
+                            <EvoqMonogram color="#000099" />
+                          </span>
+                        )}
+                        <span className="flex flex-1 flex-col leading-tight">
+                          <span className="text-[14px] font-semibold text-[#1F2430]">{s.name}</span>
+                          <span className="mt-px text-[12px] font-normal text-[#5F6B7A]">{s.sub}</span>
+                        </span>
+                        {!s.children && (
+                          <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#4747E0] text-white opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
+                            <ArrowRight size={12} />
+                          </span>
+                        )}
+                      </Link>
+                      {s.children && (
+                        <button
+                          type="button"
+                          aria-label={`${subOpen ? "Collapse" : "Expand"} ${s.name}`}
+                          aria-expanded={subOpen}
+                          onClick={() => setSubOpen((o) => !o)}
+                          className="ml-1 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-[#5F6B7A] transition-colors hover:bg-[#F2F2FF]"
+                        >
+                          <span className="inline-flex transition-transform duration-200" style={{ transform: subOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
+                            <Chevron />
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                    {s.children && subOpen && (
+                      <ul className="m-0 mb-1 ml-[27px] mt-0.5 flex list-none flex-col gap-0.5 border-l border-[#E3E6F0] p-0 pl-3">
+                        {s.children.map((c) => (
+                          <li key={c.name}>
+                            <Link
+                              href={c.href}
+                              onClick={() => setSolutionsOpen(false)}
+                              className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-semibold text-[#1F2430] no-underline transition-colors hover:bg-[#F2F2FF]"
+                            >
+                              <span className="flex-1">{c.name}</span>
+                              <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-[#4747E0] text-white opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
+                                <ArrowRight size={12} />
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
         <Link
           href="/why-evoq"
           className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 no-underline transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
         >
           Why EVOQ?
         </Link>
-        <Link
-          href="/implementation"
-          className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 no-underline transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
-        >
-          Implementation
-        </Link>
-        <a
-          href="#"
-          className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
-        >
-          Customers
-        </a>
-        <a
-          href="#"
-          className={`inline-flex cursor-pointer rounded-full px-4 py-2.5 transition-colors ${light ? "text-[#1F2430]/80 hover:bg-[#F2F2FF] hover:text-[#1F2430]" : "text-white/88 hover:bg-white/8 hover:text-white"}`}
-        >
-          Resources
-        </a>
       </nav>
 
       {/* Log in + Region + CTA */}
@@ -225,7 +367,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
             <div
               role="menu"
               className={`absolute right-0 top-[calc(100%+8px)] w-[160px] rounded-[16px] p-2 shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)] ${
-                light ? "bg-white/96 text-[#1F2430]" : "bg-white/96 text-[#1F2430]"
+                light ? "bg-white text-[#1F2430]" : "bg-white text-[#1F2430]"
               }`}
               style={{ animation: "menuIn 0.15s ease forwards" }}
             >
