@@ -243,7 +243,7 @@ export function HealthcareCrmOrganizations() {
                 <div className="relative z-10 flex w-full flex-col px-6 py-6 sm:w-[58%]">
                   <div className="flex items-center gap-4">
                     <span className={`flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full ${o.tile}`}>{o.icon}</span>
-                    <h3 className="text-[24px] font-bold leading-[1.25] text-[#102A43]">
+                    <p className="text-[17px] font-bold leading-[1.25] text-[#102A43]">
                       {o.title[0]}
                       {o.title[1] && (
                         <>
@@ -251,7 +251,7 @@ export function HealthcareCrmOrganizations() {
                           {o.title[1]}
                         </>
                       )}
-                    </h3>
+                    </p>
                   </div>
                   <p className="mt-4 text-[13.5px] leading-[1.5] text-[#31465A]/70">{o.desc}</p>
                   {o.includes && (
