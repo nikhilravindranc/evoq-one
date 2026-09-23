@@ -173,22 +173,22 @@ export function HealthcareCrmConnected() {
             </div>
 
             {/* app cards */}
-            <div className="relative mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <div className="relative mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {APPS.map((a) => (
                 <article
                   key={a.title}
-                  className="flex flex-col rounded-[22px] bg-white p-6 shadow-[0_18px_44px_-30px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/6 transition-all hover:-translate-y-1 hover:shadow-[0_24px_52px_-28px_rgba(16,42,67,0.36)]"
+                  className="flex flex-col rounded-[22px] bg-white p-5 shadow-[0_18px_44px_-30px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/6 transition-all hover:-translate-y-1 hover:shadow-[0_24px_52px_-28px_rgba(16,42,67,0.36)]"
                 >
-                  <div className="flex items-center gap-4">
-                    <span className={`flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full ${a.tile}`}>{a.icon}</span>
-                    <h3 className="text-[24px] font-bold leading-[1.25] text-[#102A43]">{a.title}</h3>
-                  </div>
-                  <p className="mt-4 text-[14px] leading-[1.55] text-[#31465A]/70">{a.desc}</p>
-                  <span className="mt-auto pt-5">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E8F1FA] text-[#2064B6]">
-                      <ArrowRight />
+                  <div className="flex items-center gap-3.5">
+                    <span className={`flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-full ${a.tile}`}>
+                      {a.chip}
                     </span>
-                  </span>
+                    <h3 className="flex-1 text-[18px] font-bold leading-[1.2] text-[#102A43]">{a.title}</h3>
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E8F1FA] text-[#2064B6]">
+                      <ArrowRight size={14} />
+                    </span>
+                  </div>
+                  <p className="mt-3 text-[13.5px] leading-[1.5] text-[#31465A]/70">{a.desc}</p>
                 </article>
               ))}
             </div>
