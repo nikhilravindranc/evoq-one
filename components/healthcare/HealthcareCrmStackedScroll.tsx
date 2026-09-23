@@ -65,7 +65,13 @@ export function HealthcareCrmStackedScroll({ panels }: { panels: React.ReactNode
     function windowFor(i: number, vh: number) {
       const overflow = Math.max(0, (heights?.[i] ?? vh) - vh);
       const hold = overflow + BASE_HOLD * vh;
-      const reveal = i + 1 < panels.length ? REVEAL * vh : 0;
+      // The last panel has no next panel to slide up and cover it, so instead
+      // it exits under its own power: it keeps sliding itself upward for
+      // exactly one viewport height. That distance is what makes the handoff
+      // seamless — the panel's bottom edge and the next (normal-flow) section's
+      // top edge rise in lockstep, meeting exactly as the panel clears the
+      // screen, with no gap and no pop in either scroll direction.
+      const reveal = i + 1 < panels.length ? REVEAL * vh : vh;
       return { overflow, hold, reveal, total: hold + reveal };
     }
 
@@ -101,7 +107,12 @@ export function HealthcareCrmStackedScroll({ panels }: { panels: React.ReactNode
             setFrame({ current: i, currentY, incoming: null, incomingT: 0, vh });
           } else {
             const t = w.reveal > 0 ? Math.min(1, (remaining - w.hold) / w.reveal) : 1;
-            setFrame({ current: i, currentY: -w.overflow, incoming: i + 1 < panels.length ? i + 1 : null, incomingT: t, vh });
+            const isLast = i + 1 >= panels.length;
+            if (isLast) {
+              setFrame({ current: i, currentY: -w.overflow - t * vh, incoming: null, incomingT: 0, vh });
+            } else {
+              setFrame({ current: i, currentY: -w.overflow, incoming: i + 1, incomingT: t, vh });
+            }
           }
           return;
         }
@@ -129,14 +140,14 @@ export function HealthcareCrmStackedScroll({ panels }: { panels: React.ReactNode
   // there's no hydration mismatch) until `heights` is measured client-side.
   const totalHeight =
     heights === null
-      ? `${panels.length * (100 + BASE_HOLD * 100 + REVEAL * 100)}vh`
+      ? `${(panels.length - 1) * (100 + BASE_HOLD * 100 + REVEAL * 100) + (100 + BASE_HOLD * 100 + 100)}vh`
       : (() => {
           const vh = typeof window !== "undefined" ? window.innerHeight : 900;
           let sum = 0;
           for (let i = 0; i < panels.length; i++) {
             const overflow = Math.max(0, heights[i] - vh);
             const hold = overflow + BASE_HOLD * vh;
-            const reveal = i + 1 < panels.length ? REVEAL * vh : 0;
+            const reveal = i + 1 < panels.length ? REVEAL * vh : vh;
             sum += hold + reveal;
           }
           return `${sum}px`;
