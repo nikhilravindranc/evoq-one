@@ -18,51 +18,29 @@ export function HealthcareNav() {
   return (
     <div className="border-b border-[#E2E8EC] bg-white/90 backdrop-blur-lg">
       <div className="px-5 sm:px-6 lg:px-6">
-        <div className="mx-auto flex max-w-[1300px] items-center justify-between py-3">
-        <Link href="/healthcare" className="no-underline">
-          <HealthcareLogo />
-        </Link>
+        <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
+          <Link href="/healthcare" className="shrink-0 no-underline">
+            <HealthcareLogo />
+          </Link>
 
-        <nav
-          className="hidden items-center gap-1 md:flex"
-          aria-label="Healthcare"
-        >
-          {MENU.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className={`relative rounded-full px-4 py-2.5 text-sm font-medium no-underline transition-colors ${
-                item.active
-                  ? "text-[#31465A]"
-                  : "text-[#64748B] hover:bg-[#F1F5F7] hover:text-[#31465A]"
-              }`}
-            >
-              {item.name}
-              {item.active && (
-                <span className="absolute inset-x-4 -bottom-[13px] h-[2.5px] rounded-full bg-[#2064B6]" />
-              )}
-            </a>
-          ))}
-        </nav>
-
-        <button
-          type="button"
-          className="hidden cursor-pointer items-center gap-2 rounded-full border border-[#2064B6] bg-white px-5 py-2.5 text-sm font-semibold text-[#2064B6] transition-all hover:-translate-y-px hover:bg-[#F1F5F7] sm:inline-flex"
-        >
-          Talk to an expert
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </button>
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Healthcare">
+            {MENU.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className={`relative whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-medium no-underline transition-colors ${
+                  item.active
+                    ? "text-[#31465A]"
+                    : "text-[#64748B] hover:bg-[#F1F5F7] hover:text-[#31465A]"
+                }`}
+              >
+                {item.name}
+                {item.active && (
+                  <span className="absolute inset-x-4 -bottom-[13px] h-[2.5px] rounded-full bg-[#2064B6]" />
+                )}
+              </a>
+            ))}
+          </nav>
         </div>
       </div>
     </div>

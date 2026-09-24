@@ -12,18 +12,12 @@ export function HealthcarePmNav() {
   return (
     <div className="border-b border-[#E2E7EB] bg-white">
       <div className="px-5 sm:px-6 lg:px-6">
-        <div className="mx-auto flex max-w-[1300px] items-center justify-between py-3">
-          <div className="flex items-center gap-4">
-            <Link href="/healthcare/practice-management" className="no-underline">
-              <HealthcareLogo label="Healthcare Practice Management" />
-            </Link>
-            <span className="hidden h-6 w-px bg-[#26384B]/10 lg:block" />
-            <div className="hidden lg:block">
-              <HealthcareSwitcher current="pm" accent="#2867B2" />
-            </div>
-          </div>
+        <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
+          <Link href="/healthcare/practice-management" className="shrink-0 no-underline">
+            <HealthcareLogo label="Healthcare Practice Management" />
+          </Link>
 
-          <nav className="hidden items-center gap-2 md:flex" aria-label="Healthcare Practice Management">
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Healthcare Practice Management">
             {MENU.map((item) => (
               <a
                 key={item.name}
@@ -38,15 +32,9 @@ export function HealthcarePmNav() {
             ))}
           </nav>
 
-          <a
-            href="#expert"
-            className="hidden items-center gap-2 rounded-full bg-[#2867B2] px-5 py-2.5 text-sm font-semibold text-white no-underline transition-all hover:-translate-y-px hover:bg-[#205995] sm:inline-flex"
-          >
-            Talk to an expert
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </a>
+          <div className="ml-auto hidden md:block">
+            <HealthcareSwitcher current="pm" accent="#2867B2" />
+          </div>
         </div>
       </div>
     </div>

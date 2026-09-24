@@ -4,7 +4,7 @@ import { HealthcareCrmNav } from "./HealthcareCrmNav";
 import { HealthcareCrmHero } from "./HealthcareCrmHero";
 import { HealthcareCrmEnquiry } from "./HealthcareCrmEnquiry";
 import { HealthcareCrmJourney } from "./HealthcareCrmJourney";
-import { HealthcareCrmSplit } from "./HealthcareCrmSplit";
+import { HealthcareCrmSharedContext, HealthcareCrmEnquiryFlow } from "./HealthcareCrmContextFlow";
 import { HealthcareCrmOrganizations } from "./HealthcareCrmOrganizations";
 import { HealthcareCrmFollowUp } from "./HealthcareCrmFollowUp";
 import { HealthcareCrmConnected } from "./HealthcareCrmConnected";
@@ -35,7 +35,8 @@ export function HealthcareCrmPage() {
       <HealthcareCrmStackedScroll
         panels={[
           <HealthcareCrmJourney key="journey" />,
-          <HealthcareCrmSplit key="split" />,
+          <HealthcareCrmSharedContext key="shared-context" />,
+            <HealthcareCrmEnquiryFlow key="enquiry-flow" />,
           <HealthcareCrmFollowUp key="followup" />,
           <HealthcareCrmConnected key="connected" />,
         ]}

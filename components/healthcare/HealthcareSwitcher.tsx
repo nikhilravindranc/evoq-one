@@ -64,7 +64,7 @@ export function HealthcareSwitcher({ current, accent = "#2064B6" }: { current: D
       </button>
 
       {open && (
-        <div className="absolute left-0 top-[calc(100%+10px)] z-50 w-[300px] rounded-[18px] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/8">
+        <div className="absolute right-0 top-[calc(100%+10px)] z-50 w-[300px] rounded-[18px] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/8">
           <p className="px-3.5 pb-1 pt-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#94A3B0]">
             Healthcare products
           </p>
