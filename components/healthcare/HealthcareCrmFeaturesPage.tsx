@@ -2,6 +2,12 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { HealthcareCrmNav } from "./HealthcareCrmNav";
 import { HealthcareCrmFeaturesHero } from "./HealthcareCrmFeaturesHero";
+import {
+  HealthcareCrmFeaturesScroll,
+  HealthcareCrmFeaturesIntegrations,
+  HealthcareCrmFeaturesConfiguration,
+  HealthcareCrmFeaturesCTA,
+} from "./HealthcareCrmFeatureSections";
 
 export function HealthcareCrmFeaturesPage() {
   return (
@@ -18,6 +24,10 @@ export function HealthcareCrmFeaturesPage() {
       </div>
       <HealthcareCrmNav />
       <HealthcareCrmFeaturesHero />
+      <HealthcareCrmFeaturesScroll />
+      <HealthcareCrmFeaturesIntegrations />
+      <HealthcareCrmFeaturesConfiguration />
+      <HealthcareCrmFeaturesCTA />
       <Footer />
     </div>
   );

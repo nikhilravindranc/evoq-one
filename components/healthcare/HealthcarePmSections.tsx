@@ -46,6 +46,18 @@ function Ic({ n, size = 24, stroke = "#2867B2" }: { n: IconName; size?: number; 
   );
 }
 
+function ShieldNetworkIcon({ size = 28, stroke = "#fff" }: { size?: number; stroke?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2.6 4.5 5.4v5.7c0 4.9 3.2 8.7 7.5 9.9 4.3-1.2 7.5-5 7.5-9.9V5.4z" />
+      <circle cx="12" cy="8.6" r="1.35" fill={stroke} stroke="none" />
+      <circle cx="9" cy="13.6" r="1.35" fill={stroke} stroke="none" />
+      <circle cx="15" cy="13.6" r="1.35" fill={stroke} stroke="none" />
+      <path d="M11.3 9.8 9.6 12.4M12.7 9.8l1.7 2.6M10.3 13.6h3.4" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
 const Arrow = ({ size = 16 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
     <path d="M5 12h14M13 6l6 6-6 6" />
@@ -191,7 +203,7 @@ function FeatureBlock({ flip, eyebrow, title, sub, paras, photo, alt, ratio, pos
     <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
       <div className={flip ? "lg:order-2" : ""}>
         <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#2867B2]">{eyebrow}</p>
-        <h3 className={`mt-3 ${H3}`}>{title}</h3>
+        <h2 className={`mt-3 ${H2}`}>{title}</h2>
         <p className="mt-5 text-[17px] font-semibold leading-[1.5] text-[#26384B]/85">{sub}</p>
         <div className={`mt-4 max-w-[540px] ${LEAD}`}>
           {paras.map((p, i) => (
@@ -585,7 +597,7 @@ export function HealthcarePmPractices() {
                       ) : c.kind === "blank" ? (
                         <div key={ci} className={`h-[132px] w-[214px] shrink-0 rounded-[22px] ${c.tone}`} />
                       ) : (
-                        <span key={ci} className="whitespace-nowrap font-[var(--font-display)] text-[54px] font-extrabold leading-none tracking-[-0.035em] text-[#26384B] lg:text-[62px]">
+                        <span key={ci} className="whitespace-nowrap font-[var(--font-display)] text-[44px] font-extrabold leading-none tracking-[-0.035em] text-[#26384B] lg:text-[52px]">
                           {c.text}
                         </span>
                       ),
@@ -679,45 +691,45 @@ export function HealthcarePmGrow() {
   );
 }
 
-/* ---------- 6. ready for your market ---------- */
+/* ---------- 6. interoperability, privacy & healthcare standards ---------- */
 
-type MarketCountry = {
-  code: string;
-  name: string;
+type MarketCategory = {
+  key: string;
+  icon: IconName;
   accent: string;
   tile: string;
-  heading: string;
+  title: string;
+  standards: string[];
   desc: string;
-  badges: string[];
 };
 
-const MARKET_COUNTRIES: MarketCountry[] = [
+const MARKET_CATEGORIES: MarketCategory[] = [
   {
-    code: "US",
-    name: "USA",
+    key: "interop",
+    icon: "refresh",
     accent: "#2867B2",
-    tile: "bg-[#E5F8FB]",
-    heading: "US healthcare privacy & practice operations",
-    desc: "Practice Management deployments serving US healthcare organizations can be structured around applicable HIPAA requirements, including appropriate access controls, information handling, security measures, and contractual arrangements where protected health information is involved.",
-    badges: ["HIPAA"],
+    tile: "bg-[#E3EEFB]",
+    title: "Interoperability",
+    standards: ["HL7", "FHIR"],
+    desc: "Support standards-based exchange of healthcare information between connected applications and systems.",
   },
   {
-    code: "IN",
-    name: "India",
+    key: "privacy",
+    icon: "shield",
     accent: "#26B9CF",
     tile: "bg-[#E5F8FB]",
-    heading: "Indian healthcare privacy & digital health",
-    desc: "Practice Management deployments can be configured around India's DPDP requirements and, where applicable, digital-health ecosystems such as ABDM. Supported integrations, communication services, and workflows can be aligned with the systems and requirements applicable to each practice.",
-    badges: ["DPDP", "ABDM"],
+    title: "Privacy & security",
+    standards: ["HIPAA", "Regional privacy requirements"],
+    desc: "Support applicable privacy and security requirements based on the organization, location, and deployment.",
   },
   {
-    code: "AE",
-    name: "UAE",
+    key: "ecosystems",
+    icon: "globe",
     accent: "#5B5FC7",
     tile: "bg-[#EEEFFA]",
-    heading: "UAE privacy & healthcare interoperability",
-    desc: "Practice Management deployments can be configured around applicable UAE PDPL requirements and, where relevant, healthcare interoperability ecosystems such as Riayati, NABIDH, and Malaffi. Integrations and workflows can be aligned with the systems and requirements applicable to each practice.",
-    badges: ["PDPL", "Riayati", "NABIDH", "Malaffi"],
+    title: "Digital health ecosystems",
+    standards: ["ABDM", "NABIDH", "Riayati", "Malaffi"],
+    desc: "Support relevant digital-health and health-information exchange requirements where applicable to the organization and deployment.",
   },
 ];
 
@@ -727,49 +739,47 @@ export function HealthcarePmMarket() {
       <div className={WRAP}>
         <div className={`${INNER} py-16 lg:py-24`}>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-[640px]">
-              <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-[#26B9CF]">Privacy &amp; compliance</p>
-              <h2 className={`mt-4 ${H2}`}>Global practice operations. Regional relevance.</h2>
+            <div className="max-w-[720px]">
+              <p className="text-[12px] font-bold uppercase tracking-[0.28em] text-[#26B9CF]">
+                Interoperability, privacy &amp; healthcare standards
+              </p>
+              <h2 className={`mt-4 ${H2}`}>Built to work across healthcare systems.</h2>
               <p className={`mt-5 ${LEAD}`}>
-                Healthcare practices may operate differently across countries, with local requirements affecting
-                patient information, privacy, communication, payments, and integrations. EVOQ Practice Management
-                provides a common operational foundation that can be configured around the way practices operate in
-                different regions.
+                Healthcare organizations rely on a growing network of clinical, operational, billing, communication,
+                and health-information systems. EVOQ Healthcare Practice Management provides an operational
+                foundation that can work alongside this ecosystem through relevant interoperability standards,
+                privacy requirements, integrations, and regional digital-health frameworks.
               </p>
             </div>
             <span className="flex h-[64px] w-[64px] shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2867B2] to-[#26B9CF] lg:mt-1">
-              <Ic n="globe" size={28} stroke="#fff" />
+              <ShieldNetworkIcon size={28} stroke="#fff" />
             </span>
           </div>
 
           <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {MARKET_COUNTRIES.map((c) => (
-              <div key={c.code} className={`${CARD} flex flex-col p-6`}>
-                <div className="flex items-center gap-3">
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[12px] font-extrabold text-white"
-                    style={{ background: c.accent }}
-                  >
-                    {c.code}
-                  </span>
-                  <span className="font-[var(--font-display)] text-[16px] font-bold text-[#26384B]">{c.name}</span>
-                </div>
+            {MARKET_CATEGORIES.map((c) => (
+              <div key={c.key} className={`${CARD} flex flex-col p-6`}>
+                <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${c.tile}`}>
+                  <Ic n={c.icon} size={22} stroke={c.accent} />
+                </span>
 
-                <p className="mt-4 text-[14.5px] font-bold leading-[1.35] text-[#26384B]">{c.heading}</p>
-                <p className="mt-2.5 flex-1 text-[13.5px] leading-[1.6] text-[#64748B]">{c.desc}</p>
+                <p className="mt-4 font-[var(--font-display)] text-[17px] font-bold leading-[1.3] text-[#26384B]">
+                  {c.title}
+                </p>
 
-                <div className="mt-5 flex flex-wrap gap-2 border-t border-[#E2E7EB] pt-4">
-                  {c.badges.map((b) => (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {c.standards.map((s) => (
                     <span
-                      key={b}
-                      className={`inline-flex items-center gap-1.5 rounded-full ${c.tile} px-3 py-1.5 text-[12px] font-semibold`}
+                      key={s}
+                      className={`inline-flex items-center rounded-full ${c.tile} px-2.5 py-1 text-[11.5px] font-semibold`}
                       style={{ color: c.accent }}
                     >
-                      <Ic n="shield" size={13} stroke={c.accent} />
-                      {b}
+                      {s}
                     </span>
                   ))}
                 </div>
+
+                <p className="mt-4 flex-1 text-[13.5px] leading-[1.6] text-[#64748B]">{c.desc}</p>
               </div>
             ))}
           </div>
