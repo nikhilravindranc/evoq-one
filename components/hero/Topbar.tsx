@@ -42,7 +42,7 @@ const HealthcareMark = () => (
   </span>
 );
 
-export function Topbar({ darkCTA = true, constrained = false, light = false }: { darkCTA?: boolean; constrained?: boolean; light?: boolean }) {
+export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string }) {
   const [open, setOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [subOpen, setSubOpen] = useState(false);
@@ -404,8 +404,11 @@ export function Topbar({ darkCTA = true, constrained = false, light = false }: {
         <button
           type="button"
           onClick={() => setShowGetStarted(true)}
+          style={ctaColor ? { background: ctaColor } : undefined}
           className={`inline-flex cursor-pointer items-center gap-3 rounded-full border-0 py-3 pl-[22px] pr-3.5 text-sm font-semibold transition-all hover:-translate-y-px ${
-            darkCTA
+            ctaColor
+              ? "text-white shadow-[0_10px_30px_-12px_rgba(31,36,48,0.4)] hover:brightness-95"
+              : darkCTA
               ? "bg-[#4747E0] text-white shadow-[0_10px_30px_-10px_rgba(0,0,153,0.55),inset_0_0_0_1px_rgba(255,255,255,0.08)] hover:bg-[#3333CC]"
               : "bg-white text-[#4747E0] shadow-[0_10px_30px_-12px_rgba(31,36,48,0.4)]"
           }`}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 /* ---------- inline icons ---------- */
@@ -16,57 +17,18 @@ const mk = (stroke: string, size: number) =>
     strokeLinejoin: "round",
   }) as const;
 
-const MeetIcon = ({ stroke = "#00AC47", size = 20 }: IconProps) => (
-  <svg {...mk(stroke, size)}>
-    <rect x="2" y="6" width="13" height="12" rx="2" />
-    <path d="m15 10 6-3.5v11L15 14z" />
-  </svg>
-);
+const LOGO_SRC = {
+  calendar: "googlecalendar",
+  meet: "googlemeet",
+  stripe: "stripe",
+  whatsapp: "whatsapp",
+  analytics: "googleanalytics",
+  woocommerce: "woocommerce",
+  shopify: "shopify",
+} as const;
 
-const StripeIcon = ({ stroke = "#635BFF", size = 20 }: IconProps) => (
-  <svg {...mk(stroke, size)}>
-    <rect x="2" y="5" width="20" height="14" rx="2.5" />
-    <path d="M2 10h20" />
-    <path d="M6 15h4" />
-  </svg>
-);
-
-const WhatsAppIcon = ({ stroke = "#25D366", size = 20 }: IconProps) => (
-  <svg {...mk(stroke, size)}>
-    <path d="M21 12a9 9 0 1 1-4-7.5" />
-    <path d="M21 3v6h-6" />
-    <path d="M8.5 10c.3 2.8 2.7 5.2 5.5 5.5" strokeLinecap="round" />
-  </svg>
-);
-
-const AnalyticsIcon = ({ stroke = "#E37400", size = 20 }: IconProps) => (
-  <svg {...mk(stroke, size)}>
-    <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
-  </svg>
-);
-
-const CalendarIcon = ({ stroke = "#1A73E8", size = 20 }: IconProps) => (
-  <svg {...mk(stroke, size)}>
-    <rect x="3" y="4" width="18" height="18" rx="2" />
-    <path d="M16 2v4M8 2v4M3 10h18" />
-    <path d="m9 16 2 2 4-4" />
-  </svg>
-);
-
-const WooCommerceIcon = ({ stroke = "#7F54B3", size = 20 }: IconProps) => (
-  <svg {...mk(stroke, size)}>
-    <rect x="2" y="6" width="20" height="14" rx="3" />
-    <path d="M7 6V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1" />
-    <path d="M7 12c.7 1.3 1.5 2 2.5 2s1.4-1 1.5-2c.1 1 .6 2 1.5 2s1.8-.7 2.5-2" />
-  </svg>
-);
-
-const ShopifyIcon = ({ stroke = "#95BF47", size = 20 }: IconProps) => (
-  <svg {...mk(stroke, size)}>
-    <path d="M7 6V5a3 3 0 0 1 6 0v1" />
-    <path d="M6 6h11l1 14H5z" />
-    <path d="M10 11a2 2 0 0 0 4 0" />
-  </svg>
+const Logo = ({ n, alt, size = 22 }: { n: keyof typeof LOGO_SRC; alt: string; size?: number }) => (
+  <Image src={`/logos/integrations/${LOGO_SRC[n]}.svg`} alt={alt} width={size} height={size} unoptimized className="object-contain" style={{ width: size, height: size }} />
 );
 
 const PlusIcon = ({ stroke = "#18B8D1", size = 18 }: IconProps) => (
@@ -100,23 +62,23 @@ type Tile = {
 };
 
 const TILES: Tile[] = [
-  { icon: <CalendarIcon />, name: "Google Calendar", bg: "bg-[#E8F1FA]", pos: "left-[4%] top-[52%]", rot: "-rotate-3" },
-  { icon: <MeetIcon />, name: "Google Meet", bg: "bg-[#E7F7F5]", pos: "left-[34%] top-[56%]", rot: "rotate-2" },
-  { icon: <StripeIcon />, name: "Stripe", bg: "bg-[#EDECFE]", pos: "left-[62%] top-[50%]", rot: "-rotate-2" },
-  { icon: <WhatsAppIcon />, name: "WhatsApp", bg: "bg-[#E3F8EA]", pos: "left-[12%] top-[12%]", rot: "rotate-3" },
-  { icon: <AnalyticsIcon />, name: "Analytics", bg: "bg-[#FDF0DE]", pos: "left-[46%] top-[6%]", rot: "-rotate-3" },
-  { icon: <WooCommerceIcon />, name: "WooCommerce", bg: "bg-[#F0EAFA]", pos: "left-[76%] top-[22%]", rot: "rotate-2" },
-  { icon: <ShopifyIcon />, name: "Shopify", bg: "bg-[#EEF6E4]", pos: "left-[80%] top-[56%]", rot: "rotate-3" },
+  { icon: <Logo n="calendar" alt="Google Calendar" />, name: "Google Calendar", bg: "bg-[#E8F1FA]", pos: "left-[4%] top-[52%]", rot: "-rotate-3" },
+  { icon: <Logo n="meet" alt="Google Meet" />, name: "Google Meet", bg: "bg-[#E7F7F5]", pos: "left-[34%] top-[56%]", rot: "rotate-2" },
+  { icon: <Logo n="stripe" alt="Stripe" />, name: "Stripe", bg: "bg-[#EDECFE]", pos: "left-[62%] top-[50%]", rot: "-rotate-2" },
+  { icon: <Logo n="whatsapp" alt="WhatsApp" />, name: "WhatsApp", bg: "bg-[#E3F8EA]", pos: "left-[12%] top-[12%]", rot: "rotate-3" },
+  { icon: <Logo n="analytics" alt="Google Analytics" />, name: "Analytics", bg: "bg-[#FDF0DE]", pos: "left-[46%] top-[6%]", rot: "-rotate-3" },
+  { icon: <Logo n="woocommerce" alt="WooCommerce" />, name: "WooCommerce", bg: "bg-[#F0EAFA]", pos: "left-[76%] top-[22%]", rot: "rotate-2" },
+  { icon: <Logo n="shopify" alt="Shopify" />, name: "Shopify", bg: "bg-[#EEF6E4]", pos: "left-[80%] top-[56%]", rot: "rotate-3" },
 ];
 
 const GRID_TILES = [
-  { icon: <CalendarIcon />, name: "Google Calendar", bg: "bg-[#E8F1FA]" },
-  { icon: <MeetIcon />, name: "Google Meet", bg: "bg-[#E7F7F5]" },
-  { icon: <StripeIcon />, name: "Stripe", bg: "bg-[#EDECFE]" },
-  { icon: <WhatsAppIcon />, name: "WhatsApp", bg: "bg-[#E3F8EA]" },
-  { icon: <AnalyticsIcon />, name: "Analytics", bg: "bg-[#FDF0DE]" },
-  { icon: <WooCommerceIcon />, name: "WooCommerce", bg: "bg-[#F0EAFA]" },
-  { icon: <ShopifyIcon />, name: "Shopify", bg: "bg-[#EEF6E4]" },
+  { icon: <Logo n="calendar" alt="Google Calendar" />, name: "Google Calendar", bg: "bg-[#E8F1FA]" },
+  { icon: <Logo n="meet" alt="Google Meet" />, name: "Google Meet", bg: "bg-[#E7F7F5]" },
+  { icon: <Logo n="stripe" alt="Stripe" />, name: "Stripe", bg: "bg-[#EDECFE]" },
+  { icon: <Logo n="whatsapp" alt="WhatsApp" />, name: "WhatsApp", bg: "bg-[#E3F8EA]" },
+  { icon: <Logo n="analytics" alt="Google Analytics" />, name: "Analytics", bg: "bg-[#FDF0DE]" },
+  { icon: <Logo n="woocommerce" alt="WooCommerce" />, name: "WooCommerce", bg: "bg-[#F0EAFA]" },
+  { icon: <Logo n="shopify" alt="Shopify" />, name: "Shopify", bg: "bg-[#EEF6E4]" },
 ];
 
 /* ---------- section ---------- */

@@ -22,7 +22,7 @@ export function HealthcarePmPage() {
           borderBottom: "1px solid rgba(16,42,67,0.08)",
         }}
       >
-        <Topbar darkCTA={false} light />
+        <Topbar darkCTA={false} light ctaColor="#2867B2" />
       </div>
       <HealthcarePmNav />
       <HealthcarePmHero />
@@ -32,7 +32,7 @@ export function HealthcarePmPage() {
       <HealthcarePmGrow />
       <HealthcarePmMarket />
       <HealthcarePmCTA />
-      <Footer />
+      <Footer background="#2867B2" />
     </div>
   );
 }

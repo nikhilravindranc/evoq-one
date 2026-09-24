@@ -5,9 +5,9 @@ import { HealthcareLogo } from "./HealthcareLogo";
 
 const MENU = [
   { name: "Overview", href: "#overview", active: true },
-  { name: "Healthcare CRM", href: "/healthcare/crm", active: false },
+  { name: "CRM", href: "/healthcare/crm", active: false },
   {
-    name: "Healthcare Practice Management",
+    name: "Practice Management",
     href: "/healthcare/practice-management",
     active: false,
   },

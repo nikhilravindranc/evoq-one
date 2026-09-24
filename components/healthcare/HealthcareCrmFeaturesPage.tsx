@@ -20,7 +20,7 @@ export function HealthcareCrmFeaturesPage() {
           borderBottom: "1px solid rgba(16,42,67,0.08)",
         }}
       >
-        <Topbar darkCTA={false} light />
+        <Topbar darkCTA={false} light ctaColor="#18B8D1" />
       </div>
       <HealthcareCrmNav />
       <HealthcareCrmFeaturesHero />
@@ -28,7 +28,7 @@ export function HealthcareCrmFeaturesPage() {
       <HealthcareCrmFeaturesIntegrations />
       <HealthcareCrmFeaturesConfiguration />
       <HealthcareCrmFeaturesCTA />
-      <Footer />
+      <Footer background="#18B8D1" />
     </div>
   );
 }
