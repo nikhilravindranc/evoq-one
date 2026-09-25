@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { IcLinkedIn, IcFacebook, IcInsta, IcYT } from "./shared";
 
-export function Footer({ background }: { background?: string } = {}) {
+export function Footer({ background, darkText = false }: { background?: string; darkText?: boolean } = {}) {
   return (
-    <footer className="evoq-footer" style={background ? { background } : undefined}>
+    <footer className={`evoq-footer${darkText ? " footer-ink" : ""}`} style={background ? { background } : undefined}>
       <div className="grain"/>
       <div className="footer-grid">
         <div className="footer-brand">
@@ -13,7 +13,7 @@ export function Footer({ background }: { background?: string } = {}) {
               alt="EVOQ"
               height={30}
               width={30 * (1127 / 230)}
-              style={{ height: 30, width: "auto", filter: "brightness(0) invert(1)" }}
+              style={{ height: 30, width: "auto", filter: darkText ? "brightness(0)" : "brightness(0) invert(1)" }}
             />
           </div>
           <div className="tagline">One Suite. Endless Potential.</div>

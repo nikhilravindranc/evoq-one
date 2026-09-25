@@ -1893,6 +1893,19 @@
 }
 .socials a:hover { background: var(--interactive); border-color: var(--interactive); color: #fff; }
 
+/* dark-text variant for light-coloured footers */
+.evoq-footer.footer-ink { color: #000; }
+.footer-ink .footer-brand .tagline { color: #000; }
+.footer-ink .footer-brand .subline { color: rgba(0,0,0,0.7); }
+.footer-ink .footer-col h6 { color: rgba(0,0,0,0.6); }
+.footer-ink .footer-col a { color: rgba(0,0,0,0.9); }
+.footer-ink .footer-col a:hover { color: #000; text-decoration: underline; }
+.footer-ink .footer-bottom { color: rgba(0,0,0,0.7); border-top-color: rgba(0,0,0,0.15); }
+.footer-ink .footer-legal a { color: rgba(0,0,0,0.75); }
+.footer-ink .footer-legal a:hover { color: #000; text-decoration: underline; }
+.footer-ink .socials a { background: rgba(0,0,0,0.07); border-color: rgba(0,0,0,0.16); color: rgba(0,0,0,0.85); }
+.footer-ink .socials a:hover { background: #000; border-color: #000; color: #fff; }
+
 /* =====================================================================
    CONTACT PAGE — responsive layout helpers
    ===================================================================== */

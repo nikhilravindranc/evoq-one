@@ -280,32 +280,49 @@ export function HealthcareCrmFeaturesScroll() {
         <div className={INNER}>
           <div ref={wrapRef} className="relative" style={{ height: `${SECTIONS.length * STEP_VH}vh` }}>
             <div className="sticky top-24 py-4 lg:top-28">
-              <div className="grid gap-10 lg:grid-cols-[280px_1fr] lg:gap-16">
-                {/* left: eyebrow list */}
-                <ul className="hidden flex-col lg:flex">
-                  {SECTIONS.map((sec, i) => (
-                    <li key={sec.key}>
-                      <button
-                        type="button"
-                        onClick={() => goTo(i)}
-                        className="flex w-full items-center gap-3 rounded-lg py-2.5 text-left"
-                      >
-                        <span
-                          className={`h-[5px] w-[5px] shrink-0 rounded-full transition-colors duration-300 ${
-                            i === active ? "bg-[#0F766E]" : "bg-[#31465A]/15"
-                          }`}
-                        />
-                        <span
-                          className={`text-[12px] font-bold uppercase leading-[1.4] tracking-[0.12em] transition-colors duration-300 ${
-                            i === active ? "text-[#102A43]" : "text-[#31465A]/35"
+              <div className="grid gap-10 lg:grid-cols-[300px_1fr] lg:gap-16">
+                {/* left: feature index with progress rail */}
+                <div className="hidden lg:block">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#31465A]/45">CRM features</p>
+                    <p className="text-[12px] font-semibold tabular-nums text-[#31465A]/45">
+                      <span className="text-[#0F766E]">{String(active + 1).padStart(2, "0")}</span>
+                      {" / "}
+                      {String(SECTIONS.length).padStart(2, "0")}
+                    </p>
+                  </div>
+                  <ul className="mt-5 flex flex-col border-l-2 border-[#31465A]/10">
+                    {SECTIONS.map((sec, i) => (
+                      <li key={sec.key}>
+                        <button
+                          type="button"
+                          onClick={() => goTo(i)}
+                          aria-current={i === active ? "true" : undefined}
+                          className={`-ml-[2px] flex w-full cursor-pointer items-baseline gap-3.5 border-l-2 py-3 pl-5 pr-3 text-left transition-all duration-300 ${
+                            i === active
+                              ? "border-[#0F766E] bg-gradient-to-r from-[#0F766E]/8 to-transparent"
+                              : "border-transparent hover:bg-[#31465A]/[0.03]"
                           }`}
                         >
-                          {sec.eyebrow}
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                          <span
+                            className={`w-5 shrink-0 text-[12px] font-bold tabular-nums transition-colors duration-300 ${
+                              i === active ? "text-[#0F766E]" : "text-[#31465A]/35"
+                            }`}
+                          >
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span
+                            className={`text-[15px] font-semibold leading-[1.35] transition-colors duration-300 ${
+                              i === active ? "text-[#102A43]" : "text-[#31465A]/55 hover:text-[#102A43]"
+                            }`}
+                          >
+                            {sec.eyebrow}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {/* mobile: current eyebrow only */}
                 <p className={`${EYEBROW} lg:hidden`}>{s.eyebrow}</p>
