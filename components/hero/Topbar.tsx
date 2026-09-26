@@ -127,6 +127,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
           height={28}
           width={28 * (1127 / 230)}
           priority
+          className={light ? undefined : "evoq-logo-glow"}
           style={{ height: 28, width: "auto" }}
         />
       </Link>
