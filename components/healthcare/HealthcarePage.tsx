@@ -5,6 +5,7 @@ import { HealthcareHero } from "./HealthcareHero";
 import { HealthcareCareSettings } from "./HealthcareCareSettings";
 import { HealthcareJourney } from "./HealthcareJourney";
 import { HealthcareJourneyTogether } from "./HealthcareJourneyTogether";
+import { HealthcareAISpotlight } from "./HealthcareAI";
 import { HealthcareStandards } from "./HealthcareStandards";
 import { HealthcareIntegrations } from "./HealthcareIntegrations";
 import { HealthcareCTA } from "./HealthcareCTA";
@@ -27,6 +28,7 @@ export function HealthcarePage() {
       <HealthcareJourney />
       <HealthcareJourneyTogether />
       <HealthcareCareSettings />
+      <HealthcareAISpotlight />
       <HealthcareStandards />
       <HealthcareIntegrations />
       <HealthcareCTA />
