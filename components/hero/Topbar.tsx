@@ -6,13 +6,133 @@ import Image from "next/image";
 import { ArrowRight, Chevron, EvoqMonogram } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 import { useRegion } from "@/components/shared/RegionContext";
+import { AIMark, AIBadge } from "@/components/ai/AIMark";
 
-const PRODUCTS = [
-  { name: "CRM", sub: "Sales & customer relationships" },
-  { name: "Sync", sub: "Unify data across systems" },
-  { name: "Skillberry", sub: "Learning & talent development" },
-  { name: "Projects", sub: "Plan and run work end-to-end" },
-  { name: "ServiceOps", sub: "Field service & operations" },
+type ProductIconProps = { size?: number };
+
+const ProductSvg = ({ size = 17, children }: ProductIconProps & { children: React.ReactNode }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {children}
+  </svg>
+);
+const UsersGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <circle cx="9" cy="8" r="3.2" />
+    <path d="M2.5 19c.8-3.2 2.9-4.7 6.5-4.7s5.7 1.5 6.5 4.7" />
+    <path d="M15.5 4.3c1.4.5 2.4 1.8 2.4 3.3s-1 2.8-2.4 3.3M18.5 19c-.4-2.1-1.5-3.5-3-4.2" />
+  </ProductSvg>
+);
+const TrendGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="M3 17l6-6 4 4 8-8" />
+    <path d="M15 6h6v6" />
+  </ProductSvg>
+);
+const LeafGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="M4 20c8 0 14-6 14-15C9 5 4 11 4 20z" />
+    <path d="M4 20c3-5 6-8 12-11" />
+  </ProductSvg>
+);
+const GrapeGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="M12 3v3" />
+    <circle cx="9" cy="9" r="2" />
+    <circle cx="15" cy="9" r="2" />
+    <circle cx="7" cy="14" r="2" />
+    <circle cx="12" cy="14" r="2" />
+    <circle cx="17" cy="14" r="2" />
+    <circle cx="9.5" cy="19" r="2" />
+    <circle cx="14.5" cy="19" r="2" />
+  </ProductSvg>
+);
+const WrenchGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="M14.7 6.3a4 4 0 0 0-5.4 4.9L3 17.5V21h3.5l6.3-6.3a4 4 0 0 0 4.9-5.4l-2.6 2.6-2.2-2.2z" />
+  </ProductSvg>
+);
+const RocketGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="M14.5 3c2 1 4.5 4 3.9 8.4-2 .3-4-.3-5.5-1.8-1.5-1.5-2.1-3.5-1.8-5.5C12.9 3.1 13.7 3 14.5 3z" />
+    <path d="M11 13 5.5 18.5M9.5 15.5 5 17M8.5 14.5 7 10" />
+    <path d="M16.5 12.5c1 2 .7 4.7-.5 6.5-1.8-.3-3.5-1.3-4.5-2.8" />
+  </ProductSvg>
+);
+const ChatGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4A8.4 8.4 0 0 1 4 11.9 8.4 8.4 0 0 1 12.6 3.5 8.4 8.4 0 0 1 21 11.5z" />
+    <path d="M8 11h8M8 14.5h5" />
+  </ProductSvg>
+);
+const CardGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <rect x="2.5" y="5.5" width="19" height="13" rx="2.5" />
+    <path d="M2.5 10h19" />
+  </ProductSvg>
+);
+const BoxGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="m3.5 8 8.5-5 8.5 5-8.5 5-8.5-5z" />
+    <path d="M3.5 8v8l8.5 5 8.5-5V8M12 13v8" />
+  </ProductSvg>
+);
+const SyncGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <circle cx="6" cy="6" r="2.4" />
+    <circle cx="18" cy="6" r="2.4" />
+    <circle cx="12" cy="18" r="2.4" />
+    <path d="M8 7.2 16 7.2M7.5 8.2 11 16M16.5 8.2 13 16" />
+  </ProductSvg>
+);
+const SparklesGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <path d="M12 3l1.7 4.6L18 9l-4.3 1.6L12 15l-1.7-4.4L6 9l4.3-1.4z" />
+    <path d="M19 15l.8 1.9L21.5 17.5l-1.7.7L19 20l-.8-1.8-1.7-.7 1.7-.6z" />
+  </ProductSvg>
+);
+const PRODUCT_GROUPS: {
+  title: string;
+  items: { name: string; sub: string; icon: (p: ProductIconProps) => React.ReactElement; tile: string; href?: string }[];
+}[] = [
+  {
+    title: "Growth",
+    items: [
+      { name: "CRM", sub: "Sales & customer relationships", icon: UsersGlyph, tile: "bg-[#4747E0]" },
+      { name: "Campaigns", sub: "Plan and launch marketing", icon: TrendGlyph, tile: "bg-[#7C3AED]" },
+    ],
+  },
+  {
+    title: "People",
+    items: [
+      { name: "HRMS", sub: "Core HR & workforce data", icon: LeafGlyph, tile: "bg-[#0F9D74]" },
+      { name: "Skillberry", sub: "Learning & talent development", icon: GrapeGlyph, tile: "bg-[#C2477F]" },
+    ],
+  },
+  {
+    title: "AI",
+    items: [
+      { name: "AI", sub: "Assistants · Agents", icon: AIMark, tile: "bg-[#F2F2FF]", href: "/ai" },
+    ],
+  },
+  {
+    title: "Operations",
+    items: [
+      { name: "ServiceOps", sub: "Field service & operations", icon: WrenchGlyph, tile: "bg-[#E8792C]" },
+      { name: "Projects", sub: "Plan and run work end-to-end", icon: RocketGlyph, tile: "bg-[#7C3AED]" },
+      { name: "Desk", sub: "Support tickets & helpdesk", icon: ChatGlyph, tile: "bg-[#0FA3BC]" },
+    ],
+  },
+  {
+    title: "Finance",
+    items: [
+      { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]" },
+      { name: "Inventory", sub: "Stock & supply tracking", icon: BoxGlyph, tile: "bg-[#C2477F]" },
+    ],
+  },
+  {
+    title: "Platform",
+    items: [{ name: "Sync", sub: "Unify data across systems", icon: SyncGlyph, tile: "bg-[#0F9D74]" }],
+  },
 ];
 
 const SOLUTIONS: {
@@ -170,7 +290,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
           {open && (
             <div
               role="menu"
-              className="absolute left-1/2 top-[calc(100%+14px)] w-[340px] -translate-x-1/2 rounded-[22px] bg-white p-3.5 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
+              className="absolute left-1/2 top-[calc(100%+14px)] w-[880px] max-w-[92vw] -translate-x-1/2 rounded-[24px] bg-white p-6 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
               style={{ animation: "menuIn 0.15s ease forwards" }}
             >
               <style>{`
@@ -182,35 +302,36 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
               {/* Caret */}
               <div className="absolute -top-[7px] left-1/2 h-3.5 w-3.5 -translate-x-1/2 rotate-45 rounded-sm bg-white shadow-[-1px_-1px_0_rgba(31,36,48,0.04)]" />
 
-              <div className="px-2.5 pb-2.5 pt-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#5F6B7A]">
-                EVOQ Suite
-              </div>
-
-              <ul className="flex flex-col gap-0.5 p-0 list-none m-0">
-                {PRODUCTS.map((p) => (
-                  <li key={p.name} role="menuitem">
-                    <a
-                      href="#"
-                      className="group flex items-center gap-3 rounded-xl p-2.5 no-underline text-[#1F2430] transition-colors hover:bg-[#F2F2FF]"
-                    >
-                      <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-content-center rounded-[9px] bg-[#F2F2FF] p-[6px]">
-                        <EvoqMonogram color="#000099" />
-                      </span>
-                      <span className="flex flex-1 flex-col leading-tight">
-                        <span className="text-[14px] font-semibold text-[#1F2430]">
-                          {p.name}
-                        </span>
-                        <span className="mt-px text-[12px] font-normal text-[#5F6B7A]">
-                          {p.sub}
-                        </span>
-                      </span>
-                      <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#4747E0] text-white opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
-                        <ArrowRight size={12} />
-                      </span>
-                    </a>
-                  </li>
+              <div className="grid grid-cols-3 gap-x-8 gap-y-6">
+                {PRODUCT_GROUPS.map((group, i) => (
+                  <div key={group.title} className={i >= 3 ? "border-t border-[#EEF0F5] pt-6" : ""}>
+                    <p className="px-2.5 pb-2 text-[13px] font-bold text-[#1F2430]">{group.title}</p>
+                    <ul className="flex flex-col gap-0.5 p-0 list-none m-0">
+                      {group.items.map((p) => (
+                        <li key={p.name} role="menuitem">
+                          <Link
+                            href={p.href ?? "#"}
+                            onClick={() => setOpen(false)}
+                            className="group flex items-center gap-3 rounded-xl p-2.5 no-underline text-[#1F2430] transition-colors hover:bg-[#F2F2FF]"
+                          >
+                            {p.name === "AI" ? (
+                              <AIBadge size={34} />
+                            ) : (
+                              <span className={`flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] ${p.tile}`}>
+                                <p.icon size={17} />
+                              </span>
+                            )}
+                            <span className="flex flex-1 flex-col leading-tight">
+                              <span className="text-[14px] font-semibold text-[#1F2430]">{p.name}</span>
+                              <span className="mt-px whitespace-nowrap text-[12px] font-normal text-[#5F6B7A]">{p.sub}</span>
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
         </div>

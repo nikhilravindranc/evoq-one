@@ -891,6 +891,7 @@ const GRADIENT =
   `radial-gradient(90% 75% at 100% 15%, #9333EA 0%, rgba(147,51,234,0.7) 40%, rgba(147,51,234,0) 72%),
    radial-gradient(46% 42% at var(--logo-x, 69%) var(--logo-y, 51%), rgba(242,242,255,0.55) 0%, rgba(242,242,255,0) 62%),
    radial-gradient(120% 30% at 100% 0%, rgba(255,255,255,0.34) 0%, rgba(226,220,255,0.2) 35%, rgba(255,255,255,0.07) 62%, rgba(255,255,255,0) 88%),
+   radial-gradient(70% 55% at 0% 0%, rgba(255,255,255,0.4) 0%, rgba(226,220,255,0.22) 40%, rgba(255,255,255,0.08) 65%, rgba(255,255,255,0) 88%),
    radial-gradient(38% 20% at var(--topbar-logo-x, 6%) var(--topbar-logo-y, 8%), rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 55%, rgba(255,255,255,0) 90%),
    linear-gradient(96deg, #6366F6 0%, #6658F2 32%, #6D4AE8 58%, #7C3AED 78%, #9333EA 100%)`;
 
@@ -1016,7 +1017,7 @@ export function HeroSection() {
               position: "absolute",
               inset: 0,
               background: GRADIENT,
-              backgroundBlendMode: "screen, normal, normal, normal",
+              backgroundBlendMode: "screen, normal, normal, normal, normal",
               // @ts-expect-error -- CSS custom properties aren't in CSSProperties
               "--logo-x": logoPos.x,
               "--logo-y": logoPos.y,
@@ -1045,12 +1046,6 @@ export function HeroSection() {
               pointerEvents: "none",
             }}
           />
-
-          {/* Drifting light that travels in from the right toward the logo */}
-          <div className="hero-light" aria-hidden>
-            <i className="hero-light-a" />
-            <i className="hero-light-b" />
-          </div>
 
           {/* Topbar -- shrinks to its natural height */}
           <div style={{ position: "relative", zIndex: 3, flexShrink: 0 }}>
