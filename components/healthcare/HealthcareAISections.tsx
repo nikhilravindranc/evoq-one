@@ -16,24 +16,22 @@ const MessageIcon = (p: IP) => (<Svg {...p}><path d="M21 11.5a8.38 8.38 0 0 1-.9
 const UsersIcon = (p: IP) => (<Svg {...p}><circle cx="9" cy="8" r="3.2" /><path d="M3.5 20c.8-3.4 3-5 5.5-5s4.7 1.6 5.5 5" /><path d="M16 4.2c1.5.5 2.5 1.9 2.5 3.5s-1 3-2.5 3.5M19 20c-.5-2.3-1.6-3.8-3.2-4.6" /></Svg>);
 const HomeIcon = (p: IP) => (<Svg {...p}><path d="M4 11.5 12 4l8 7.5" /><path d="M6 10v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9" /></Svg>);
 const BarChartIcon = (p: IP) => (<Svg {...p}><path d="M4 20V10M12 20V4M20 20v-7" /></Svg>);
-const CardIcon = (p: IP) => (<Svg {...p}><rect x="2.5" y="5.5" width="19" height="13" rx="2.5" /><path d="M2.5 10h19" /></Svg>);
 const MegaphoneIcon = (p: IP) => (<Svg {...p}><path d="M3 11v2a1 1 0 0 0 1 1h3l7 4V6L7 10H4a1 1 0 0 0-1 1Z" /><path d="M18 9a4 4 0 0 1 0 6" /></Svg>);
-const UserCheckIcon = (p: IP) => (<Svg {...p}><circle cx="9" cy="8" r="3.2" /><path d="M3.5 20c.8-3.4 3-5 5.5-5s4.7 1.6 5.5 5" /><path d="m16 11 2 2 4-4" /></Svg>);
 
 /* ---------- shared pieces ---------- */
 type Accent = { eyebrow: string; bg: string; blob: string; navActive: string; navActiveText: string };
 
 function AISectionShell({
-  accent, eyebrow, title, lead, body, children,
-}: { accent: Accent; eyebrow: string; title: string; lead: string; body: string; children: React.ReactNode }) {
+  accent, eyebrow, title, lead, body, children, reverse = false,
+}: { accent: Accent; eyebrow: string; title: string; lead: string; body: string; children: React.ReactNode; reverse?: boolean }) {
   return (
     <section className={`relative overflow-hidden ${accent.bg}`}>
       <div className={`pointer-events-none absolute -left-40 top-0 h-[420px] w-[420px] rounded-full blur-3xl ${accent.blob}`} />
       <div className="pointer-events-none absolute -right-24 bottom-0 h-[380px] w-[380px] rounded-full bg-gradient-to-br from-[#4747E0]/10 via-[#5C5CFF]/10 to-[#8484FF]/10 blur-3xl" />
       <div className="relative px-5 sm:px-6 lg:px-6">
         <div className="mx-auto max-w-[1400px] py-16 lg:py-24">
-          <div className="grid gap-14 lg:grid-cols-[0.9fr_1.2fr] lg:items-center">
-            <div className="max-w-[500px]">
+          <div className={`grid gap-14 lg:items-center ${reverse ? "lg:grid-cols-[1.2fr_0.9fr]" : "lg:grid-cols-[0.9fr_1.2fr]"}`}>
+            <div className={`max-w-[500px] ${reverse ? "lg:order-2" : ""}`}>
               <p className="text-[12.5px] font-bold uppercase tracking-[0.2em]" style={{ color: accent.eyebrow }}>{eyebrow}</p>
               <h2 className="mt-5 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.12] tracking-[-0.02em] text-[#102A43]">{title}</h2>
               <p className="mt-6 text-[16px] font-semibold leading-[1.6] text-[#31465A]">{lead}</p>
@@ -46,7 +44,7 @@ function AISectionShell({
                 <ArrowIcon size={18} stroke="#fff" />
               </a>
             </div>
-            {children}
+            <div className={`min-w-0 ${reverse ? "lg:order-1" : ""}`}>{children}</div>
           </div>
         </div>
       </div>
@@ -104,24 +102,69 @@ function EviAgentCard({ d, className = "" }: { d: CardData; className?: string }
 }
 
 /* desktop composition (980x600, scaled) + mobile fallback (card only) */
-function Stage({ window: win, card }: { window: React.ReactNode; card: CardData }) {
+/* scaled 980x600 desktop canvas + mobile fallback (EVI card only) */
+function Canvas({ card, children, mobileTop }: { card: CardData; children: React.ReactNode; mobileTop?: React.ReactNode }) {
   return (
     <>
       <div className="relative mx-auto hidden w-full max-w-[720px] lg:block" style={{ height: 441 }}>
-        <div className="relative h-[600px] w-[980px] origin-top-left" style={{ transform: "scale(0.735)" }}>
-          <span className="absolute right-[2%] top-0 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[0_18px_40px_-14px_rgba(16,42,67,0.4)] ring-1 ring-[#31465A]/8">
-            <Image src="/ai/ai-logo-icon.png" alt="EVOQ AI" width={30} height={30} className="rounded-[9px]" />
-          </span>
-          <div className="absolute left-0 top-[6%] flex h-[490px] w-[860px] overflow-hidden rounded-[22px] bg-white shadow-[0_40px_90px_-30px_rgba(16,42,67,0.35)] ring-1 ring-[#31465A]/8">
-            {win}
-          </div>
-          <EviAgentCard d={card} className="absolute bottom-0 right-0 w-[480px]" />
-        </div>
+        <div className="relative h-[600px] w-[980px] origin-top-left" style={{ transform: "scale(0.735)" }}>{children}</div>
       </div>
-      <div className="lg:hidden">
+      <div className="flex flex-col gap-5 lg:hidden">
+        {mobileTop}
         <EviAgentCard d={card} className="mx-auto w-full max-w-[480px]" />
       </div>
     </>
+  );
+}
+
+/* CRM: EVI docked as a side panel, input anchored inside it */
+function EviDock({ d, className = "" }: { d: CardData; className?: string }) {
+  return (
+    <div className={`flex flex-col rounded-[26px] bg-gradient-to-b from-[#4747E0] to-[#5C5CFF] p-[1.5px] shadow-[0_40px_80px_-28px_rgba(71,71,224,0.6)] ${className}`}>
+      <div className="flex flex-1 flex-col rounded-[24.5px] bg-white p-5">
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-2">
+            <Image src="/ai/ai-logo-icon.png" alt="EVOQ AI" width={32} height={32} className="rounded-[10px]" />
+            <span className="text-[15px] font-extrabold text-[#0C2472]">EVI</span>
+          </span>
+          <span className="flex items-center gap-1.5 text-[11px] font-bold text-[#4747E0]">
+            <i className="h-[7px] w-[7px] rounded-full bg-[#4747E0]" />
+            Online
+          </span>
+        </div>
+        <div className="mt-4 flex justify-end">
+          <p className="max-w-[250px] rounded-[16px] rounded-br-[5px] bg-gradient-to-r from-[#4747E0] to-[#5C5CFF] px-3.5 py-2.5 text-[12.5px] font-semibold leading-[1.45] text-white">
+            Who has not had a reply in 48 hours?
+          </p>
+        </div>
+        <div className="mt-3 rounded-[16px] rounded-bl-[5px] bg-[#F5F5FF] p-3.5 text-[12.5px] leading-[1.6] text-[#0C2472]">{d.answer}</div>
+        <div className="mt-3 rounded-[14px] border border-[#E6E6FA] p-3.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[12.5px] font-extrabold text-[#0C2472]">{d.agentName}</span>
+            <span className="rounded-full bg-[#FFF4DB] px-2.5 py-1 text-[10px] font-bold text-[#B7791F]">{d.status}</span>
+          </div>
+          <div className="mt-2.5 flex flex-col gap-1.5 text-[12px] text-[#31465A]/80">
+            {d.rows.map((r) => (
+              <span key={r.text} className="flex items-center gap-2">
+                {r.done ? <CheckCircleIcon size={14} stroke="#0E9F6E" /> : <CalendarIcon size={14} stroke="#B7791F" />}
+                {r.text}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="flex-1" />
+        <div className="mt-4 rounded-[18px] border-2 border-[#4747E0] bg-white p-3 shadow-[0_14px_30px_-16px_rgba(71,71,224,0.6)]">
+          <p className="text-[13px] text-[#31465A]/50">Ask EVI about an enquiry…</p>
+          <div className="mt-3 flex items-center gap-3 text-[#4747E0]">
+            <MessageIcon size={15} />
+            <span className="text-[13px] font-bold">@</span>
+            <span className="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-[#4747E0]">
+              <ArrowIcon size={15} stroke="#fff" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -226,12 +269,18 @@ export function HealthcareCrmAI() {
   return (
     <AISectionShell
       accent={CRM_ACCENT}
+      reverse
       eyebrow="AI across patient relationships"
       title="EVI and AI agents, working across your enquiries and follow-ups."
       lead="Find who needs a reply. Prepare the response. Keep relationships moving."
       body="EVI, the EVOQ AI assistant, helps your team find the enquiries, patient history, and follow-ups that need attention, and prepares the next step. AI agents handle defined tasks such as drafting replies and preparing reminders, then return the result for your review."
     >
-      <Stage window={win} card={CRM_CARD} />
+      <Canvas card={CRM_CARD}>
+        <div className="absolute left-0 top-[6%] flex h-[490px] w-[700px] overflow-hidden rounded-[22px] bg-white shadow-[0_40px_90px_-30px_rgba(16,42,67,0.35)] ring-1 ring-[#31465A]/8">
+          {win}
+        </div>
+        <EviDock d={CRM_CARD} className="absolute right-0 top-[40px] h-[540px] w-[340px]" />
+      </Canvas>
     </AISectionShell>
   );
 }
@@ -245,15 +294,6 @@ const PM_ACCENT: Accent = {
   navActiveText: "#1F7A70",
 };
 
-const PROVIDERS = ["Dr. Patel", "Dr. Nguyen", "Dr. Okafor"];
-const SLOTS = ["9:00", "10:00", "11:00", "12:00"];
-type Appt = { who: string; what: string; state: "confirmed" | "unconfirmed" | "open" } | null;
-const SCHEDULE: Appt[][] = [
-  [{ who: "Emily Carter", what: "Consultation", state: "confirmed" }, { who: "Noah Brooks", what: "Check-up", state: "unconfirmed" }, null, { who: "Liam Reed", what: "Follow-up", state: "confirmed" }],
-  [{ who: "Priya Nair", what: "Physio session", state: "unconfirmed" }, null, { who: "Sophia Hale", what: "Consultation", state: "confirmed" }, { who: "Daniel Cruz", what: "Review", state: "unconfirmed" }],
-  [null, { who: "Ava Mitchell", what: "Treatment", state: "confirmed" }, { who: "James Wood", what: "Follow-up", state: "unconfirmed" }, null],
-];
-
 const PM_CARD: CardData = {
   answer: (<><strong>4 appointments</strong> tomorrow are unconfirmed and <strong>3 provider slots</strong> are open. Dr. Patel has a gap at 10:00 that matches two waitlisted patients.</>),
   agentName: "Scheduling agent",
@@ -266,64 +306,134 @@ const PM_CARD: CardData = {
   button: "Review schedule",
 };
 
-export function HealthcarePmAI() {
-  const win = (
-    <>
-      <Sidebar
-        accent={PM_ACCENT}
-        logoLabel="Healthcare Practice Management"
-        items={[
-          { icon: HomeIcon, label: "Dashboard" },
-          { icon: CalendarIcon, label: "Appointments", active: true },
-          { icon: UsersIcon, label: "Providers" },
-          { icon: UserCheckIcon, label: "Check-in" },
-          { icon: CardIcon, label: "Billing" },
-          { icon: BarChartIcon, label: "Reports" },
-        ]}
-      />
-      <div className="min-w-0 flex-1 overflow-hidden p-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-[15px] font-bold text-[#102A43]">Tomorrow&apos;s schedule</p>
-            <p className="text-[11.5px] text-[#31465A]/55">12 appointments · 3 providers</p>
-          </div>
-          <span className="flex items-center gap-1 rounded-full bg-[#F1F4F6] p-1 text-[11px] font-bold text-[#31465A]/60">
-            <span className="rounded-full bg-white px-3 py-1 text-[#1F7A70] shadow-sm">Day</span>
-            <span className="px-3 py-1">Week</span>
-          </span>
-        </div>
-        <div className="mt-4 grid grid-cols-[48px_repeat(3,1fr)] gap-x-3 gap-y-2.5">
-          <span />
-          {PROVIDERS.map((p) => (
-            <p key={p} className="text-center text-[11px] font-bold text-[#31465A]/70">{p}</p>
-          ))}
-          {SLOTS.map((t, row) => (
-            <div key={t} className="contents">
-              <p className="pt-3 text-[10.5px] font-semibold text-[#31465A]/45">{t}</p>
-              {SCHEDULE.map((col, c) => {
-                const a = col[row];
-                if (!a) {
-                  return (
-                    <div key={c} className="flex h-[64px] items-center justify-center rounded-[11px] border border-dashed border-[#31465A]/15 text-[10.5px] font-semibold text-[#31465A]/35">
-                      Open slot
-                    </div>
-                  );
-                }
-                const un = a.state === "unconfirmed";
-                return (
-                  <div key={c} className="h-[64px] rounded-[11px] p-2.5" style={{ background: un ? "#FFF8E6" : "#E6F6F3", boxShadow: `inset 3px 0 0 ${un ? "#F59E0B" : "#2A8F84"}` }}>
-                    <p className="truncate text-[11.5px] font-bold text-[#102A43]">{a.who}</p>
-                    <p className="truncate text-[10.5px] text-[#31465A]/60">{a.what}</p>
-                    <p className="mt-0.5 text-[9.5px] font-bold" style={{ color: un ? "#B7791F" : "#1F7A70" }}>{un ? "Unconfirmed" : "Confirmed"}</p>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+const PM_PROMPTS = ["Confirm tomorrow's appointments", "Show no-show risk", "Balance provider schedules"];
+
+function PmInputBar({ className = "" }: { className?: string }) {
+  return (
+    <div className={`rounded-[30px] bg-gradient-to-r from-[#000099] via-[#4747E0] to-[#5C5CFF] p-[2px] shadow-[0_34px_70px_-26px_rgba(71,71,224,0.7)] ${className}`}>
+      <div className="flex items-center gap-4 rounded-[28px] bg-white px-5 py-4">
+        <Image src="/ai/ai-logo-icon.png" alt="EVOQ AI" width={44} height={44} className="shrink-0 rounded-[13px]" />
+        <p className="flex-1 text-[18px] font-semibold text-[#0C2472]">
+          Fill tomorrow&apos;s open slots from the waitlist
+          <span className="ml-0.5 inline-block h-[22px] w-[2px] translate-y-[4px] animate-pulse bg-[#4747E0]" />
+        </p>
+        <span className="hidden items-center gap-1.5 text-[#4747E0] sm:flex">
+          <MessageIcon size={18} />
+          <span className="text-[15px] font-bold">@</span>
+        </span>
+        <span className="flex h-12 items-center gap-2 rounded-full bg-gradient-to-r from-[#4747E0] to-[#5C5CFF] px-6 text-[15px] font-bold text-white shadow-[0_14px_28px_-12px_rgba(71,71,224,0.9)]">
+          Run
+          <ArrowIcon size={17} stroke="#fff" />
+        </span>
       </div>
-    </>
+    </div>
   );
+}
+
+function PmStep({ n, title, tone, children, className = "" }: { n: number; title: string; tone: string; children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`flex flex-col rounded-[26px] bg-white p-5 ring-1 ring-[#E6E6FA] shadow-[0_30px_60px_-34px_rgba(40,40,140,0.4)] ${className}`}>
+      <p className="flex items-center gap-2.5">
+        <span className="flex h-7 w-7 items-center justify-center rounded-full text-[13px] font-extrabold text-white" style={{ background: tone }}>{n}</span>
+        <span className="text-[14px] font-extrabold text-[#0C2472]">{title}</span>
+      </p>
+      <div className="mt-4 flex flex-1 flex-col">{children}</div>
+    </div>
+  );
+}
+
+function PmBoard() {
+  const stats = [
+    { n: "4", label: "Unconfirmed appointments", sub: "Tomorrow", bg: "#FFF4DB", fg: "#B7791F" },
+    { n: "3", label: "Open provider slots", sub: "Dr. Patel, Dr. Okafor", bg: "#E3F7EC", fg: "#0E8F5F" },
+    { n: "2", label: "Waitlist matches", sub: "Fit the open slots", bg: "#ECECFF", fg: "#4747E0" },
+  ];
+  const steps = [
+    { t: "Checking provider calendars", done: true },
+    { t: "Matching waitlist patients", done: true },
+    { t: "Drafting appointment reminders", done: false, active: true },
+    { t: "Preparing slot changes", done: false },
+  ];
+  const actions = [
+    { t: "Send 4 reminders", tag: "Ready", tone: "#0E9F6E", bg: "#E3F7EC" },
+    { t: "Fill Dr. Patel, 10:00", tag: "Ready", tone: "#0E9F6E", bg: "#E3F7EC" },
+    { t: "Move 1 booking to Dr. Okafor", tag: "Approval", tone: "#B7791F", bg: "#FFF4DB" },
+  ];
+  return (
+    <div className="absolute inset-0 flex flex-col">
+      <PmInputBar />
+      <div className="mt-4 flex flex-wrap gap-2.5">
+        {PM_PROMPTS.map((p) => (
+          <span key={p} className="rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-[#0C2472] ring-1 ring-[#D9D9FA]">{p}</span>
+        ))}
+      </div>
+
+      <div className="mt-5 grid flex-1 grid-cols-[1fr_28px_1.1fr_28px_1.05fr] items-stretch">
+        <PmStep n={1} title="EVI found" tone="#B7791F">
+          <div className="flex flex-1 flex-col justify-between gap-3">
+            {stats.map((s) => (
+              <div key={s.label} className="flex items-center gap-3 rounded-[16px] px-3 py-2.5" style={{ background: s.bg }}>
+                <span className="w-[36px] text-center font-[var(--font-display)] text-[34px] font-extrabold leading-none" style={{ color: s.fg }}>{s.n}</span>
+                <span>
+                  <span className="block text-[13px] font-extrabold leading-[1.25] text-[#0C2472]">{s.label}</span>
+                  <span className="block text-[11.5px] text-[#31465A]/60">{s.sub}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </PmStep>
+
+        <span className="flex items-center justify-center"><ArrowIcon size={22} stroke="#8484FF" /></span>
+
+        <PmStep n={2} title="Scheduling agent" tone="#4747E0">
+          <span className="-mt-2 mb-3 flex items-center gap-1.5 text-[11px] font-bold text-[#4747E0]">
+            <i className="h-[7px] w-[7px] animate-pulse rounded-full bg-[#4747E0]" />
+            Working on it
+          </span>
+          <div className="flex flex-col gap-3.5">
+            {steps.map((s) => (
+              <span key={s.t} className="flex items-center gap-2.5 text-[13px]" style={{ color: s.done || s.active ? "#0C2472" : "rgba(49,70,90,0.45)", fontWeight: s.active ? 700 : 500 }}>
+                {s.done ? (
+                  <CheckCircleIcon size={18} stroke="#0E9F6E" />
+                ) : s.active ? (
+                  <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full border-2 border-[#4747E0]"><i className="h-[6px] w-[6px] rounded-full bg-[#4747E0]" /></span>
+                ) : (
+                  <span className="h-[18px] w-[18px] rounded-full border-2 border-[#D9DCE8]" />
+                )}
+                {s.t}
+              </span>
+            ))}
+          </div>
+          <div className="mt-auto pt-5">
+            <div className="h-2 overflow-hidden rounded-full bg-[#ECECFF]">
+              <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-[#4747E0] to-[#8484FF]" />
+            </div>
+            <p className="mt-2 text-[11.5px] font-semibold text-[#31465A]/60">68% complete</p>
+          </div>
+        </PmStep>
+
+        <span className="flex items-center justify-center"><ArrowIcon size={22} stroke="#8484FF" /></span>
+
+        <PmStep n={3} title="Ready for review" tone="#0E9F6E">
+          <div className="flex flex-1 flex-col justify-between gap-2.5">
+            {actions.map((a) => (
+              <div key={a.t} className="flex items-center gap-2 rounded-[14px] border border-[#E6E6FA] px-3 py-4">
+                <span className="flex-1 text-[12.5px] font-bold leading-[1.3] text-[#0C2472]">{a.t}</span>
+                <span className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ background: a.bg, color: a.tone }}>{a.tag}</span>
+              </div>
+            ))}
+          </div>
+          <span className="mt-4 flex items-center justify-center gap-2 rounded-full bg-[#4747E0] py-3 text-[13.5px] font-bold text-white shadow-[0_14px_26px_-12px_rgba(71,71,224,0.8)]">
+            Approve all
+            <ArrowIcon size={15} stroke="#fff" />
+          </span>
+        </PmStep>
+      </div>
+    </div>
+  );
+}
+
+export function HealthcarePmAI() {
   return (
     <AISectionShell
       accent={PM_ACCENT}
@@ -332,7 +442,9 @@ export function HealthcarePmAI() {
       lead="Spot schedule gaps. Prepare the next action. Reduce routine admin."
       body="EVI, the EVOQ AI assistant, helps your team find information across appointments, providers, check-ins, and billing, and prepares the next step. AI agents handle defined tasks such as appointment reminders and waitlist matching, then return the result for your review."
     >
-      <Stage window={win} card={PM_CARD} />
+      <Canvas card={PM_CARD} mobileTop={<PmInputBar />}>
+        <PmBoard />
+      </Canvas>
     </AISectionShell>
   );
 }

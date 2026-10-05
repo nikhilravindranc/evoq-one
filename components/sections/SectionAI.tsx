@@ -46,7 +46,7 @@ export function SectionAI() {
             {/* EVOQ AI home screen with the app orbit, EVI mascot and follow-up agent card */}
             <motion.div className="ai-right" {...fadeUp(0.08)}>
               <img
-                src="/evi-home-visual.webp"
+                src="/evi-home-visual-v2.webp"
                 alt="EVOQ AI home screen: ask EVI anything, with EVOQ apps and a follow-up agent working alongside"
                 className="ai-right-img"
               />

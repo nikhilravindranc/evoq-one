@@ -244,7 +244,7 @@ export function HealthcareAISpotlight() {
 
               {/* EVI answer + follow-up agent, overlapping the window's bottom-right corner */}
               <div className="absolute bottom-0 right-0 w-[480px] rounded-[24px] bg-gradient-to-r from-[#000099] via-[#4747E0] to-[#5C5CFF] p-[1.5px] shadow-[0_35px_70px_-24px_rgba(71,71,224,0.55)]">
-                <div className="rounded-[22.5px] bg-white p-5">
+                <div className="rounded-[22.5px] bg-white p-5 pb-12">
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
                       <Image src="/ai/ai-logo-icon.png" alt="EVOQ AI" width={32} height={32} className="rounded-[10px]" />
@@ -254,7 +254,12 @@ export function HealthcareAISpotlight() {
                       AI assistant
                     </span>
                   </div>
-                  <div className="mt-3 rounded-[14px] bg-[#F5F5FF] p-3.5 text-[13px] leading-[1.6] text-[#0C2472]">
+                  <div className="mt-3 flex justify-end">
+                    <p className="max-w-[330px] rounded-[16px] rounded-br-[5px] bg-gradient-to-r from-[#4747E0] to-[#5C5CFF] px-3.5 py-2.5 text-[12.5px] font-semibold leading-[1.45] text-white">
+                      Which patients need a follow-up this week?
+                    </p>
+                  </div>
+                  <div className="mt-2.5 rounded-[16px] rounded-bl-[5px] bg-[#F5F5FF] p-3.5 text-[13px] leading-[1.6] text-[#0C2472]">
                     <strong>3 patients</strong> need follow-up this week. Emily Carter completed her first skin
                     rejuvenation session on Sep 24 and has no next appointment booked.
                   </div>
@@ -293,6 +298,17 @@ export function HealthcareAISpotlight() {
                       <ArrowIcon size={13} stroke="#fff" />
                     </button>
                   </div>
+                </div>
+              </div>
+
+              {/* separate input layer floating over the card's bottom edge */}
+              <div className="absolute -bottom-8 right-0 z-10 w-[600px] rounded-full bg-gradient-to-r from-[#000099] via-[#4747E0] to-[#5C5CFF] p-[2px] shadow-[0_34px_70px_-18px_rgba(71,71,224,0.75)]">
+                <div className="flex items-center gap-4 rounded-full bg-white py-3.5 pl-6 pr-3.5">
+                  <MessageIcon size={20} stroke="#4747E0" />
+                  <span className="flex-1 text-[15px] font-medium text-[#31465A]/60">Ask EVI about a patient, appointment, or follow-up…</span>
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-[#4747E0] to-[#5C5CFF] shadow-[0_12px_24px_-8px_rgba(71,71,224,0.9)]">
+                    <ArrowIcon size={20} stroke="#fff" />
+                  </span>
                 </div>
               </div>
             </div>

@@ -1,11 +1,108 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, MotionConfig, motion, useInView, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 import { AIMark } from "@/components/ai/AIMark";
 import { HeroWindow } from "@/components/evoq-ai/HeroWindow";
+import { ScaleFit } from "@/components/evoq-ai/ScaleFit";
+
+
+/* ---------- motion helpers ---------- */
+const EASE = [0.22, 1, 0.36, 1] as const;
+const VP = { once: true, margin: "-80px" } as const;
+const rise: Variants = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } } };
+const group = (gap = 0.09, delay = 0): Variants => ({ hidden: {}, show: { transition: { staggerChildren: gap, delayChildren: delay } } });
+const reveal = (delay = 0, y = 28, x = 0) => ({
+  initial: { opacity: 0, y, x },
+  whileInView: { opacity: 1, y: 0, x: 0 },
+  viewport: VP,
+  transition: { duration: 0.7, delay, ease: EASE },
+});
+
+
+const cardV: Variants = {
+  hidden: { opacity: 0, y: 70, scale: 0.94 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 80, damping: 16, staggerChildren: 0.14, delayChildren: 0.25 } },
+};
+const inner: Variants = { hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } } };
+
+
+const stepV: Variants = { hidden: { opacity: 0, x: -22 }, show: { opacity: 1, x: 0, transition: { duration: 0.5, ease: EASE } } };
+
+
+const stagePop: Variants = { hidden: { opacity: 0, scale: 0.85, rotate: -4 }, show: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.7, ease: EASE } } };
+const stagePhoto: Variants = { hidden: { opacity: 0, y: 30, scale: 0.92 }, show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: EASE } } };
+const stageSpin: Variants = { hidden: { opacity: 0, scale: 0.4, rotate: -25 }, show: { opacity: 1, scale: 1, rotate: 0, transition: { type: "spring", stiffness: 200, damping: 15 } } };
+const stageCard: Variants = { hidden: { opacity: 0, x: -30 }, show: { opacity: 1, x: 0, transition: { duration: 0.6, ease: EASE } } };
+
+/* advances an index on a timer; any manual change restarts the timer */
+function useAutoCycle({ count, ms, index, setIndex, active }: { count: number; ms: number; index: number; setIndex: (n: number) => void; active: boolean }) {
+  useEffect(() => {
+    if (!active) return;
+    const t = setTimeout(() => setIndex((index + 1) % count), ms);
+    return () => clearTimeout(t);
+  }, [active, index, count, ms, setIndex]);
+}
+
+/* thin bar that fills while a tab is auto-running */
+function TabProgress({ ms, running, k, className = "", color = "rgba(255,255,255,0.75)" }: { ms: number; running: boolean; k: string | number; className?: string; color?: string }) {
+  return (
+    <motion.span
+      key={`${k}-${running}`}
+      className={`pointer-events-none absolute bottom-0 h-[3px] origin-left rounded-full ${className}`}
+      style={{ background: color }}
+      initial={{ scaleX: running ? 0 : 1 }}
+      animate={{ scaleX: 1 }}
+      transition={{ duration: running ? ms / 1000 : 0.25, ease: "linear" }}
+    />
+  );
+}
+
+/* headline that lands word by word */
+function WordReveal({ text }: { text: string }) {
+  return (
+    <motion.span variants={group(0.06, 0.1)} initial="hidden" whileInView="show" viewport={VP} className="inline">
+      {text.split(" ").map((w, i) => (
+        <span key={i} className="inline-block overflow-hidden align-bottom">
+          <motion.span variants={{ hidden: { y: "110%" }, show: { y: 0, transition: { duration: 0.6, ease: EASE } } }} className="inline-block">
+            {w}&nbsp;
+          </motion.span>
+        </span>
+      ))}
+    </motion.span>
+  );
+}
+
+/* types text in once it scrolls into view, keeping the final layout reserved */
+function Typewriter({ text, delay = 0, speed = 24 }: { text: string; delay?: number; speed?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const seen = useInView(ref, { once: true, margin: "-60px" });
+  const reduce = useReducedMotion();
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!seen || reduce) return;
+    let i = 0;
+    let int: ReturnType<typeof setInterval> | undefined;
+    const t = setTimeout(() => {
+      int = setInterval(() => {
+        i += 1;
+        setN(i);
+        if (i >= text.length && int) clearInterval(int);
+      }, speed);
+    }, delay * 1000);
+    return () => { clearTimeout(t); if (int) clearInterval(int); };
+  }, [seen, text, delay, speed, reduce]);
+  const shown = reduce ? text.length : n;
+  return (
+    <span ref={ref}>
+      <span>{text.slice(0, shown)}</span>
+      <span style={{ visibility: "hidden" }}>{text.slice(shown)}</span>
+    </span>
+  );
+}
 
 /* ---------- palette (EVOQ AI brand guidelines) ---------- */
 const C = {
@@ -52,16 +149,6 @@ const FlagIcon = (p: IP) => (
 const TrendIcon = (p: IP) => (
   <Svg {...p}><path d="M3 17l6-6 4 4 8-8" /><path d="M15 6h6v6" /></Svg>
 );
-const RocketIcon = (p: IP) => (
-  <Svg {...p}>
-    <path d="M14.5 3c2 1 4.5 4 3.9 8.4-2 .3-4-.3-5.5-1.8-1.5-1.5-2.1-3.5-1.8-5.5C12.9 3.1 13.7 3 14.5 3z" />
-    <path d="M11 13 5.5 18.5M9.5 15.5 5 17M8.5 14.5 7 10" />
-    <path d="M16.5 12.5c1 2 .7 4.7-.5 6.5-1.8-.3-3.5-1.3-4.5-2.8" />
-  </Svg>
-);
-const SyncIcon = (p: IP) => (
-  <Svg {...p}><circle cx="6" cy="6" r="2.4" /><circle cx="18" cy="6" r="2.4" /><circle cx="12" cy="18" r="2.4" /><path d="M8 7.2 16 7.2M7.5 8.2 11 16M16.5 8.2 13 16" /></Svg>
-);
 const CheckCircleIcon = (p: IP) => (
   <Svg {...p}><circle cx="12" cy="12" r="9" /><path d="m8.5 12.5 2.4 2.4L16 10" /></Svg>
 );
@@ -71,23 +158,11 @@ const ChevronRightIcon = (p: IP) => (
 const MonitorIcon = (p: IP) => (
   <Svg {...p}><rect x="3" y="4" width="18" height="14" rx="3" /><path d="M8 21h8M12 18v3" /></Svg>
 );
-const HeartIcon = (p: IP) => (
-  <Svg {...p}><path d="M12 20s-7-4.4-9.5-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.5 11c-2.5 4.6-9.5 9-9.5 9z" /></Svg>
-);
 const FactoryIcon = (p: IP) => (
   <Svg {...p}><path d="M3 21V11l6 4v-4l6 4V7l6 4v10H3Z" /><path d="M7 21v-4M12 21v-4M17 21v-4" /></Svg>
 );
-const BriefcaseIcon = (p: IP) => (
-  <Svg {...p}><rect x="3" y="7" width="18" height="13" rx="2.5" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18" /></Svg>
-);
 const CalendarIcon = (p: IP) => (
   <Svg {...p}><rect x="3" y="4" width="18" height="18" rx="3" /><path d="M16 2v4M8 2v4M3 10h18" /></Svg>
-);
-const HomeIcon = (p: IP) => (
-  <Svg {...p}><path d="M4 11.5 12 4l8 7.5" /><path d="M6 10v9h12v-9" /></Svg>
-);
-const LayersIcon = (p: IP) => (
-  <Svg {...p}><path d="M12 3 2.5 8 12 13l9.5-5L12 3Z" /><path d="M2.5 13 12 18l9.5-5M2.5 10.5 12 15.5l9.5-5" /></Svg>
 );
 const GridIcon = (p: IP) => (
   <Svg {...p}><rect x="3" y="3" width="8" height="8" rx="1.5" /><rect x="13" y="3" width="8" height="8" rx="1.5" /><rect x="3" y="13" width="8" height="8" rx="1.5" /><rect x="13" y="13" width="8" height="8" rx="1.5" /></Svg>
@@ -95,32 +170,11 @@ const GridIcon = (p: IP) => (
 const ChartIcon = (p: IP) => (
   <Svg {...p}><path d="M4 20V10M12 20V4M20 20v-7" /></Svg>
 );
-const GearIcon = (p: IP) => (
-  <Svg {...p}>
-    <circle cx="12" cy="12" r="3.2" />
-    <path d="M19.4 13.5a1.8 1.8 0 0 0 .36 1.98l.06.06a2.2 2.2 0 1 1-3.1 3.1l-.06-.06a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.65V20a2.2 2.2 0 1 1-4.4 0v-.1a1.8 1.8 0 0 0-1.17-1.65 1.8 1.8 0 0 0-1.98.36l-.06.06a2.2 2.2 0 1 1-3.1-3.1l.06-.06a1.8 1.8 0 0 0 .36-1.98 1.8 1.8 0 0 0-1.65-1.1H2.5a2.2 2.2 0 1 1 0-4.4h.1a1.8 1.8 0 0 0 1.65-1.17 1.8 1.8 0 0 0-.36-1.98l-.06-.06a2.2 2.2 0 1 1 3.1-3.1l.06.06a1.8 1.8 0 0 0 1.98.36H9a1.8 1.8 0 0 0 1.1-1.65V2.5a2.2 2.2 0 1 1 4.4 0v.1a1.8 1.8 0 0 0 1.1 1.65 1.8 1.8 0 0 0 1.98-.36l.06-.06a2.2 2.2 0 1 1 3.1 3.1l-.06.06a1.8 1.8 0 0 0-.36 1.98V9a1.8 1.8 0 0 0 1.65 1.1h.1a2.2 2.2 0 1 1 0 4.4h-.1a1.8 1.8 0 0 0-1.65 1.1Z" />
-  </Svg>
-);
-const PaperclipIcon = (p: IP) => (
-  <Svg {...p}><path d="M8 13.5 15.5 6a3 3 0 0 1 4.24 4.24L11 18.9a4.5 4.5 0 0 1-6.36-6.36L13 4.2" /></Svg>
-);
-const AtIcon = (p: IP) => (
-  <Svg {...p}><circle cx="12" cy="12" r="4" /><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-4 7.5" /></Svg>
-);
-const GlobeIcon = (p: IP) => (
-  <Svg {...p}><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></Svg>
-);
-const SendIcon = (p: IP) => (
-  <Svg {...p}><path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7Z" /></Svg>
-);
 const SearchIcon = (p: IP) => (
   <Svg {...p}><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></Svg>
 );
 const DocIcon = (p: IP) => (
   <Svg {...p}><path d="M6 2h9l5 5v15H6z" /><path d="M15 2v5h5M9 13h6M9 17h6" /></Svg>
-);
-const PlayIcon = (p: IP) => (
-  <Svg {...p}><path d="M7 4.5v15l13-7.5L7 4.5Z" /></Svg>
 );
 
 const BotIcon = (p: IP) => (
@@ -161,9 +215,7 @@ const CubeIcon = (p: IP) => (
 const MailIcon = (p: IP) => (
   <Svg {...p}><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m3.5 7 8.5 6 8.5-6" /></Svg>
 );
-const ListIcon = (p: IP) => (
-  <Svg {...p}><path d="M9 6h11M9 12h11M9 18h11" /><circle cx="4.5" cy="6" r="1" /><circle cx="4.5" cy="12" r="1" /><circle cx="4.5" cy="18" r="1" /></Svg>
-);
+
 
 /* ---------- gradient washes ---------- */
 function GradientWash({ variant }: { variant: "subtle" | "light" }) {
@@ -219,17 +271,6 @@ const MEET_AGENTS = [
   { name: "Service agent", task: "Review overdue work orders", status: "Complete", type: "done" as const },
   { name: "Finance agent", task: "Prepare payment follow-ups", status: "Awaiting approval", type: "pending" as const },
 ];
-
-const WORKSPACE_APPS = [
-  { label: "CRM", icon: TrendIcon },
-  { label: "ServiceOps", icon: WrenchIcon },
-  { label: "Projects", icon: RocketIcon },
-  { label: "Desk", icon: MessageIcon },
-  { label: "Billing", icon: CardIcon },
-  { label: "Inventory", icon: SyncIcon },
-];
-
-const CONNECTED_SYSTEMS = ["ERP", "EMR", "Finance", "Existing CRM", "Other business applications"];
 
 const GREEN = { fg: "#0E9F6E", bg: "#E5F7EF" };
 
@@ -518,7 +559,7 @@ const INDUSTRIES: {
   },
   {
     name: "Field service", tabLabel: "Field service",
-    title: "Stay ahead of service work.",
+    title: "Keep technicians and service visits on schedule.",
     desc: "Review work orders, technician activity, asset history, and service commitments to identify priority work and prepare the next action.",
     cta: "Explore field service", href: "#", icon: WrenchIcon, fg: "#0E9F6E", bg: "#DDF6EA",
     main: "/industries/v2/fs-main-hd.jpg", mainPos: "85% 40%", circle: "/industries/v2/fs-circle-hd.jpg", circlePos: "50% 30%", detail: "/industries/v2/fs-detail-hd.jpg", detailPos: "25% 40%",
@@ -530,10 +571,10 @@ const INDUSTRIES: {
   },
   {
     name: "Professional services", tabLabel: "Professional services",
-    title: "Keep client work on track.",
+    title: "Keep clients, projects, and deliverables on track.",
     desc: "Review client, project, task, and activity information to identify what needs attention and prepare updates or follow-up actions.",
     cta: "Explore professional services", href: "#", icon: UsersIcon, fg: "#5C5CFF", bg: "#ECE9FF",
-    main: "/industries/v2/ps-main-hd.jpg", mainPos: "70% 0%", circle: "/industries/v2/ps-circle-hd.jpg", circlePos: "50% 30%", detail: "/industries/v2/ps-detail-hd.jpg", detailPos: "65% 40%",
+    main: "/industries/v2/ps-main2-hd.jpg", mainPos: "30% 50%", circle: "/industries/v2/ps-circle-hd.jpg", circlePos: "50% 30%", detail: "/industries/v2/ps-detail-hd.jpg", detailPos: "65% 40%",
     cards: [
       { icon: DocIcon, title: "Client update", desc: "Status summary ready for review", fg: "#5C5CFF", bg: "#ECE9FF" },
       { icon: FlagIcon, title: "Overdue tasks", desc: "6 project tasks need review", fg: "#F26A21", bg: "#FFEBDD" },
@@ -542,7 +583,7 @@ const INDUSTRIES: {
   },
   {
     name: "Retail & commerce", tabLabel: "Retail & commerce",
-    title: "Act on customer and order activity.",
+    title: "Keep customers, orders, and inventory in sync.",
     desc: "Review customer, order, inventory, and engagement information to identify what needs attention and prepare the next action.",
     cta: "Explore retail & commerce", href: "#", icon: CartIcon, fg: "#F26A21", bg: "#FFEBDD",
     main: "/industries/v2/rt-main-hd.jpg", mainPos: "8% 20%", circle: "/industries/v2/rt-circle-hd.jpg", circlePos: "50% 30%", detail: "/industries/v2/rt-main-hd.jpg", detailPos: "12% 40%", detailZoom: "scale(1.15)",
@@ -554,7 +595,7 @@ const INDUSTRIES: {
   },
   {
     name: "More industries", tabLabel: "More industries",
-    title: "AI for the work specific to your industry.",
+    title: "Put AI to work on your industry's information and processes.",
     desc: "Apply the same AI capabilities to the information, processes, and decisions that matter in your industry.",
     cta: "Explore all industries", href: "/why-evoq", icon: GridIcon, fg: "#5C5CFF", bg: "#ECE9FF",
     main: "/industries/v2/mo-team-hd.jpg", mainPos: "85% 30%", circle: "/industries/v2/mo-circle-hd.jpg", circlePos: "50% 30%", detail: "/industries/v2/mo-detail-hd.jpg", detailPos: "50% 35%",
@@ -568,7 +609,7 @@ const INDUSTRIES: {
 
 function IndustryCard({ c, className = "", style }: { c: IndCard; className?: string; style?: React.CSSProperties }) {
   return (
-    <div className={`flex items-center gap-3 rounded-[16px] bg-white p-3.5 ${className}`} style={{ border: "1px solid #EEF0F8", boxShadow: "0 18px 40px -22px rgba(40,40,140,0.35)", ...style }}>
+    <motion.div variants={stageCard} className={`flex items-center gap-3 rounded-[16px] bg-white p-3.5 ${className}`} style={{ border: "1px solid #EEF0F8", boxShadow: "0 18px 40px -22px rgba(40,40,140,0.35)", ...style }}>
       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: c.bg }}>
         <c.icon size={20} stroke={c.fg} />
       </span>
@@ -577,7 +618,7 @@ function IndustryCard({ c, className = "", style }: { c: IndCard; className?: st
         <span className="mt-0.5 block text-[12px] leading-[1.4]" style={{ color: C.muted }}>{c.desc}</span>
       </span>
       <ChevronRightIcon size={14} stroke={c.fg} />
-    </div>
+    </motion.div>
   );
 }
 
@@ -587,7 +628,7 @@ function IndustryStage({ ind }: { ind: (typeof INDUSTRIES)[number] }) {
       {/* desktop: orbit composition */}
       <div className="hidden lg:block">
         <ScaleFit width={640}>
-          <div key={ind.name} className="evoq-fade relative" style={{ width: 640, height: 560 }}>
+          <motion.div key={ind.name} variants={group(0.08, 0.05)} initial="hidden" animate="show" className="relative" style={{ width: 640, height: 560 }}>
             <svg className="pointer-events-none absolute inset-0" width="640" height="560" fill="none" aria-hidden="true">
               <circle cx="345" cy="285" r="255" stroke="#C9CCF5" strokeWidth="1.2" strokeDasharray="2 5" />
               <circle cx="262" cy="68" r="6" fill="#5C5CFF" />
@@ -596,26 +637,26 @@ function IndustryStage({ ind }: { ind: (typeof INDUSTRIES)[number] }) {
               <circle cx="190" cy="500" r="6" fill="#5C5CFF" />
               <circle cx="570" cy="470" r="6" fill="#5C5CFF" />
             </svg>
-            <div className="absolute rounded-[34px]" style={{ left: 300, top: 120, width: 270, height: 330, background: "linear-gradient(160deg,#DCD5FF,#EDE9FF)" }} />
-            <div className="absolute overflow-hidden" style={{ left: 245, top: 70, width: 300, height: 410, borderRadius: "34px 34px 90px 34px", boxShadow: "0 30px 60px -30px rgba(40,30,140,0.45)" }}>
+            <motion.div variants={stagePop} className="absolute rounded-[34px]" style={{ left: 300, top: 120, width: 270, height: 330, background: "linear-gradient(160deg,#DCD5FF,#EDE9FF)" }} />
+            <motion.div variants={stagePhoto} className="absolute overflow-hidden" style={{ left: 245, top: 70, width: 300, height: 410, borderRadius: "34px 34px 90px 34px", boxShadow: "0 30px 60px -30px rgba(40,30,140,0.45)" }}>
               <Image src={ind.main} alt={ind.name} fill sizes="640px" quality={92} className="object-cover" style={{ objectPosition: ind.mainPos, transform: ind.mainZoom, transformOrigin: "95% 50%" }} />
-            </div>
-            <div className="absolute flex items-center justify-center rounded-[26px]" style={{ left: 205, top: 405, width: 104, height: 104, background: "#ECE8FF", boxShadow: "0 18px 40px -22px rgba(40,40,140,0.4)" }}>
+            </motion.div>
+            <motion.div variants={stageSpin} className="absolute flex items-center justify-center rounded-[26px]" style={{ left: 205, top: 405, width: 104, height: 104, background: "#ECE8FF", boxShadow: "0 18px 40px -22px rgba(40,40,140,0.4)" }}>
               <ind.icon size={52} stroke={C.interactive} />
-            </div>
-            <div className="absolute overflow-hidden rounded-full" style={{ left: 495, top: 18, width: 108, height: 108, border: "4px solid #fff", boxShadow: "0 16px 34px -14px rgba(40,40,140,0.45)" }}>
+            </motion.div>
+            <motion.div variants={stageSpin} className="absolute overflow-hidden rounded-full" style={{ left: 495, top: 18, width: 108, height: 108, border: "4px solid #fff", boxShadow: "0 16px 34px -14px rgba(40,40,140,0.45)" }}>
               <Image src={ind.circle} alt="" fill sizes="256px" quality={90} className="object-cover" style={{ objectPosition: ind.circlePos }} />
-            </div>
-            <div className="absolute overflow-hidden rounded-[18px]" style={{ left: 478, top: 380, width: 104, height: 128, border: "3px solid #fff", boxShadow: "0 16px 34px -14px rgba(40,40,140,0.45)" }}>
+            </motion.div>
+            <motion.div variants={stagePhoto} className="absolute overflow-hidden rounded-[18px]" style={{ left: 478, top: 380, width: 104, height: 128, border: "3px solid #fff", boxShadow: "0 16px 34px -14px rgba(40,40,140,0.45)" }}>
               <Image src={ind.detail} alt="" fill sizes="512px" quality={90} className="object-cover" style={{ objectPosition: ind.detailPos, transform: ind.detailZoom, transformOrigin: "50% 50%" }} />
-            </div>
-            <div className="absolute flex items-center justify-center rounded-[16px] bg-white" style={{ left: 590, top: 382, width: 50, height: 50, border: "1px solid #E4EEFF", boxShadow: "0 12px 26px -14px rgba(40,100,240,0.5)" }}>
+            </motion.div>
+            <motion.div variants={stageSpin} className="absolute flex items-center justify-center rounded-[16px] bg-white" style={{ left: 590, top: 382, width: 50, height: 50, border: "1px solid #E4EEFF", boxShadow: "0 12px 26px -14px rgba(40,100,240,0.5)" }}>
               <SparkleIcon size={24} stroke="#2F7BF5" />
-            </div>
+            </motion.div>
             <IndustryCard c={ind.cards[0]} className="absolute" style={{ left: 0, top: 40, width: 285 }} />
             <IndustryCard c={ind.cards[1]} className="absolute" style={{ left: 4, top: 240, width: 285 }} />
             <IndustryCard c={ind.cards[2]} className="absolute" style={{ left: 395, top: 232, width: 245 }} />
-          </div>
+          </motion.div>
         </ScaleFit>
       </div>
 
@@ -634,81 +675,144 @@ function IndustryStage({ ind }: { ind: (typeof INDUSTRIES)[number] }) {
   );
 }
 
-const CROSS_SYSTEM_SOURCES = [
-  { name: "EVOQ CRM", sub: "Customer information", icon: UsersIcon, fg: "#5C5CFF", bg: "#ECE9FF" },
-  { name: "EVOQ ServiceOps", sub: "Service history", icon: GearIcon, fg: "#0E9F6E", bg: "#DDF6EA" },
-  { name: "ERP", sub: "Order and product data", icon: DatabaseIcon, fg: "#5C5CFF", bg: "#ECE9FF" },
-  { name: "Finance system", sub: "Invoices and payments", icon: ChartIcon, fg: "#2F7BF5", bg: "#E4EFFF" },
-  { name: "EVOQ Projects", sub: "Project details", icon: ListIcon, fg: "#5C5CFF", bg: "#ECE9FF" },
-];
-
-const EVOQ_APP_LOGOS = [
-  { label: "CRM", src: "/evoq-ai/apps/crm.png", w: 135, h: 55 },
-  { label: "ServiceOps", src: "/evoq-ai/apps/serviceops.png", w: 253, h: 55 },
-  { label: "Projects", src: "/evoq-ai/apps/projects.png", w: 184, h: 55 },
-  { label: "Desk", src: "/evoq-ai/apps/desk.png", w: 135, h: 55 },
-  { label: "Sync", src: "/evoq-ai/apps/sync.png", w: 141, h: 54 },
-  { label: "Inventory", src: "/evoq-ai/apps/inventory.png", w: 200, h: 55 },
-];
-const SYSTEM_TILES = [
-  { label: "ERP", icon: DatabaseIcon, fg: "#5C5CFF", bg: "#ECE9FF" },
-  { label: "EMR", icon: HeartIcon, fg: "#F0436A", bg: "#FFE4EB" },
-  { label: "Finance", icon: ChartIcon, fg: "#2F7BF5", bg: "#E4EFFF" },
-  { label: "Existing CRM", icon: UsersIcon, fg: "#F5A524", bg: "#FFF1D6" },
-  { label: "Other business applications", icon: CubeIcon, fg: "#0E9F6E", bg: "#DDF6EA" },
-];
-const SOFT_CARD: React.CSSProperties = { background: "#fff", border: "1px solid #EEF0F8", boxShadow: "0 18px 44px -26px rgba(40,40,140,0.3)" };
-
-/* shrinks a fixed-width composition to fit its column (desktop only) */
-function ScaleFit({ width, children }: { width: number; children: React.ReactNode }) {
-  const outer = useRef<HTMLDivElement>(null);
-  const inner = useRef<HTMLDivElement>(null);
-  const [box, setBox] = useState<{ scale: number; h: number } | null>(null);
-  useEffect(() => {
-    const el = outer.current;
-    const inn = inner.current;
-    if (!el || !inn) return;
-    const measure = () => {
-      if (window.innerWidth < 1024) return setBox(null);
-      setBox({ scale: Math.min(1, el.clientWidth / width), h: inn.offsetHeight });
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    ro.observe(inn);
-    window.addEventListener("resize", measure);
-    return () => { ro.disconnect(); window.removeEventListener("resize", measure); };
-  }, [width]);
+/* ---------- shared visuals ---------- */
+function HeroInfoCard({ c, className = "", style }: { c: (typeof HERO_INFO_CARDS)[number]; className?: string; style?: React.CSSProperties }) {
   return (
-    <div ref={outer} style={box ? { height: box.h * box.scale } : undefined}>
-      <div ref={inner} style={box ? { width, transform: `scale(${box.scale})`, transformOrigin: "top left" } : undefined}>
-        {children}
+    <motion.div
+      className={className}
+      style={style}
+      animate={{ y: [0, -9, 0] }}
+      transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: c.side === "top" ? 0 : 1.8 }}
+    >
+      {/* soft glass halo around the card, as in the reference */}
+      <div className="pointer-events-none absolute -inset-[9px] rounded-[24px] border border-white/25 bg-white/[0.14]" style={{ backdropFilter: "blur(6px)" }} />
+      <div className="relative flex items-start gap-3 rounded-[16px] bg-white p-4" style={{ boxShadow: "0 24px 50px -18px rgba(10,0,80,0.55)" }}>
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ background: C.aiHighlight }}>
+          <c.icon size={18} stroke={C.primary} />
+        </span>
+        <div>
+          <p className="text-[13.5px] font-extrabold leading-[1.3]" style={{ color: "#0B1220" }}>{c.title}</p>
+          <p className="mt-1 text-[12px] leading-[1.5]" style={{ color: C.muted }}>{c.desc}</p>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
+
+function HeroWorkspacePanel() {
+  const [topCard, bottomCard] = HERO_INFO_CARDS;
+  const PX = 360; // panel left inside the 1620px desktop composition
+  return (
+    <>
+      {/* desktop: panel + two floating cards, scaled to fit */}
+      <div className="hidden lg:block">
+        <ScaleFit width={1620}>
+          <div className="relative" style={{ width: 1620, height: 620 }}>
+            <div className="pointer-events-none absolute rounded-[28px] border border-white/15 bg-white/[0.09]" style={{ left: PX - 36, top: 160, width: 170, height: 330 }} />
+            <div
+              className="pointer-events-none absolute rounded-[36px] border border-white/25 bg-white/[0.13]"
+              style={{ left: PX - 16, top: 114, width: 932, height: 400, backdropFilter: "blur(8px)", boxShadow: "0 40px 90px -30px rgba(10,0,80,0.5)" }}
+            />
+            <svg className="pointer-events-none absolute inset-0" width="1620" height="620" fill="none" aria-hidden="true">
+              <path d="M1330 94 H1198 V140" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeDasharray="5 5" />
+              <path d="M1440 210 V300 H1262" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeDasharray="5 5" />
+              <path d="M1145 490 V545 H1228" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeDasharray="5 5" />
+              <circle cx="1145" cy="490" r="3.5" fill="#fff" />
+            </svg>
+            <div className="absolute" style={{ left: PX, top: 130, width: 900 }}>
+              <HeroWindow />
+            </div>
+            <HeroInfoCard c={topCard} className="absolute" style={{ left: 1335, top: 30, width: 290 }} />
+            <HeroInfoCard c={bottomCard} className="absolute" style={{ left: 1228, top: 480, width: 340 }} />
+          </div>
+        </ScaleFit>
+      </div>
+
+      {/* below lg: window, then info cards stacked beneath */}
+      <div className="lg:hidden">
+        <div className="relative mx-auto max-w-[920px]">
+          <div
+            className="pointer-events-none absolute -inset-4 rounded-[36px] border border-white/25 bg-white/[0.13]"
+            style={{ backdropFilter: "blur(8px)", boxShadow: "0 40px 90px -30px rgba(10,0,80,0.5)" }}
+          />
+          <HeroWindow />
+          <div className="relative z-10 mt-12 flex flex-col gap-4">
+            {HERO_INFO_CARDS.map((c) => (
+              <HeroInfoCard key={c.title} c={c} className="relative text-left" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* the diagram's source column is the single place that lists what EVI works with, grouped by kind */
+const EVOQ_SOURCES = [
+  { name: "CRM", sub: "Customer information", logo: "/evoq-ai/apps/crm.png", w: 135, h: 55 },
+  { name: "ServiceOps", sub: "Service history", logo: "/evoq-ai/apps/serviceops.png", w: 253, h: 55 },
+  { name: "Projects", sub: "Project details", logo: "/evoq-ai/apps/projects.png", w: 184, h: 55 },
+];
+const CONNECTED_SOURCES = [
+  { name: "ERP", sub: "Order and product data", icon: DatabaseIcon, fg: "#5C5CFF", bg: "#ECE9FF" },
+  { name: "Finance system", sub: "Invoices and payments", icon: ChartIcon, fg: "#2F7BF5", bg: "#E4EFFF" },
+];
+const SOFT_CARD: React.CSSProperties = { background: "#fff", border: "1px solid #EEF0F8", boxShadow: "0 18px 44px -26px rgba(40,40,140,0.3)" };
+
+
 function CrossSystemDiagram() {
-  const H = 68, G = 16;
-  const ys = CROSS_SYSTEM_SOURCES.map((_, i) => i * (H + G) + H / 2);
-  const hub = 175;
+  /* group card geometry: 12 pad + 34 header + rows of 58 (6 gap) + 12 pad */
+  const ROW = 58, ROWGAP = 6, HEAD = 34, PAD = 12, GROUPGAP = 22;
+  const groupH = (n: number) => PAD + HEAD + n * ROW + (n - 1) * ROWGAP + PAD;
+  const aH = groupH(EVOQ_SOURCES.length);
+  const bH = groupH(CONNECTED_SOURCES.length);
+  const rowY = (top: number, i: number) => top + PAD + HEAD + i * (ROW + ROWGAP) + ROW / 2;
+  const ys = [
+    ...EVOQ_SOURCES.map((_, i) => rowY(0, i)),
+    ...CONNECTED_SOURCES.map((_, i) => rowY(aH + GROUPGAP, i)),
+  ];
+  const total = aH + GROUPGAP + bH;
+  const hub = 216;
   return (
     <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-0">
       <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
-        <div className="flex w-full flex-col lg:w-[200px] lg:shrink-0" style={{ gap: G }}>
-          {CROSS_SYSTEM_SOURCES.map((x) => (
-            <div key={x.name} className="flex items-center gap-3 rounded-[14px] px-3" style={{ ...SOFT_CARD, height: H }}>
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[12px]" style={{ background: x.bg }}>
-                <x.icon size={20} stroke={x.fg} />
-              </span>
-              <span className="min-w-0">
-                <p className="text-[13px] font-extrabold" style={{ color: "#0B1230" }}>{x.name}</p>
-                <p className="truncate text-[11.5px]" style={{ color: C.muted }}>{x.sub}</p>
-              </span>
+        <div className="flex w-full flex-col lg:w-[250px] lg:shrink-0" style={{ gap: GROUPGAP }}>
+          <div className="rounded-[20px]" style={{ ...SOFT_CARD, padding: PAD }}>
+            <p className="flex items-center gap-2 px-1 text-[11px] font-extrabold uppercase tracking-[0.14em]" style={{ color: C.primary, height: HEAD }}>
+              <i className="h-[7px] w-[7px] rounded-full" style={{ background: C.primary }} />
+              EVOQ applications
+            </p>
+            <div className="flex flex-col" style={{ gap: ROWGAP }}>
+              {EVOQ_SOURCES.map((x) => (
+                <div key={x.name} className="flex flex-col justify-center rounded-[12px] px-3" style={{ height: ROW, background: "#FAFAFF", border: "1px solid #EEF0F8" }}>
+                  <Image src={x.logo} alt={x.name} width={x.w} height={x.h} className="h-[22px] w-auto self-start" />
+                  <p className="mt-1 truncate text-[11.5px]" style={{ color: C.muted }}>{x.sub}</p>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div className="rounded-[20px]" style={{ ...SOFT_CARD, padding: PAD, background: "#FBFAFF" }}>
+            <p className="flex items-center gap-2 px-1 text-[11px] font-extrabold uppercase tracking-[0.14em]" style={{ color: "#0E9F6E", height: HEAD }}>
+              <i className="h-[7px] w-[7px] rounded-full" style={{ background: "#0E9F6E" }} />
+              Connected systems
+            </p>
+            <div className="flex flex-col" style={{ gap: ROWGAP }}>
+              {CONNECTED_SOURCES.map((x) => (
+                <div key={x.name} className="flex items-center gap-3 rounded-[12px] bg-white px-3" style={{ height: ROW, border: "1px solid #EEF0F8" }}>
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]" style={{ background: x.bg }}>
+                    <x.icon size={18} stroke={x.fg} />
+                  </span>
+                  <span className="min-w-0">
+                    <p className="text-[13px] font-extrabold" style={{ color: "#0B1230" }}>{x.name}</p>
+                    <p className="truncate text-[11.5px]" style={{ color: C.muted }}>{x.sub}</p>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <svg className="hidden shrink-0 lg:block" width="64" height={5 * H + 4 * G} fill="none" aria-hidden="true">
+        <svg className="hidden shrink-0 lg:block" width="64" height={total} fill="none" aria-hidden="true">
           {ys.map((y, i) => (
             <g key={i}>
               <path d={`M2 ${y} C 30 ${y}, 30 ${hub}, 62 ${hub}`} stroke={C.primary} strokeWidth="1.3" strokeDasharray="3 4" opacity="0.7" />
@@ -720,7 +824,7 @@ function CrossSystemDiagram() {
       </div>
 
       <div className="flex w-full flex-col items-center lg:w-[270px] lg:shrink-0">
-        <div className="relative w-full rounded-[22px] px-5 pb-5 pt-14 text-center" style={{ ...SOFT_CARD, minHeight: 2 * hub - 36, marginTop: 36 }}>
+        <div className="relative w-full rounded-[22px] px-5 pb-5 pt-14 text-center" style={{ ...SOFT_CARD, minHeight: 2 * (hub - 36), marginTop: 36 }}>
           <span className="absolute -top-9 left-1/2 h-[84px] w-[84px] -translate-x-1/2 overflow-hidden rounded-full border-4 border-white" style={{ boxShadow: "0 0 0 8px #E8E3FF, 0 16px 30px -10px rgba(92,92,255,0.5)" }}>
             <Image src="/healthcare/avatars/priya.jpg" alt="EVI" fill sizes="84px" className="object-cover" />
           </span>
@@ -803,74 +907,6 @@ function CrossSystemDiagram() {
   );
 }
 
-/* ---------- shared visuals ---------- */
-function HeroInfoCard({ c, className = "", style }: { c: (typeof HERO_INFO_CARDS)[number]; className?: string; style?: React.CSSProperties }) {
-  return (
-    <div className={className} style={style}>
-      {/* soft glass halo around the card, as in the reference */}
-      <div className="pointer-events-none absolute -inset-[9px] rounded-[24px] border border-white/25 bg-white/[0.14]" style={{ backdropFilter: "blur(6px)" }} />
-      <div className="relative flex items-start gap-3 rounded-[16px] bg-white p-4" style={{ boxShadow: "0 24px 50px -18px rgba(10,0,80,0.55)" }}>
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ background: C.aiHighlight }}>
-          <c.icon size={18} stroke={C.primary} />
-        </span>
-        <div>
-          <p className="text-[13.5px] font-extrabold leading-[1.3]" style={{ color: "#0B1220" }}>{c.title}</p>
-          <p className="mt-1 text-[12px] leading-[1.5]" style={{ color: C.muted }}>{c.desc}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-function HeroWorkspacePanel() {
-  const [topCard, bottomCard] = HERO_INFO_CARDS;
-  const PX = 360; // panel left inside the 1620px desktop composition
-  return (
-    <>
-      {/* desktop: panel + two floating cards, scaled to fit */}
-      <div className="hidden lg:block">
-        <ScaleFit width={1620}>
-          <div className="relative" style={{ width: 1620, height: 620 }}>
-            <div className="pointer-events-none absolute rounded-[28px] border border-white/15 bg-white/[0.09]" style={{ left: PX - 36, top: 160, width: 170, height: 330 }} />
-            <div
-              className="pointer-events-none absolute rounded-[36px] border border-white/25 bg-white/[0.13]"
-              style={{ left: PX - 16, top: 114, width: 932, height: 400, backdropFilter: "blur(8px)", boxShadow: "0 40px 90px -30px rgba(10,0,80,0.5)" }}
-            />
-            <svg className="pointer-events-none absolute inset-0" width="1620" height="620" fill="none" aria-hidden="true">
-              <path d="M1330 94 H1198 V140" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeDasharray="5 5" />
-              <path d="M1440 210 V300 H1262" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeDasharray="5 5" />
-              <path d="M1145 490 V545 H1228" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeDasharray="5 5" />
-              <circle cx="1145" cy="490" r="3.5" fill="#fff" />
-            </svg>
-            <div className="absolute" style={{ left: PX, top: 130, width: 900 }}>
-              <HeroWindow />
-            </div>
-            <HeroInfoCard c={topCard} className="absolute" style={{ left: 1335, top: 30, width: 290 }} />
-            <HeroInfoCard c={bottomCard} className="absolute" style={{ left: 1228, top: 480, width: 340 }} />
-          </div>
-        </ScaleFit>
-      </div>
-
-      {/* below lg: window, then info cards stacked beneath */}
-      <div className="lg:hidden">
-        <div className="relative mx-auto max-w-[920px]">
-          <div
-            className="pointer-events-none absolute -inset-4 rounded-[36px] border border-white/25 bg-white/[0.13]"
-            style={{ backdropFilter: "blur(8px)", boxShadow: "0 40px 90px -30px rgba(10,0,80,0.5)" }}
-          />
-          <HeroWindow />
-          <div className="relative z-10 mt-12 flex flex-col gap-4">
-            {HERO_INFO_CARDS.map((c) => (
-              <HeroInfoCard key={c.title} c={c} className="relative text-left" />
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 function StatusPill({ type, label }: { type: "active" | "done" | "pending"; label: string }) {
   const style =
     type === "done"
@@ -895,14 +931,43 @@ export function EvoqAIPage() {
   const industry = INDUSTRIES[activeIndustry];
   const scenario = WORK_SCENARIOS[activeScenario];
 
+  /* auto-running tabs: run while the section is on screen and the pointer is not over it */
+  const reduce = useReducedMotion();
+  const askRef = useRef<HTMLDivElement>(null);
+  const workRef = useRef<HTMLDivElement>(null);
+  const indRef = useRef<HTMLDivElement>(null);
+  const askIn = useInView(askRef, { amount: 0.35 });
+  const workIn = useInView(workRef, { amount: 0.4 });
+  const indIn = useInView(indRef, { amount: 0.35 });
+  const [askHold, setAskHold] = useState(false);
+  const [workHold, setWorkHold] = useState(false);
+  const [indHold, setIndHold] = useState(false);
+  const ASK_MS = 5000;
+  const WORK_MS = 6000;
+  const IND_MS = 5500;
+  const askRun = askIn && !askHold && !reduce;
+  const workRun = workIn && !workHold && !reduce;
+  const indRun = indIn && !indHold && !reduce;
+  useAutoCycle({ count: INTERACTION_MODES.length, ms: ASK_MS, index: activeMode, setIndex: setActiveMode, active: askRun });
+  useAutoCycle({ count: WORK_SCENARIOS.length, ms: WORK_MS, index: activeScenario, setIndex: setActiveScenario, active: workRun });
+  useAutoCycle({ count: INDUSTRIES.length, ms: IND_MS, index: activeIndustry, setIndex: setActiveIndustry, active: indRun });
+
   return (
+    <MotionConfig reducedMotion="user">
     <div style={{ background: "#fff" }}>
       {/* ===== 1. HERO — AI that gets work done ===== */}
       <section
         id="hero"
         className="relative overflow-hidden"
-        style={{ backgroundColor: "#3A1FD6", backgroundImage: "url('/evoq-ai-hero-bg.webp')", backgroundSize: "cover", backgroundPosition: "center", scrollMarginTop: 96 }}
+        style={{ background: "linear-gradient(115deg, #2417C4 0%, #3A1FDA 42%, #5A1FEA 75%, #8A26F2 100%)", scrollMarginTop: 96 }}
       >
+        {/* same curved shapes as the "Get started" banner */}
+        <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 1440 1000" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 520 C 160 560, 300 760, 440 1000 L0 1000 Z" fill="#B84DFF" opacity="0.5" />
+          <path d="M0 700 C 110 690, 230 810, 340 1000 L0 1000 Z" fill="#9B3CFF" opacity="0.55" />
+          <path d="M260 930 C 520 880, 720 1000, 980 960 C 1190 928, 1330 880, 1440 820 L1440 1000 L280 1000 Z" fill="#8A2BFF" opacity="0.55" />
+          <path d="M1060 140 C 1160 60, 1300 30, 1440 0 L1440 560 C 1340 470, 1120 430, 1060 140 Z" fill="#5E2BFF" opacity="0.45" />
+        </svg>
         {/* same white header lighting as the home hero: wash from the left (behind the logo) and the top-right */}
         <div
           className="pointer-events-none absolute inset-0"
@@ -912,15 +977,15 @@ export function EvoqAIPage() {
           }}
         />
         <div className="relative px-5 sm:px-6 lg:px-6">
-          <div className="mx-auto max-w-[1100px] pt-36 text-center lg:pt-44">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.32em] text-white/90">EVOQ AI</p>
-            <h1 className="mx-auto mt-4 max-w-[860px] font-[var(--font-display)] text-[40px] font-bold leading-[1.1] tracking-[-0.02em] text-white sm:text-[58px]">
+          <motion.div variants={group(0.12, 0.1)} initial="hidden" animate="show" className="mx-auto max-w-[1100px] pt-36 text-center lg:pt-44">
+            <motion.p variants={rise} className="text-[13px] font-semibold uppercase tracking-[0.32em] text-white/90">EVOQ AI</motion.p>
+            <motion.h1 variants={rise} className="mx-auto mt-4 max-w-[860px] font-[var(--font-display)] text-[40px] font-bold leading-[1.1] tracking-[-0.02em] text-white sm:text-[58px]">
               AI that gets work done
-            </h1>
-            <p className="mx-auto mt-5 max-w-[600px] text-[17px] leading-[1.7] text-white/90">
+            </motion.h1>
+            <motion.p variants={rise} className="mx-auto mt-5 max-w-[640px] text-balance text-[17px] leading-[1.7] text-white/90">
               EVOQ AI brings AI into the applications, systems, and processes where your work happens.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            </motion.p>
+            <motion.div variants={rise} className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <button
                 type="button"
                 onClick={() => setShowGetStarted(true)}
@@ -937,12 +1002,12 @@ export function EvoqAIPage() {
               >
                 Talk to an expert
               </Link>
-            </div>
+            </motion.div>
 
-          </div>
-          <div className="mx-auto mt-16 max-w-[1500px] pb-24 lg:pb-36">
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.55, ease: EASE }} className="mx-auto mt-10 max-w-[1500px] pb-24 lg:-mt-12 lg:pb-32">
             <HeroWorkspacePanel />
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -955,21 +1020,21 @@ export function EvoqAIPage() {
               style={{ background: `linear-gradient(160deg, #F8F8FF 0%, ${C.tint}55 55%, #C7C7FF 100%)` }}
             >
               <GradientWash variant="subtle" />
-              <div className="relative text-center">
+              <motion.div {...reveal()} className="relative text-center">
                 <Eyebrow>Meet EVOQ AI</Eyebrow>
                 <h2 className="mx-auto mt-5 max-w-[640px] font-[var(--font-display)] text-[26px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[34px]" style={{ color: C.heading }}>
                   EVI helps you work with AI. Agents perform the work.
                 </h2>
-              </div>
+              </motion.div>
 
               <div className="relative mt-14 grid gap-3 sm:grid-cols-2">
                 {/* EVI panel */}
-                <div className="rounded-[26px] bg-white p-8" style={{ border: `1px solid ${C.border}`, boxShadow: "0 24px 60px -32px rgba(16,42,67,0.18)" }}>
+                <motion.div {...reveal(0.05, 30, -40)} className="rounded-[26px] bg-white p-8" style={{ border: `1px solid ${C.border}`, boxShadow: "0 24px 60px -32px rgba(16,42,67,0.18)" }}>
                   <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.1em] text-white" style={{ background: C.primary }}>
                     EVI
                   </span>
                   <h3 className="mt-5 font-[var(--font-display)] text-[20px] font-bold leading-[1.3]" style={{ color: C.heading }}>
-                    Ask. Understand. Act.
+                    AI. Assist. Act.
                   </h3>
                   <p className="mt-3 text-[14.5px] leading-[1.7]" style={{ color: C.body }}>
                     EVI is your AI assistant across EVOQ. Ask questions, find information, understand activity,
@@ -994,12 +1059,12 @@ export function EvoqAIPage() {
                     </div>
 
                     <div className="bg-white p-4">
-                      <div className="flex justify-end">
+                      <motion.div initial={{ opacity: 0, y: 16, scale: 0.96 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.5, delay: 0.7, ease: EASE }} className="flex justify-end">
                         <div className="max-w-[88%] rounded-[14px] rounded-tr-sm px-4 py-2.5 text-[12.5px] font-semibold text-white" style={{ background: C.primary }}>
                           Which opportunities need follow-up this week?
                         </div>
-                      </div>
-                      <div className="mt-3 flex items-start gap-2.5">
+                      </motion.div>
+                      <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={VP} transition={{ duration: 0.55, delay: 1.3, ease: EASE }} className="mt-3 flex items-start gap-2.5">
                         <span className="mt-0.5 h-6 w-6 shrink-0 rounded-full" style={{ background: C.primary }} />
                         <div className="flex-1 rounded-[14px] rounded-tl-sm p-3.5" style={{ background: C.aiHighlight }}>
                           <p className="text-[10px] font-bold uppercase tracking-[0.08em]" style={{ color: C.interactive }}>
@@ -1010,7 +1075,7 @@ export function EvoqAIPage() {
                             and <strong>Beta Inc.</strong> Suggested next actions are ready for review.
                           </p>
                         </div>
-                      </div>
+                      </motion.div>
                     </div>
 
                     <div className="flex items-center gap-2 px-4 py-3" style={{ background: "#fff", borderTop: `1px solid ${C.border}` }}>
@@ -1020,10 +1085,10 @@ export function EvoqAIPage() {
                       </span>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 {/* AI agents panel */}
-                <div className="rounded-[26px] bg-white p-8" style={{ border: `1px solid ${C.border}`, boxShadow: "0 24px 60px -32px rgba(16,42,67,0.18)" }}>
+                <motion.div {...reveal(0.15, 30, 40)} className="rounded-[26px] bg-white p-8" style={{ border: `1px solid ${C.border}`, boxShadow: "0 24px 60px -32px rgba(16,42,67,0.18)" }}>
                   <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.1em]" style={{ background: C.aiHighlight, color: C.interactive }}>
                     AI agents
                   </span>
@@ -1043,7 +1108,7 @@ export function EvoqAIPage() {
                     </div>
                     <div className="divide-y bg-white" style={{ borderColor: C.border }}>
                       {MEET_AGENTS.map((a) => (
-                        <div key={a.name} className="flex items-center gap-3 px-4 py-3.5">
+                        <motion.div initial={{ opacity: 0, x: 26 }} whileInView={{ opacity: 1, x: 0 }} viewport={VP} transition={{ duration: 0.5, delay: 0.7 + MEET_AGENTS.indexOf(a) * 0.2, ease: EASE }} key={a.name} className="flex items-center gap-3 px-4 py-3.5">
                           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]" style={{ background: C.aiHighlight }}>
                             <TrendIcon size={16} stroke={C.primary} />
                           </span>
@@ -1052,76 +1117,47 @@ export function EvoqAIPage() {
                             <p className="truncate text-[11.5px]" style={{ color: C.muted }}>{a.task}</p>
                           </div>
                           <StatusPill type={a.type} label={a.status} />
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===== 3. YOUR WORK, IN ONE WORKSPACE ===== */}
-      <section id="workspace" className="relative overflow-hidden" style={{ background: `linear-gradient(180deg, ${C.soft} 0%, #FFFFFF 100%)`, scrollMarginTop: 96 }}>
-        <GradientWash variant="light" />
-        <div className="relative px-5 sm:px-6 lg:px-6">
-          <div className="mx-auto max-w-[1300px] py-20 lg:py-24">
-            <div className="mx-auto max-w-[680px] text-center">
-              <Eyebrow>Where AI works</Eyebrow>
-              <h2 className="mt-5 font-[var(--font-display)] text-[32px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[38px]" style={{ color: C.heading }}>
-                Your work, in one workspace
-              </h2>
-              <p className="mt-5 text-[16px] leading-[1.75]" style={{ color: C.body }}>
-                Your workspace brings together the applications you use, the systems you already have, and EVOQ AI.
-              </p>
-            </div>
+      {/* ===== 3. AI ACROSS THE SYSTEMS YOU USE ===== */}
+      <section id="cross-system" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FBFBFF 0%, #F4F3FF 100%)" }}>
+        <div className="px-5 sm:px-6 lg:px-6">
+          <div className="mx-auto max-w-[1480px] py-16 lg:py-24">
+            <div className="grid gap-12 xl:grid-cols-[430px_1fr] xl:gap-6">
+              <div className="xl:pt-20">
+                <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.interactive }}>AI across the systems you use</p>
+                <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[44px]" style={{ color: "#0B1230" }}>
+                  Your work extends beyond EVOQ applications.
+                </h2>
+                <p className="mt-6 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
+                  EVOQ AI can work with information and actions made available through your connected systems.
+                </p>
+                <p className="mt-4 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
+                  EVI can use that information to answer questions and prepare work. AI agents can use it to perform
+                  defined tasks across the applications and systems available to them.
+                </p>
 
-            <div className="relative mx-auto mt-14 max-w-[980px]">
-              {/* EVOQ AI layer badge */}
-              <div className="relative z-10 mx-auto mb-[-18px] flex w-fit items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold uppercase tracking-[0.1em] text-white" style={{ background: C.aiGradient, boxShadow: "0 16px 32px -12px rgba(76,71,224,0.5)" }}>
-                <AIMark size={13} />
-                EVOQ AI works across this workspace
+                <a
+                  href="#evoq-ai-at-work"
+                  className="mt-9 inline-flex items-center gap-3 rounded-[14px] px-7 py-4 text-[16px] font-bold text-white no-underline transition-transform hover:-translate-y-0.5"
+                  style={{ background: "#3D2BF0", boxShadow: "0 18px 36px -16px rgba(61,43,240,0.7)" }}
+                >
+                  See how it works
+                  <ArrowIcon size={18} stroke="#fff" />
+                </a>
               </div>
 
-              <div
-                className="relative overflow-hidden rounded-[28px] p-7 pt-12 sm:p-10 sm:pt-14"
-                style={{ border: `1.5px dashed ${C.tint}`, background: "#fff" }}
-              >
-                <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
-                  <div>
-                    <p className="text-[12px] font-extrabold uppercase tracking-[0.1em]" style={{ color: C.primary }}>EVOQ applications</p>
-                    <p className="mt-2 text-[14px] leading-[1.7]" style={{ color: C.body }}>
-                      Work with the information and processes already available across your EVOQ applications.
-                    </p>
-                    <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-                      {WORKSPACE_APPS.map((a) => (
-                        <div key={a.label} className="flex items-center gap-2.5 rounded-[12px] px-3 py-2.5" style={{ background: C.surface, border: `1px solid ${C.border}` }}>
-                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px]" style={{ background: C.aiHighlight }}>
-                            <a.icon size={14} stroke={C.primary} />
-                          </span>
-                          <span className="truncate text-[12.5px] font-bold" style={{ color: C.heading }}>{a.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="rounded-[20px] p-6" style={{ background: C.aiSurface, border: `1px solid ${C.border}` }}>
-                    <p className="text-[12px] font-extrabold uppercase tracking-[0.1em]" style={{ color: C.interactive }}>Connected systems</p>
-                    <p className="mt-2 text-[13.5px] leading-[1.7]" style={{ color: C.body }}>
-                      Bring information and authorized actions from the systems you already use into the work you do.
-                    </p>
-                    <div className="mt-5 flex flex-col gap-2">
-                      {CONNECTED_SYSTEMS.map((s) => (
-                        <div key={s} className="flex items-center gap-2.5 rounded-[10px] bg-white px-3 py-2" style={{ border: `1px solid ${C.border}` }}>
-                          <span className="h-[7px] w-[7px] shrink-0 rounded-full" style={{ background: C.interactive }} />
-                          <span className="truncate text-[12.5px] font-semibold" style={{ color: C.heading }}>{s}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+              <div className="min-w-0 xl:pt-8">
+                <ScaleFit width={966}><CrossSystemDiagram /></ScaleFit>
               </div>
             </div>
           </div>
@@ -1131,15 +1167,15 @@ export function EvoqAIPage() {
       {/* ===== 4. ASK, ASSIGN, ACT ===== */}
       <section id="ask-assign-act" className="relative" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FFFFFF 0%, #FAFAFF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
-          <div className="mx-auto max-w-[1300px] py-20 lg:py-24">
+          <div ref={askRef} onMouseEnter={() => setAskHold(true)} onMouseLeave={() => setAskHold(false)} className="mx-auto max-w-[1300px] py-20 lg:py-24">
             <div className="mx-auto max-w-[1100px] text-center">
-              <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>Ask, assign, act</p>
+              <motion.p {...reveal(0, 14)} className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>How you work with AI</motion.p>
               <h2 className="mt-4 font-[var(--font-display)] text-[26px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[32px] lg:text-[38px] lg:whitespace-nowrap" style={{ color: C.heading }}>
-                There is more than one way to work with EVOQ AI.
+                <WordReveal text="There is more than one way to work with EVOQ AI." />
               </h2>
             </div>
 
-            <div className="mx-auto mt-10 grid max-w-[1060px] grid-cols-2 gap-2 rounded-[28px] p-2 lg:flex lg:items-center lg:justify-between lg:gap-1 lg:rounded-full lg:p-1.5" style={{ background: "#fff", border: `1px solid ${C.border}`, boxShadow: "0 12px 30px -22px rgba(40,40,140,0.35)" }}>
+            <motion.div initial={{ opacity: 0, y: 24, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.7, delay: 0.25, ease: EASE }} className="mx-auto mt-10 grid max-w-[1060px] grid-cols-2 gap-2 rounded-[28px] p-2 lg:flex lg:items-center lg:justify-between lg:gap-1 lg:rounded-full lg:p-1.5" style={{ background: "#fff", border: `1px solid ${C.border}`, boxShadow: "0 12px 30px -22px rgba(40,40,140,0.35)" }}>
               {INTERACTION_MODES.map((m, i) => {
                 const on = i === activeMode;
                 return (
@@ -1148,25 +1184,36 @@ export function EvoqAIPage() {
                     type="button"
                     aria-pressed={on}
                     onClick={() => setActiveMode(i)}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-full px-3 py-3 text-[13px] font-bold transition-all lg:px-4 lg:text-[13.5px]"
-                    style={on ? { background: MODE_STYLE[i].accent, color: "#fff", boxShadow: `0 10px 22px -12px ${MODE_STYLE[i].accent}` } : { color: C.heading, background: "transparent" }}
+                    className="relative flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-full px-3 py-3 text-[13px] font-bold lg:px-4 lg:text-[13.5px]"
+                    style={{ color: on ? "#fff" : C.heading }}
                   >
-                    <m.icon size={16} stroke={on ? "#fff" : MODE_STYLE[i].accent} />
-                    <span className="text-center leading-[1.2]">{m.tab}</span>
+                    {on && (
+                      <motion.span
+                        layoutId="mode-pill"
+                        className="absolute inset-0 rounded-full"
+                        style={{ background: MODE_STYLE[i].accent, boxShadow: `0 10px 22px -12px ${MODE_STYLE[i].accent}` }}
+                        transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                      />
+                    )}
+                    {on && <TabProgress ms={ASK_MS} running={askRun} k={`ask-${i}`} className="left-5 right-5" />}
+                    <span className="relative z-10 flex items-center gap-2">
+                      <m.icon size={16} stroke={on ? "#fff" : MODE_STYLE[i].accent} />
+                      <span className="text-center leading-[1.2]">{m.tab}</span>
+                    </span>
                   </button>
                 );
               })}
-            </div>
+            </motion.div>
 
-            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <motion.div variants={group(0.16, 0.2)} initial="hidden" whileInView="show" viewport={VP} className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {INTERACTION_MODES.map((m, i) => {
                 const st = MODE_STYLE[i];
                 const on = i === activeMode;
                 return (
+                  <motion.div key={m.tab} variants={cardV} className="flex">
                   <div
-                    key={m.tab}
                     onClick={() => setActiveMode(i)}
-                    className="flex cursor-pointer flex-col overflow-hidden rounded-[26px] transition-all duration-300"
+                    className="flex w-full cursor-pointer flex-col overflow-hidden rounded-[26px] transition-all duration-300"
                     style={{
                       background: st.bg,
                       border: `1.5px solid ${on ? st.accent : st.line}`,
@@ -1175,7 +1222,7 @@ export function EvoqAIPage() {
                     }}
                   >
                     {/* 1 — what you do (tinted) */}
-                    <div className="px-5 pb-5 pt-6">
+                    <motion.div variants={inner} className="px-5 pb-5 pt-6">
                       <div className="flex items-center gap-3">
                         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white" style={{ boxShadow: `0 8px 18px -10px ${st.accent}` }}>
                           <m.icon size={21} stroke={st.accent} />
@@ -1188,23 +1235,23 @@ export function EvoqAIPage() {
                       <div className="mt-4 min-h-[64px]">
                         {m.quote && (
                           <div className="rounded-[14px] bg-white px-3.5 py-3 text-[13px] italic leading-[1.5]" style={{ color: C.heading, borderLeft: `3px solid ${st.accent}` }}>
-                            &ldquo;{m.quote}&rdquo;
+                            &ldquo;<Typewriter text={m.quote} delay={0.9 + i * 0.25} speed={22} />&rdquo;
                           </div>
                         )}
                       </div>
                       <p className="mt-3 min-h-[63px] text-[13px] leading-[1.6]" style={{ color: C.body }}>{m.desc}</p>
-                    </div>
+                    </motion.div>
 
                     {/* 2 — what you see (white panel) */}
-                    <div className="flex flex-1 flex-col rounded-t-[22px] bg-white px-4 pb-4 pt-3" style={{ boxShadow: "0 -10px 30px -22px rgba(20,20,100,0.35)" }}>
+                    <motion.div variants={inner} className="flex flex-1 flex-col rounded-t-[22px] bg-white px-4 pb-4 pt-3" style={{ boxShadow: "0 -10px 30px -22px rgba(20,20,100,0.35)" }}>
                       <p className="mb-2.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em]" style={{ color: st.accent }}>In EVOQ</p>
                       <div className="flex flex-1 flex-col">
                         <ModeMock index={i} />
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* 3 — what you get (tinted) */}
-                    <div className="flex items-center gap-3 px-5 py-4" style={{ background: st.bg }}>
+                    <motion.div variants={inner} className="flex items-center gap-3 px-5 py-4" style={{ background: st.bg }}>
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ background: st.accent }}>
                         <m.outcome.icon size={18} stroke="#fff" />
                       </span>
@@ -1214,11 +1261,12 @@ export function EvoqAIPage() {
                           {m.outcome.label[0]} <span className="text-[13px] font-semibold" style={{ color: C.body }}>{m.outcome.label[1]}</span>
                         </span>
                       </p>
-                    </div>
+                    </motion.div>
                   </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -1227,7 +1275,7 @@ export function EvoqAIPage() {
       <section id="evoq-ai-at-work" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FAFAFF 0%, #F1F0FF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div className="mx-auto max-w-[1300px] py-16 lg:py-24">
-            <div className="mx-auto max-w-[820px] text-center">
+            <motion.div {...reveal()} className="mx-auto max-w-[820px] text-center">
               <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>See EVOQ AI at work</p>
               <h2 className="mt-4 font-[var(--font-display)] text-[28px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[38px]" style={{ color: C.heading }}>
                 What needs attention?{" "}
@@ -1238,9 +1286,9 @@ export function EvoqAIPage() {
               <p className="mx-auto mt-5 max-w-[680px] text-[16px] leading-[1.7]" style={{ color: C.body }}>
                 EVOQ AI identifies what needs attention, understands the relevant information, and helps move the work forward. Select a signal or a tab to see how.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="mx-auto mt-12 max-w-[1120px] overflow-hidden rounded-[26px] bg-white" style={{ border: `1px solid ${C.border}`, boxShadow: "0 30px 80px -30px rgba(0,0,153,0.25)" }}>
+            <motion.div ref={workRef} onMouseEnter={() => setWorkHold(true)} onMouseLeave={() => setWorkHold(false)} initial={{ opacity: 0, y: 50, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.8, delay: 0.1, ease: EASE }} className="mx-auto mt-12 max-w-[1120px] overflow-hidden rounded-[26px] bg-white" style={{ border: `1px solid ${C.border}`, boxShadow: "0 30px 80px -30px rgba(0,0,153,0.25)" }}>
               <div className="flex items-center gap-2 px-5 py-3.5" style={{ borderBottom: `1px solid ${C.border}`, background: "#FBFBFF" }}>
                 <i className="h-[10px] w-[10px] rounded-full" style={{ background: "#FF5F57" }} />
                 <i className="h-[10px] w-[10px] rounded-full" style={{ background: "#FEBC2E" }} />
@@ -1269,15 +1317,22 @@ export function EvoqAIPage() {
                         key={s.tab}
                         type="button"
                         onClick={() => setActiveScenario(i)}
-                        className="group flex w-full items-center gap-3.5 rounded-[13px] px-3.5 py-3.5 text-left transition-all"
-                        style={{ background: on ? "#fff" : "transparent", border: `1px solid ${on ? C.tint : "transparent"}`, boxShadow: on ? "0 10px 26px -12px rgba(0,0,153,0.25)" : "none" }}
+                        className="group relative flex w-full items-center gap-3.5 rounded-[13px] px-3.5 py-3.5 text-left"
                       >
-                        <i className="h-[9px] w-[9px] shrink-0 rounded-full" style={{ background: s.dot }} />
-                        <span className="min-w-0 flex-1">
+                        {on && (
+                          <motion.span
+                            layoutId="sig-pill"
+                            className="absolute inset-0 rounded-[13px] bg-white"
+                            style={{ border: `1px solid ${C.tint}`, boxShadow: "0 10px 26px -12px rgba(0,0,153,0.25)" }}
+                            transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                          />
+                        )}
+                        <i className="relative h-[9px] w-[9px] shrink-0 rounded-full" style={{ background: s.dot }} />
+                        <span className="relative min-w-0 flex-1">
                           <span className="block text-[13.5px] font-bold" style={{ color: "#0B1230" }}>{s.signalTitle}</span>
                           <span className="mt-0.5 block text-[11.5px]" style={{ color: C.muted }}>{s.source}</span>
                         </span>
-                        <span className={`shrink-0 text-[10px] font-extrabold transition-opacity ${on ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} style={{ color: C.primary }}>View →</span>
+                        <span className={`relative shrink-0 text-[10px] font-extrabold transition-opacity ${on ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} style={{ color: C.primary }}>View →</span>
                       </button>
                     );
                   })}
@@ -1293,16 +1348,26 @@ export function EvoqAIPage() {
                           key={s.tab}
                           type="button"
                           onClick={() => setActiveScenario(i)}
-                          className="rounded-full px-4 py-2 text-[12px] font-extrabold transition-all"
-                          style={on ? { background: C.aiGradient, color: "#fff", boxShadow: "0 8px 20px -8px rgba(92,92,255,0.6)" } : { background: "#FBFBFF", color: C.muted, border: `1px solid ${C.border}` }}
+                          className="relative overflow-hidden rounded-full px-4 py-2 text-[12px] font-extrabold"
+                          style={on ? { color: "#fff" } : { background: "#FBFBFF", color: C.muted, border: `1px solid ${C.border}` }}
                         >
-                          {s.tab}
+                          {on && (
+                            <motion.span
+                              layoutId="tab-pill"
+                              className="absolute inset-0 rounded-full"
+                              style={{ background: C.aiGradient, boxShadow: "0 8px 20px -8px rgba(92,92,255,0.6)" }}
+                              transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                            />
+                          )}
+                          {on && <TabProgress ms={WORK_MS} running={workRun} k={`work-${i}`} className="left-4 right-4" />}
+                          <span className="relative z-10">{s.tab}</span>
                         </button>
                       );
                     })}
                   </div>
 
-                  <div key={activeScenario} className="evoq-fade flex flex-1 flex-col">
+                  <AnimatePresence mode="wait">
+                    <motion.div variants={group(0.18, 0.05)} initial="hidden" animate="show" exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }} key={activeScenario} className="evoq-fade flex flex-1 flex-col">
                     {[
                       { k: "Signal", t: scenario.signalTitle, p: scenario.signalDesc, icon: SparkleIcon, kind: "normal" },
                       { k: "EVI", t: "Understands the situation", p: scenario.eviDesc, icon: SparkleIcon, kind: "evi" },
@@ -1313,7 +1378,7 @@ export function EvoqAIPage() {
                       const res = st.kind === "result";
                       const fg = res ? "#0E9B6E" : C.primary;
                       return (
-                        <div key={st.k} className="relative flex gap-4" style={{ paddingBottom: idx === arr.length - 1 ? 0 : 22 }}>
+                        <motion.div variants={stepV} key={st.k} className="relative flex gap-4" style={{ paddingBottom: idx === arr.length - 1 ? 0 : 22 }}>
                           {idx < arr.length - 1 && <span className="absolute bottom-[2px] left-[17px] top-[38px] w-[1.5px]" style={{ background: `linear-gradient(180deg, ${C.tint}, ${C.soft})` }} />}
                           <span
                             className="z-[1] flex h-[35px] w-[35px] shrink-0 items-center justify-center rounded-[11px]"
@@ -1334,13 +1399,14 @@ export function EvoqAIPage() {
                             <p className="text-[14.5px] font-extrabold" style={{ color: res ? C.deep : "#0B1230" }}>{st.t}</p>
                             <p className="mt-1 max-w-[520px] text-[13px] leading-[1.6]" style={{ color: C.muted }}>{st.p}</p>
                           </div>
-                        </div>
+                        </motion.div>
                       );
                     })}
-                  </div>
+                  </motion.div>
+                    </AnimatePresence>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
         <style jsx global>{`
@@ -1356,14 +1422,15 @@ export function EvoqAIPage() {
       {/* ===== 6. AI FOR EVERY INDUSTRY ===== */}
       <section id="industries" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FAFAFF 0%, #F4F4FF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
-          <div className="mx-auto max-w-[1240px] py-16 lg:py-24">
+          <div ref={indRef} onMouseEnter={() => setIndHold(true)} onMouseLeave={() => setIndHold(false)} className="mx-auto max-w-[1240px] py-16 lg:py-24">
             <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
-              <div key={industry.name} className="evoq-fade">
-                <p className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color: C.interactive }}>AI for every industry</p>
-                <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.12] tracking-[-0.02em] sm:text-[46px]" style={{ color: "#0B1230" }}>
+              <AnimatePresence mode="wait">
+              <motion.div variants={group(0.1)} initial="hidden" animate="show" exit={{ opacity: 0, x: -20, transition: { duration: 0.18 } }} key={industry.name} className="evoq-fade">
+                <motion.p variants={rise} className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color: C.interactive }}>AI for every industry</motion.p>
+                <motion.h2 variants={rise} className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.12] tracking-[-0.02em] sm:text-[46px]" style={{ color: "#0B1230" }}>
                   {industry.title}
-                </h2>
-                <p className="mt-6 max-w-[520px] text-[17px] leading-[1.7]" style={{ color: C.body }}>{industry.desc}</p>
+                </motion.h2>
+                <motion.p variants={rise} className="mt-6 max-w-[520px] text-[17px] leading-[1.7]" style={{ color: C.body }}>{industry.desc}</motion.p>
                 <Link
                   href={industry.href}
                   className="mt-8 inline-flex items-center gap-3 rounded-[14px] px-7 py-4 text-[16px] font-bold text-white no-underline transition-transform hover:-translate-y-0.5"
@@ -1372,11 +1439,12 @@ export function EvoqAIPage() {
                   {industry.cta}
                   <ArrowIcon size={18} stroke="#fff" />
                 </Link>
-              </div>
+              </motion.div>
+              </AnimatePresence>
               <IndustryStage ind={industry} />
             </div>
 
-            <div className="mt-10 flex items-center gap-4">
+            <motion.div {...reveal(0.1, 20)} className="mt-10 flex items-center gap-4">
               <div className="no-scrollbar grid flex-1 grid-cols-2 gap-1 rounded-[24px] bg-white p-2 sm:flex sm:items-stretch sm:overflow-x-auto sm:rounded-[28px]" style={{ boxShadow: "0 20px 50px -30px rgba(40,40,140,0.35)", border: "1px solid #EEF0F8" }}>
                 {INDUSTRIES.map((ind, i) => {
                   const on = i === activeIndustry;
@@ -1386,14 +1454,14 @@ export function EvoqAIPage() {
                       type="button"
                       onClick={() => setActiveIndustry(i)}
                       aria-pressed={on}
-                      className={`relative flex items-center gap-2.5 rounded-[16px] px-3 py-3 text-left sm:shrink-0 sm:gap-3 sm:rounded-none sm:px-5 sm:py-4 ${i > 0 ? "sm:border-l sm:border-[#EEF0F8]" : ""}`}
+                      className={`relative flex items-center gap-2.5 rounded-[16px] px-3 py-3 text-left sm:shrink-0 sm:gap-3 sm:rounded-none sm:px-5 sm:py-4 lg:min-w-0 lg:flex-1 lg:shrink lg:gap-2.5 lg:px-3 ${i > 0 ? "sm:border-l sm:border-[#EEF0F8]" : ""}`}
                       style={on ? { background: "#F5F5FF" } : undefined}
                     >
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full sm:h-12 sm:w-12" style={{ background: ind.bg }}>
                         <ind.icon size={20} stroke={ind.fg} />
                       </span>
-                      <span className="text-[13px] font-extrabold leading-[1.25] sm:whitespace-nowrap sm:text-[15px]" style={{ color: on ? "#0B1230" : C.heading }}>{ind.tabLabel}</span>
-                      <span className="absolute bottom-0 left-3 right-3 h-[3px] sm:left-5 sm:right-5 rounded-full transition-opacity" style={{ background: C.interactive, opacity: on ? 1 : 0 }} />
+                      <span className="text-[13px] font-extrabold leading-[1.25] sm:whitespace-nowrap sm:text-[15px] lg:whitespace-normal lg:text-[14px]" style={{ color: on ? "#0B1230" : C.heading }}>{ind.tabLabel}</span>
+                      {on && <TabProgress ms={IND_MS} running={indRun} k={`ind-${i}`} className="left-3 right-3 sm:left-5 sm:right-5 lg:left-3 lg:right-3" color={C.interactive} />}
                     </button>
                   );
                 })}
@@ -1406,9 +1474,9 @@ export function EvoqAIPage() {
                   <ArrowIcon size={20} stroke="#0B1230" />
                 </button>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="mt-8 grid items-center gap-6 rounded-[24px] bg-white/70 p-6 lg:grid-cols-[1fr_auto] lg:gap-10 lg:px-8" style={{ border: "1px solid #E9E9FB" }}>
+            <motion.div {...reveal(0, 30)} className="mt-8 grid items-center gap-6 rounded-[24px] bg-white/70 p-6 lg:grid-cols-[1fr_auto] lg:gap-10 lg:px-8" style={{ border: "1px solid #E9E9FB" }}>
               <div>
                 <p className="text-[18px] font-extrabold leading-[1.4] sm:text-[20px]" style={{ color: "#0B1230" }}>
                   AI works differently when the information, processes, and decisions are specific to your industry.
@@ -1428,76 +1496,23 @@ export function EvoqAIPage() {
                     { t: "Identify what needs attention", i: FlagIcon },
                     { t: "Prepare the next action", i: SparkleIcon },
                   ].map((p) => (
-                    <span key={p.t} className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[12.5px] font-bold" style={{ color: "#0B1230", border: "1px solid #E4E4FA", boxShadow: "0 8px 20px -14px rgba(40,40,140,0.4)" }}>
+                    <motion.span initial={{ opacity: 0, y: 10, scale: 0.9 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.45, delay: 0.3 + ["Find information", "Identify what needs attention", "Prepare the next action"].indexOf(p.t) * 0.12, ease: EASE }} key={p.t} className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[12.5px] font-bold" style={{ color: "#0B1230", border: "1px solid #E4E4FA", boxShadow: "0 8px 20px -14px rgba(40,40,140,0.4)" }}>
                       <p.i size={15} stroke={C.interactive} />
                       {p.t}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ===== 7. AI ACROSS THE SYSTEMS YOU USE ===== */}
-      <section id="cross-system" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FBFBFF 0%, #F4F3FF 100%)" }}>
-        <div className="px-5 sm:px-6 lg:px-6">
-          <div className="mx-auto max-w-[1480px] py-16 lg:py-24">
-            <div className="grid gap-12 xl:grid-cols-[460px_1fr] xl:gap-6">
-              <div>
-                <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.interactive }}>AI across the systems you use</p>
-                <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[44px]" style={{ color: "#0B1230" }}>
-                  Your work extends beyond EVOQ applications.
-                </h2>
-                <p className="mt-6 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
-                  EVOQ AI can work with information and actions made available through your connected systems.
-                </p>
-                <p className="mt-4 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
-                  EVI can use that information to answer questions and prepare work. AI agents can use it to perform
-                  defined tasks across the applications and systems available to them.
-                </p>
-
-                <div className="mt-8 flex flex-col gap-5">
-                  <div className="rounded-[22px] p-6" style={SOFT_CARD}>
-                    <p className="text-[17px] font-extrabold" style={{ color: "#0B1230" }}>EVOQ applications</p>
-                    <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3">
-                      {EVOQ_APP_LOGOS.map((a) => (
-                        <div key={a.label} className="flex h-12 items-center rounded-[12px] px-3" style={{ background: "#FAFAFF", border: "1px solid #EEF0F8" }}>
-                          <Image src={a.src} alt={a.label} width={a.w} height={a.h} className="h-8 w-auto max-w-full object-contain object-left" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="rounded-[22px] p-6" style={SOFT_CARD}>
-                    <p className="text-[17px] font-extrabold" style={{ color: "#0B1230" }}>Connected systems</p>
-                    <div className="mt-5 grid grid-cols-3 gap-4 sm:grid-cols-5">
-                      {SYSTEM_TILES.map((a) => (
-                        <div key={a.label} className="flex flex-col items-center gap-2 text-center">
-                          <span className="flex h-14 w-14 items-center justify-center rounded-[16px]" style={{ background: a.bg }}>
-                            <a.icon size={26} stroke={a.fg} />
-                          </span>
-                          <span className="text-[12.5px] font-semibold leading-[1.3]" style={{ color: "#0B1230" }}>{a.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="min-w-0 xl:pt-16">
-                <ScaleFit width={916}><CrossSystemDiagram /></ScaleFit>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 8. PUT EVOQ AI TO WORK ===== */}
+      {/* ===== 7. PUT EVOQ AI TO WORK ===== */}
       <section id="get-started" className="relative" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #F4F3FF 0%, #FBFBFF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div className="mx-auto max-w-[1300px] py-12 lg:py-16">
-            <div
+            <motion.div initial={{ opacity: 0, y: 50, scale: 0.96 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.85, ease: EASE }}
               className="relative overflow-hidden rounded-[32px] px-6 py-16 text-center sm:px-14 sm:py-20"
               style={{ background: "linear-gradient(115deg, #2417C4 0%, #3A1FDA 42%, #5A1FEA 75%, #8A26F2 100%)", boxShadow: "0 30px 80px -30px rgba(60,30,220,0.5)" }}
             >
@@ -1508,14 +1523,14 @@ export function EvoqAIPage() {
                 <path d="M740 60 C 800 20, 900 10, 1000 0 L1000 190 C 930 150, 790 130, 740 60 Z" fill="#5E2BFF" opacity="0.45" />
               </svg>
               <div className="relative">
-                <p className="text-[12.5px] font-extrabold uppercase tracking-[0.2em] text-white/90">Get started</p>
-                <h2 className="mt-5 font-[var(--font-display)] text-[32px] font-extrabold leading-[1.15] tracking-[-0.02em] text-white sm:text-[46px]">
+                <motion.p {...reveal(0.2, 16)} className="text-[12.5px] font-extrabold uppercase tracking-[0.2em] text-white/90">Get started</motion.p>
+                <motion.h2 {...reveal(0.3, 24)} className="mt-5 font-[var(--font-display)] text-[32px] font-extrabold leading-[1.15] tracking-[-0.02em] text-white sm:text-[46px]">
                   Put EVOQ AI to work
-                </h2>
-                <p className="mx-auto mt-4 max-w-[640px] text-[16px] leading-[1.7] text-white/90 sm:text-[18px]">
+                </motion.h2>
+                <motion.p {...reveal(0.42, 24)} className="mx-auto mt-4 max-w-[640px] text-[16px] leading-[1.7] text-white/90 sm:text-[18px]">
                   Bring AI into the applications and systems where your work already happens.
-                </p>
-                <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+                </motion.p>
+                <motion.div {...reveal(0.55, 24)} className="mt-9 flex flex-wrap items-center justify-center gap-4">
                   <button
                     type="button"
                     onClick={() => setShowGetStarted(true)}
@@ -1530,14 +1545,15 @@ export function EvoqAIPage() {
                   >
                     Talk to an expert
                   </Link>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       <GetStartedModal isOpen={showGetStarted} onClose={() => setShowGetStarted(false)} />
     </div>
+    </MotionConfig>
   );
 }

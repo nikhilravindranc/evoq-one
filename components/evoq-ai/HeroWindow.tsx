@@ -31,27 +31,12 @@ const SearchIcon = (p: IP) => (<Svg {...p}><circle cx="11" cy="11" r="7" /><path
 const DocIcon = (p: IP) => (<Svg {...p}><path d="M6 2h9l5 5v15H6z" /><path d="M15 2v5h5M9 13h6M9 17h6" /></Svg>);
 const PlayIcon = (p: IP) => (<Svg {...p}><path d="M7 4.5v15l13-7.5L7 4.5Z" /></Svg>);
 
-const UsersIcon = (p: IP) => (<Svg {...p}><circle cx="9" cy="8" r="3.2" /><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" /><circle cx="17" cy="9" r="2.5" /><path d="M17.5 14c2.4.2 4 2 4 5" /></Svg>);
-const WrenchIcon = (p: IP) => (<Svg {...p}><path d="M14.7 6.3a4 4 0 0 0-5.4 4.9L3 17.5V21h3.5l6.3-6.3a4 4 0 0 0 4.9-5.4l-2.6 2.6-2.2-2.2z" /></Svg>);
-const RocketIcon = (p: IP) => (
-  <Svg {...p}>
-    <path d="M14.5 3c2 1 4.5 4 3.9 8.4-2 .3-4-.3-5.5-1.8-1.5-1.5-2.1-3.5-1.8-5.5C12.9 3.1 13.7 3 14.5 3z" />
-    <path d="M11 13 5.5 18.5M9.5 15.5 5 17M8.5 14.5 7 10" />
-    <path d="M16.5 12.5c1 2 .7 4.7-.5 6.5-1.8-.3-3.5-1.3-4.5-2.8" />
-  </Svg>
-);
-const DeskIcon = (p: IP) => (<Svg {...p}><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><rect x="3" y="13" width="4" height="6" rx="2" /><rect x="17" y="13" width="4" height="6" rx="2" /><path d="M19 19c0 1.5-2 2.5-5 2.5" /></Svg>);
-const SyncNavIcon = (p: IP) => (<Svg {...p}><circle cx="6" cy="18" r="2.6" /><circle cx="18" cy="6" r="2.6" /><path d="M8 16l8-8" /></Svg>);
-
 const HERO_SIDEBAR_NAV = [
-  { icon: HomeIcon, label: "Home", active: true },
-  { icon: UsersIcon, label: "CRM" },
-  { icon: WrenchIcon, label: "ServiceOps" },
-  { icon: RocketIcon, label: "Projects" },
-  { icon: DeskIcon, label: "Desk" },
-  { icon: SyncNavIcon, label: "Sync" },
-  { icon: ChartIcon, label: "Reports" },
-  { icon: GearIcon, label: "Settings" },
+  { icon: HomeIcon, active: true },
+  { icon: LayersIcon },
+  { icon: GridIcon },
+  { icon: ChartIcon },
+  { icon: GearIcon },
 ];
 
 const HERO_SUGGESTIONS = [
@@ -65,26 +50,23 @@ export function HeroWindow() {
   return (
     <div className="relative z-10 flex items-stretch">
       <aside
-        className="hidden w-[190px] shrink-0 flex-col rounded-[22px] bg-white px-3 pb-6 pt-6 sm:flex"
-        style={{ margin: "-18px 0", boxShadow: "0 24px 48px -16px rgba(10,0,80,0.45)" }}
+        className="hidden w-[100px] shrink-0 flex-col items-center gap-3 rounded-[20px] bg-white py-6 sm:flex"
+        style={{ margin: "-18px -30px -18px 0", position: "relative", zIndex: 2, boxShadow: "0 24px 48px -16px rgba(10,0,80,0.45)" }}
       >
-        <Image src="/black-logo.png" alt="EVOQ" width={1127} height={230} priority className="mb-5 ml-2 h-[30px] w-auto self-start" />
-        <nav className="flex flex-col gap-1">
-          {HERO_SIDEBAR_NAV.map((n) => (
-            <span
-              key={n.label}
-              className="flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[14px]"
-              style={n.active ? { background: C.aiHighlight, color: C.interactive, fontWeight: 700 } : { color: "#1F2430", fontWeight: 500 }}
-            >
-              <n.icon size={19} stroke={n.active ? C.interactive : "#1F2430"} />
-              {n.label}
-            </span>
-          ))}
-        </nav>
+        <Image src="/symbol-color.png" alt="EVOQ" width={225} height={230} priority className="mb-3 h-[38px] w-auto" />
+        {HERO_SIDEBAR_NAV.map((n, i) => (
+          <span
+            key={i}
+            className="flex h-12 w-12 items-center justify-center rounded-[12px]"
+            style={n.active ? { background: C.aiHighlight } : {}}
+          >
+            <n.icon size={22} stroke={n.active ? C.interactive : "#1F2430"} />
+          </span>
+        ))}
       </aside>
 
       <div
-        className="relative flex min-h-[330px] flex-1 flex-col items-center justify-center rounded-[22px] bg-white px-5 pb-14 pt-24 sm:px-8 sm:py-16"
+        className="relative flex min-h-[330px] flex-1 flex-col items-center justify-center rounded-[22px] bg-white px-5 pb-14 pt-24 sm:py-16 sm:pl-[60px] sm:pr-8"
         style={{ boxShadow: "0 30px 70px -20px rgba(10,0,80,0.45)" }}
       >
         <Image
