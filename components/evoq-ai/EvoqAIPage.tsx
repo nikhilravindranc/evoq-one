@@ -1556,7 +1556,7 @@ export function EvoqAIPage() {
               <div className="relative">
                 <motion.p {...reveal(0.2, 16)} className="text-[12.5px] font-extrabold uppercase tracking-[0.2em] text-white/90">Get started</motion.p>
                 <motion.h2 {...reveal(0.3, 24)} className="mt-5 font-[var(--font-display)] text-[32px] font-extrabold leading-[1.15] tracking-[-0.02em] text-white sm:text-[46px]">
-                  Put EVOQ AI to work
+                  Ready to see AI at work?
                 </motion.h2>
                 <motion.p {...reveal(0.42, 24)} className="mx-auto mt-4 max-w-[640px] text-[16px] leading-[1.7] text-white/90 sm:text-[18px]">
                   Bring AI into the applications and systems where your work already happens.
