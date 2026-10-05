@@ -31,6 +31,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${figtree.variable} ${dmSans.variable} h-full antialiased`}
+      suppressHydrationWarning /* the Billing pages add a "js" class to <html> before hydration */
     >
       <body className="min-h-full bg-white font-[var(--font-sans)]">
         <RegionProvider>{children}</RegionProvider>

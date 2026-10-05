@@ -125,7 +125,7 @@ const PRODUCT_GROUPS: {
   {
     title: "Finance",
     items: [
-      { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]" },
+      { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]", href: "/billing" },
       { name: "Inventory", sub: "Stock & supply tracking", icon: BoxGlyph, tile: "bg-[#C2477F]" },
     ],
   },
