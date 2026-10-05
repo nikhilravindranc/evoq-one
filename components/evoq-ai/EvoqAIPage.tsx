@@ -1023,7 +1023,7 @@ export function EvoqAIPage() {
               <motion.div {...reveal()} className="relative text-center">
                 <Eyebrow>Meet EVOQ AI</Eyebrow>
                 <h2 className="mx-auto mt-5 max-w-[640px] font-[var(--font-display)] text-[26px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[34px]" style={{ color: C.heading }}>
-                  EVI helps you work with AI. Agents perform the work.
+                  EVI guides the work.<br />Agents perform the work.
                 </h2>
               </motion.div>
 
@@ -1171,7 +1171,7 @@ export function EvoqAIPage() {
             <div className="mx-auto max-w-[1100px] text-center">
               <motion.p {...reveal(0, 14)} className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>How you work with AI</motion.p>
               <h2 className="mt-4 font-[var(--font-display)] text-[26px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[32px] lg:text-[38px] lg:whitespace-nowrap" style={{ color: C.heading }}>
-                <WordReveal text="There is more than one way to work with EVOQ AI." />
+                <WordReveal text="Four ways to put EVOQ AI to work." />
               </h2>
             </div>
 
@@ -1278,9 +1278,9 @@ export function EvoqAIPage() {
             <motion.div {...reveal()} className="mx-auto max-w-[820px] text-center">
               <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>See EVOQ AI at work</p>
               <h2 className="mt-4 font-[var(--font-display)] text-[28px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[38px]" style={{ color: C.heading }}>
-                What needs attention?{" "}
+                A signal comes in.{" "}
                 <span style={{ backgroundImage: "linear-gradient(90deg, #3333CC, #5C5CFF 60%, #8484FF)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
-                  Watch EVI and an agent handle it.
+                  EVI and an agent take it from there.
                 </span>
               </h2>
               <p className="mx-auto mt-5 max-w-[680px] text-[16px] leading-[1.7]" style={{ color: C.body }}>
