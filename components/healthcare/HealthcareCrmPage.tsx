@@ -11,6 +11,7 @@ import { HealthcareCrmConnected } from "./HealthcareCrmConnected";
 import { HealthcareCrmSecurity } from "./HealthcareCrmSecurity";
 import { HealthcareCrmCTA } from "./HealthcareCrmCTA";
 import { HealthcareCrmStackedScroll } from "./HealthcareCrmStackedScroll";
+import { HealthcareCrmAI } from "./HealthcareAISections";
 
 export function HealthcareCrmPage() {
   return (
@@ -42,6 +43,7 @@ export function HealthcareCrmPage() {
         ]}
       />
 
+      <HealthcareCrmAI />
       <HealthcareCrmOrganizations />
       <HealthcareCrmSecurity />
       <HealthcareCrmCTA />

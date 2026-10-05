@@ -10,6 +10,7 @@ import {
   HealthcarePmMarket,
   HealthcarePmCTA,
 } from "./HealthcarePmSections";
+import { HealthcarePmAI } from "./HealthcareAISections";
 
 export function HealthcarePmPage() {
   return (
@@ -28,6 +29,7 @@ export function HealthcarePmPage() {
       <HealthcarePmHero />
       <HealthcarePmWorkflow />
       <HealthcarePmFeatures />
+      <HealthcarePmAI />
       <HealthcarePmPractices />
       <HealthcarePmGrow />
       <HealthcarePmMarket />

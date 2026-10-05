@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { HealthcareLogo } from "./HealthcareLogo";
 
 type IP = { size?: number; stroke?: string; className?: string };
 
@@ -8,12 +9,6 @@ const Svg = ({ size = 24, stroke = "currentColor", className, children }: IP & {
   </svg>
 );
 
-const SparkleIcon = (p: IP) => (
-  <Svg {...p}>
-    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
-    <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
-  </Svg>
-);
 const MessageIcon = (p: IP) => (
   <Svg {...p}>
     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
@@ -78,12 +73,6 @@ const BarChartIcon = (p: IP) => (
     <path d="M4 20V10M12 20V4M20 20v-7" />
   </Svg>
 );
-const ListIcon = (p: IP) => (
-  <Svg {...p}>
-    <path d="M9 6h11M9 12h11M9 18h11" />
-    <path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" />
-  </Svg>
-);
 const CheckCircleIcon = (p: IP) => (
   <Svg {...p}>
     <circle cx="12" cy="12" r="9" />
@@ -119,11 +108,6 @@ const ACTIVITY = [
   { icon: MessageIcon, tile: "bg-[#E6F0FD]", stroke: "#2064B6", title: "Enquiry received", desc: "Interested in skin treatment", date: "Sep 10, 2025" },
 ];
 
-const SUGGESTIONS = [
-  { icon: CalendarIcon, label: "Suggest next appointment date" },
-  { icon: ListIcon, label: "Summarize recent activity" },
-];
-
 export function HealthcareAISpotlight() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-white via-[#F1FBF9] to-[#E1F6F3]">
@@ -139,19 +123,19 @@ export function HealthcareAISpotlight() {
                 AI across the patient journey
               </p>
               <h2 className="mt-5 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.12] tracking-[-0.02em] text-[#102A43]">
-                Give your healthcare team AI assistance at the moments that matter.
+                EVI and AI agents, working across the patient journey.
               </h2>
               <p className="mt-6 text-[16px] font-semibold leading-[1.6] text-[#31465A]">
-                Review patient activity. Prepare the next action. Reduce routine work.
+                Find what needs attention. Prepare the next step. Reduce routine work.
               </p>
               <p className="mt-4 text-[15px] leading-[1.75] text-[#31465A]/70">
-                AI can help teams bring together enquiry history, appointments, visits, treatment information, and
-                engagement activity to prepare responses, identify patients requiring attention, and support
-                follow-up.
+                EVI, the EVOQ AI assistant, helps your team find patient information across enquiries, appointments,
+                visits, and treatments, and prepares the next step. AI agents handle defined tasks such as follow-ups
+                and reminders, then return the result for your review.
               </p>
 
               <a
-                href="#"
+                href="/evoq-ai"
                 className="mt-9 inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#14B8A6] via-[#3B82F6] to-[#8B5CF6] px-7 py-3.5 text-[15px] font-bold text-white shadow-[0_20px_40px_-16px_rgba(59,130,246,0.5)] transition-transform hover:-translate-y-0.5"
               >
                 Explore EVOQ AI
@@ -164,18 +148,15 @@ export function HealthcareAISpotlight() {
             <div className="relative h-[600px] w-[980px] origin-top-left" style={{ transform: "scale(0.735)" }}>
               {/* floating sparkle bubble */}
               <span className="absolute right-[2%] top-0 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-[0_18px_40px_-14px_rgba(16,42,67,0.4)] ring-1 ring-[#31465A]/8">
-                <SparkleIcon size={22} stroke="#2064B6" />
+                <Image src="/ai/ai-logo-icon.png" alt="EVOQ AI" width={30} height={30} className="rounded-[9px]" />
               </span>
 
               {/* app window */}
               <div className="absolute left-0 top-[6%] flex h-[490px] w-[860px] overflow-hidden rounded-[22px] bg-white shadow-[0_40px_90px_-30px_rgba(16,42,67,0.35)] ring-1 ring-[#31465A]/8">
                 {/* sidebar */}
                 <div className="hidden w-[168px] shrink-0 flex-col border-r border-[#31465A]/8 bg-[#FAFBFC] p-4 sm:flex">
-                  <div className="flex items-center gap-2 px-1">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#E7F7F5]">
-                      <HeartIcon size={16} stroke="#18B8D1" />
-                    </span>
-                    <span className="text-[14px] font-bold text-[#31465A]">Healthcare</span>
+                  <div className="px-1">
+                    <HealthcareLogo />
                   </div>
                   <nav className="mt-6 flex flex-col gap-0.5">
                     {NAV.map((item) => (
@@ -261,44 +242,56 @@ export function HealthcareAISpotlight() {
                 </div>
               </div>
 
-              {/* EVOQ AI suggested action card, overlapping the window's bottom-right corner */}
-              <div className="absolute bottom-0 right-0 w-[480px] rounded-[24px] bg-gradient-to-r from-[#14B8A6] via-[#3B82F6] to-[#8B5CF6] p-[1.5px] shadow-[0_35px_70px_-24px_rgba(59,130,246,0.5)]">
-                <div className="rounded-[22.5px] bg-white p-6">
+              {/* EVI answer + follow-up agent, overlapping the window's bottom-right corner */}
+              <div className="absolute bottom-0 right-0 w-[480px] rounded-[24px] bg-gradient-to-r from-[#000099] via-[#4747E0] to-[#5C5CFF] p-[1.5px] shadow-[0_35px_70px_-24px_rgba(71,71,224,0.55)]">
+                <div className="rounded-[22.5px] bg-white p-5">
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-2">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#14B8A6] via-[#3B82F6] to-[#8B5CF6] text-white">
-                        <SparkleIcon size={15} stroke="#fff" />
-                      </span>
-                      <span className="text-[15px] font-extrabold text-[#102A43]">EVOQ AI</span>
+                      <Image src="/ai/ai-logo-icon.png" alt="EVOQ AI" width={32} height={32} className="rounded-[10px]" />
+                      <span className="text-[15px] font-extrabold text-[#0C2472]">EVI</span>
                     </span>
-                    <span className="rounded-full bg-[#EEF6FF] px-3 py-1 text-[11px] font-bold text-[#2064B6]">
-                      Suggested action
+                    <span className="rounded-full bg-[#ECECFF] px-3 py-1 text-[11px] font-bold text-[#4747E0]">
+                      AI assistant
                     </span>
                   </div>
-                  <p className="mt-3.5 text-[14px] leading-[1.6] text-[#31465A]/80">
-                    Prepare a follow-up message based on the patient&apos;s enquiry and previous visit.
-                  </p>
-                  <div className="mt-3.5 rounded-[16px] bg-gradient-to-br from-[#EAFBF8] via-[#EEF3FE] to-[#F4F0FD] p-4">
-                    <p className="text-[13px] leading-[1.65] text-[#31465A]/80">
-                      Hi Emily, I hope you&apos;re doing well after your recent skin rejuvenation session. Here are
-                      some personalised aftercare tips, and I&apos;d be happy to schedule your next session if you
-                      have any questions.
-                    </p>
+                  <div className="mt-3 rounded-[14px] bg-[#F5F5FF] p-3.5 text-[13px] leading-[1.6] text-[#0C2472]">
+                    <strong>3 patients</strong> need follow-up this week. Emily Carter completed her first skin
+                    rejuvenation session on Sep 24 and has no next appointment booked.
+                  </div>
+
+                  <div className="mt-3 rounded-[14px] border border-[#E6E6FA] p-3.5">
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-[13px] font-extrabold text-[#0C2472]">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-[9px] bg-[#ECECFF]">
+                          <ClockIcon size={14} stroke="#4747E0" />
+                        </span>
+                        Follow-up agent
+                      </span>
+                      <span className="rounded-full bg-[#FFF4DB] px-2.5 py-1 text-[10.5px] font-bold text-[#B7791F]">
+                        Awaiting approval
+                      </span>
+                    </div>
+                    <div className="mt-3 flex flex-col gap-2 text-[12.5px] text-[#31465A]/80">
+                      <span className="flex items-center gap-2">
+                        <CheckCircleIcon size={15} stroke="#0E9F6E" />
+                        3 patients reviewed
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <CheckCircleIcon size={15} stroke="#0E9F6E" />
+                        2 follow-ups prepared
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <CalendarIcon size={15} stroke="#B7791F" />
+                        1 needs your approval
+                      </span>
+                    </div>
                     <button
                       type="button"
-                      className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-[#1777F0] px-4 py-2 text-[12.5px] font-bold text-white"
+                      className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-[#4747E0] px-4 py-2 text-[12.5px] font-bold text-white"
                     >
-                      Use this message
-                      <FileIcon size={13} stroke="#fff" />
+                      Review follow-ups
+                      <ArrowIcon size={13} stroke="#fff" />
                     </button>
-                  </div>
-                  <div className="mt-3.5 divide-y divide-[#31465A]/8 border-t border-[#31465A]/8">
-                    {SUGGESTIONS.map((s) => (
-                      <div key={s.label} className="flex items-center gap-2.5 py-3">
-                        <s.icon size={15} stroke="#2064B6" />
-                        <p className="text-[13px] font-semibold text-[#31465A]/75">{s.label}</p>
-                      </div>
-                    ))}
                   </div>
                 </div>
               </div>

@@ -822,356 +822,118 @@
 }
 
 /* ============================================================
-   SECTION 2 -- AI Assist (DARK MOMENT)
+   SECTION 2 -- AI Assist (LIGHT MOMENT)
    ============================================================ */
+/* No more boxed panel -- the soft sapphire wash now IS the section
+   background (full-bleed), rather than a rounded card floating on a
+   plain white section. That also removes the overflow:hidden crop that
+   was chopping the live product image's own edges (mascot/agent-card)
+   off wherever they happened to bleed past the box. */
 .s-ai {
-  background: #FFFFFF;
-  /* Top padding was 0 -- the heading started right at the section's own
-     edge, which sits exactly where the platform carousel's green blob
-     above fades out (its background is clipped by that section's own
-     overflow:hidden, not by any gap). With no whitespace buffer between
-     them the two sections read as glued together / overlapping rather
-     than as two distinct sections in sequence. */
+  position: relative;
+  background:
+    radial-gradient(55% 60% at 10% 0%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 55%),
+    radial-gradient(60% 70% at 100% 100%, rgba(132,132,255,0.4) 0%, rgba(132,132,255,0) 60%),
+    linear-gradient(135deg, #EEF4FF 0%, #E6ECFF 32%, #E8E3FF 66%, #ECE2FF 100%);
+  color: var(--charcoal);
   padding: 100px 80px 120px;
+  overflow: hidden;
 }
-.s-ai-head {
-  /* Now lives inside .s-ai-frame (moved from a standalone block above
-     the box), sitting over .grain/.vignette which are also absolutely
-     positioned inset:0 -- needs the same position+z-index treatment as
-     .s-ai-inner below it to actually render on top of them rather than
-     wherever paint order happens to land it. */
-  position: relative; z-index: 2;
-  width: 100%; max-width: 760px; margin: 0 0 40px;
-}
-.s-ai-head .evoq-h2 { margin-top: 16px; }
-
-/* Reverted to the pre-redesign look at the user's request (a previous
-   screenshot showed this version): a single flat-ish purple panel, no
-   separate light bezel ring around it. .s-ai-shell is kept in the JSX
-   but neutralised to a no-op wrapper rather than removing the element,
-   so .s-ai-frame's own sizing/radius carries the whole visual again. */
+/* .s-ai-shell / .s-ai-frame are kept in the JSX as no-op wrappers
+   (used to carry the boxed panel's sizing/radius/background) rather
+   than removing the elements -- .s-ai itself now does that work. */
 .s-ai-shell {
   width: 100%; max-width: 1168px; margin: 0 auto;
 }
 .s-ai-frame {
   position: relative;
   width: 100%;
-  border-radius: 32px;
-  background:
-    linear-gradient(225deg, #8484FF 0%, #5C5CFF 65%, #4747E0 90%, #7C3AED 100%),
-    radial-gradient(60% 50% at 80% 70%, rgba(189,189,255,0.35) 0%, rgba(189,189,255,0) 60%);
-  background-blend-mode: screen, normal;
-  padding: 80px 64px;
-  overflow: hidden;
-  isolation: isolate;
-  color: #fff;
-  box-shadow: 0 40px 80px -34px rgba(0,0,153,0.4);
-}
-.s-ai .grain {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-  opacity: .35;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-.s-ai .vignette {
-  position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(120% 80% at 50% 110%, rgba(0,0,153,0.75) 0%, rgba(0,0,153,0) 55%);
 }
 .s-ai-inner {
   position: relative; z-index: 2;
   width: 100%; margin: 0 auto;
-  /* Two columns, not three -- the mascot no longer occupies its own
-     centre column (see .ai-right below), so copy gets more breathing
-     room and the chat card anchors the right side on its own.
-     Right column got the bigger share (was 0.95fr, narrower than
-     copy) -- the chat card's own content (three chips, three chat
-     bubbles) needs more width to stop wrapping onto extra lines than
-     the copy panel's shorter paragraphs do, and a wider card is
-     shorter, which is what actually closes the gap below the copy
-     panel.
-     align-items: stretch (the grid default -- restated here since it
-     was explicitly overridden to "start" before) is what actually
-     forces the copy panel and the card column to the SAME height: each
-     column's track height is sized to the taller of the two, then
-     both grid items are stretched to fill it. That only works because
-     .ai-mascot below is now position:absolute (out of normal flow) --
-     with it still in-flow, .ai-right's natural height included the
-     mascot's own height on top of the card's, so it would always "win"
-     as the taller column even once the card and copy were themselves
-     close in height, and stretch would just add empty space under the
-     copy panel again instead of matching the card. */
-  /* Plain fr shares, both panels flush to the frame's own left/right
-     padding at every width -- same as on smaller screens.
-     A capped-track version of this (minmax(0, Xpx) columns +
-     justify-content: center) was tried to stop the card's max-width
-     (see .ai-card) from leaving a widening dead gap between the panels
-     on large screens, but centering a narrower-than-the-frame pair of
-     boxes just traded that problem for equally-wide empty margins on
-     both outer sides instead -- also not flush like the small-screen
-     layout. The actual fix is that .ai-card no longer has a max-width
-     tight enough to matter: .s-ai-shell already caps the whole frame at
-     1168px (see below), so plain fr columns can never grow the card
-     past roughly 560px regardless of viewport -- there's no separate
-     cap needed, and no dead gap or side margins at any width. */
-  display: grid; grid-template-columns: 0.88fr 1.12fr;
-  gap: 32px; align-items: stretch;
+  /* Right column carries the live product visual, which is naturally
+     taller than the copy block next to it -- centered, not top-aligned,
+     so the shorter copy column doesn't read as having a large dead
+     gap underneath it relative to the image's own height. */
+  display: grid; grid-template-columns: 0.78fr 1.22fr;
+  gap: 40px; align-items: center;
 }
 
-/* Copy sits in a lit glass panel rather than as bare text, matching
-   the chat card's weight so the two flank the mascot evenly. */
+/* Eyebrow + heading + copy + CTA all live together in one column now
+   (was a separate full-width header above both columns) -- each rule
+   below sets its own top margin off the element directly before it so
+   the whole stack reads as one deliberate rhythm, tightest at the top
+   (eyebrow-to-heading) and loosest before the CTA. */
 .ai-copy {
   position: relative;
-  border-radius: 16px;
-  padding: 22px 24px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.22);
-  backdrop-filter: blur(6px);
-  box-shadow:
-    0 0 26px rgba(0,0,0,0.08),
-    inset 0 0 22px rgba(255,255,255,0.06);
-  /* Stretched to match the card column's height (see .s-ai-inner) --
-     centering the text block in that extra vertical room reads as a
-     deliberate quote-panel layout instead of top-aligned text with a
-     visibly empty band underneath it. box-sizing so the padding above
-     doesn't push the panel past 100% of the stretched grid track. */
-  box-sizing: border-box;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 4px 0;
 }
-.ai-copy-label {
-  display: block;
-  font-family: var(--sans); font-size: 11px; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  margin: 0 0 8px;
-}
+.ai-copy .evoq-h2 { margin: 0; }
 .ai-copy .lead {
-  font-family: var(--sans); font-size: 15.5px; font-weight: 600;
-  line-height: 1.55; color: #fff;
-  margin: 0;
+  font-family: var(--sans); font-size: 16.5px; font-weight: 600;
+  line-height: 1.55; color: var(--charcoal);
+  margin: 20px 0 0;
 }
 .ai-copy p.body {
-  font-family: var(--sans); font-size: 13.5px; line-height: 1.65;
-  color: rgba(255,255,255,0.74);
-  margin: 14px 0 0;
+  font-family: var(--sans); font-size: 14px; line-height: 1.75;
+  color: var(--body-text);
+  margin: 16px 0 0;
+  max-width: 44ch;
 }
-/* The "data vs. decisions" line is the section's thesis statement --
-   bumped to full white + semibold so it reads as a beat, not just
-   another sentence in the paragraph flow around it. */
+/* The closing "works with, not outside" line is the section's thesis
+   statement -- bumped to full charcoal + semibold so it reads as a
+   beat, not just another sentence in the paragraph flow around it. */
 .ai-copy p.body.strong {
-  color: #fff;
+  color: var(--charcoal);
   font-weight: 600;
 }
+.ai-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 12px 14px 12px 22px;
+  background: var(--interactive); color: #FFFFFF;
+  border-radius: 999px;
+  font-family: var(--sans); font-size: 14px; font-weight: 600;
+  margin-top: 32px;
+  text-decoration: none;
+  box-shadow: 0 10px 28px -10px rgba(0,0,153,0.5);
+  transition: background .15s ease, transform .15s ease;
+}
+.ai-cta:hover { background: var(--mid); transform: translateY(-1px); }
+.ai-cta .ic {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  display: inline-flex; align-items: center; justify-content: center;
+}
 
-/* Right column wraps the card only -- the mascot (below) is
-   position:absolute, so it no longer adds to this column's own flow
-   height. That's what lets .ai-right end up EXACTLY the card's height
-   (needed for the equal-height stretch in .s-ai-inner to compare
-   apples to apples against the copy panel) while the mascot still
-   visually floats above the card as its own layer. */
+/* EVOQ AI home visual (window + app orbit + EVI mascot + follow-up agent
+   card) -- transparent webp, see SectionAI.tsx. */
 .ai-right {
   position: relative;
   width: 100%;
 }
-
-/* Previously the large centrepiece filling its own grid column
-   (min-height: 360px, up to 400px wide), then a smaller corner accent
-   still sitting in normal flow above the card. Now absolutely
-   positioned so it doesn't affect .ai-right's height at all: anchored
-   by its own bottom edge to the top of the card (bottom: 100%), then
-   nudged down by margin-bottom so its hands/arms -- the bottom third
-   of the artwork -- overlap the card's top edge, reading as EVI
-   resting its hands on its own chat card rather than hovering above
-   it with a gap. */
-.ai-mascot {
-  position: absolute;
-  z-index: 1;
-  right: -4px;
-  bottom: 100%;
-  margin-bottom: -10px;
-  width: 44%;
-  max-width: 210px;
-  pointer-events: none;
-}
-.ai-mascot-glow {
-  position: absolute;
-  inset: 8%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(189,189,255,0.5) 0%, rgba(189,189,255,0.18) 45%, rgba(189,189,255,0) 72%);
-  filter: blur(6px);
-  z-index: 0;
-}
-.ai-mascot-crop {
-  position: relative;
-  z-index: 1;
+.ai-right-img {
   display: block;
-  width: 100%;
-}
-.ai-mascot-img {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 20px 34px rgba(0,0,153,0.45));
-}
-
-.ai-card {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  /* Raised from 440px -- .s-ai-shell's own 1168px cap already keeps
-     this from growing past ~560px at any viewport (see .s-ai-inner), so
-     a tighter cap here was redundant and, worse, was what caused a
-     widening dead gap (or, briefly, equally-wide empty side margins)
-     on large screens: once .ai-right's grid column grew past whatever
-     this max-width was, the card stopped growing with it. 600px is
-     just a hard ceiling in case that reasoning is ever wrong (e.g. this
-     card is reused somewhere without the shell's own cap) -- it should
-     never actually be reached in this section. */
-  max-width: 600px;
-  /* margin-left: auto still matters even though the card should now
-     always fill its column exactly -- it's what kept the card correctly
-     right-aligned under the mascot (see .ai-mascot) during the period
-     where the old 440px cap WAS smaller than the column, and costs
-     nothing to leave in as a safety net against the same class of bug
-     recurring. */
-  margin-left: auto;
-  /* Fills .ai-right, which is itself stretched to match the copy
-     panel's height (see .s-ai-inner) -- without this the visible white
-     card would stay its own natural (shorter) height while its
-     invisible wrapper grew around it, leaving the two panels still
-     visually mismatched despite being the "same" box height. */
-  height: 100%;
-  box-sizing: border-box;
-  background: #FFFFFF;
-  border-radius: 18px;
-  padding: 13px;
-  box-shadow:
-    0 40px 70px -30px rgba(0, 0, 90, 0.65),
-    inset 0 0 0 1px rgba(255,255,255,0.4);
-  display: flex; flex-direction: column; gap: 9px;
-}
-.ai-card-hd {
-  display: flex; align-items: center; gap: 8px;
-  padding: 2px 2px 8px;
-  border-bottom: 1px solid var(--border);
-}
-.ai-card-avatar {
-  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--bright), var(--primary));
-  overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-}
-.ai-card-avatar img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: 50% 8%;
-  transform: scale(2.6);
-}
-.ai-card-name { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--charcoal); }
-.ai-card-status {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--sans); font-size: 10.5px; color: var(--muted); margin-top: 1px;
-}
-.ai-card-status .dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #0E9F6E;
-}
-
-.ai-thread {
-  display: flex; flex-direction: column; gap: 6px;
-  /* flex:1 lets this absorb any extra height .ai-card picks up from
-     being stretched to match the copy panel (see .ai-card, .s-ai-inner)
-     -- reads as a taller chat window instead of leaving dead space
-     under the CTA button. min-height keeps the original 190px floor so
-     short thread content doesn't collapse below its old size. */
-  flex: 1;
-  min-height: 190px;
-  overflow: hidden;
-}
-.ai-bubble {
-  padding: 8px 11px;
-  border-radius: 12px;
-  font-family: var(--sans); font-size: 11.5px; line-height: 1.45;
-  max-width: 88%;
-}
-.ai-bubble.bot {
-  background: var(--soft);
-  color: var(--body-text);
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-.ai-bubble.user {
-  background: var(--interactive);
-  color: #fff;
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-
-.ai-chips {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.ai-chip {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #FFFFFF;
-  border: 1px solid var(--border);
-  font-family: var(--sans); font-size: 10.5px; font-weight: 500; color: var(--body-text);
-  cursor: pointer;
-  transition: background .15s ease, border-color .15s ease, color .15s ease;
-}
-.ai-chip:hover { background: var(--soft); border-color: var(--tint); color: var(--charcoal); }
-
-.ai-cta-plan {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 7px 7px 7px 14px;
-  background: linear-gradient(135deg, #6D4FEB 0%, #4B32B8 100%); color: #fff;
-  border-radius: 999px;
-  font-family: var(--sans); font-size: 11.5px; font-weight: 600;
-  border: 0; cursor: pointer;
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-.ai-cta-plan:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 20px -10px rgba(75,50,184,0.55);
-}
-.ai-cta-plan.wide {
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 1px;
-}
-.ai-cta-plan .ic {
-  width: 20px; height: 20px; border-radius: 50%;
-  background: rgba(255,255,255,0.16);
-  display: inline-flex; align-items: center; justify-content: center;
+  width: 108%;
+  max-width: none;
+  margin: 0 -8% 0 0;
 }
 
 @media (max-width: 1024px) {
   .s-ai { padding: 80px 40px 100px; }
-  .s-ai-frame { padding: 52px 36px; border-radius: 24px; }
-  /* Stack: copy, then the card+mascot corner group -- each row owns
-     the full width once there's no second column to share it with. */
+  /* Stack: copy, then the visual -- each row owns the full width once
+     there's no second column to share it with. */
   .s-ai-inner { grid-template-columns: 1fr; gap: 32px; justify-items: center; }
-  .ai-copy { max-width: 520px; height: auto; }
-  /* Extra top margin reserves room for the mascot poking up above the
-     card (it's position:absolute now, so it doesn't push .ai-right's
-     own box down the way it would in normal flow) -- without this the
-     32px row gap isn't enough clearance and the mascot's head
-     overlaps the copy panel's last line of text above it. */
-  .ai-right { width: auto; margin-top: 70px; }
-  .ai-card { height: auto; }
-  .ai-mascot { width: 46%; max-width: 190px; margin-bottom: -8px; right: -4px; }
+  .ai-copy { max-width: 560px; text-align: center; }
+  .ai-copy p.body { max-width: none; }
+  .ai-right { width: 100%; max-width: 560px; }
+  .ai-right-img { width: 100%; margin: 0; }
 }
 @media (max-width: 640px) {
   .s-ai { padding: 64px 20px 72px; }
-  .s-ai-frame { padding: 36px 20px; border-radius: 20px; }
-  /* keeps "Your AI assistant for work." from dropping "work." alone
-     onto a third line at narrow widths */
-  .s-ai-head .evoq-h2 { text-wrap: balance; }
-  .ai-copy { padding: 18px 18px; }
+  /* keeps the heading from dropping its last word alone onto a third
+     line at narrow widths */
+  .ai-copy .evoq-h2 { text-wrap: balance; }
 }
 
 /* ============================================================
