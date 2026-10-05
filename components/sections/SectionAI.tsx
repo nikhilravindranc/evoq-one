@@ -22,7 +22,7 @@ export function SectionAI() {
                 whole left side reads as one block next to the visual,
                 matching the reference layout. */}
             <motion.div className="ai-copy" {...fadeUp(0.04)}>
-              <h2 className="evoq-h2">AI that works where your work happens</h2>
+              <h2 className="evoq-h2">AI built into the work you already do</h2>
               <p className="lead">
                 EVOQ brings AI into the applications your teams already use.
               </p>

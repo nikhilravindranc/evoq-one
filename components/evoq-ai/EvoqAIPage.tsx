@@ -1166,7 +1166,7 @@ export function EvoqAIPage() {
             <div className="mx-auto max-w-[1100px] text-center">
               <motion.p {...reveal(0, 14)} className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>How you work with AI</motion.p>
               <h2 className="mt-4 font-[var(--font-display)] text-[26px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[32px] lg:text-[38px] lg:whitespace-nowrap" style={{ color: C.heading }}>
-                <WordReveal text="Four ways to put EVOQ AI to work." />
+                <WordReveal text="AI that adapts to how you work." />
               </h2>
             </div>
 
