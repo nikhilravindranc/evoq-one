@@ -37,7 +37,7 @@ function AISectionShell({
               <p className="mt-6 text-[16px] font-semibold leading-[1.6] text-[#31465A]">{lead}</p>
               <p className="mt-4 text-[15px] leading-[1.75] text-[#31465A]/70">{body}</p>
               <a
-                href="/evoq-ai"
+                href="/ai"
                 className="mt-9 inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#4747E0] to-[#5C5CFF] px-7 py-3.5 text-[15px] font-bold text-white shadow-[0_20px_40px_-16px_rgba(71,71,224,0.55)] transition-transform hover:-translate-y-0.5"
               >
                 Explore EVOQ AI

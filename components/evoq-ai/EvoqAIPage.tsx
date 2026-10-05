@@ -992,16 +992,9 @@ export function EvoqAIPage() {
                 className="inline-flex items-center gap-2 rounded-[10px] bg-white px-7 py-3.5 text-[15px] font-bold transition-transform hover:-translate-y-0.5"
                 style={{ color: C.interactive }}
               >
-                Explore EVOQ AI
+                Connect with an expert
                 <ArrowIcon size={15} stroke={C.interactive} />
               </button>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-[10px] px-7 py-3.5 text-[15px] font-bold text-white no-underline transition-colors hover:bg-white/10"
-                style={{ border: "1px solid rgba(255,255,255,0.55)" }}
-              >
-                Talk to an expert
-              </Link>
             </motion.div>
 
           </motion.div>
@@ -1128,43 +1121,7 @@ export function EvoqAIPage() {
         </div>
       </section>
 
-      {/* ===== 3. AI ACROSS THE SYSTEMS YOU USE ===== */}
-      <section id="cross-system" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FBFBFF 0%, #F4F3FF 100%)" }}>
-        <div className="px-5 sm:px-6 lg:px-6">
-          <div className="mx-auto max-w-[1480px] py-16 lg:py-24">
-            <div className="grid gap-12 xl:grid-cols-[430px_1fr] xl:gap-6">
-              <div className="xl:pt-20">
-                <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.interactive }}>AI across the systems you use</p>
-                <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[44px]" style={{ color: "#0B1230" }}>
-                  Your work extends beyond EVOQ applications.
-                </h2>
-                <p className="mt-6 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
-                  EVOQ AI can work with information and actions made available through your connected systems.
-                </p>
-                <p className="mt-4 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
-                  EVI can use that information to answer questions and prepare work. AI agents can use it to perform
-                  defined tasks across the applications and systems available to them.
-                </p>
-
-                <a
-                  href="#evoq-ai-at-work"
-                  className="mt-9 inline-flex items-center gap-3 rounded-[14px] px-7 py-4 text-[16px] font-bold text-white no-underline transition-transform hover:-translate-y-0.5"
-                  style={{ background: "#3D2BF0", boxShadow: "0 18px 36px -16px rgba(61,43,240,0.7)" }}
-                >
-                  See how it works
-                  <ArrowIcon size={18} stroke="#fff" />
-                </a>
-              </div>
-
-              <div className="min-w-0 xl:pt-8">
-                <ScaleFit width={966}><CrossSystemDiagram /></ScaleFit>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 4. ASK, ASSIGN, ACT ===== */}
+      {/* ===== 3. ASK, ASSIGN, ACT ===== */}
       <section id="ask-assign-act" className="relative" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FFFFFF 0%, #FAFAFF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div ref={askRef} onMouseEnter={() => setAskHold(true)} onMouseLeave={() => setAskHold(false)} className="mx-auto max-w-[1300px] py-20 lg:py-24">
@@ -1267,6 +1224,42 @@ export function EvoqAIPage() {
                 );
               })}
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== 4. AI ACROSS THE SYSTEMS YOU USE ===== */}
+      <section id="cross-system" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FBFBFF 0%, #F4F3FF 100%)" }}>
+        <div className="px-5 sm:px-6 lg:px-6">
+          <div className="mx-auto max-w-[1480px] py-16 lg:py-24">
+            <div className="grid gap-12 xl:grid-cols-[430px_1fr] xl:gap-6">
+              <div className="xl:pt-20">
+                <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.interactive }}>AI across the systems you use</p>
+                <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[44px]" style={{ color: "#0B1230" }}>
+                  Your work extends beyond EVOQ applications.
+                </h2>
+                <p className="mt-6 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
+                  EVOQ AI can work with information and actions made available through your connected systems.
+                </p>
+                <p className="mt-4 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
+                  EVI can use that information to answer questions and prepare work. AI agents can use it to perform
+                  defined tasks across the applications and systems available to them.
+                </p>
+
+                <a
+                  href="#evoq-ai-at-work"
+                  className="mt-9 inline-flex items-center gap-3 rounded-[14px] px-7 py-4 text-[16px] font-bold text-white no-underline transition-transform hover:-translate-y-0.5"
+                  style={{ background: "#3D2BF0", boxShadow: "0 18px 36px -16px rgba(61,43,240,0.7)" }}
+                >
+                  See how it works
+                  <ArrowIcon size={18} stroke="#fff" />
+                </a>
+              </div>
+
+              <div className="min-w-0 xl:pt-8">
+                <ScaleFit width={966}><CrossSystemDiagram /></ScaleFit>
+              </div>
+            </div>
           </div>
         </div>
       </section>

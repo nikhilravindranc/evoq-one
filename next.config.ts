@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
+  async redirects() {
+    return [{ source: "/evoq-ai", destination: "/ai", permanent: true }];
+  },
 };
 
 export default nextConfig;

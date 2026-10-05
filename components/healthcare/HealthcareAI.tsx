@@ -135,7 +135,7 @@ export function HealthcareAISpotlight() {
               </p>
 
               <a
-                href="/evoq-ai"
+                href="/ai"
                 className="mt-9 inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#14B8A6] via-[#3B82F6] to-[#8B5CF6] px-7 py-3.5 text-[15px] font-bold text-white shadow-[0_20px_40px_-16px_rgba(59,130,246,0.5)] transition-transform hover:-translate-y-0.5"
               >
                 Explore EVOQ AI

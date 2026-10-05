@@ -1,20 +1,21 @@
 import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
-import { AIPage } from "@/components/ai/AIPage";
+import { EvoqAIPage } from "@/components/evoq-ai/EvoqAIPage";
 
 export const metadata = {
-  title: "EVOQ AI — AI That Runs Your Processes",
+  title: "EVOQ AI — AI That Gets Work Done",
   description:
-    "EVI is the assistant, AI agents are the specialists. See how EVOQ fuses AI into your sales, service, operations, finance, and people systems.",
+    "EVOQ AI brings AI into the applications, systems, and processes where your work happens. Ask EVI for help, assign work to AI agents, or let AI work automatically.",
 };
 
 export default function AI() {
   return (
-    <div style={{ minHeight: "100vh", background: "#fff" }}>
-      <div style={{ background: "#fff", position: "relative", zIndex: 10, borderBottom: "1px solid rgba(230,234,240,0.8)" }}>
-        <Topbar darkCTA={false} constrained light />
+    <div style={{ position: "relative", minHeight: "100vh", background: "#fff" }}>
+      {/* nav floats over the hero gradient */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 50 }}>
+        <Topbar darkCTA={false} />
       </div>
-      <AIPage />
+      <EvoqAIPage />
       <Footer />
     </div>
   );
