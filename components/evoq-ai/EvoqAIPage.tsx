@@ -5,14 +5,13 @@ import { AnimatePresence, MotionConfig, motion, useInView, useReducedMotion, typ
 import Link from "next/link";
 import Image from "next/image";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
-import { AIMark } from "@/components/ai/AIMark";
 import { HeroWindow } from "@/components/evoq-ai/HeroWindow";
 import { ScaleFit } from "@/components/evoq-ai/ScaleFit";
 
 
 /* ---------- motion helpers ---------- */
 const EASE = [0.22, 1, 0.36, 1] as const;
-const VP = { once: true, margin: "-80px" } as const;
+const VP = { once: true, margin: "-80px 0px" } as const;
 const rise: Variants = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } } };
 const group = (gap = 0.09, delay = 0): Variants => ({ hidden: {}, show: { transition: { staggerChildren: gap, delayChildren: delay } } });
 const reveal = (delay = 0, y = 28, x = 0) => ({
@@ -217,39 +216,34 @@ const MailIcon = (p: IP) => (
 );
 
 
+
+/* glyphs for the AI agents orbit + chat input */
+const ChartGlyph = () => (
+  <svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+    <defs><linearGradient id="gl-chart" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#38A3FF" /><stop offset="1" stopColor="#2363E8" /></linearGradient></defs>
+    <rect x="3" y="12" width="4.6" height="9" rx="1.2" fill="url(#gl-chart)" />
+    <rect x="9.7" y="6" width="4.6" height="15" rx="1.2" fill="url(#gl-chart)" />
+    <rect x="16.4" y="9" width="4.6" height="12" rx="1.2" fill="url(#gl-chart)" />
+  </svg>
+);
+const GearGlyph = () => (
+  <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px]" style={{ background: "linear-gradient(135deg,#FFB058,#F2761E)" }}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.2" />
+      <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" />
+    </svg>
+  </span>
+);
+const DocGlyph = () => (
+  <span className="flex h-[34px] w-[30px] items-center justify-center rounded-[8px]" style={{ background: "linear-gradient(135deg,#3DD68C,#12A06A)" }}>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M7 8h10M7 12h10M7 16h6" /></svg>
+  </span>
+);
+const PaperclipGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5648F0" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 13.5 15.5 6a3 3 0 0 1 4.24 4.24L11 18.9a4.5 4.5 0 0 1-6.36-6.36L13 4.2" /></svg>
+);
+
 /* ---------- gradient washes ---------- */
-function GradientWash({ variant }: { variant: "subtle" | "light" }) {
-  if (variant === "subtle") {
-    return (
-      <>
-        <div
-          className="pointer-events-none absolute -right-24 -top-32 h-[560px] w-[760px] rounded-full opacity-90 blur-3xl"
-          style={{ background: `radial-gradient(ellipse at center, ${C.primary}70, transparent 65%)`, transform: "rotate(-8deg)" }}
-        />
-        <div
-          className="pointer-events-none absolute -left-32 bottom-[-120px] h-[400px] w-[520px] rounded-full opacity-70 blur-3xl"
-          style={{ background: `radial-gradient(ellipse at center, ${C.interactive}55, transparent 65%)` }}
-        />
-      </>
-    );
-  }
-  return (
-    <div
-      className="pointer-events-none absolute -right-40 bottom-[-160px] h-[420px] w-[680px] rounded-full opacity-45 blur-3xl"
-      style={{ background: `radial-gradient(ellipse at center, ${C.primary}22, transparent 68%)` }}
-    />
-  );
-}
-
-function Eyebrow({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
-  return (
-    <p className="inline-flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.2em]" style={{ color: light ? "#fff" : C.primary }}>
-      <AIMark size={14} />
-      {children}
-    </p>
-  );
-}
-
 /* ---------- data ---------- */
 const HERO_INFO_CARDS = [
   {
@@ -264,12 +258,6 @@ const HERO_INFO_CARDS = [
     desc: "Let AI work with the information and processes available across your workspace.",
     side: "bottom" as const,
   },
-];
-
-const MEET_AGENTS = [
-  { name: "Sales agent", task: "Review opportunities", status: "Running", type: "active" as const },
-  { name: "Service agent", task: "Review overdue work orders", status: "Complete", type: "done" as const },
-  { name: "Finance agent", task: "Prepare payment follow-ups", status: "Awaiting approval", type: "pending" as const },
 ];
 
 const GREEN = { fg: "#0E9F6E", bg: "#E5F7EF" };
@@ -907,21 +895,6 @@ function CrossSystemDiagram() {
   );
 }
 
-function StatusPill({ type, label }: { type: "active" | "done" | "pending"; label: string }) {
-  const style =
-    type === "done"
-      ? { background: "#ECFDF5", color: "#0E9F6E" }
-      : type === "active"
-        ? { background: C.aiHighlight, color: C.primary }
-        : { background: "#FFF8E8", color: "#B45309" };
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10.5px] font-bold" style={style}>
-      <span className="h-[6px] w-[6px] rounded-full" style={{ background: style.color }} />
-      {label}
-    </span>
-  );
-}
-
 /* ---------- page ---------- */
 export function EvoqAIPage() {
   const [showGetStarted, setShowGetStarted] = useState(false);
@@ -1005,117 +978,182 @@ export function EvoqAIPage() {
       </section>
 
       {/* ===== 2. MEET EVOQ AI ===== */}
-      <section id="meet-evoq-ai" className="relative" style={{ scrollMarginTop: 96 }}>
-        <div className="px-5 sm:px-6 lg:px-6">
+      <section id="meet-evoq-ai" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FBFBFF 0%, #F1EFFF 100%)" }}>
+        <div className="pointer-events-none absolute -left-32 top-10 h-[420px] w-[420px] rounded-full opacity-70 blur-3xl" style={{ background: "radial-gradient(closest-side, #E4E1FF, rgba(228,225,255,0))" }} />
+        <div className="pointer-events-none absolute -right-24 top-0 h-[520px] w-[520px] rounded-full opacity-80 blur-3xl" style={{ background: "radial-gradient(closest-side, #DAD6FF, rgba(218,214,255,0))" }} />
+        <div className="pointer-events-none absolute -bottom-32 right-10 h-[420px] w-[620px] rounded-full opacity-70 blur-3xl" style={{ background: "radial-gradient(closest-side, #E7E3FF, rgba(231,227,255,0))" }} />
+
+        <div className="relative px-5 sm:px-6 lg:px-6">
           <div className="mx-auto max-w-[1300px] py-20 lg:py-24">
-            <div
-              className="relative overflow-hidden rounded-[36px] p-8 sm:p-12 lg:p-16"
-              style={{ background: `linear-gradient(160deg, #F8F8FF 0%, ${C.tint}55 55%, #C7C7FF 100%)` }}
-            >
-              <GradientWash variant="subtle" />
-              <motion.div {...reveal()} className="relative text-center">
-                <Eyebrow>Meet EVOQ AI</Eyebrow>
-                <h2 className="mx-auto mt-5 max-w-[640px] font-[var(--font-display)] text-[26px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[34px]" style={{ color: C.heading }}>
-                  EVI guides the work.<br />Agents perform the work.
-                </h2>
-              </motion.div>
+            <motion.div {...reveal()} className="mx-auto max-w-[760px] text-center">
+              <p className="text-[13px] font-extrabold uppercase tracking-[0.28em]" style={{ color: C.interactive }}>Meet EVOQ AI</p>
+              <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.12] tracking-[-0.02em] sm:text-[46px]" style={{ color: "#0B1230" }}>
+                <span style={{ color: "#2A28F0" }}>EVI</span> guides the work.<br />Agents perform the work.
+              </h2>
+              <p className="mx-auto mt-5 max-w-[640px] text-[16px] leading-[1.7]" style={{ color: C.body }}>
+                Get answers, find what matters, and take the next step with EVI. Use AI agents to handle specific tasks across your EVOQ apps.
+              </p>
+            </motion.div>
 
-              <div className="relative mt-14 grid gap-3 sm:grid-cols-2">
-                {/* EVI panel */}
-                <motion.div {...reveal(0.05, 30, -40)} className="rounded-[26px] bg-white p-8" style={{ border: `1px solid ${C.border}`, boxShadow: "0 24px 60px -32px rgba(16,42,67,0.18)" }}>
-                  <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.1em] text-white" style={{ background: C.primary }}>
-                    EVI
-                  </span>
-                  <h3 className="mt-5 font-[var(--font-display)] text-[20px] font-bold leading-[1.3]" style={{ color: C.heading }}>
-                    AI. Assist. Act.
-                  </h3>
-                  <p className="mt-3 text-[14.5px] leading-[1.7]" style={{ color: C.body }}>
-                    EVI is your AI assistant across EVOQ. Ask questions, find information, understand activity,
-                    prepare work, or get help with the next step. Interact with EVI directly, or use it within the
-                    application and information you are working with.
-                  </p>
+            <div className="mt-24 grid gap-14 lg:mt-28 lg:grid-cols-[1.05fr_1fr] lg:items-start lg:gap-10">
+              {/* EVI */}
+              <motion.div {...reveal(0.1, 34, -30)} className="relative z-10">
+                {/* character from the supplied sheet: fixed in place, no movement */}
+                <div className="pointer-events-none absolute bottom-full left-10 z-10 hidden w-[212px] sm:block" style={{ marginBottom: -13 }}>
+                  <Image src="/evoq-ai/evi-hold.webp" alt="EVI" width={1010} height={784} sizes="500px" className="h-auto w-full" style={{ filter: "drop-shadow(0 6px 8px rgba(60,50,200,0.16))" }} />
+                </div>
 
-                  <div className="mt-6 overflow-hidden rounded-[16px]" style={{ border: `1px solid ${C.border}` }}>
-                    <div className="flex items-center justify-between px-4 py-2.5" style={{ background: C.surface, borderBottom: `1px solid ${C.border}` }}>
-                      <div className="flex items-center gap-2.5">
+                <div className="rounded-[32px] bg-white/85 p-5 sm:p-6" style={{ border: "1px solid #ECEAFB", boxShadow: "0 40px 90px -50px rgba(60,50,200,0.45)" }}>
+                  <div className="overflow-hidden rounded-[20px]" style={{ border: `1px solid ${C.border}` }}>
+                    <div className="flex items-center justify-between px-4 py-3" style={{ background: "#F7F7FC", borderBottom: `1px solid ${C.border}` }}>
+                      <div className="flex items-center gap-3">
                         <span className="flex gap-1.5">
-                          <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#F87171" }} />
-                          <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#FBBF24" }} />
-                          <span className="h-2.5 w-2.5 rounded-full" style={{ background: "#34D399" }} />
+                          <i className="h-3 w-3 rounded-full" style={{ background: "#F87171" }} />
+                          <i className="h-3 w-3 rounded-full" style={{ background: "#FBBF24" }} />
+                          <i className="h-3 w-3 rounded-full" style={{ background: "#34D399" }} />
                         </span>
-                        <span className="text-[12px] font-bold" style={{ color: C.heading }}>EVI · Assistant</span>
+                        <span className="text-[13px] font-bold" style={{ color: "#0B1230" }}>EVI · Assistant</span>
                       </div>
-                      <span className="flex items-center gap-1.5 text-[11px] font-semibold" style={{ color: C.muted }}>
-                        <span className="h-2 w-2 rounded-full" style={{ background: "#34D399" }} />
+                      <span className="flex items-center gap-1.5 text-[12.5px] font-semibold" style={{ color: C.muted }}>
+                        <i className="h-2 w-2 rounded-full" style={{ background: "#22C55E" }} />
                         Online
                       </span>
                     </div>
 
-                    <div className="bg-white p-4">
-                      <motion.div initial={{ opacity: 0, y: 16, scale: 0.96 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.5, delay: 0.7, ease: EASE }} className="flex justify-end">
-                        <div className="max-w-[88%] rounded-[14px] rounded-tr-sm px-4 py-2.5 text-[12.5px] font-semibold text-white" style={{ background: C.primary }}>
+                    <div className="bg-white p-5">
+                      <motion.div
+                        className="flex justify-end"
+                        initial={{ opacity: 0, y: 14, scale: 0.97 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        viewport={VP}
+                        transition={{ duration: 0.5, delay: 0.7, ease: EASE }}
+                      >
+                        <p className="rounded-[18px] px-5 py-3 text-[14.5px] font-semibold text-white" style={{ background: "#5648F0" }}>
                           Which opportunities need follow-up this week?
-                        </div>
+                        </p>
                       </motion.div>
-                      <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={VP} transition={{ duration: 0.55, delay: 1.3, ease: EASE }} className="mt-3 flex items-start gap-2.5">
-                        <span className="mt-0.5 h-6 w-6 shrink-0 rounded-full" style={{ background: C.primary }} />
-                        <div className="flex-1 rounded-[14px] rounded-tl-sm p-3.5" style={{ background: C.aiHighlight }}>
-                          <p className="text-[10px] font-bold uppercase tracking-[0.08em]" style={{ color: C.interactive }}>
-                            EVI · Generated answer
-                          </p>
-                          <p className="mt-1.5 text-[12.5px] leading-[1.6]" style={{ color: C.heading }}>
-                            <strong>3 opportunities</strong> need follow-up this week, including <strong>Northgate Logistics</strong>{" "}
-                            and <strong>Beta Inc.</strong> Suggested next actions are ready for review.
-                          </p>
-                        </div>
+                      <motion.div
+                        className="mt-5 flex items-start gap-3"
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={VP}
+                        transition={{ duration: 0.55, delay: 1.3, ease: EASE }}
+                      >
+                        <Image src="/evoq-ai/evi-avatar.webp" alt="" width={371} height={380} sizes="96px" className="h-12 w-12 shrink-0 rounded-full bg-[#F0EEFF] object-cover" />
+                        <p className="rounded-[18px] px-4 py-3 text-[14.5px] leading-[1.55]" style={{ background: "#EEEDFC", color: "#0B1230" }}>
+                          I found 3 opportunities that need follow-up this week, including <strong>Northgate Logistics</strong> and <strong>Beta Inc.</strong>
+                          <br />
+                          Here are the next actions.
+                        </p>
                       </motion.div>
                     </div>
 
-                    <div className="flex items-center gap-2 px-4 py-3" style={{ background: "#fff", borderTop: `1px solid ${C.border}` }}>
-                      <span className="flex-1 text-[12.5px]" style={{ color: C.light }}>Ask EVI anything…</span>
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full" style={{ background: C.primary }}>
-                        <ArrowIcon size={13} stroke="#fff" />
+                    <div className="mx-4 mb-4 flex items-center gap-3 rounded-full px-4 py-2.5" style={{ border: `1px solid ${C.border}`, background: "#fff" }}>
+                      <PaperclipGlyph />
+                      <span className="flex-1 text-[14px]" style={{ color: C.light }}>Ask EVI anything…</span>
+                      <span className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: "#4B3FF0", boxShadow: "0 10px 22px -10px rgba(75,63,240,0.8)" }}>
+                        <ArrowIcon size={18} stroke="#fff" />
                       </span>
                     </div>
                   </div>
-                </motion.div>
 
-                {/* AI agents panel */}
-                <motion.div {...reveal(0.15, 30, 40)} className="rounded-[26px] bg-white p-8" style={{ border: `1px solid ${C.border}`, boxShadow: "0 24px 60px -32px rgba(16,42,67,0.18)" }}>
-                  <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.1em]" style={{ background: C.aiHighlight, color: C.interactive }}>
-                    AI agents
-                  </span>
-                  <h3 className="mt-5 font-[var(--font-display)] text-[20px] font-bold leading-[1.3]" style={{ color: C.heading }}>
-                    Give work to a specialist.
-                  </h3>
-                  <p className="mt-3 text-[14.5px] leading-[1.7]" style={{ color: C.body }}>
-                    AI agents handle defined tasks that require multiple steps, decisions, or actions. They work
-                    with information across applications and connected systems, then return results or take
-                    approved actions. Use agents through EVI, directly from an application, or automatically.
-                  </p>
-
-                  <div className="mt-6 overflow-hidden rounded-[16px]" style={{ border: `1px solid ${C.border}` }}>
-                    <div className="flex items-center justify-between px-4 py-2.5" style={{ background: C.surface, borderBottom: `1px solid ${C.border}` }}>
-                      <span className="text-[12px] font-bold" style={{ color: C.heading }}>Agent activity</span>
-                      <span className="text-[11px] font-semibold" style={{ color: C.muted }}>3 agents</span>
-                    </div>
-                    <div className="divide-y bg-white" style={{ borderColor: C.border }}>
-                      {MEET_AGENTS.map((a) => (
-                        <motion.div initial={{ opacity: 0, x: 26 }} whileInView={{ opacity: 1, x: 0 }} viewport={VP} transition={{ duration: 0.5, delay: 0.7 + MEET_AGENTS.indexOf(a) * 0.2, ease: EASE }} key={a.name} className="flex items-center gap-3 px-4 py-3.5">
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]" style={{ background: C.aiHighlight }}>
-                            <TrendIcon size={16} stroke={C.primary} />
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-[13px] font-bold" style={{ color: C.heading }}>{a.name}</p>
-                            <p className="truncate text-[11.5px]" style={{ color: C.muted }}>{a.task}</p>
-                          </div>
-                          <StatusPill type={a.type} label={a.status} />
-                        </motion.div>
-                      ))}
+                  <div className="flex items-start gap-4 px-2 pb-1 pt-6">
+                    <span className="mt-1.5 shrink-0 rounded-full px-5 py-2 text-[13px] font-extrabold tracking-[0.12em] text-white" style={{ background: "#5648F0" }}>EVI</span>
+                    <div>
+                      <h3 className="font-[var(--font-display)] text-[24px] font-extrabold leading-[1.15]" style={{ color: "#0B1230" }}>AI. Assist. Act.</h3>
+                      <p className="mt-2 text-[14.5px] leading-[1.65]" style={{ color: C.body }}>
+                        EVI is your AI assistant across EVOQ. Ask questions, find information, understand what&apos;s happening, prepare work, or get help with the next step.
+                      </p>
                     </div>
                   </div>
-                </motion.div>
-              </div>
+                </div>
+              </motion.div>
+
+              {/* AI agents */}
+              <motion.div {...reveal(0.2, 34, 30)} className="relative lg:pt-0">
+                {/* agent flow: one soft ribbon through three orbs, ending in an arrowhead (coordinates follow the supplied design) */}
+                <div className="pointer-events-none relative z-[5] hidden h-[140px] lg:block">
+                  <div className="absolute h-[160px]" style={{ top: -18, left: "-39%", width: "141%" }}>
+                    <svg className="absolute inset-0 h-full w-full" viewBox="-260 0 940 160" preserveAspectRatio="none" fill="none" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="agent-ribbon" x1="-260" y1="0" x2="680" y2="0" gradientUnits="userSpaceOnUse">
+                          <stop offset="0" stopColor="#B9B5F8" stopOpacity="0" />
+                          <stop offset="0.28" stopColor="#B4AFF7" stopOpacity="0.55" />
+                          <stop offset="0.7" stopColor="#8B84F3" />
+                          <stop offset="1" stopColor="#5648F0" />
+                        </linearGradient>
+                      </defs>
+                      <motion.path
+                        d="M-250 42 C -180 6, -90 26, 53 67 C 130 88, 175 38, 248 38 C 312 38, 332 78, 400 100 C 440 112, 468 118, 487 118 C 545 114, 600 84, 650 56"
+                        stroke="url(#agent-ribbon)"
+                        strokeWidth="5"
+                        strokeLinecap="round"
+                        vectorEffect="non-scaling-stroke"
+                        initial={{ pathLength: 0 }}
+                        whileInView={{ pathLength: 1 }}
+                        viewport={VP}
+                        transition={{ duration: 1.8, delay: 0.3, ease: "easeInOut" }}
+                      />
+                      <circle cx="365" cy="72" r="4.5" fill="#B3AEF6" />
+                      <circle cx="-150" cy="112" r="3" fill="#CFCBFA" />
+                    </svg>
+                    <motion.svg
+                      className="absolute"
+                      style={{ left: `${((640 + 260) / 940) * 100}%`, top: 36, width: 38, height: 38 }}
+                      viewBox="0 0 38 38"
+                      aria-hidden="true"
+                      initial={{ opacity: 0, scale: 0.4 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={VP}
+                      transition={{ type: "spring", stiffness: 200, damping: 14, delay: 1.9 }}
+                    >
+                      <path d="M3 12 L35 3 L22 33 L17 20 Z" fill="#5648F0" stroke="#5648F0" strokeWidth="3" strokeLinejoin="round" />
+                    </motion.svg>
+
+                    {[
+                      { cx: 53, cy: 67, size: 58, halo: "#CBDEFF", icon: <ChartGlyph /> },
+                      { cx: 248, cy: 38, size: 62, halo: "#FFD6B0", icon: <GearGlyph /> },
+                      { cx: 487, cy: 118, size: 58, halo: "#B9EBD0", icon: <DocGlyph /> },
+                    ].map((o, i) => (
+                      <motion.span
+                        key={i}
+                        className="absolute flex items-center justify-center rounded-full"
+                        style={{
+                          left: `${((o.cx + 260) / 940) * 100}%`,
+                          top: o.cy - o.size / 2,
+                          width: o.size,
+                          height: o.size,
+                          marginLeft: -o.size / 2,
+                          background: o.halo,
+                          boxShadow: `0 0 0 6px ${o.halo}99, 0 10px 22px -10px ${o.halo}`,
+                        }}
+                        initial={{ opacity: 0, scale: 0.4 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={VP}
+                        transition={{ type: "spring", stiffness: 200, damping: 14, delay: 0.8 + i * 0.35 }}
+                      >
+                        {o.icon}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-[32px] bg-white/90 p-7 sm:p-9" style={{ border: "1px solid #ECEAFB", boxShadow: "0 40px 90px -50px rgba(60,50,200,0.45)" }}>
+                  <span className="inline-block rounded-full px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.14em]" style={{ background: "#ECEBFC", color: "#4B3FF0" }}>AI agents</span>
+                  <h3 className="mt-6 font-[var(--font-display)] text-[24px] font-extrabold leading-[1.2]" style={{ color: "#0B1230" }}>Give work to a specialist.</h3>
+                  <p className="mt-4 text-[15.5px] leading-[1.7]" style={{ color: C.body }}>
+                    AI agents handle defined tasks that require multiple steps, decisions, or actions. They work with information across EVOQ apps, then return results or take approved actions.
+                  </p>
+                  <a
+                    href="#ask-assign-act"
+                    className="mt-7 inline-flex items-center gap-3 rounded-[14px] px-7 py-4 text-[16px] font-bold text-white no-underline transition-transform hover:-translate-y-0.5"
+                    style={{ background: "#4B3FF0", boxShadow: "0 18px 36px -16px rgba(75,63,240,0.75)" }}
+                  >
+                    Explore AI agents
+                    <ArrowIcon size={18} stroke="#fff" />
+                  </a>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
