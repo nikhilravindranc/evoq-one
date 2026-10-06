@@ -13,7 +13,7 @@ const TINT = "var(--tint)";
 const ACD = "var(--acd)";
 const ACL = "var(--acl)";
 const THEMES: Record<string, Record<string, string>> = {
-  green: { "--ac": "#00ab88", "--acd": ACD, "--tint": TINT, "--acl": ACL },
+  green: { "--ac": "#00ab88", "--acd": "#04795f", "--tint": "#d4f1e6", "--acl": "#6fe3c0" },
   violet: { "--ac": "#6a54d6", "--acd": "#4a3bb0", "--tint": "#e6e2fb", "--acl": "#c9c1ff" },
   sky: { "--ac": "#2f8fc8", "--acd": "#1f6a9a", "--tint": "#d9effc", "--acl": "#8fd0f5" },
   indigo: { "--ac": "#14a8b8", "--acd": "#0b7482", "--tint": "#d2f1f5", "--acl": "#7fdbe6" },
@@ -21,7 +21,7 @@ const THEMES: Record<string, Record<string, string>> = {
   coral: { "--ac": "#e9736b", "--acd": "#b8433a", "--tint": "#fde2df", "--acl": "#f6a8a1" },
   orange: { "--ac": "#f08a3c", "--acd": "#b35a14", "--tint": "#ffe6d0", "--acl": "#ffc590" },
   forest2: { "--ac": "#00ab88", "--acd": "#04795f", "--tint": "#d4f1e6", "--acl": "#6fe3c0" },
-  forest: { "--ac": "#00ab88", "--acd": ACL, "--tint": "rgba(255,255,255,.14)", "--acl": ACL },
+  forest: { "--ac": "#00ab88", "--acd": "#9ff0d3", "--tint": "rgba(255,255,255,.14)", "--acl": "#6fe3c0" },
 };
 const M = "rgba(14, 52, 44, 0.62)";
 const SOFT = "0 24px 48px -28px rgba(14, 52, 44, 0.35)";
@@ -81,8 +81,16 @@ function Styles() {
       .fx-split{display:grid;gap:40px;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:56px}
       .fx-split-visual{height:416px;width:368px;max-width:100%;margin-left:auto}
       .fx-scale{transform:scale(.8)}
+      @media (max-width:1180px){.fx-tab{font-size:12.5px!important;padding:10px 12px!important}.fx-nav{gap:4px!important;padding:14px 12px!important}}
+      @media (max-width:860px){.fx-nav{justify-content:flex-start!important}}
       .fx-nav::-webkit-scrollbar{display:none}
       .fx-nav{scrollbar-width:none}
+      @keyframes fxBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+      .fx-bob{animation:fxBob 6s ease-in-out infinite}
+      @keyframes fxStamp{0%{transform:rotate(-8deg) scale(1.6);opacity:0}60%{transform:rotate(-8deg) scale(.95);opacity:1}100%{transform:rotate(-8deg) scale(1)}}
+      .fx-stamp{animation:fxStamp .45s ease both}
+      .fx-dashline{animation:fxDash 1.2s linear infinite}
+      .fx-hint{animation:fxBob 3s ease-in-out infinite}
       .fx-lift{transition:transform .25s ease,box-shadow .25s ease}
       .fx-lift:hover{transform:translateY(-4px)}
       .fx-press{transition:transform .15s ease,background .25s ease,color .25s ease,box-shadow .25s ease}
@@ -111,7 +119,7 @@ function Styles() {
         .fx-h2{font-size:28px}
         .fx-split-visual{width:276px;height:312px}.fx-scale{transform:scale(.6)}
       }
-      @media (prefers-reduced-motion:reduce){.fx-rise{animation:none}}
+      @media (prefers-reduced-motion:reduce){.fx-rise,.fx-bob,.fx-stamp,.fx-dashline{animation:none}}
     `}</style>
   );
 }
@@ -131,7 +139,7 @@ function Header({ eyebrow, title, lead, dark = false }: { eyebrow: string; title
 
 function Section({ bg, children, id, theme = "green" }: { bg: string; children: ReactNode; id?: string; theme?: string }) {
   return (
-    <section id={id} style={{ ...(THEMES[theme] as CSSProperties), background: bg, padding: "84px 0", position: "relative", overflow: "hidden", scrollMarginTop: 108 }}>
+    <section id={id} style={{ ...(THEMES[theme] as CSSProperties), background: bg, padding: "84px 0", position: "relative", overflow: "hidden", scrollMarginTop: 148 }}>
       <div className="fx-wrap">{children}</div>
     </section>
   );
@@ -176,6 +184,7 @@ function Catalog() {
           </div>
           <div className="fx-split-visual">
             <div className="fx-scale" style={{ position: "relative", width: 460, height: 520, transformOrigin: "top left" }}>
+              {cart.length === 0 && <Hint label="Tap an item" lx={290} ly={470} tx={352} ty={318} />}
               <div aria-hidden="true" style={{ position: "absolute", left: 24, top: 6, width: 436, height: 500, borderRadius: 56, background: "linear-gradient(135deg, #bfeedb, #e6f6ef)", transform: "rotate(2deg)" }} />
               <div style={{ position: "absolute", left: 0, top: 22, width: 440, height: 480, borderRadius: 26, background: "#fff", boxShadow: "0 44px 90px -40px rgba(14,52,44,.55)", overflow: "hidden", padding: "20px 20px" }}>
                 <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
@@ -200,7 +209,6 @@ function Catalog() {
                     );
                   })}
                 </div>
-                <div style={{ marginTop: 12, textAlign: "center", fontSize: 11, color: M }}>Tap an item to add it to an invoice</div>
                 {/* draft invoice bar */}
                 <div style={{ position: "absolute", left: 16, right: 16, bottom: 16, borderRadius: 16, background: D, color: "#fff", padding: "11px 14px", display: "flex", alignItems: "center", gap: 12, transform: lines.length ? "translateY(0)" : "translateY(90px)", opacity: lines.length ? 1 : 0, transition: "transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s", boxShadow: "0 22px 40px -18px rgba(14,52,44,.7)" }}>
                   <span style={{ display: "flex" }}>
@@ -225,7 +233,30 @@ function Catalog() {
 }
 
 /* ================================================================ shared boxed layout (same as Product catalog) */
-function FeatBox({ eyebrow, title, lead, feats, children, border }: { eyebrow: string; title: string; lead: string; feats: [string, string][]; children: ReactNode; border: string }) {
+type HintProps = { label: string; lx: number; ly: number; tx: number; ty: number; bend?: number };
+function Hint({ label, lx, ly, tx, ty, bend = 38 }: HintProps) {
+  const sx = lx + 40, sy = ly + 14;
+  const mx = (sx + tx) / 2, my = (sy + ty) / 2;
+  const dx = tx - sx, dy = ty - sy;
+  const len = Math.max(1, Math.hypot(dx, dy));
+  const cx = mx + (-dy / len) * bend, cy = my + (dx / len) * bend;
+  const ang = Math.atan2(ty - cy, tx - cx);
+  const a1 = ang + 2.55, a2 = ang - 2.55;
+  const hx1 = tx + Math.cos(a1) * 12, hy1 = ty + Math.sin(a1) * 12;
+  const hx2 = tx + Math.cos(a2) * 12, hy2 = ty + Math.sin(a2) * 12;
+  return (
+    <div aria-hidden="true" className="fx-hint" style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 30 }}>
+      <svg width="460" height="520" viewBox="0 0 460 520" fill="none" style={{ position: "absolute", inset: 0, overflow: "visible", filter: "drop-shadow(0 2px 3px rgba(255,255,255,.9))" }}>
+        <path d={`M${sx} ${sy} Q ${cx} ${cy} ${tx} ${ty}`} strokeWidth="3" strokeLinecap="round" style={{ stroke: ACD }} />
+        <path d={`M${hx1} ${hy1} L${tx} ${ty} L${hx2} ${hy2}`} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ stroke: ACD }} />
+      </svg>
+      <span style={{ position: "absolute", left: lx, top: ly, whiteSpace: "nowrap", fontFamily: "'Segoe Script', 'Brush Script MT', cursive", fontSize: 16, fontWeight: 600, color: ACD, background: "#fff", padding: "4px 14px 6px", borderRadius: 99, boxShadow: "0 12px 24px -12px rgba(14,52,44,.55)", transform: "rotate(-3deg)" }}>{label}</span>
+    </div>
+  );
+}
+
+function FeatBox({ eyebrow, title, lead, feats, children, border, free = false, hint }: { eyebrow: string; title: string; lead: string; feats: [string, string][]; children: ReactNode; border: string; free?: boolean; hint?: HintProps }) {
+  const [touched, setTouched] = useState(false);
   return (
     <div style={{ background: "linear-gradient(160deg, #ffffff 0%, rgba(255,255,255,.82) 100%)", borderRadius: 36, border: `1.5px solid ${border}`, boxShadow: "0 50px 100px -50px rgba(14,52,44,.4), 0 0 0 6px rgba(255,255,255,.7)", padding: "56px 48px", position: "relative", overflow: "hidden" }}>
       <div aria-hidden="true" style={{ position: "absolute", right: -120, top: -80, width: 520, height: 520, borderRadius: "50%", background: "radial-gradient(circle, color-mix(in srgb, var(--ac) 22%, transparent), transparent 70%)" }} />
@@ -243,9 +274,10 @@ function FeatBox({ eyebrow, title, lead, feats, children, border }: { eyebrow: s
           </div>
         </div>
         <div className="fx-split-visual">
-          <div className="fx-scale" style={{ position: "relative", width: 460, height: 520, transformOrigin: "top left" }}>
+          <div className="fx-scale" onClickCapture={() => setTouched(true)} style={{ position: "relative", width: 460, height: 520, transformOrigin: "top left" }}>
             <div aria-hidden="true" style={{ position: "absolute", left: 24, top: 6, width: 436, height: 500, borderRadius: 56, background: "linear-gradient(135deg, color-mix(in srgb, var(--ac) 28%, white), color-mix(in srgb, var(--tint) 60%, white))", transform: "rotate(2deg)" }} />
-            <div style={{ position: "absolute", left: 0, top: 22, width: 440, height: 480, borderRadius: 26, background: "#fff", boxShadow: "0 44px 90px -40px rgba(14,52,44,.55)", overflow: "hidden", padding: 22, display: "flex", flexDirection: "column" }}>{children}</div>
+            {free ? children : <div style={{ position: "absolute", left: 0, top: 22, width: 440, height: 480, borderRadius: 26, background: "#fff", boxShadow: "0 44px 90px -40px rgba(14,52,44,.55)", overflow: "hidden", padding: 22, display: "flex", flexDirection: "column" }}>{children}</div>}
+            {!touched && hint && <Hint {...hint} />}
           </div>
         </div>
       </div>
@@ -274,38 +306,78 @@ function Seg({ opts, val, set }: { opts: string[]; val: number; set: (n: number)
 
 const rowBtn = (on: boolean): CSSProperties => ({ fontFamily: "inherit", cursor: "pointer", textAlign: "left", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, padding: "14px 16px", borderRadius: 16, border: on ? `2px solid ${P}` : "2px solid transparent", background: on ? "color-mix(in srgb, var(--tint) 40%, white)" : "#f5f7f6" });
 
-/* ---------------- Subscription */
+/* ---------------- shared helpers for the free-form visuals */
+function Photo({ src, style, children }: { src: string; style: CSSProperties; children?: ReactNode }) {
+  return (
+    <div style={{ position: "absolute", borderRadius: 26, overflow: "hidden", backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center", boxShadow: "0 40px 80px -36px rgba(14,52,44,.6)", ...style }}>{children}</div>
+  );
+}
+function Float({ style, children, anim = true }: { style: CSSProperties; children: ReactNode; anim?: boolean }) {
+  return <div className={anim ? "fx-bob" : undefined} style={{ position: "absolute", background: "#fff", borderRadius: 20, boxShadow: "0 30px 60px -28px rgba(14,52,44,.6)", ...style }}>{children}</div>;
+}
+function StatusPill({ text, bg, color }: { text: string; bg: string; color: string }) {
+  return <span style={{ fontSize: 10.5, fontWeight: 700, padding: "4px 10px", borderRadius: 99, background: bg, color, whiteSpace: "nowrap" }}>{text}</span>;
+}
+function Switch({ on, set, label }: { on: boolean; set: (v: boolean) => void; label: string }) {
+  return (
+    <button type="button" role="switch" aria-checked={on} aria-label={label} onClick={() => set(!on)} style={{ width: 44, height: 26, borderRadius: 99, border: 0, cursor: "pointer", background: on ? P : "#cfd6d4", position: "relative", transition: "background .25s", flexShrink: 0 }}>
+      <span style={{ position: "absolute", top: 3, left: on ? 21 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", transition: "left .25s", boxShadow: "0 2px 6px rgba(0,0,0,.25)" }} />
+    </button>
+  );
+}
+
+/* ---------------- Subscription: customer list with faces */
 function Subscription() {
+  type Cust = { n: string; face: string; plan: number; stage: number };
+  const [custs, setCusts] = useState<Cust[]>([
+    { n: "Priya Nair", face: "/billing/people/priya.jpg", plan: 1, stage: 2 },
+    { n: "Rohan Mehta", face: "/billing/people/rohan.jpg", plan: 0, stage: 1 },
+    { n: "Sarah Whitfield", face: "/billing/people/sarah.jpg", plan: 2, stage: 3 },
+    { n: "Daniel Cho", face: "/billing/people/daniel.jpg", plan: 1, stage: 4 },
+  ]);
+  const [sel, setSel] = useState(0);
   const [yearly, setYearly] = useState(0);
-  const [plan, setPlan] = useState(1);
-  const [stage, setStage] = useState(2);
   const plans = [["Starter", 490], ["Pro", 1290], ["Scale", 2990]] as const;
-  const stages = [["Signup", "users", "Subscribed Jan 4"], ["Trial", "clock", "14-day trial"], ["Active", "refresh", "Billed every cycle"], ["Renewal", "check", "Renews Feb 18"], ["Ends", "undo", "Cancelled or expired"]] as const;
+  const stages = [["Signup", "#e6e2fb", "#4a3bb0"], ["Trial", "#fdf0c4", "#8a6500"], ["Active", "#d4f1e6", "#04795f"], ["Renewing", "#d9effc", "#1f6a9a"], ["Cancelled", "#eceff0", "#667"]] as const;
   const price = (m: number) => (yearly ? Math.round(m * 12 * 0.8) : m);
+  const c = custs[sel];
+  const setPlan = (p: number) => setCusts((a) => a.map((x, i) => (i === sel ? { ...x, plan: p } : x)));
+  const next = () => setCusts((a) => a.map((x, i) => (i === sel ? { ...x, stage: (x.stage + 1) % 5 } : x)));
   const feats: [string, string][] = [["layers", "Subscription plans"], ["users", "Customer subscriptions"], ["refresh", "Recurring billing"], ["clock", "Billing frequency"], ["doc", "Subscription start & end dates"], ["bolt", "Trial periods"], ["check", "Subscription renewals"], ["chart", "Subscription status"], ["split", "Plan changes"], ["undo", "Cancellation & expiry"], ["receipt", "Subscription history"]];
   return (
     <Section id="subscription" theme="violet" bg="linear-gradient(180deg, #f7f4ff 0%, #ece7fb 100%)">
-      <FeatBox border="rgba(106,84,214,.28)" eyebrow="Subscription" title="Manage recurring customer relationships from signup to renewal." lead="Create subscription plans, assign customers, and let recurring billing run automatically based on the terms of each subscription." feats={feats}>
-        <WinTitle title="Subscription plans" right={<Seg opts={["Monthly", "Yearly"]} val={yearly} set={setYearly} />} />
-        <div style={{ display: "grid", gap: 10 }}>
-          {plans.map(([n, m], i) => (
-            <button key={n} type="button" className="fx-press" onClick={() => setPlan(i)} aria-pressed={plan === i} style={rowBtn(plan === i)}>
-              <span style={{ fontSize: 14.5, fontWeight: 700, color: D }}>{n}{plan === i && <span style={{ marginLeft: 8, fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 99, background: P, color: "#fff" }}>Selected</span>}</span>
-              <span style={{ textAlign: "right" }}><b style={{ fontSize: 18, color: D }}>{inr(price(m))}</b><span style={{ display: "block", fontSize: 10.5, color: M }}>{yearly ? "per year · save 20%" : "per month"}</span></span>
+      <FeatBox free hint={{ label: "Step through it", lx: 250, ly: 492, tx: 386, ty: 392 }} border="rgba(106,84,214,.28)" eyebrow="Subscription" title="Manage recurring customer relationships from signup to renewal." lead="Create subscription plans, assign customers, and let recurring billing run automatically based on the terms of each subscription." feats={feats}>
+        <Float anim={false} style={{ left: 0, top: 24, width: 440, padding: 18, borderRadius: 26 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+            <span style={{ fontSize: 17, fontWeight: 700, color: D }}>Customer subscriptions</span>
+            <Seg opts={["Monthly", "Yearly"]} val={yearly} set={setYearly} />
+          </div>
+          {custs.map((x, i) => (
+            <button key={x.n} type="button" onClick={() => setSel(i)} aria-pressed={sel === i} className="fx-press" style={{ fontFamily: "inherit", cursor: "pointer", width: "100%", textAlign: "left", display: "flex", alignItems: "center", gap: 12, padding: "9px 10px", marginBottom: 6, borderRadius: 16, border: 0, background: sel === i ? "#f1edff" : "transparent", boxShadow: sel === i ? "inset 3px 0 0 var(--ac)" : "none" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={x.face} alt="" width={42} height={42} style={{ width: 42, height: 42, borderRadius: "50%", objectFit: "cover" }} />
+              <span style={{ flex: 1 }}><b style={{ display: "block", fontSize: 13.5, color: D }}>{x.n}</b><span style={{ fontSize: 11.5, color: M }}>{plans[x.plan][0]} · {inr(price(plans[x.plan][1]))}/{yearly ? "yr" : "mo"}</span></span>
+              <StatusPill text={stages[x.stage][0]} bg={stages[x.stage][1]} color={stages[x.stage][2]} />
             </button>
           ))}
-        </div>
-        <div style={{ marginTop: 18, fontSize: 12.5, fontWeight: 700, color: D }}>Subscription lifecycle</div>
-        <div style={{ marginTop: 10, display: "flex", justifyContent: "space-between", position: "relative" }}>
-          <div aria-hidden="true" style={{ position: "absolute", left: 22, right: 22, top: 17, height: 2, background: "rgba(14,52,44,.1)" }} />
-          {stages.map(([k, ic], n) => (
-            <button key={k} type="button" className="fx-press" onClick={() => setStage(n)} aria-pressed={stage === n} style={{ position: "relative", fontFamily: "inherit", cursor: "pointer", border: 0, background: "none", padding: 0, textAlign: "center", width: 62 }}>
-              <span style={{ width: 36, height: 36, borderRadius: "50%", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center", background: n <= stage ? P : "#fff", color: n <= stage ? "#fff" : M, boxShadow: n <= stage ? "none" : "inset 0 0 0 2px rgba(14,52,44,.14)", transition: "background .3s" }}><Icon name={ic} size={16} /></span>
-              <span style={{ display: "block", marginTop: 6, fontSize: 11, fontWeight: stage === n ? 700 : 500, color: stage === n ? D : M }}>{k}</span>
-            </button>
-          ))}
-        </div>
-        <div key={stage} className="fx-rise" style={{ marginTop: 14, padding: "12px 14px", borderRadius: 14, background: "color-mix(in srgb, var(--tint) 50%, white)", fontSize: 12.5, color: D }}><b>Northwind Ltd · {plans[plan][0]}</b> — {stages[stage][2]}</div>
+        </Float>
+        <Float anim={false} style={{ left: 30, top: 358, width: 400, padding: 16 }}>
+          <div key={sel} className="fx-rise">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: 13.5, fontWeight: 700, color: D }}>Change plan · {c.n.split(" ")[0]}</span>
+              <button type="button" className="fx-press" onClick={next} style={{ fontFamily: "inherit", cursor: "pointer", border: 0, fontSize: 11, fontWeight: 700, padding: "6px 12px", borderRadius: 99, background: "#f1edff", color: ACD }}>Next stage →</button>
+            </div>
+            <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8 }}>
+              {plans.map(([n], p) => (
+                <button key={n} type="button" className="fx-press" onClick={() => setPlan(p)} aria-pressed={c.plan === p} style={{ fontFamily: "inherit", cursor: "pointer", padding: "10px 0", borderRadius: 12, border: c.plan === p ? `2px solid ${P}` : "2px solid transparent", background: c.plan === p ? "#f6f3ff" : "#f5f6f8", fontSize: 12.5, fontWeight: 700, color: D }}>{n}</button>
+              ))}
+            </div>
+            <div style={{ marginTop: 12, display: "flex", gap: 6 }}>
+              {stages.map(([k], n) => <span key={k} style={{ flex: 1, height: 5, borderRadius: 9, background: n <= c.stage ? P : "rgba(14,52,44,.1)", transition: "background .3s" }} />)}
+            </div>
+            <div style={{ marginTop: 8, fontSize: 11.5, color: M }}>History: signed up Jan 4 · trial 14 days · {stages[c.stage][0].toLowerCase()}</div>
+          </div>
+        </Float>
       </FeatBox>
     </Section>
   );
@@ -332,89 +404,101 @@ function QuickNav() {
     return () => { window.removeEventListener("scroll", onScroll); if (raf) cancelAnimationFrame(raf); };
   }, []);
   return (
-    <div style={{ position: "sticky", top: 52, zIndex: 40, background: "rgba(255,255,255,.88)", backdropFilter: "blur(10px)", borderBottom: "1px solid rgba(14,52,44,.08)" }}>
-      <nav aria-label="Feature sections" className="fx-wrap fx-nav" style={{ display: "flex", gap: 6, overflowX: "auto", padding: "10px 20px" }}>
+    <div style={{ position: "sticky", top: 64, zIndex: 39, background: "rgba(255,255,255,.94)", backdropFilter: "blur(10px)", borderBottom: "1px solid rgba(14,52,44,.08)", boxShadow: "0 10px 24px -20px rgba(14,52,44,.5)" }}>
+      <nav aria-label="Feature sections" className="fx-wrap fx-nav" style={{ display: "flex", justifyContent: "center", gap: 6, overflowX: "auto", padding: "16px 20px" }}>
         {NAV.map(([id, label]) => (
-          <a key={id} href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }); history.replaceState(null, "", `#${id}`); }} aria-current={active === id ? "true" : undefined} className="fx-press" style={{ flexShrink: 0, textDecoration: "none", fontSize: 13.5, fontWeight: 700, padding: "9px 16px", borderRadius: 99, background: active === id ? D : "transparent", color: active === id ? "#fff" : M, transition: "background .25s, color .25s" }}>{label}</a>
+          <a key={id} href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }); history.replaceState(null, "", `#${id}`); }} aria-current={active === id ? "true" : undefined} className="fx-press fx-tab" style={{ flexShrink: 0, textDecoration: "none", fontSize: 13.5, fontWeight: 700, padding: "11px 18px", borderRadius: 99, whiteSpace: "nowrap", background: active === id ? D : "transparent", color: active === id ? "#fff" : M, transition: "background .25s, color .25s" }}>{label}</a>
         ))}
       </nav>
     </div>
   );
 }
 
-/* ---------------- Billing models */
+/* ---------------- Billing models: photo hero + floating pricing card */
 function Models() {
   const tabs = [
-    { k: "One-time", icon: "receipt", rows: [["Website Redesign", "₹42,000"], ["Tax (5%)", "₹2,100"]], foot: "Due in 14 days" },
-    { k: "Recurring", icon: "refresh", rows: [["Standard plan", "₹490"], ["Next bill", "Oct 1"]], foot: "Auto-renews" },
-    { k: "Usage-based", icon: "chart", rows: [["2,450 API calls", "₹110"], ["Base fee", "₹49"]], foot: "Estimated ₹159" },
-    { k: "Seat & quantity", icon: "users", rows: [["12 seats × ₹25", "₹300"], ["+3 added", "₹75"]], foot: "Prorated" },
-    { k: "Progress & milestone", icon: "clock", rows: [["Design approved", "40%"], ["Launch", "60%"]], foot: "2 of 5 billed" },
+    { k: "One-time", icon: "receipt", rows: [["Website Redesign", 42000], ["Tax (5%)", 2100]], foot: "Due in 14 days" },
+    { k: "Recurring", icon: "refresh", rows: [["Standard plan", 490], ["Add-on", 120]], foot: "Auto-renews" },
+    { k: "Usage-based", icon: "chart", rows: [["2,450 API calls", 110], ["Base fee", 49]], foot: "Estimated bill" },
+    { k: "Seat & quantity", icon: "users", rows: [["12 seats × 25", 300], ["+3 added", 75]], foot: "Prorated" },
+    { k: "Progress & milestone", icon: "clock", rows: [["Design approved 40%", 16800], ["Launch 60%", 25200]], foot: "2 of 5 billed" },
   ];
   const [i, setI] = useState(0);
   const [cur, setCur] = useState(0);
   const curs = ["₹", "$", "€"];
-  const feats: [string, string][] = [["receipt", "One-time billing"], ["refresh", "Recurring billing"], ["chart", "Usage-based billing"], ["users", "Seat & quantity-based billing"], ["clock", "Progress & milestone billing"], ["layers", "Centralized pricing"], ["globe", "Multi-currency"]];
-  const t = tabs[i];
   const conv = [1, 0.012, 0.011][cur];
-  const money = (s: string) => (cur === 0 || !s.startsWith("₹") ? s : curs[cur] + Math.round(Number(s.replace(/[₹,]/g, "")) * conv).toLocaleString());
+  const money = (n: number) => curs[cur] + Math.round(n * conv).toLocaleString(cur === 0 ? "en-IN" : "en-US");
+  const t = tabs[i];
+  const total = t.rows.reduce((a, r) => a + (r[1] as number), 0);
+  const feats: [string, string][] = [["receipt", "One-time billing"], ["refresh", "Recurring billing"], ["chart", "Usage-based billing"], ["users", "Seat & quantity-based billing"], ["clock", "Progress & milestone billing"], ["layers", "Centralized pricing"], ["globe", "Multi-currency"]];
   return (
     <Section id="billing" theme="sky" bg="linear-gradient(180deg, #f2f9fe 0%, #e1f0fa 100%)">
-      <FeatBox border="rgba(47,143,200,.3)" eyebrow="Billing" title="Bill customers the way your business works." lead="Set your prices and choose how customers should be billed. Whether it's a single purchase, recurring service, usage or a project milestone, EVOQ Billing handles different billing arrangements in one place." feats={feats}>
-        <WinTitle title="Billing model" right={<Seg opts={curs} val={cur} set={setCur} />} />
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+      <FeatBox free hint={{ label: "Try a model", lx: 6, ly: 2, tx: 112, ty: 226 }} border="rgba(47,143,200,.3)" eyebrow="Billing" title="Bill customers the way your business works." lead="Set your prices and choose how customers should be billed. Whether it's a single purchase, recurring service, usage or a project milestone, EVOQ Billing handles different billing arrangements in one place." feats={feats}>
+        <Photo src="/billing/features/card-laptop.jpg" style={{ left: 0, top: 24, width: 440, height: 250 }}>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(14,52,80,0) 40%, rgba(14,52,80,.55) 100%)" }} />
+          <div style={{ position: "absolute", right: 14, top: 14 }}><Seg opts={curs} val={cur} set={setCur} /></div>
+        </Photo>
+        <div style={{ position: "absolute", left: 14, top: 214, right: 14, display: "flex", flexWrap: "wrap", gap: 6, zIndex: 2 }}>
           {tabs.map((x, n) => (
-            <button key={x.k} type="button" className="fx-press" onClick={() => setI(n)} aria-pressed={i === n} style={{ ...rowBtn(i === n), padding: "11px 12px", justifyContent: "flex-start", fontSize: 12.5, fontWeight: 700, color: D, gridColumn: n === 4 ? "span 2" : undefined }}>
-              <Icon name={x.icon} size={16} color={P} />{x.k}
+            <button key={x.k} type="button" className="fx-press" onClick={() => setI(n)} aria-pressed={i === n} style={{ fontFamily: "inherit", cursor: "pointer", border: 0, display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 12px", borderRadius: 99, fontSize: 11.5, fontWeight: 700, background: i === n ? "var(--ac)" : "rgba(255,255,255,.95)", color: i === n ? "#fff" : D, boxShadow: "0 10px 20px -12px rgba(0,0,0,.5)" }}>
+              <Icon name={x.icon} size={13} />{x.k}
             </button>
           ))}
         </div>
-        <div key={i + "-" + cur} className="fx-rise" style={{ marginTop: 16, borderRadius: 18, background: "color-mix(in srgb, var(--tint) 45%, white)", padding: 16 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: M, letterSpacing: ".08em", textTransform: "uppercase" }}>Billing cycle</div>
-          {t.rows.map(([a, b]) => (
-            <div key={a} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid rgba(14,52,44,.08)", fontSize: 13.5, color: D }}><span>{a}</span><b>{money(b)}</b></div>
-          ))}
-          <div style={{ marginTop: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 11.5, color: M }}>Centralized pricing · {curs[cur]}</span>
-            <span style={{ fontSize: 11.5, fontWeight: 700, padding: "5px 12px", borderRadius: 99, background: "#fff", color: ACD }}>{t.foot}</span>
+        <Float style={{ left: 40, top: 300, width: 380, padding: 20 }}>
+          <div key={i + "-" + cur} className="fx-rise">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: M, letterSpacing: ".08em", textTransform: "uppercase" }}>{t.k} · billing cycle</span>
+              <StatusPill text={t.foot} bg="#d9effc" color="#1f6a9a" />
+            </div>
+            {t.rows.map(([a, b]) => (
+              <div key={String(a)} style={{ display: "flex", justifyContent: "space-between", padding: "11px 0", borderBottom: "1px solid rgba(14,52,44,.08)", fontSize: 13.5, color: D }}><span>{a}</span><b>{money(b as number)}</b></div>
+            ))}
+            <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 12, fontSize: 20, fontWeight: 700, color: D }}><span>Total</span><span>{money(total)}</span></div>
           </div>
-        </div>
+        </Float>
       </FeatBox>
     </Section>
   );
 }
 
-/* ---------------- Invoicing */
+/* ---------------- Invoicing: paper document over a photo */
 function Invoicing() {
   const [done, setDone] = useState(false);
   const [rec, setRec] = useState(true);
   const feats: [string, string][] = [["note", "Quotes"], ["doc", "Invoices"], ["refresh", "Recurring invoices"], ["undo", "Credit & debit notes"], ["layers", "Invoice templates"], ["coins", "Billable charges"]];
   return (
     <Section id="invoicing" theme="indigo" bg="linear-gradient(180deg, #f0fbfc 0%, #d9f1f4 100%)">
-      <FeatBox border="rgba(20,168,184,.38)" eyebrow="Invoicing" title="Create accurate invoices without starting from scratch." lead="Turn products, services, completed work or approved quotes into invoices. Keep billing documents organized and automate invoices that repeat." feats={feats}>
-        <WinTitle title={done ? "Invoice INV-1048" : "Quote Q-0098"} right={<span key={String(done)} className="fx-rise" style={{ fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 99, background: done ? "#d4f1e6" : "#fdf0c4", color: done ? "#04795f" : "#8a6500" }}>{done ? "Sent" : "Approved"}</span>} />
-        <div style={{ borderRadius: 18, background: "#f6f6fb", padding: 16 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: M }}><span>Customer</span><b style={{ color: D }}>Acme Industries</b></div>
+      <FeatBox free hint={{ label: "Convert it", lx: 336, ly: 440, tx: 318, ty: 474, bend: -30 }} border="rgba(20,168,184,.38)" eyebrow="Invoicing" title="Create accurate invoices without starting from scratch." lead="Turn products, services, completed work or approved quotes into invoices. Keep billing documents organized and automate invoices that repeat." feats={feats}>
+        <Photo src="/billing/features/notes.jpg" style={{ left: 0, top: 24, width: 440, height: 250, borderRadius: 30 }}>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(8,60,70,.1), rgba(8,60,70,.55))" }} />
+        </Photo>
+        <Float anim={false} style={{ right: 22, top: 44, padding: "9px 12px", borderRadius: 16, display: "flex", alignItems: "center", gap: 10 }}>
+          <Icon name="refresh" size={16} color={P} /><span style={{ fontSize: 12, fontWeight: 700, color: D }}>Recurring</span><Switch on={rec} set={setRec} label="Recurring invoice" />
+        </Float>
+        <Float anim={false} style={{ left: 40, top: 168, width: 360, padding: 20, borderRadius: 14, transform: "rotate(-2.5deg)", boxShadow: "0 36px 70px -30px rgba(8,60,70,.7)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: M, letterSpacing: ".1em" }}>{done ? "INVOICE" : "QUOTE"}</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: D }}>{done ? "INV-1048" : "Q-0098"}</div>
+            </div>
+            <span key={String(done)} className="fx-stamp" style={{ border: `3px solid ${done ? "#1d7a46" : "#d79a00"}`, color: done ? "#1d7a46" : "#d79a00", fontWeight: 800, fontSize: 13, letterSpacing: ".12em", padding: "4px 10px", borderRadius: 8, transform: "rotate(-8deg)" }}>{done ? "SENT" : "APPROVED"}</span>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 12, color: M }}>Acme Industries</div>
           {[["Website Redesign", "₹40,000"], ["Hosting setup", "₹2,000"], ["GST (18%)", "₹7,560"]].map(([a, b]) => (
-            <div key={a} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid rgba(14,52,44,.08)", fontSize: 13, color: D }}><span>{a}</span><span>{b}</span></div>
+            <div key={a} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px dashed rgba(14,52,44,.15)", fontSize: 12.5, color: D }}><span>{a}</span><span>{b}</span></div>
           ))}
-          <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 12, fontSize: 17, fontWeight: 700, color: D }}><span>Total</span><span>₹49,560</span></div>
-        </div>
-        <button type="button" className="fx-press" onClick={() => setDone((v) => !v)} style={{ marginTop: 14, fontFamily: "inherit", cursor: "pointer", border: 0, borderRadius: 14, padding: "13px 0", fontSize: 13.5, fontWeight: 700, color: "#fff", background: done ? "#1d7a46" : "#0b4a54" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 10, fontSize: 17, fontWeight: 700, color: D }}><span>Total</span><span>₹49,560</span></div>
+        </Float>
+        <button type="button" className="fx-press" onClick={() => setDone((v) => !v)} style={{ position: "absolute", left: 40, top: 452, width: 270, fontFamily: "inherit", cursor: "pointer", border: 0, borderRadius: 16, padding: "14px 0", fontSize: 13.5, fontWeight: 700, color: "#fff", background: done ? "#1d7a46" : "#0b4a54", boxShadow: "0 20px 36px -18px rgba(8,60,70,.8)" }}>
           {done ? "✓ Converted · tap to reset" : "Convert quote to invoice →"}
         </button>
-        <div style={{ marginTop: 14, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: 14, background: "#f6f6fb" }}>
-          <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, color: D }}><Icon name="refresh" size={16} color={P} />Recurring invoice</span>
-          <button type="button" role="switch" aria-checked={rec} aria-label="Recurring invoice" onClick={() => setRec((v) => !v)} style={{ width: 44, height: 26, borderRadius: 99, border: 0, cursor: "pointer", background: rec ? P : "#cfd6d4", position: "relative", transition: "background .25s" }}>
-            <span style={{ position: "absolute", top: 3, left: rec ? 21 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", transition: "left .25s", boxShadow: "0 2px 6px rgba(0,0,0,.25)" }} />
-          </button>
-        </div>
       </FeatBox>
     </Section>
   );
 }
 
-/* ---------------- Payments */
+/* ---------------- Payments: tap-to-pay photo + payment sheet */
 function Payments() {
   const [m, setM] = useState(0);
   const [paid, setPaid] = useState(false);
@@ -422,54 +506,78 @@ function Payments() {
   const feats: [string, string][] = [["card", "Payment gateways"], ["link", "Payment links"], ["check", "Payment recording"], ["split", "Partial payments"], ["receipt", "Receipts"], ["undo", "Refunds"]];
   return (
     <Section id="payments" theme="amber" bg="linear-gradient(180deg, #fffaf0 0%, #fdf2d4 100%)">
-      <FeatBox border="rgba(215,154,0,.35)" eyebrow="Payments" title="Make it easy for customers to pay." lead="Give customers convenient ways to pay and keep payment activity connected to the invoice." feats={feats}>
-        <WinTitle title="Pay invoice INV-1048" right={<span style={{ fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 99, background: paid ? "#d4f1e6" : "#fdf0c4", color: paid ? "#04795f" : "#8a6500" }}>{paid ? "Paid" : "Due"}</span>} />
-        <div style={{ fontSize: 40, fontWeight: 700, letterSpacing: "-.02em", color: D }}>₹4,200</div>
-        <div style={{ fontSize: 12, color: M, marginBottom: 14 }}>Acme Industries · due Oct 12</div>
-        <div style={{ display: "grid", gap: 8 }}>
-          {methods.map(([ic, k], n) => (
-            <button key={k} type="button" className="fx-press" onClick={() => { setM(n); setPaid(false); }} aria-pressed={m === n} style={{ ...rowBtn(m === n), padding: "12px 14px" }}>
-              <span style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13.5, fontWeight: 600, color: D }}><Icon name={ic} size={17} color={P} />{k}</span>
-              <span style={{ width: 18, height: 18, borderRadius: "50%", border: `2px solid ${m === n ? P : "#c5ceca"}`, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{m === n && <span style={{ width: 8, height: 8, borderRadius: "50%", background: P }} />}</span>
-            </button>
-          ))}
-        </div>
-        <button type="button" className="fx-press" onClick={() => setPaid((v) => !v)} style={{ marginTop: 14, fontFamily: "inherit", cursor: "pointer", border: 0, borderRadius: 14, padding: "13px 0", fontSize: 13.5, fontWeight: 700, color: "#fff", background: paid ? "#1d7a46" : P }}>
-          {paid ? "✓ Payment recorded" : `Pay securely with ${methods[m][1].toLowerCase()}`}
-        </button>
-        {paid && (
-          <div className="fx-rise" style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 10, padding: "11px 14px", borderRadius: 14, background: "#f6f5ee", fontSize: 12, color: D }}>
-            <Icon name="receipt" size={16} color={P} /><span>Receipt sent · <b>Refund</b> available</span>
+      <FeatBox free hint={{ label: "Try paying", lx: 14, ly: 352, tx: 128, ty: 268 }} border="rgba(215,154,0,.35)" eyebrow="Payments" title="Make it easy for customers to pay." lead="Give customers convenient ways to pay and keep payment activity connected to the invoice." feats={feats}>
+        <Photo src="/billing/features/pay.jpg" style={{ left: 0, top: 24, width: 440, height: 300, borderRadius: 30 }} />
+        <Float style={{ left: 120, top: 150, width: 300, padding: 18 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: M }}>Pay INV-1048</span>
+            <StatusPill text={paid ? "Paid" : "Due"} bg={paid ? "#d4f1e6" : "#fdf0c4"} color={paid ? "#04795f" : "#8a6500"} />
           </div>
-        )}
+          <div style={{ fontSize: 34, fontWeight: 700, letterSpacing: "-.02em", color: D, marginTop: 2 }}>₹4,200</div>
+          <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
+            {methods.map(([ic, k], n) => (
+              <button key={k} type="button" className="fx-press" onClick={() => { setM(n); setPaid(false); }} aria-pressed={m === n} style={{ ...rowBtn(m === n), padding: "9px 12px", borderRadius: 12 }}>
+                <span style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, fontWeight: 600, color: D }}><Icon name={ic} size={15} color={P} />{k}</span>
+                <span style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${m === n ? P : "#c5ceca"}`, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{m === n && <span style={{ width: 7, height: 7, borderRadius: "50%", background: P }} />}</span>
+              </button>
+            ))}
+          </div>
+          <button type="button" className="fx-press" onClick={() => setPaid((v) => !v)} style={{ marginTop: 12, width: "100%", fontFamily: "inherit", cursor: "pointer", border: 0, borderRadius: 12, padding: "12px 0", fontSize: 13, fontWeight: 700, color: "#fff", background: paid ? "#1d7a46" : P }}>{paid ? "✓ Payment recorded" : "Pay securely"}</button>
+        </Float>
+        <div style={{ position: "absolute", left: 24, top: 420, width: 392, transition: "opacity .4s, transform .4s", opacity: paid ? 1 : 0, transform: paid ? "none" : "translateY(14px)" }}>
+          <Float anim={false} style={{ position: "relative", padding: "14px 16px", display: "flex", alignItems: "center", gap: 12 }}>
+            <IconTile name="receipt" size={42} />
+            <span style={{ flex: 1, fontSize: 13, fontWeight: 700, color: D }}>Payment received · ₹4,200<span style={{ display: "block", fontSize: 11.5, fontWeight: 500, color: M }}>Receipt sent · refund available</span></span>
+            <span style={{ width: 28, height: 28, borderRadius: "50%", background: P, color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Icon name="check" size={15} sw={3} /></span>
+          </Float>
+        </div>
+        {!paid && <div style={{ position: "absolute", left: 24, top: 440, width: 392, textAlign: "center", fontSize: 12, color: M }}>Partial payments and refunds stay linked to the invoice</div>}
       </FeatBox>
     </Section>
   );
 }
 
-/* ---------------- Outstanding */
+/* ---------------- Outstanding: charts photo + aging donut */
 function Outstanding() {
   const [sel, setSel] = useState(0);
   const [sent, setSent] = useState(false);
-  const ag = [["0–30 days", "₹65K", 72, "#00ab88"], ["31–60 days", "₹28K", 40, "#fec915"], ["60+ days", "₹12K", 20, "#e9736b"]] as const;
+  const ag = [["0–30 days", 65, "#00ab88"], ["31–60 days", 28, "#fec915"], ["60+ days", 12, "#e9736b"]] as const;
+  const tot = 105;
+  const R = 52, C = 2 * Math.PI * R;
+  let acc = 0;
   const feats: [string, string][] = [["chart", "Payment tracking"], ["bell", "Payment reminders"], ["doc", "Customer statements"], ["clock", "Receivables aging"], ["users", "Customer balances"]];
   return (
     <Section id="outstanding" theme="coral" bg="linear-gradient(180deg, #fff7f5 0%, #fde6e2 100%)">
-      <FeatBox border="rgba(233,115,107,.35)" eyebrow="Outstanding" title="Know what's paid, what's due and what needs attention." lead="Keep your receivables visible after invoices are sent and follow up when payments are due." feats={feats}>
-        <WinTitle title="Receivables aging" right={<span style={{ fontSize: 11.5, color: M }}>Tap a bucket</span>} />
-        <div style={{ display: "grid", gap: 10 }}>
-          {ag.map(([l, v, w, c], n) => (
-            <button key={l} type="button" className="fx-press" onClick={() => setSel(n)} aria-pressed={sel === n} style={{ ...rowBtn(sel === n), display: "block", border: sel === n ? `2px solid ${c}` : "2px solid transparent" }}>
-              <span style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 600, color: D }}><span>{l}</span><span>{v}</span></span>
-              <span style={{ display: "block", marginTop: 8, height: 7, borderRadius: 9, background: "rgba(14,52,44,.08)" }}><span style={{ display: "block", width: `${w}%`, height: "100%", borderRadius: 9, background: c, transition: "width .4s" }} /></span>
-            </button>
-          ))}
-        </div>
-        <div style={{ marginTop: 14, borderRadius: 18, padding: "16px 18px", background: "linear-gradient(150deg, #3a1d1b, #7a2f2a)", color: "#fff" }}>
-          <div style={{ fontSize: 11.5, opacity: 0.75 }}>{ag[sel][0]} · customer balances</div>
-          <div style={{ fontSize: 34, fontWeight: 700, letterSpacing: "-.02em" }}>{ag[sel][1]}</div>
-        </div>
-        <button type="button" className="fx-press" onClick={() => setSent((v) => !v)} style={{ marginTop: 12, fontFamily: "inherit", cursor: "pointer", border: 0, borderRadius: 14, padding: "13px 0", fontSize: 13.5, fontWeight: 700, color: sent ? "#a0332a" : "#fff", background: sent ? "#fde2df" : "#e9736b", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+      <FeatBox free hint={{ label: "Tap a slice", lx: 20, ly: 40, tx: 70, ty: 268, bend: -50 }} border="rgba(233,115,107,.35)" eyebrow="Outstanding" title="Know what's paid, what's due and what needs attention." lead="Keep your receivables visible after invoices are sent and follow up when payments are due." feats={feats}>
+        <Photo src="/billing/features/charts.jpg" style={{ left: 0, top: 24, width: 440, height: 190, borderRadius: 30 }} />
+        <Float anim={false} style={{ left: 24, top: 186, width: 392, padding: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            <div style={{ position: "relative", width: 128, height: 128, flexShrink: 0 }}>
+              <svg width="128" height="128" viewBox="0 0 128 128" style={{ transform: "rotate(-90deg)" }}>
+                <circle cx="64" cy="64" r={R} fill="none" stroke="rgba(14,52,44,.07)" strokeWidth="16" />
+                {ag.map(([l, v, c], n) => {
+                  const len = (v / tot) * C; const off = -acc; acc += len;
+                  return <circle key={l} cx="64" cy="64" r={R} fill="none" stroke={c} strokeWidth={sel === n ? 20 : 16} strokeDasharray={`${len - 3} ${C}`} strokeDashoffset={off} style={{ transition: "stroke-width .3s", cursor: "pointer" }} onClick={() => setSel(n)} />;
+                })}
+              </svg>
+              <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                <b style={{ fontSize: 20, color: D }}>₹{ag[sel][1]}K</b><span style={{ fontSize: 10, color: M }}>{ag[sel][0]}</span>
+              </div>
+            </div>
+            <div style={{ flex: 1, display: "grid", gap: 6 }}>
+              {ag.map(([l, v, c], n) => (
+                <button key={l} type="button" className="fx-press" onClick={() => setSel(n)} aria-pressed={sel === n} style={{ fontFamily: "inherit", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, border: 0, padding: "8px 10px", borderRadius: 12, background: sel === n ? "#fdf0ee" : "transparent", fontSize: 12.5, color: D, fontWeight: 600 }}>
+                  <span style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />{l}<span style={{ marginLeft: "auto" }}>₹{v}K</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </Float>
+        <Float anim={false} style={{ left: 24, top: 378, width: 392, padding: "11px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+          <IconTile name="users" size={40} />
+          <span style={{ flex: 1, fontSize: 12.5, fontWeight: 700, color: D }}>Customer balances<span style={{ display: "block", fontSize: 11.5, fontWeight: 500, color: M }}>Statements ready for 12 customers</span></span>
+        </Float>
+        <button type="button" className="fx-press" onClick={() => setSent((v) => !v)} style={{ position: "absolute", left: 24, top: 450, width: 392, fontFamily: "inherit", cursor: "pointer", border: 0, borderRadius: 16, padding: "14px 0", fontSize: 13.5, fontWeight: 700, color: sent ? "#a0332a" : "#fff", background: sent ? "#fde2df" : "#e9736b", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: "0 20px 36px -18px rgba(190,70,60,.7)" }}>
           <Icon name="bell" size={16} />{sent ? "Reminders sent to 3 customers" : "Send payment reminders"}
         </button>
       </FeatBox>
@@ -477,7 +585,7 @@ function Outstanding() {
   );
 }
 
-/* ---------------- Taxes */
+/* ---------------- Taxes: calculator photo + paper receipt */
 function Taxes() {
   const [r, setR] = useState(0);
   const [incl, setIncl] = useState(false);
@@ -485,58 +593,62 @@ function Taxes() {
   const base = incl ? Math.round(11800 / (1 + d.pct)) : 10000;
   const tax = Math.round(base * d.pct);
   const feats: [string, string][] = [["percent", "Tax configuration"], ["coins", "Tax-inclusive & tax-exclusive pricing"], ["split", "Tax breakup"], ["globe", "Regional tax support"], ["receipt", "India GST"], ["receipt", "UAE VAT"]];
+  const zig = "polygon(0 0,100% 0,100% calc(100% - 10px),96% 100%,92% calc(100% - 10px),88% 100%,84% calc(100% - 10px),80% 100%,76% calc(100% - 10px),72% 100%,68% calc(100% - 10px),64% 100%,60% calc(100% - 10px),56% 100%,52% calc(100% - 10px),48% 100%,44% calc(100% - 10px),40% 100%,36% calc(100% - 10px),32% 100%,28% calc(100% - 10px),24% 100%,20% calc(100% - 10px),16% 100%,12% calc(100% - 10px),8% 100%,4% calc(100% - 10px),0 100%)";
   return (
     <Section id="taxes" theme="orange" bg="linear-gradient(180deg, #fff8f1 0%, #ffead8 100%)">
-      <FeatBox border="rgba(240,138,60,.38)" eyebrow="Taxes & compliance" title="Handle the tax details that come with every bill." lead="Apply the right tax treatment to products, services and invoices while keeping tax information clear for customers." feats={feats}>
-        <WinTitle title="Tax breakup" right={<Seg opts={["India GST", "UAE VAT"]} val={r} set={setR} />} />
-        <div key={r + "-" + String(incl)} className="fx-rise" style={{ borderRadius: 18, background: "#fbf7f2", padding: 18 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: M, letterSpacing: ".08em", textTransform: "uppercase" }}>{d.label} · {incl ? "tax-inclusive" : "tax-exclusive"}</div>
-          {[[incl ? "Price excl. tax" : "Subtotal", base], [d.rate, tax]].map(([a, b]) => (
-            <div key={String(a)} style={{ display: "flex", justifyContent: "space-between", padding: "13px 0", borderBottom: "1px solid rgba(14,52,44,.08)", fontSize: 14.5, color: D }}><span>{a}</span><span style={{ fontWeight: 600 }}>{d.cur}{Number(b).toLocaleString()}</span></div>
-          ))}
-          <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 14, fontSize: 21, fontWeight: 700, color: D }}><span>Total</span><span>{d.cur}{(base + tax).toLocaleString()}</span></div>
-          <div style={{ marginTop: 8, fontSize: 11.5, color: M }}>{d.note}</div>
+      <FeatBox free hint={{ label: "Switch region", lx: 30, ly: 430, tx: 236, ty: 404 }} border="rgba(240,138,60,.38)" eyebrow="Taxes & compliance" title="Handle the tax details that come with every bill." lead="Apply the right tax treatment to products, services and invoices while keeping tax information clear for customers." feats={feats}>
+        <Photo src="/billing/features/calc.jpg" style={{ left: 0, top: 24, width: 300, height: 470, borderRadius: 34, backgroundPosition: "55% center" }} />
+        <div style={{ position: "absolute", right: 0, top: 70, width: 268, filter: "drop-shadow(0 30px 40px rgba(120,60,0,.45))" }}>
+          <div key={r + String(incl)} className="fx-rise" style={{ background: "#fff", padding: "20px 20px 28px", clipPath: zig }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 11, fontWeight: 700, color: M, letterSpacing: ".1em" }}>TAX BREAKUP</span>
+              <StatusPill text={d.label} bg="#ffe6d0" color="#b35a14" />
+            </div>
+            <div style={{ marginTop: 6, fontSize: 11, color: M }}>{incl ? "Tax-inclusive price" : "Tax-exclusive price"}</div>
+            {[[incl ? "Price excl. tax" : "Subtotal", base], [d.rate, tax]].map(([a, b]) => (
+              <div key={String(a)} style={{ display: "flex", justifyContent: "space-between", padding: "11px 0", borderBottom: "1px dashed rgba(14,52,44,.18)", fontSize: 13.5, color: D }}><span>{a}</span><b>{d.cur}{Number(b).toLocaleString()}</b></div>
+            ))}
+            <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 12, fontSize: 21, fontWeight: 700, color: D }}><span>Total</span><span>{d.cur}{(base + tax).toLocaleString()}</span></div>
+            <div style={{ marginTop: 6, fontSize: 11, color: M }}>{d.note}</div>
+          </div>
         </div>
-        <div style={{ marginTop: 14, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: 14, background: "#fbf7f2" }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: D }}>Prices include tax</span>
-          <button type="button" role="switch" aria-checked={incl} aria-label="Prices include tax" onClick={() => setIncl((v) => !v)} style={{ width: 44, height: 26, borderRadius: 99, border: 0, cursor: "pointer", background: incl ? P : "#cfd6d4", position: "relative", transition: "background .25s" }}>
-            <span style={{ position: "absolute", top: 3, left: incl ? 21 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", transition: "left .25s", boxShadow: "0 2px 6px rgba(0,0,0,.25)" }} />
-          </button>
-        </div>
-        <div style={{ marginTop: 12, fontSize: 11.5, color: M, textAlign: "center" }}>+ regional tax rules, configured once</div>
+        <Float anim={false} style={{ right: 0, top: 376, width: 268, padding: 14, borderRadius: 18 }}>
+          <Seg opts={["India GST", "UAE VAT"]} val={r} set={setR} />
+          <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12.5, fontWeight: 600, color: D }}>Prices include tax<Switch on={incl} set={setIncl} label="Prices include tax" /></div>
+        </Float>
       </FeatBox>
     </Section>
   );
 }
 
-/* ---------------- Automation */
+/* ---------------- Automation: workflow photo + node flow */
 function Automation() {
   const [on, setOn] = useState(true);
-  const steps = [["clock", "Billing schedule", "Monthly · 1st of the month"], ["doc", "Invoice generated", "INV-1049 created automatically"], ["bell", "Reminder sent", "3 days before the due date"], ["check", "Payment status updated", "Marked paid when money arrives"]];
+  const nodes = [["clock", "Billing schedule", "Monthly · 1st", 0], ["doc", "Invoice generated", "INV-1049 created", 1], ["bell", "Reminder sent", "3 days before due", 2], ["check", "Payment status updated", "Marked paid", 3]] as const;
   const feats: [string, string][] = [["clock", "Billing schedules"], ["doc", "Automated invoice generation"], ["bell", "Automated reminders"], ["check", "Payment status updates"]];
+  const xs = [0, 70, 20, 90];
   return (
     <Section id="automation" theme="forest2" bg="linear-gradient(180deg, #eefaf5 0%, #d9f1e6 100%)">
-      <FeatBox border="rgba(0,171,136,.35)" eyebrow="Automation" title="Set it up once. Let Billing keep it moving." lead="Reduce repetitive billing work with automated schedules, invoices, reminders, and payment updates." feats={feats}>
-        <WinTitle title="Automation" right={
-          <button type="button" role="switch" aria-checked={on} aria-label="Automation" className="fx-press" onClick={() => setOn((v) => !v)} style={{ fontFamily: "inherit", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10, border: 0, background: "none", fontSize: 12, fontWeight: 700, color: on ? ACD : M }}>
-            {on ? "On" : "Off"}
-            <span style={{ width: 44, height: 26, borderRadius: 99, background: on ? P : "#cfd6d4", position: "relative", transition: "background .25s" }}>
-              <span style={{ position: "absolute", top: 3, left: on ? 21 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", transition: "left .25s" }} />
-            </span>
-          </button>
-        } />
-        <div style={{ position: "relative", display: "grid", gap: 12 }}>
-          <div aria-hidden="true" style={{ position: "absolute", left: 21, top: 24, bottom: 24, width: 3, borderRadius: 9, background: "rgba(14,52,44,.1)" }}>
-            <div style={{ width: "100%", background: P, borderRadius: 9, height: on ? "100%" : "0%", transition: "height 1.2s ease" }} />
-          </div>
-          {steps.map(([ic, t, d], n) => (
-            <div key={t} style={{ position: "relative", display: "flex", alignItems: "center", gap: 14, padding: "10px 12px", borderRadius: 16, background: "#f5f8f7", opacity: on ? 1 : 0.55, transition: "opacity .4s", transitionDelay: `${n * 0.1}s` }}>
-              <span style={{ width: 40, height: 40, borderRadius: "50%", flexShrink: 0, background: on ? P : "#cfd6d4", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", transition: "background .4s" }}><Icon name={ic} size={18} /></span>
-              <span><b style={{ display: "block", fontSize: 13.5, color: D }}>{t}</b><span style={{ fontSize: 11.5, color: M }}>{d}</span></span>
-            </div>
+      <FeatBox free hint={{ label: "Toggle it", lx: 250, ly: 8, tx: 190, ty: 60 }} border="rgba(0,171,136,.35)" eyebrow="Automation" title="Set it up once. Let Billing keep it moving." lead="Reduce repetitive billing work with automated schedules, invoices, reminders, and payment updates." feats={feats}>
+        <Photo src="/billing/features/workflow.jpg" style={{ left: 0, top: 24, width: 440, height: 470, borderRadius: 34, backgroundPosition: "62% center" }}>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(6,40,32,.35), rgba(6,40,32,.72))" }} />
+        </Photo>
+        <Float anim={false} style={{ left: 24, top: 44, padding: "9px 14px", borderRadius: 99, display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 12.5, fontWeight: 700, color: on ? ACD : M }}>{on ? "Automation on" : "Automation paused"}</span><Switch on={on} set={setOn} label="Automation" />
+        </Float>
+        <svg aria-hidden="true" width="440" height="470" viewBox="0 0 440 470" style={{ position: "absolute", left: 0, top: 24 }} fill="none">
+          {[0, 1, 2].map((n) => (
+            <path key={n} className={on ? "fx-dashline" : undefined} d={`M${60 + xs[n] * 1.7 + 110} ${128 + n * 92} C ${60 + xs[n] * 1.7 + 110} ${160 + n * 92}, ${60 + xs[n + 1] * 1.7 + 110} ${130 + n * 92}, ${60 + xs[n + 1] * 1.7 + 110} ${176 + n * 92 - 12}`} style={{ stroke: on ? ACL : "rgba(255,255,255,.3)" }} strokeWidth="2.5" strokeDasharray="6 7" strokeLinecap="round" />
           ))}
-        </div>
-        <div style={{ marginTop: 14, textAlign: "center", fontSize: 12, fontWeight: 700, color: on ? ACD : M }}>{on ? "Automation on · runs without you" : "Automation paused"}</div>
+        </svg>
+        {nodes.map(([ic, t, d, n]) => (
+          <div key={t} style={{ position: "absolute", left: 24 + xs[n] * 1.7, top: 100 + n * 92, width: 220, transition: "opacity .4s, transform .4s", transitionDelay: `${n * 0.12}s`, opacity: on ? 1 : 0.6, transform: on ? "none" : "scale(.97)" }}>
+            <div className="fx-bob" style={{ display: "flex", alignItems: "center", gap: 12, background: "#fff", borderRadius: 18, padding: "11px 14px", boxShadow: "0 24px 44px -24px rgba(0,0,0,.7)", animationDelay: `${n * 0.5}s` }}>
+              <span style={{ width: 40, height: 40, borderRadius: 13, background: on ? P : "#cfd6d4", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", transition: "background .4s" }}><Icon name={ic} size={19} /></span>
+              <span><b style={{ display: "block", fontSize: 13, color: D }}>{t}</b><span style={{ fontSize: 11.5, color: M }}>{d}</span></span>
+            </div>
+          </div>
+        ))}
       </FeatBox>
     </Section>
   );

@@ -623,9 +623,9 @@ export function BillingPricingContent() {
           </div>
           <div className="mt-10 text-center">
             <a href="#compare-plans" className="text-[14px] font-bold no-underline" style={{ color: "var(--billing-primary, #00ab88)" }}>
-              Compare plans
+              See full comparison
               {/*  */}
-              ↓
+              →
             </a>
           </div>
         </div>
