@@ -150,6 +150,11 @@ const SOLUTIONS: {
       { name: "Healthcare Practice Management", href: "/healthcare/practice-management" },
     ],
   },
+  {
+    name: "Manufacturing",
+    sub: "From enquiry to the field",
+    href: "/manufacturing",
+  },
 ];
 
 const HealthcareMark = () => (
