@@ -36,7 +36,7 @@ export function BillingPricingContent() {
       {/* ============ Pricing plans ============ */}
       <section className="relative py-16 lg:py-20" style={{ background: "#ffffff" }} data-reveal-group="" data-duration="0.5" data-ease="default" data-amount="0.1">
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8">
-          <h2 className="text-center text-[26px] font-semibold leading-tight sm:text-[30px]" style={{ color: "var(--billing-depth, #0e342c)", "--reveal-y": "12px" } as React.CSSProperties} data-reveal="" data-reveal-delay="0">
+          <h2 className="text-[38px] text-center font-semibold leading-tight" style={{ color: "var(--billing-depth, #0e342c)", "--reveal-y": "12px" } as React.CSSProperties} data-reveal="" data-reveal-delay="0">
             Pricing plans
           </h2>
           <div className="mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between" data-reveal="" style={{ "--reveal-y": "12px" } as React.CSSProperties} data-reveal-delay="0.05">
@@ -634,7 +634,7 @@ export function BillingPricingContent() {
       <section id="compare-plans" className="scroll-mt-24 py-16 lg:py-24" style={{ background: "var(--billing-surface, #eef1ef)" }} data-reveal-group="" data-duration="0.55" data-ease="default" data-amount="0.05">
         <div className="mx-auto max-w-[1100px] px-5 lg:px-8">
           <div className="mb-12 text-center" data-reveal="" style={{ "--reveal-y": "20px" } as React.CSSProperties} data-reveal-delay="0">
-            <h2 className="text-[28px] font-semibold leading-tight sm:text-[34px]" style={{ color: "var(--billing-depth, #0e342c)" }}>
+            <h2 className="text-[38px] font-semibold leading-tight" style={{ color: "var(--billing-depth, #0e342c)" }}>
               Compare plans
             </h2>
             <p className="mt-3 text-[15px] text-slate-600">
@@ -1749,7 +1749,7 @@ export function BillingPricingContent() {
       <section className="relative py-16 lg:py-20" style={{ background: "#ffffff" }}>
         <div className="mx-auto max-w-3xl px-5">
           <div className="mb-8 text-center" data-reveal="" style={{ "--reveal-y": "24px" } as React.CSSProperties} data-reveal-group="" data-duration="0.55" data-margin="-10%">
-            <h2 className="text-[26px] font-semibold leading-tight sm:text-[30px]" style={{ color: "var(--billing-depth, #0e342c)" }}>
+            <h2 className="text-[38px] font-semibold leading-tight" style={{ color: "var(--billing-depth, #0e342c)" }}>
               Additional users
             </h2>
             <p className="mx-auto mt-3 max-w-[52ch] text-[15px] leading-relaxed text-slate-600">
@@ -1825,7 +1825,7 @@ export function BillingPricingContent() {
       <section className="relative py-16 lg:py-24" style={{ background: "#ffffff" }}>
         <div className="mx-auto max-w-3xl px-5">
           <div className="mb-10 text-center" data-reveal="" style={{ "--reveal-y": "16px" } as React.CSSProperties} data-reveal-group="" data-duration="0.5" data-margin="-10%">
-            <h2 className="text-[26px] font-semibold leading-tight sm:text-[32px]" style={{ color: "var(--billing-depth, #0e342c)" }}>
+            <h2 className="text-[38px] font-semibold leading-tight" style={{ color: "var(--billing-depth, #0e342c)" }}>
               FAQ
             </h2>
           </div>

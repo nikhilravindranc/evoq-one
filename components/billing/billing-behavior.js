@@ -476,6 +476,7 @@ export function initBilling() {
       var tabs = $$("[data-model-tab]", root);
       var grounds = $$("[data-model-ground]", root);
       var cards = $$("[data-model-card]", root);
+      var floats = $$("[data-model-float]", root);
       var active = 0;
       var busy = null;
 
@@ -495,6 +496,10 @@ export function initBilling() {
         out.style.transition = "opacity 0.3s " + EASE.smooth + ", transform 0.3s " + EASE.smooth;
         out.style.opacity = "0";
         out.style.transform = "translateY(-14px)";
+        if (floats[prev]) {
+          floats[prev].style.transition = "opacity 0.3s " + EASE.smooth;
+          floats[prev].style.opacity = "0";
+        }
 
         window.clearTimeout(busy);
         busy = window.setTimeout(function () {
@@ -506,6 +511,18 @@ export function initBilling() {
           grounds.forEach(function (g, i) {
             if (i !== next) g.style.opacity = "0";
           });
+          floats.forEach(function (f, i) {
+            if (i !== next) f.hidden = true;
+          });
+          if (floats[next]) {
+            var f = floats[next];
+            f.style.transition = "none";
+            f.style.opacity = "0";
+            f.hidden = false;
+            void f.offsetWidth;
+            f.style.transition = "opacity 0.35s " + EASE.smooth;
+            f.style.opacity = "1";
+          }
           var g = grounds[next];
           g.style.transition = "opacity 0.35s " + EASE.smooth;
           g.style.opacity = "1";
