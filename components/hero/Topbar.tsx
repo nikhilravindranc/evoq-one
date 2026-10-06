@@ -167,6 +167,15 @@ const HealthcareMark = () => (
   </span>
 );
 
+const ManufacturingMark = () => (
+  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#F1F5F9]">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" />
+    </svg>
+  </span>
+);
+
 export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string }) {
   const [open, setOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
@@ -396,6 +405,8 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                       >
                         {s.name === "Healthcare" ? (
                           <HealthcareMark />
+                        ) : s.name === "Manufacturing" ? (
+                          <ManufacturingMark />
                         ) : (
                           <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-content-center rounded-[9px] bg-[#F2F2FF] p-[6px]">
                             <EvoqMonogram color="#000099" />

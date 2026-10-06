@@ -53,6 +53,7 @@ export function Footer({ background, darkText = false }: { background?: string; 
             <li><a href="/healthcare">Healthcare</a></li>
             <li><a href="/healthcare/crm">Healthcare CRM</a></li>
             <li><a href="/healthcare/practice-management">Healthcare Practice Management</a></li>
+            <li><a href="/manufacturing">Manufacturing</a></li>
           </ul>
         </div>
 
