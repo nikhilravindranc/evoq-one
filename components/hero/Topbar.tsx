@@ -157,8 +157,7 @@ const SOLUTIONS: {
     href: "/manufacturing",
   },
   { name: "Construction & Real Estate", sub: "Projects, sites and property", href: "#", icon: "building" },
-  { name: "Field Service", sub: "Dispatch, visits and repairs", href: "#", icon: "wrench" },
-  { name: "Facilities & Maintenance", sub: "Assets, upkeep and requests", href: "#", icon: "tools" },
+  { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "#", icon: "wrench" },
   { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "#", icon: "hotel" },
   { name: "More industries", sub: "Explore every EVOQ solution", href: "#", icon: "grid" },
 ];

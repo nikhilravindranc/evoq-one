@@ -16,7 +16,7 @@ export default function AI() {
         <Topbar darkCTA={false} />
       </div>
       <EvoqAIPage />
-      <Footer />
+      <Footer background="#1A1190" />
     </div>
   );
 }

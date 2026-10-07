@@ -301,6 +301,13 @@ const INTERACTION_MODES = [
   },
 ];
 
+const MODE_FLOW = [
+  { trigger: "You ask", engine: "EVI works on it", fallback: "", steps: ["Finds the relevant records", "Ranks what matters most", "Suggests the next step"] },
+  { trigger: "You assign", engine: "The agent carries it out", fallback: "", steps: ["Reads the overdue invoices", "Prepares follow-up actions", "Returns it for approval"] },
+  { trigger: "You work in an app", engine: "EVI helps in place", fallback: "", steps: ["Reads the open record", "Summarizes recent activity", "Offers actions on the spot"] },
+  { trigger: "A schedule or event fires", engine: "The agent runs on its own", fallback: "Every Monday at 9:00 AM, or when an invoice is created.", steps: ["Watches for the trigger", "Runs the defined task", "Reports the result"] },
+];
+
 const MODE_STYLE = [
   { accent: "#5C5CFF", bg: "#F0EFFF", line: "#DEDCFF" },
   { accent: "#2F7BF5", bg: "#EAF2FF", line: "#D3E4FF" },
@@ -308,152 +315,9 @@ const MODE_STYLE = [
   { accent: "#0E9F6E", bg: "#E8F8F1", line: "#CBEFDF" },
 ];
 
-function Skel({ w, dot }: { w: string; dot?: string }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <span className="h-[7px] w-[7px] shrink-0 rounded-full" style={{ background: dot ?? "#E3E6F0" }} />
-      <span className="h-[7px] rounded-full" style={{ width: w, background: "#E8EBF5" }} />
-    </div>
-  );
-}
-
-function MockShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex-1 rounded-[18px] bg-white p-4" style={{ border: `1px solid ${C.border}`, boxShadow: "0 18px 40px -26px rgba(16,42,67,0.28)" }}>
-      {children}
-    </div>
-  );
-}
-
 function EviAvatar({ size = 28 }: { size?: number }) {
   return <Image src="/ai/ai-logo-icon.png" alt="EVI" width={size} height={size} className="shrink-0 rounded-[9px]" />;
 }
-
-function ModeMock({ index }: { index: number }) {
-  if (index === 0) {
-    return (
-      <MockShell>
-        <div className="flex items-center gap-2">
-          <EviAvatar />
-          <span className="text-[13px] font-bold" style={{ color: C.heading }}>EVI</span>
-        </div>
-        <div className="mt-3 rounded-[12px] px-3 py-2 text-[11.5px] leading-[1.45]" style={{ background: C.aiHighlight, color: C.heading }}>
-          Which opportunities need follow-up this week?
-        </div>
-        <div className="mt-3 rounded-[12px] p-3" style={{ border: `1px solid ${C.border}` }}>
-          <p className="text-[11.5px] leading-[1.45]" style={{ color: C.heading }}>Here are 5 opportunities that need follow-up this week.</p>
-          <div className="mt-3 flex flex-col gap-2">
-            <Skel w="70%" />
-            <Skel w="52%" dot={C.interactive} />
-            <Skel w="80%" dot={GREEN.fg} />
-            <Skel w="48%" dot={C.bright} />
-          </div>
-        </div>
-        <span className="mt-3 inline-flex items-center gap-1.5 rounded-[9px] px-3 py-1.5 text-[11px] font-bold" style={{ color: C.interactive, border: `1px solid ${C.tint}` }}>
-          <MessageIcon size={12} stroke={C.interactive} />
-          Draft follow-up emails
-        </span>
-      </MockShell>
-    );
-  }
-  if (index === 1) {
-    return (
-      <MockShell>
-        <div className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-[9px]" style={{ background: C.aiHighlight }}>
-            <BotIcon size={15} stroke={C.primary} />
-          </span>
-          <span className="text-[13px] font-bold" style={{ color: C.heading }}>Create agent task</span>
-        </div>
-        <div className="mt-3 rounded-[12px] px-3 py-2.5 text-[11.5px] leading-[1.5]" style={{ border: `1px solid ${C.border}`, color: C.body, minHeight: 64 }}>
-          Review overdue invoices and prepare follow-up actions.
-        </div>
-        <div className="mt-3 flex items-center justify-between gap-2 text-[11.5px]">
-          <span className="flex items-center gap-1.5 font-semibold" style={{ color: C.heading }}>
-            <BotIcon size={13} stroke={C.muted} /> Assign to
-          </span>
-          <span className="flex flex-1 items-center justify-between rounded-[9px] px-2.5 py-1.5" style={{ border: `1px solid ${C.border}`, color: C.body }}>
-            Finance Agent <ChevronDownIcon size={12} stroke={C.muted} />
-          </span>
-        </div>
-        <div className="mt-2 flex items-center justify-between rounded-[9px] px-2.5 py-1.5 text-[11.5px]" style={{ border: `1px solid ${C.border}`, color: C.heading }}>
-          <span className="flex items-center gap-1.5 font-semibold"><BranchIcon size={13} stroke={C.muted} /> Run now</span>
-          <ChevronDownIcon size={12} stroke={C.muted} />
-        </div>
-        <div className="mt-3 flex justify-end">
-          <span className="rounded-[9px] px-3.5 py-2 text-[11.5px] font-bold text-white" style={{ background: C.primary }}>Assign task</span>
-        </div>
-      </MockShell>
-    );
-  }
-  if (index === 2) {
-    return (
-      <MockShell>
-        <div className="flex items-center justify-between">
-          <span className="text-[13px] font-bold" style={{ color: C.heading }}>Customer</span>
-          <span className="inline-flex items-center gap-1.5 rounded-[9px] px-2.5 py-1.5 text-[11px] font-bold" style={{ color: C.heading, border: `1px solid ${C.tint}` }}>
-            <SparkleIcon size={12} stroke={C.primary} /> Ask EVI
-          </span>
-        </div>
-        <div className="mt-2.5 flex gap-3 text-[10.5px]" style={{ color: C.light }}>
-          <span>Overview</span>
-          <span className="font-bold" style={{ color: C.primary }}>Activity</span>
-          <span>Deals</span>
-          <span>Documents</span>
-        </div>
-        <div className="mt-3 rounded-[12px] p-3" style={{ background: C.aiSurface, border: `1px solid ${C.border}` }}>
-          <div className="flex items-start gap-2">
-            <EviAvatar size={24} />
-            <div className="rounded-[10px] px-2.5 py-1.5 text-[11px] leading-[1.4]" style={{ background: C.aiHighlight, color: C.heading }}>
-              Summarize this customer&apos;s recent activity.
-            </div>
-          </div>
-          <div className="mt-3 rounded-[10px] bg-white p-2.5" style={{ border: `1px solid ${C.border}` }}>
-            <p className="text-[11px] leading-[1.4]" style={{ color: C.heading }}>Here&apos;s a summary of recent activity for Acme Corp.</p>
-            <div className="mt-2.5 flex flex-col gap-1.5">
-              <Skel w="66%" />
-              <Skel w="44%" dot={C.interactive} />
-              <Skel w="76%" dot={GREEN.fg} />
-            </div>
-          </div>
-        </div>
-      </MockShell>
-    );
-  }
-  const rows = [
-    { icon: CalendarIcon, title: "On a schedule", sub: "Run every Monday at 9:00 AM" },
-    { icon: BoltIcon, title: "On an event", sub: "When a new invoice is created" },
-    { icon: BranchIcon, title: "On a condition", sub: "When an opportunity is idle for 7 days" },
-  ];
-  return (
-    <MockShell>
-      <div className="flex items-center gap-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full" style={{ background: GREEN.bg }}>
-          <ClockIcon size={15} stroke={GREEN.fg} />
-        </span>
-        <span className="text-[13px] font-bold" style={{ color: C.heading }}>Automate with agents</span>
-      </div>
-      <div className="mt-3 flex flex-col gap-2">
-        {rows.map((r) => (
-          <div key={r.title} className="flex items-center gap-2.5 rounded-[11px] px-2.5 py-2" style={{ border: `1px solid ${C.border}` }}>
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px]" style={{ background: C.aiHighlight }}>
-              <r.icon size={15} stroke={C.interactive} />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-[11.5px] font-bold" style={{ color: C.heading }}>{r.title}</p>
-              <p className="truncate text-[10.5px]" style={{ color: C.muted }}>{r.sub}</p>
-            </div>
-            <ChevronRightIcon size={13} stroke={C.light} />
-          </div>
-        ))}
-      </div>
-      <div className="mt-3 flex justify-end">
-        <span className="rounded-[9px] px-3.5 py-2 text-[11.5px] font-bold text-white" style={{ background: C.primary }}>Create automation</span>
-      </div>
-    </MockShell>
-  );
-}
-
 
 const WORK_SCENARIOS = [
   {
@@ -952,7 +816,7 @@ export function EvoqAIPage() {
         <div className="relative px-5 sm:px-6 lg:px-6">
           <motion.div variants={group(0.12, 0.1)} initial="hidden" animate="show" className="mx-auto max-w-[1100px] pt-36 text-center lg:pt-44">
             <motion.p variants={rise} className="text-[13px] font-semibold uppercase tracking-[0.32em] text-white/90">EVOQ AI</motion.p>
-            <motion.h1 variants={rise} className="mx-auto mt-4 max-w-[860px] font-[var(--font-display)] text-[40px] font-bold leading-[1.1] tracking-[-0.02em] text-white sm:text-[58px]">
+            <motion.h1 variants={rise} className="mx-auto mt-4 max-w-[860px] font-[var(--font-display)] text-[36px] font-bold leading-[1.1] tracking-[-0.02em] text-white sm:text-[48px]">
               AI that gets work done
             </motion.h1>
             <motion.p variants={rise} className="mx-auto mt-5 max-w-[640px] text-balance text-[17px] leading-[1.7] text-white/90">
@@ -979,15 +843,16 @@ export function EvoqAIPage() {
 
       {/* ===== 2. MEET EVOQ AI ===== */}
       <section id="meet-evoq-ai" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FBFBFF 0%, #F1EFFF 100%)" }}>
-        <div className="pointer-events-none absolute -left-32 top-10 h-[420px] w-[420px] rounded-full opacity-70 blur-3xl" style={{ background: "radial-gradient(closest-side, #E4E1FF, rgba(228,225,255,0))" }} />
-        <div className="pointer-events-none absolute -right-24 top-0 h-[520px] w-[520px] rounded-full opacity-80 blur-3xl" style={{ background: "radial-gradient(closest-side, #DAD6FF, rgba(218,214,255,0))" }} />
-        <div className="pointer-events-none absolute -bottom-32 right-10 h-[420px] w-[620px] rounded-full opacity-70 blur-3xl" style={{ background: "radial-gradient(closest-side, #E7E3FF, rgba(231,227,255,0))" }} />
+        <div className="pointer-events-none absolute -left-32 top-10 h-[460px] w-[460px] rounded-full opacity-60 blur-3xl" style={{ background: "radial-gradient(closest-side, #E4E1FF, rgba(228,225,255,0))" }} />
+        <div className="pointer-events-none absolute -right-24 top-0 h-[520px] w-[520px] rounded-full opacity-50 blur-3xl" style={{ background: "radial-gradient(closest-side, #DAD6FF, rgba(218,214,255,0))" }} />
+        <div className="pointer-events-none absolute -bottom-32 right-10 h-[420px] w-[620px] rounded-full opacity-40 blur-3xl" style={{ background: "radial-gradient(closest-side, #E7E3FF, rgba(231,227,255,0))" }} />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.35]" style={{ backgroundImage: "radial-gradient(rgba(86,72,240,0.16) 1px, transparent 1px)", backgroundSize: "30px 30px", maskImage: "linear-gradient(180deg, transparent, #000 25%, #000 75%, transparent)", WebkitMaskImage: "linear-gradient(180deg, transparent, #000 25%, #000 75%, transparent)" }} />
 
         <div className="relative px-5 sm:px-6 lg:px-6">
           <div className="mx-auto max-w-[1300px] py-20 lg:py-24">
             <motion.div {...reveal()} className="mx-auto max-w-[760px] text-center">
-              <p className="text-[13px] font-extrabold uppercase tracking-[0.28em]" style={{ color: C.interactive }}>Meet EVOQ AI</p>
-              <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.12] tracking-[-0.02em] sm:text-[46px]" style={{ color: "#0B1230" }}>
+              <p className="text-[13px] font-extrabold uppercase tracking-[0.28em]" style={{ color: "#2A28F0" }}>Meet EVOQ AI</p>
+              <h2 className="mt-5 font-[var(--font-display)] text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[38px]" style={{ color: "#0B1230" }}>
                 <span style={{ color: "#2A28F0" }}>EVI</span> guides the work.<br />Agents perform the work.
               </h2>
               <p className="mx-auto mt-5 max-w-[640px] text-[16px] leading-[1.7]" style={{ color: C.body }}>
@@ -995,76 +860,42 @@ export function EvoqAIPage() {
               </p>
             </motion.div>
 
-            <div className="mt-24 grid gap-14 lg:mt-28 lg:grid-cols-[1.05fr_1fr] lg:items-start lg:gap-10">
-              {/* EVI */}
+            <div className="mt-20 grid gap-14 lg:mt-24 lg:grid-cols-[1.05fr_1fr] lg:items-start lg:gap-10">
+              {/* EVI: character and conversation, no window chrome */}
               <motion.div {...reveal(0.1, 34, -30)} className="relative z-10">
-                {/* character from the supplied sheet: fixed in place, no movement */}
-                <div className="pointer-events-none absolute bottom-full left-10 z-10 hidden w-[212px] sm:block" style={{ marginBottom: -13 }}>
-                  <Image src="/evoq-ai/evi-hold.webp" alt="EVI" width={1010} height={784} sizes="500px" className="h-auto w-full" style={{ filter: "drop-shadow(0 6px 8px rgba(60,50,200,0.16))" }} />
+                <div className="grid items-end gap-5 sm:grid-cols-[210px_1fr]">
+                  <div className="pointer-events-none hidden sm:block">
+                    <Image src="/evoq-ai/evi-hold.webp" alt="EVI" width={1010} height={784} sizes="420px" className="h-auto w-full" style={{ filter: "drop-shadow(0 14px 22px rgba(60,50,200,0.22))" }} />
+                  </div>
+                  <div className="flex flex-col gap-4">
+                    <motion.div className="flex justify-end" initial={{ opacity: 0, y: 14, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.5, delay: 0.7, ease: EASE }}>
+                      <p className="rounded-[20px] rounded-br-[6px] px-5 py-3 text-[14.5px] font-semibold text-white" style={{ background: "#5648F0", boxShadow: "0 16px 34px -16px rgba(86,72,240,0.9)" }}>
+                        Which opportunities need follow-up this week?
+                      </p>
+                    </motion.div>
+                    <motion.div className="flex items-start gap-3" initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={VP} transition={{ duration: 0.55, delay: 1.3, ease: EASE }}>
+                      <Image src="/evoq-ai/evi-avatar.webp" alt="" width={371} height={380} sizes="96px" className="h-11 w-11 shrink-0 rounded-full bg-[#F0EEFF] object-cover" />
+                      <p className="rounded-[20px] rounded-tl-[6px] px-4 py-3 text-[14.5px] leading-[1.55]" style={{ background: "#fff", border: "1px solid #ECEAFB", color: "#0B1230", boxShadow: "0 16px 34px -22px rgba(60,50,200,0.5)" }}>
+                        I found 3 opportunities that need follow-up this week, including <strong>Northgate Logistics</strong> and <strong>Beta Inc.</strong>
+                        <br />
+                        Here are the next actions.
+                      </p>
+                    </motion.div>
+                    <motion.div className="flex flex-wrap gap-2 pl-14" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={VP} transition={{ duration: 0.5, delay: 1.8, ease: EASE }}>
+                      {["Draft follow-up emails", "Schedule calls", "Open deals"].map((t) => (
+                        <span key={t} className="rounded-full px-3.5 py-1.5 text-[12.5px] font-bold" style={{ background: "#ECEBFC", color: "#4B3FF0" }}>{t}</span>
+                      ))}
+                    </motion.div>
+                  </div>
                 </div>
 
-                <div className="rounded-[32px] bg-white/85 p-5 sm:p-6" style={{ border: "1px solid #ECEAFB", boxShadow: "0 40px 90px -50px rgba(60,50,200,0.45)" }}>
-                  <div className="overflow-hidden rounded-[20px]" style={{ border: `1px solid ${C.border}` }}>
-                    <div className="flex items-center justify-between px-4 py-3" style={{ background: "#F7F7FC", borderBottom: `1px solid ${C.border}` }}>
-                      <div className="flex items-center gap-3">
-                        <span className="flex gap-1.5">
-                          <i className="h-3 w-3 rounded-full" style={{ background: "#F87171" }} />
-                          <i className="h-3 w-3 rounded-full" style={{ background: "#FBBF24" }} />
-                          <i className="h-3 w-3 rounded-full" style={{ background: "#34D399" }} />
-                        </span>
-                        <span className="text-[13px] font-bold" style={{ color: "#0B1230" }}>EVI · Assistant</span>
-                      </div>
-                      <span className="flex items-center gap-1.5 text-[12.5px] font-semibold" style={{ color: C.muted }}>
-                        <i className="h-2 w-2 rounded-full" style={{ background: "#22C55E" }} />
-                        Online
-                      </span>
-                    </div>
-
-                    <div className="bg-white p-5">
-                      <motion.div
-                        className="flex justify-end"
-                        initial={{ opacity: 0, y: 14, scale: 0.97 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        viewport={VP}
-                        transition={{ duration: 0.5, delay: 0.7, ease: EASE }}
-                      >
-                        <p className="rounded-[18px] px-5 py-3 text-[14.5px] font-semibold text-white" style={{ background: "#5648F0" }}>
-                          Which opportunities need follow-up this week?
-                        </p>
-                      </motion.div>
-                      <motion.div
-                        className="mt-5 flex items-start gap-3"
-                        initial={{ opacity: 0, y: 14 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={VP}
-                        transition={{ duration: 0.55, delay: 1.3, ease: EASE }}
-                      >
-                        <Image src="/evoq-ai/evi-avatar.webp" alt="" width={371} height={380} sizes="96px" className="h-12 w-12 shrink-0 rounded-full bg-[#F0EEFF] object-cover" />
-                        <p className="rounded-[18px] px-4 py-3 text-[14.5px] leading-[1.55]" style={{ background: "#EEEDFC", color: "#0B1230" }}>
-                          I found 3 opportunities that need follow-up this week, including <strong>Northgate Logistics</strong> and <strong>Beta Inc.</strong>
-                          <br />
-                          Here are the next actions.
-                        </p>
-                      </motion.div>
-                    </div>
-
-                    <div className="mx-4 mb-4 flex items-center gap-3 rounded-full px-4 py-2.5" style={{ border: `1px solid ${C.border}`, background: "#fff" }}>
-                      <PaperclipGlyph />
-                      <span className="flex-1 text-[14px]" style={{ color: C.light }}>Ask EVI anything…</span>
-                      <span className="flex h-11 w-11 items-center justify-center rounded-full" style={{ background: "#4B3FF0", boxShadow: "0 10px 22px -10px rgba(75,63,240,0.8)" }}>
-                        <ArrowIcon size={18} stroke="#fff" />
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 px-2 pb-1 pt-6">
-                    <span className="mt-1.5 shrink-0 rounded-full px-5 py-2 text-[13px] font-extrabold tracking-[0.12em] text-white" style={{ background: "#5648F0" }}>EVI</span>
-                    <div>
-                      <h3 className="font-[var(--font-display)] text-[24px] font-extrabold leading-[1.15]" style={{ color: "#0B1230" }}>AI. Assist. Act.</h3>
-                      <p className="mt-2 text-[14.5px] leading-[1.65]" style={{ color: C.body }}>
-                        EVI is your AI assistant across EVOQ. Ask questions, find information, understand what&apos;s happening, prepare work, or get help with the next step.
-                      </p>
-                    </div>
+                <div className="mt-7 flex items-start gap-4 px-1">
+                  <span className="mt-1.5 shrink-0 rounded-full px-5 py-2 text-[13px] font-extrabold tracking-[0.12em] text-white" style={{ background: "#5648F0" }}>EVI</span>
+                  <div>
+                    <h4 className="font-[var(--font-display)] text-[16px] font-extrabold leading-[1.25]" style={{ color: "#0B1230" }}>AI. Assist. Act.</h4>
+                    <p className="mt-2 text-[14.5px] leading-[1.65]" style={{ color: C.body }}>
+                      EVI is your AI assistant across EVOQ. Ask questions, find information, understand what&apos;s happening, prepare work, or get help with the next step.
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -1138,9 +969,9 @@ export function EvoqAIPage() {
                   </div>
                 </div>
 
-                <div className="rounded-[32px] bg-white/90 p-7 sm:p-9" style={{ border: "1px solid #ECEAFB", boxShadow: "0 40px 90px -50px rgba(60,50,200,0.45)" }}>
+                <div className="rounded-[28px] p-7 sm:p-9" style={{ background: "rgba(255,255,255,0.9)", border: "1px solid #ECEAFB", boxShadow: "0 40px 90px -50px rgba(60,50,200,0.45)" }}>
                   <span className="inline-block rounded-full px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.14em]" style={{ background: "#ECEBFC", color: "#4B3FF0" }}>AI agents</span>
-                  <h3 className="mt-6 font-[var(--font-display)] text-[24px] font-extrabold leading-[1.2]" style={{ color: "#0B1230" }}>Give work to a specialist.</h3>
+                  <h4 className="mt-6 font-[var(--font-display)] text-[16px] font-extrabold leading-[1.25]" style={{ color: "#0B1230" }}>Give work to a specialist.</h4>
                   <p className="mt-4 text-[15.5px] leading-[1.7]" style={{ color: C.body }}>
                     AI agents handle defined tasks that require multiple steps, decisions, or actions. They work with information across EVOQ apps, then return results or take approved actions.
                   </p>
@@ -1160,12 +991,12 @@ export function EvoqAIPage() {
       </section>
 
       {/* ===== 3. ASK, ASSIGN, ACT ===== */}
-      <section id="ask-assign-act" className="relative" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FFFFFF 0%, #FAFAFF 100%)" }}>
+      <section id="ask-assign-act" className="relative" style={{ scrollMarginTop: 96, background: "#FFFFFF" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div ref={askRef} onMouseEnter={() => setAskHold(true)} onMouseLeave={() => setAskHold(false)} className="mx-auto max-w-[1300px] py-20 lg:py-24">
             <div className="mx-auto max-w-[1100px] text-center">
               <motion.p {...reveal(0, 14)} className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>How you work with AI</motion.p>
-              <h2 className="mt-4 font-[var(--font-display)] text-[26px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[32px] lg:text-[38px] lg:whitespace-nowrap" style={{ color: C.heading }}>
+              <h2 className="mt-4 font-[var(--font-display)] text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[38px] lg:whitespace-nowrap" style={{ color: C.heading }}>
                 <WordReveal text="AI that adapts to how you work." />
               </h2>
             </div>
@@ -1200,80 +1031,102 @@ export function EvoqAIPage() {
               })}
             </motion.div>
 
-            <motion.div variants={group(0.16, 0.2)} initial="hidden" whileInView="show" viewport={VP} className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {INTERACTION_MODES.map((m, i) => {
-                const st = MODE_STYLE[i];
-                const on = i === activeMode;
-                return (
-                  <motion.div key={m.tab} variants={cardV} className="flex">
-                  <div
-                    onClick={() => setActiveMode(i)}
-                    className="flex w-full cursor-pointer flex-col overflow-hidden rounded-[26px] transition-all duration-300"
-                    style={{
-                      background: st.bg,
-                      border: `1.5px solid ${on ? st.accent : st.line}`,
-                      boxShadow: on ? `0 28px 60px -30px ${st.accent}` : "none",
-                      transform: on ? "translateY(-4px)" : undefined,
-                    }}
-                  >
-                    {/* 1 — what you do (tinted) */}
-                    <motion.div variants={inner} className="px-5 pb-5 pt-6">
-                      <div className="flex items-center gap-3">
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white" style={{ boxShadow: `0 8px 18px -10px ${st.accent}` }}>
-                          <m.icon size={21} stroke={st.accent} />
+            <style>{`
+              @keyframes aaTravel{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 10px);opacity:0}}
+              @keyframes aaRing{0%{transform:scale(.9);opacity:.55}100%{transform:scale(1.5);opacity:0}}
+              @keyframes aaTick{0%,100%{background:#fff;color:#8A93A6}30%,70%{background:var(--aa);color:#fff}}
+              .aa-dot{position:absolute;top:-4px;width:10px;height:10px;border-radius:50%;animation:aaTravel 2.4s ease-in-out infinite}
+              .aa-ring{position:absolute;inset:0;border-radius:50%;animation:aaRing 2.4s ease-out infinite}
+              .aa-tick{animation:aaTick 3.6s ease-in-out infinite}
+              @media (prefers-reduced-motion:reduce){.aa-dot,.aa-ring,.aa-tick{animation:none}}
+            `}</style>
+            {(() => {
+              const m = INTERACTION_MODES[activeMode];
+              const st = MODE_STYLE[activeMode];
+              const fl = MODE_FLOW[activeMode];
+              const Conn = ({ delay = 0 }: { delay?: number }) => (
+                <div className="relative mx-2 hidden h-[2px] flex-1 lg:block" style={{ marginTop: 51, backgroundImage: `repeating-linear-gradient(90deg, ${st.accent}66 0 6px, transparent 6px 11px)` }}>
+                  <i className="aa-dot" style={{ background: st.accent, boxShadow: `0 0 0 4px ${st.accent}33`, animationDelay: `${delay}s` }} />
+                  <svg className="absolute -right-1 -top-[5px]" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l8 5-8 5z" fill={st.accent} /></svg>
+                </div>
+              );
+              return (
+                <motion.div
+                  key={activeMode}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, ease: EASE }}
+                  className="mx-auto mt-8 max-w-[1100px] rounded-[32px] px-6 py-10 sm:px-10"
+                  style={{ background: `${st.bg}`, border: `1.5px solid ${st.line}`, backgroundImage: `radial-gradient(${st.accent}33 1px, transparent 1px)`, backgroundSize: "22px 22px", ["--aa" as string]: st.accent }}
+                >
+                  <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-start lg:gap-0">
+                    {/* 1: you */}
+                    <div className="flex w-full max-w-[290px] flex-col items-center text-center lg:w-[240px] lg:shrink-0">
+                      <div className="flex h-[104px] items-center justify-center">
+                        <span className="flex h-[76px] w-[76px] items-center justify-center rounded-full bg-white" style={{ boxShadow: `0 14px 30px -14px ${st.accent}`, border: `2px solid ${st.accent}` }}>
+                          <m.icon size={30} stroke={st.accent} />
                         </span>
-                        <h4 className="text-[16px] font-extrabold leading-[1.25]" style={{ color: C.heading }}>
-                          {m.title[0]}
-                          <span className="block text-[13px] font-semibold" style={{ color: st.accent }}>{m.title[1]}</span>
-                        </h4>
                       </div>
-                      <div className="mt-4 min-h-[64px]">
-                        {m.quote && (
-                          <div className="rounded-[14px] bg-white px-3.5 py-3 text-[13px] italic leading-[1.5]" style={{ color: C.heading, borderLeft: `3px solid ${st.accent}` }}>
-                            &ldquo;<Typewriter text={m.quote} delay={0.9 + i * 0.25} speed={22} />&rdquo;
-                          </div>
-                        )}
+                      <p className="mt-3 text-[11px] font-extrabold uppercase tracking-[0.16em]" style={{ color: st.accent }}>{fl.trigger}</p>
+                      <div className="relative mt-3 rounded-[18px] bg-white px-4 py-3 text-[14px] italic leading-[1.5]" style={{ color: C.heading, border: `1px solid ${st.line}`, minHeight: 64 }}>
+                        &ldquo;<Typewriter text={m.quote || fl.fallback} delay={0.2} speed={22} />&rdquo;
                       </div>
-                      <p className="mt-3 min-h-[63px] text-[13px] leading-[1.6]" style={{ color: C.body }}>{m.desc}</p>
-                    </motion.div>
+                    </div>
 
-                    {/* 2 — what you see (white panel) */}
-                    <motion.div variants={inner} className="flex flex-1 flex-col rounded-t-[22px] bg-white px-4 pb-4 pt-3" style={{ boxShadow: "0 -10px 30px -22px rgba(20,20,100,0.35)" }}>
-                      <p className="mb-2.5 text-[10.5px] font-extrabold uppercase tracking-[0.14em]" style={{ color: st.accent }}>In EVOQ</p>
-                      <div className="flex flex-1 flex-col">
-                        <ModeMock index={i} />
-                      </div>
-                    </motion.div>
+                    <Conn />
 
-                    {/* 3 — what you get (tinted) */}
-                    <motion.div variants={inner} className="flex items-center gap-3 px-5 py-4" style={{ background: st.bg }}>
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full" style={{ background: st.accent }}>
-                        <m.outcome.icon size={18} stroke="#fff" />
-                      </span>
-                      <p className="text-[11px] font-extrabold uppercase tracking-[0.12em]" style={{ color: C.muted }}>
-                        You get
-                        <span className="block text-[15px] normal-case tracking-normal" style={{ color: C.heading }}>
-                          {m.outcome.label[0]} <span className="text-[13px] font-semibold" style={{ color: C.body }}>{m.outcome.label[1]}</span>
+                    {/* 2: EVOQ AI */}
+                    <div className="flex w-full max-w-[300px] flex-col items-center text-center lg:w-[290px] lg:shrink-0">
+                      <div className="relative flex h-[104px] w-[104px] items-center justify-center">
+                        <span className="aa-ring" style={{ border: `2px solid ${st.accent}` }} />
+                        <span className="aa-ring" style={{ border: `2px solid ${st.accent}`, animationDelay: "1.2s" }} />
+                        <span className="relative flex h-[104px] w-[104px] items-center justify-center rounded-full bg-white" style={{ boxShadow: `0 20px 40px -16px ${st.accent}` }}>
+                          <EviAvatar size={52} />
                         </span>
+                      </div>
+                      <p className="mt-3 text-[11px] font-extrabold uppercase tracking-[0.16em]" style={{ color: st.accent }}>{fl.engine}</p>
+                      <ol className="mt-3 flex w-full list-none flex-col gap-2 p-0 text-left">
+                        {fl.steps.map((s, k) => (
+                          <li key={s} className="flex items-center gap-2.5 rounded-[12px] bg-white px-3 py-2 text-[13px] font-semibold" style={{ color: C.heading, border: `1px solid ${st.line}` }}>
+                            <span className="aa-tick flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10.5px] font-extrabold" style={{ border: `1.5px solid ${st.accent}`, animationDelay: `${k * 0.9}s` }}>{k + 1}</span>
+                            {s}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+
+                    <Conn delay={1.2} />
+
+                    {/* 3: outcome */}
+                    <div className="flex w-full max-w-[290px] flex-col items-center text-center lg:w-[240px] lg:shrink-0">
+                      <div className="flex h-[104px] items-center justify-center">
+                        <span className="flex h-[76px] w-[76px] items-center justify-center rounded-full" style={{ background: st.accent, boxShadow: `0 16px 32px -12px ${st.accent}` }}>
+                          <m.outcome.icon size={30} stroke="#fff" />
+                        </span>
+                      </div>
+                      <p className="mt-3 text-[11px] font-extrabold uppercase tracking-[0.16em]" style={{ color: st.accent }}>You get</p>
+                      <p className="mt-2 text-[20px] font-extrabold leading-[1.2]" style={{ color: C.heading }}>
+                        {m.outcome.label[0]}
+                        <span className="block text-[14px] font-semibold" style={{ color: C.body }}>{m.outcome.label[1]}</span>
                       </p>
-                    </motion.div>
+                      <p className="mt-3 text-[13.5px] leading-[1.6]" style={{ color: C.body }}>{m.desc}</p>
+                    </div>
                   </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
+                </motion.div>
+              );
+            })()}
           </div>
         </div>
       </section>
 
       {/* ===== 4. AI ACROSS THE SYSTEMS YOU USE ===== */}
-      <section id="cross-system" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FBFBFF 0%, #F4F3FF 100%)" }}>
+      <section id="cross-system" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #EEF4FF 0%, #E2ECFF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div className="mx-auto max-w-[1480px] py-16 lg:py-24">
             <div className="grid gap-12 xl:grid-cols-[430px_1fr] xl:gap-6">
               <div className="xl:pt-20">
                 <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.interactive }}>AI across the systems you use</p>
-                <h2 className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[44px]" style={{ color: "#0B1230" }}>
+                <h2 className="mt-5 font-[var(--font-display)] text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[38px]" style={{ color: "#0B1230" }}>
                   Your work extends beyond EVOQ applications.
                 </h2>
                 <p className="mt-6 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
@@ -1303,12 +1156,12 @@ export function EvoqAIPage() {
       </section>
 
       {/* ===== 5. SEE EVOQ AI AT WORK (interactive console) ===== */}
-      <section id="evoq-ai-at-work" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FAFAFF 0%, #F1F0FF 100%)" }}>
+      <section id="evoq-ai-at-work" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "#FFFFFF" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div className="mx-auto max-w-[1300px] py-16 lg:py-24">
             <motion.div {...reveal()} className="mx-auto max-w-[820px] text-center">
               <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.primary }}>See EVOQ AI at work</p>
-              <h2 className="mt-4 font-[var(--font-display)] text-[28px] font-extrabold leading-[1.2] tracking-[-0.02em] sm:text-[38px]" style={{ color: C.heading }}>
+              <h2 className="mt-4 font-[var(--font-display)] text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[38px]" style={{ color: C.heading }}>
                 A signal comes in.{" "}
                 <span style={{ backgroundImage: "linear-gradient(90deg, #3333CC, #5C5CFF 60%, #8484FF)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                   EVI and an agent take it from there.
@@ -1451,14 +1304,14 @@ export function EvoqAIPage() {
       </section>
 
       {/* ===== 6. AI FOR EVERY INDUSTRY ===== */}
-      <section id="industries" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FAFAFF 0%, #F4F4FF 100%)" }}>
+      <section id="industries" className="relative overflow-hidden" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #F3F1FF 0%, #E8E4FF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div ref={indRef} onMouseEnter={() => setIndHold(true)} onMouseLeave={() => setIndHold(false)} className="mx-auto max-w-[1240px] py-16 lg:py-24">
             <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
               <AnimatePresence mode="wait">
               <motion.div variants={group(0.1)} initial="hidden" animate="show" exit={{ opacity: 0, x: -20, transition: { duration: 0.18 } }} key={industry.name} className="evoq-fade">
                 <motion.p variants={rise} className="text-[13px] font-extrabold uppercase tracking-[0.12em]" style={{ color: C.interactive }}>AI for every industry</motion.p>
-                <motion.h2 variants={rise} className="mt-5 font-[var(--font-display)] text-[34px] font-extrabold leading-[1.12] tracking-[-0.02em] sm:text-[46px]" style={{ color: "#0B1230" }}>
+                <motion.h2 variants={rise} className="mt-5 font-[var(--font-display)] text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[38px]" style={{ color: "#0B1230" }}>
                   {industry.title}
                 </motion.h2>
                 <motion.p variants={rise} className="mt-6 max-w-[520px] text-[17px] leading-[1.7]" style={{ color: C.body }}>{industry.desc}</motion.p>
@@ -1540,7 +1393,7 @@ export function EvoqAIPage() {
       </section>
 
       {/* ===== 7. PUT EVOQ AI TO WORK ===== */}
-      <section id="get-started" className="relative" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #F4F3FF 0%, #FBFBFF 100%)" }}>
+      <section id="get-started" className="relative" style={{ scrollMarginTop: 96, background: "linear-gradient(180deg, #FFFFFF 0%, #EEEBFF 100%)" }}>
         <div className="px-5 sm:px-6 lg:px-6">
           <div className="mx-auto max-w-[1300px] py-12 lg:py-16">
             <motion.div initial={{ opacity: 0, y: 50, scale: 0.96 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.85, ease: EASE }}
@@ -1555,7 +1408,7 @@ export function EvoqAIPage() {
               </svg>
               <div className="relative">
                 <motion.p {...reveal(0.2, 16)} className="text-[12.5px] font-extrabold uppercase tracking-[0.2em] text-white/90">Get started</motion.p>
-                <motion.h2 {...reveal(0.3, 24)} className="mt-5 font-[var(--font-display)] text-[32px] font-extrabold leading-[1.15] tracking-[-0.02em] text-white sm:text-[46px]">
+                <motion.h2 {...reveal(0.3, 24)} className="mt-5 font-[var(--font-display)] text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-white sm:text-[38px]">
                   Ready to see AI at work?
                 </motion.h2>
                 <motion.p {...reveal(0.42, 24)} className="mx-auto mt-4 max-w-[640px] text-[16px] leading-[1.7] text-white/90 sm:text-[18px]">
