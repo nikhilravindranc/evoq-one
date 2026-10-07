@@ -3,6 +3,8 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { ConfigXWindow } from "./ConfigX";
 import { MfMotion } from "./MfMotion";
+import { EnquiryModal } from "./EnquiryModal";
+import { HeroVisual } from "./HeroVisual";
 
 const G = "#1F2933";
 const ST = "#475569";
@@ -33,6 +35,41 @@ const IMG = {
   plant: U("1717386255767-52643970d483", 1800),
 };
 
+const STEP = 12.5;
+const NB = `border-color:${CG};box-shadow:0 14px 30px -20px rgba(31,41,51,.5)`;
+const NA = `border-color:${BL};box-shadow:0 0 0 4px ${PB},0 20px 40px -22px rgba(37,99,235,.6)`;
+const CB = `border-color:${CG};box-shadow:0 24px 50px -28px rgba(31,41,51,.45)`;
+const FLOWCSS = (() => {
+  let c = ".mf-opszone{position:relative;height:250px}.mf-fn{position:relative;background:#fff;border-radius:10px;border:1px solid " + CG + ";box-shadow:0 14px 30px -20px rgba(31,41,51,.5);padding:12px 10px;text-align:center}";
+  c += ".mf-vl{position:absolute;top:172px;bottom:0;width:2px}.mf-vl-l{left:calc((100% - 170px)/12 - 1px)}.mf-vl-r{right:calc((100% - 170px)/12 - 1px)}";
+  c += `.mf-vline{position:absolute;inset:0;background:repeating-linear-gradient(180deg,${CG} 0 5px,transparent 5px 9px)}`;
+  c += `.mf-vhead{position:absolute;left:-4px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent}.mf-vhead-d{bottom:-2px;border-top:8px solid ${BL}}.mf-vhead-u{top:-2px;border-bottom:8px solid ${BL}}`;
+  c += `.mf-vdot{position:absolute;left:-4px;top:0;width:10px;height:10px;border-radius:50%;background:${BL};box-shadow:0 0 0 4px ${PB};opacity:0}`;
+  c += `.mf-vlab{position:absolute;top:50%;margin-top:-8px;font-size:10.5px;font-weight:700;color:${BL};white-space:nowrap}`;
+  c += `.mf-fc{position:absolute;left:100%;top:50%;width:34px;height:2px;margin-top:-1px}.mf-cf{position:absolute;left:0;top:0;width:calc(100% - 6px);height:2px;background:${BL};transform:scaleX(0);transform-origin:left}`;
+  c += `.mf-fc:before{content:"";position:absolute;left:0;top:0;width:calc(100% - 6px);height:2px;background:repeating-linear-gradient(90deg,${CG} 0 4px,transparent 4px 7px)}`;
+  c += `.mf-fh{position:absolute;right:-1px;top:-4px;width:0;height:0;border-left:8px solid ${CG};border-top:5px solid transparent;border-bottom:5px solid transparent}.mf-fhb{border-left-color:${BL};opacity:0}`;
+  for (let k = 0; k <= 7; k++) {
+    const sp = k * STEP, a = sp + 1, b = Math.min(sp + 10, 97), r = Math.min(sp + 13, 99.5);
+    const base = k === 0 || k === 7 ? CB : NB;
+    c += `@keyframes mfA${k}{0%,${sp}%{${base}}${a}%,${b}%{${NA}}${r}%,100%{${base}}}`;
+    c += `.mf-n${k}{animation:mfA${k} 11.2s linear infinite}`;
+    if (k >= 1 && k <= 6) {
+      c += `@keyframes mfI${k}{0%,${sp}%{stroke:${G}}${a}%,${b}%{stroke:${BL}}${r}%,100%{stroke:${G}}}.mf-n${k} svg{animation:mfI${k} 11.2s linear infinite}`;
+    }
+    if (k >= 1 && k <= 5) {
+      const f0 = sp + 6, f1 = sp + 12;
+      c += `@keyframes mfF${k}{0%,${f0}%{transform:scaleX(0)}${f1}%,96%{transform:scaleX(1)}99%,100%{transform:scaleX(0)}}`;
+      c += `@keyframes mfH${k}{0%,${f0 + 4}%{opacity:0}${f1}%,96%{opacity:1}99%,100%{opacity:0}}`;
+    }
+  }
+  c += ".mf-cf,.mf-fhb{animation-duration:11.2s;animation-timing-function:linear;animation-iteration-count:infinite}";
+  c += "@keyframes mfV0{0%{opacity:0;transform:translateY(0)}1%{opacity:1;transform:translateY(0)}10%{opacity:1;transform:translateY(68px)}11%,100%{opacity:0;transform:translateY(68px)}}";
+  c += `@keyframes mfV7{0%,${7 * STEP}%{opacity:0;transform:translateY(68px)}${7 * STEP + 1}%{opacity:1;transform:translateY(68px)}${7 * STEP + 10}%{opacity:1;transform:translateY(0)}${7 * STEP + 11}%,100%{opacity:0;transform:translateY(0)}}`;
+  c += ".mf-vd0{animation:mfV0 11.2s linear infinite}.mf-vd7{animation:mfV7 11.2s linear infinite}";
+  return c;
+})();
+
 const ICONS: Record<string, ReactNode> = {
   chat: <><path d="M21 12a8 8 0 0 1-11.5 7.2L4 20l1.1-4.2A8 8 0 1 1 21 12z" /><path d="M9 11h6M9 14h4" /></>,
   cog: <><circle cx="12" cy="12" r="3" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" /></>,
@@ -61,9 +98,9 @@ const photoStyle = (src: string, extra: CSSProperties = {}): CSSProperties => ({
 function Eyebrow({ children, light = false }: { children: ReactNode; light?: boolean }) {
   return <p style={{ margin: "0 0 14px", fontSize: 11, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: light ? "#CBD5E1" : SL }}>{children}</p>;
 }
-function Btn({ children, dark = true, href = "#" }: { children: ReactNode; dark?: boolean; href?: string }) {
+function Btn({ children, dark = true, href = "#", enquiry = false }: { children: ReactNode; dark?: boolean; href?: string; enquiry?: boolean }) {
   return (
-    <a href={href} className="mf-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "13px 22px", borderRadius: 8, fontSize: 13.5, fontWeight: 600, textDecoration: "none", background: dark ? G : "#fff", color: dark ? "#fff" : G, border: dark ? `1px solid ${G}` : `1px solid ${CG}` }}>{children}</a>
+    <a href={enquiry ? "#" : href} {...(enquiry ? { "data-enquiry": "" } : {})} className="mf-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "13px 22px", borderRadius: 8, fontSize: 13.5, fontWeight: 600, textDecoration: "none", background: dark ? G : "#fff", color: dark ? "#fff" : G, border: dark ? `1px solid ${G}` : `1px solid ${CG}` }}>{children}</a>
   );
 }
 function Card({ style, children, cls }: { style?: CSSProperties; children: ReactNode; cls?: string }) {
@@ -100,30 +137,12 @@ function Hero() {
             <h1 className="mf-h1">From product enquiry to the field</h1>
             <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "46ch" }}>Manufacturing does not stop at the factory. Manage the commercial and operational work that surrounds your products, from complex configuration and quoting to delivery and service.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Btn href="#talk">Talk to an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn>
+              <Btn enquiry>Talk to an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn>
               <Btn dark={false} href="#segments">Explore manufacturing solutions</Btn>
             </div>
           </div>
           <div className="mf-hero-visual">
-            <div style={{ position: "absolute", right: 0, top: 16, width: "78%", height: "88%", borderRadius: 14, ...photoStyle(IMG.hero), boxShadow: "0 40px 80px -40px rgba(31,41,51,.6)" }} />
-            <div className="mf-float" style={{ position: "absolute", left: "30%", top: "30%", width: "44%", aspectRatio: "4 / 3", borderRadius: 14, border: "4px solid #fff", boxShadow: "0 30px 60px -24px rgba(31,41,51,.7)", ...photoStyle(IMG.motor) }} />
-            <Card style={{ position: "absolute", left: "2%", top: 8, width: 230, padding: 14 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: G }}>Industrial Control Unit</div>
-              {[["Configuration", "11 options"], ["Material", "Aluminium"], ["Status", "Ready for quote"], ["Price (Estimated)", "₹4,800"]].map(([a, b]) => (
-                <div key={a} style={{ display: "flex", justifyContent: "space-between", fontSize: 11, padding: "6px 0", borderBottom: `1px solid ${PG}`, color: SL }}><span>{a}</span><b style={{ color: G }}>{b}</b></div>
-              ))}
-            </Card>
-            <Card style={{ position: "absolute", left: "8%", bottom: 6, width: 210, padding: 12 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, fontWeight: 700, color: G }}>Configuration<span style={{ color: SL, fontWeight: 500 }}>01 / 04</span></div>
-              {[["Housing", "Aluminium"], ["Motor", "High torque"], ["Mounting", "Base mount"]].map(([a, b]) => (
-                <div key={a} style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, padding: "6px 8px", marginTop: 6, borderRadius: 6, border: `1px solid ${CG}`, color: SL }}>{a}<b style={{ color: G }}>{b}</b></div>
-              ))}
-            </Card>
-            <div style={{ position: "absolute", right: "4%", bottom: 6, display: "flex", gap: 6 }}>
-              {[0, 1, 2, 3].map((n) => (
-                <span key={n} style={{ width: 58, height: 46, borderRadius: 8, background: n === 0 ? PB : "#fff", border: `1px solid ${n === 0 ? BL : CG}`, display: "inline-flex", alignItems: "center", justifyContent: "center", padding: 6 }}><span style={{ width: "100%", height: "100%", borderRadius: 5, display: "block", ...photoStyle([IMG.motor, IMG.cnc, IMG.robots, IMG.profiles][n]) }} /></span>
-              ))}
-            </div>
+            <HeroVisual />
           </div>
         </div>
       </div>
@@ -213,28 +232,36 @@ function Operations() {
         <h2 className="mf-h2">Keep the order moving</h2>
         <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: ST }}>Winning the order is only the beginning. Customer information, pricing, stock and delivery all need to move with the sale. The less information gets lost between these steps, the easier it is to keep the order on track.</p>
       </div>
-      <div style={{ position: "relative", marginTop: 44, minHeight: 540 }}>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 300, borderRadius: 14, ...photoStyle(IMG.warehouse, { backgroundPosition: "center 60%" }), maskImage: "linear-gradient(180deg, transparent, #000 45%)", WebkitMaskImage: "linear-gradient(180deg, transparent, #000 45%)" }} />
-        <Card style={{ position: "absolute", left: 0, top: 0, width: 230, padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: SL, display: "flex", alignItems: "center", gap: 6 }}><Ic n="users" s={14} />CRM</div>
-          <div style={{ marginTop: 8, fontSize: 10.5, color: SL }}>Customers and opportunities</div>
-          <div style={{ marginTop: 8, padding: 8, borderRadius: 8, background: PG, fontSize: 11.5, fontWeight: 700, color: G }}>ABC Industries<span style={{ display: "block", fontSize: 10, fontWeight: 500, color: SL }}>Industrial equipment · Opportunity</span></div>
-        </Card>
-        <Card style={{ position: "absolute", right: 0, top: 0, width: 230, padding: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: SL, display: "flex", alignItems: "center", gap: 6 }}><Ic n="doc" s={14} />Billing</div>
-          <div style={{ marginTop: 8, fontSize: 10.5, color: SL }}>Quotes, invoices and payments</div>
-          {[["Invoice #INV-4871", "Paid"], ["Amount", "₹4,820"], ["Payment term", "Net 30"], ["Due date", "Nov 28, 2026"]].map(([a, b]) => (
-            <div key={a} style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, padding: "5px 0", color: SL, borderBottom: `1px solid ${PG}` }}><span>{a}</span><b style={{ color: G }}>{b}</b></div>
-          ))}
-        </Card>
-        <div className="mf-flow" style={{ position: "relative", top: 150 }}>
-          {nodes.map(([ic, t, d], i) => (
-            <div key={t} style={{ animationDelay: `${i * 0.35}s`, position: "relative", background: "#fff", borderRadius: 10, border: `1px solid ${i === 3 ? BL : CG}`, boxShadow: i === 3 ? `0 0 0 4px ${PB}, 0 20px 40px -22px rgba(37,99,235,.6)` : "0 14px 30px -20px rgba(31,41,51,.5)", padding: "12px 10px", textAlign: "center" }}>
-              <Ic n={ic} s={20} c={i === 3 ? BL : G} />
-              <div style={{ marginTop: 6, fontSize: 12.5, fontWeight: 700, color: G }}>{t}</div>
-              <div style={{ fontSize: 10, color: SL, marginTop: 2 }}>{d}</div>
-            </div>
-          ))}
+      <div style={{ position: "relative", marginTop: 44, minHeight: 650 }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 290, borderRadius: 14, ...photoStyle(IMG.warehouse, { backgroundPosition: "center 60%" }), maskImage: "linear-gradient(180deg, transparent, #000 45%)", WebkitMaskImage: "linear-gradient(180deg, transparent, #000 45%)" }} />
+        <div style={{ position: "relative", maxWidth: 960, margin: "0 auto" }}>
+          <div className="mf-opszone">
+            <Card cls="mf-an mf-n0" style={{ position: "absolute", left: 0, top: 0, width: 230, minHeight: 172, padding: 14 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: SL, display: "flex", alignItems: "center", gap: 6 }}><Ic n="users" s={14} />CRM</div>
+              <div style={{ marginTop: 8, fontSize: 10.5, color: SL }}>Customers and opportunities</div>
+              <div style={{ marginTop: 8, padding: 8, borderRadius: 8, background: PG, fontSize: 11.5, fontWeight: 700, color: G }}>ABC Industries<span style={{ display: "block", fontSize: 10, fontWeight: 500, color: SL }}>Industrial equipment · Opportunity</span></div>
+              <div style={{ marginTop: 8, display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10.5, fontWeight: 700, color: BL }}><Dots />Deal won · starts the order</div>
+            </Card>
+            <Card cls="mf-an mf-n7 mf-bill" style={{ position: "absolute", right: 0, top: 0, width: 230, minHeight: 172, padding: 14 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: SL, display: "flex", alignItems: "center", gap: 6 }}><Ic n="doc" s={14} />Billing</div>
+              <div style={{ marginTop: 8, fontSize: 10.5, color: SL }}>Quotes, invoices and payments</div>
+              {[["Invoice #INV-4871", "Paid"], ["Amount", "₹4,820"], ["Payment term", "Net 30"], ["Due date", "Nov 28, 2026"]].map(([a, b]) => (
+                <div key={a} style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, padding: "5px 0", color: SL, borderBottom: `1px solid ${PG}` }}><span>{a}</span><b style={{ color: G }}>{b}</b></div>
+              ))}
+            </Card>
+            <div className="mf-arrow mf-vl mf-vl-l"><i className="mf-vline" /><i className="mf-vhead mf-vhead-d" /><i className="mf-an mf-vdot mf-vd0" /><span className="mf-vlab" style={{ left: 14 }}>Opportunity won</span></div>
+            <div className="mf-arrow mf-vl mf-vl-r"><i className="mf-vline" /><i className="mf-vhead mf-vhead-u" /><i className="mf-an mf-vdot mf-vd7" /><span className="mf-vlab" style={{ right: 14 }}>Invoice raised</span></div>
+          </div>
+          <div className="mf-flow">
+            {nodes.map(([ic, t, d], i) => (
+              <div key={t} className={`mf-an mf-n${i + 1} mf-fn`}>
+                <Ic n={ic} s={20} c={G} />
+                <div style={{ marginTop: 6, fontSize: 12.5, fontWeight: 700, color: G }}>{t}</div>
+                <div style={{ fontSize: 10, color: SL, marginTop: 2 }}>{d}</div>
+                {i < 5 && <span className="mf-arrow mf-fc"><i className="mf-an mf-cf" style={{ animationName: `mfF${i + 1}` }} /><b className="mf-fh" /><b className="mf-an mf-fh mf-fhb" style={{ animationName: `mfH${i + 1}` }} /></span>}
+              </div>
+            ))}
+          </div>
         </div>
         <div className="mf-g3" style={{ position: "absolute", left: "8%", right: "8%", bottom: 10 }}>
           {[["box", "Inventory", "Products and availability"], ["layers", "Projects", "Delivery and project coordination"], ["wrench", "ServiceOps", "Service and maintenance"]].map(([ic, t, d]) => (
@@ -251,7 +278,7 @@ function Operations() {
 
 /* ------------------------------------------------------------------ 5. Factory to field */
 function Field() {
-  const apps = [["layers", "Projects", "Plan and coordinate delivery and installation."], ["wrench", "ServiceOps", "Manage service visits, maintenance and repairs."], ["box", "Inventory", "Track products, spare parts and stock availability."], ["headset", "Desk", "Support customers with questions and service requests."]];
+  const apps = [["/evoq-ai/apps/projects.png", "Projects", "Delivery and installation"], ["/evoq-ai/apps/serviceops.png", "ServiceOps", "Service and maintenance"], ["/evoq-ai/apps/inventory.png", "Inventory", "Stock and spare parts"], ["/evoq-ai/apps/desk.png", "Desk", "Customer support"]];
   return (
     <Sec bg={PG} grid id="field">
       <div className="mf-split2" style={{ alignItems: "center", gap: 48 }}>
@@ -259,15 +286,29 @@ function Field() {
           <Eyebrow>From factory to field</Eyebrow>
           <h2 className="mf-h2">The product keeps moving</h2>
           <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "46ch" }}>Delivery is not always the end of the relationship. Installation, commissioning, maintenance, service visits, spare parts and customer support can continue long after the original order.</p>
-          <div style={{ marginTop: 28 }}><Btn href="#talk">Explore service and delivery <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn></div>
+          <div style={{ marginTop: 28 }}><Btn enquiry>Connect with an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn></div>
         </div>
-        <div style={{ position: "relative", height: 420 }}>
+        <div className="mf-fieldvis" style={{ position: "relative", height: 460 }}>
           <div style={{ position: "absolute", inset: 0, borderRadius: 14, ...photoStyle(IMG.delivery), boxShadow: "0 40px 80px -40px rgba(31,41,51,.6)" }} />
           <Card style={{ position: "absolute", right: 16, top: 16, width: 190, padding: 12 }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: G, display: "flex", gap: 8, alignItems: "center" }}><Ic n="wrench" s={15} />Field service</div>
             <div style={{ fontSize: 10.5, color: SL, marginTop: 6, lineHeight: 1.6 }}>Installation<br />Maintenance<br />Ongoing support</div>
           </Card>
-          <Card style={{ position: "absolute", left: 16, bottom: 16, width: 200, padding: 12 }}>
+          <Card style={{ position: "absolute", right: 16, bottom: 16, width: 236, padding: 12 }}>
+            <div style={{ fontSize: 11.5, fontWeight: 700, color: G, display: "flex", justifyContent: "space-between", alignItems: "center" }}>EVOQ applications<span style={{ fontSize: 9.5, fontWeight: 700, color: BL, background: "#DBEAFE", padding: "2px 7px", borderRadius: 99 }}>Included</span></div>
+            <div style={{ marginTop: 8, display: "grid", gap: 7 }}>
+              {apps.map(([img, t, d]) => (
+                <div key={t} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ width: 86, flexShrink: 0 }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img} alt={`EVOQ ${t}`} height={19} style={{ height: 19, width: "auto", maxWidth: "100%", objectFit: "contain", display: "block" }} />
+                  </span>
+                  <span style={{ fontSize: 10.5, color: SL, lineHeight: 1.3 }}>{d}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+          <Card style={{ position: "absolute", left: 16, bottom: 16, width: 190, padding: 12 }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: G, display: "flex", gap: 8, alignItems: "center" }}><Ic n="truck" s={15} />Delivery</div>
             <div style={{ fontSize: 10.5, color: SL, marginTop: 6, lineHeight: 1.6 }}>Shipment · Tracking<br />Delivery · Out for delivery</div>
           </Card>
@@ -276,14 +317,6 @@ function Field() {
             <div style={{ fontSize: 10.5, color: SL, marginTop: 6, lineHeight: 1.6 }}>Production · Quality<br />Ready for delivery</div>
           </Card>
         </div>
-      </div>
-      <div className="mf-g4" style={{ marginTop: 44 }}>
-        {apps.map(([ic, t, d]) => (
-          <div key={t} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <span style={{ width: 38, height: 38, borderRadius: 9, background: "#fff", border: `1px solid ${CG}`, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Ic n={ic} s={18} c={G} /></span>
-            <span style={{ fontSize: 13.5, fontWeight: 700, color: G }}>{t}<span style={{ display: "block", fontSize: 12, fontWeight: 400, color: SL, lineHeight: 1.5, marginTop: 2 }}>{d}</span></span>
-          </div>
-        ))}
       </div>
     </Sec>
   );
@@ -343,19 +376,17 @@ function Segments() {
           <h2 className="mf-h2" style={{ fontSize: 34 }}>Different products. Different operating models.</h2>
           <p style={{ margin: "14px 0 0", fontSize: 14.5, lineHeight: 1.7, color: ST, maxWidth: "70ch" }}>Manufacturing looks different across industries. A configurable furniture product, an industrial machine and a medical device can follow very different paths from enquiry to service. EVOQ adapts to the commercial and operational work around the products you make.</p>
         </div>
-        <a href="#" style={{ fontSize: 13, fontWeight: 600, color: BL, textDecoration: "none" }}>View all industries →</a>
       </div>
       <div className="mf-g6">
         {segs.map(([t, d, img, pos]) => (
-          <a key={t} href="#" className="mf-seg" style={{ position: "relative", display: "block", height: 210, borderRadius: 12, overflow: "hidden", border: `1px solid ${CG}`, textDecoration: "none" }}>
+          <div key={t} className="mf-seg" style={{ position: "relative", display: "block", height: 210, borderRadius: 12, overflow: "hidden", border: `1px solid ${CG}` }}>
             <div className="mf-seg-img" style={{ position: "absolute", inset: 0, ...photoStyle(img, { backgroundPosition: pos }) }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(31,41,51,0) 35%, rgba(31,41,51,.82))" }} />
             <div style={{ position: "absolute", left: 12, right: 12, bottom: 12, color: "#fff" }}>
               <b style={{ display: "block", fontSize: 13.5, lineHeight: 1.25 }}>{t}</b>
               <span style={{ display: "block", fontSize: 10.5, opacity: 0.8, marginTop: 3, lineHeight: 1.35 }}>{d}</span>
             </div>
-            <span style={{ position: "absolute", right: 10, top: 10, width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,.92)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Ic n="arrow" s={13} c={G} w={2.2} /></span>
-          </a>
+          </div>
         ))}
       </div>
     </Sec>
@@ -389,7 +420,6 @@ function Apps() {
             <div style={{ margin: "12px 0", height: 78, borderRadius: 8, background: PG, padding: 8, display: "grid", gap: 5, alignContent: "center" }}>
               {[70, 100, 55].map((w, i) => <span key={i} style={{ display: "block", height: 8, width: `${w}%`, borderRadius: 4, background: i === 0 ? CG : "#fff", border: `1px solid ${CG}` }} />)}
             </div>
-            <a href="#" style={{ fontSize: 12, fontWeight: 600, color: BL, textDecoration: "none", marginTop: "auto" }}>Explore →</a>
           </Card>
         ))}
       </div>
@@ -418,7 +448,7 @@ function Cta() {
         <h2 className="mf-h2" style={{ color: "#fff", maxWidth: "16ch" }}>Turn complex products into simpler operations.</h2>
         <p style={{ margin: "18px 0 0", fontSize: 15, lineHeight: 1.7, color: CG, maxWidth: "50ch" }}>Every manufacturer has its own products, processes and customer journey. Start with the way your operation works today. Find where EVOQ can support the journey from enquiry to service.</p>
         <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Btn dark={false} href="/contact">Talk to an expert <Ic n="arrow" s={15} c={G} w={2.2} /></Btn>
+          <Btn dark={false} enquiry>Talk to an expert <Ic n="arrow" s={15} c={G} w={2.2} /></Btn>
           <a href="/" className="mf-btn" style={{ display: "inline-flex", alignItems: "center", padding: "13px 22px", borderRadius: 8, fontSize: 13.5, fontWeight: 600, textDecoration: "none", color: "#fff", border: "1px solid rgba(255,255,255,.4)" }}>Explore EVOQ</a>
         </div>
       </div>
@@ -430,6 +460,7 @@ export function ManufacturingPage() {
   return (
     <div className="mf-root" style={{ minHeight: "100vh", background: "#fff", color: TX }}>
       <MfMotion />
+      <EnquiryModal />
       <style>{`
         .mf-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .mf-h1{margin:14px 0 0;font-size:60px;line-height:1.04;letter-spacing:-.03em;font-weight:600;color:${G}}
@@ -442,7 +473,8 @@ export function ManufacturingPage() {
         .mf-g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
         .mf-g5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
         .mf-g6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-        .mf-flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;max-width:880px;margin:0 auto}
+        .mf-flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:34px}
+        ${FLOWCSS}
         .mf-btn{transition:transform .2s ease,box-shadow .2s ease}
         .mf-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px -16px rgba(31,41,51,.6)}
         @keyframes mfFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -452,7 +484,7 @@ export function ManufacturingPage() {
         .mf-seg-img{transition:transform .5s ease}
         .mf-seg:hover .mf-seg-img{transform:scale(1.06)}
         @media (max-width:1100px){.mf-g6{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-g5{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-steps{grid-template-columns:repeat(4,minmax(0,1fr))}.mf-h1{font-size:50px}.mf-h2{font-size:38px}}
-        @media (max-width:900px){.mf-hero,.mf-split2{grid-template-columns:1fr}.mf-g4{grid-template-columns:repeat(2,minmax(0,1fr))!important}.mf-g3{grid-template-columns:1fr}.mf-flow{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-cfg{grid-template-columns:1fr!important}.mf-arrow{display:none}}
+        @media (max-width:900px){.mf-hero,.mf-split2{grid-template-columns:1fr}.mf-g4{grid-template-columns:repeat(2,minmax(0,1fr))!important}.mf-g3{grid-template-columns:1fr}.mf-flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.mf-opszone{height:auto!important;display:grid;gap:14px;margin-bottom:14px}.mf-opszone>.mf-bill,.mf-opszone>.mf-n0{position:static!important;width:auto!important}.mf-cfg{grid-template-columns:1fr!important}.mf-arrow{display:none}}
         @media (max-width:600px){.mf-g6,.mf-g5{grid-template-columns:repeat(2,minmax(0,1fr))}.mf-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.mf-g4{grid-template-columns:1fr!important}.mf-h1{font-size:38px}.mf-h2{font-size:30px}.mf-hero-visual{height:380px}}
         .mf-rv{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--mf-d,0ms)}
         .mf-rv.mf-in{opacity:1;transform:none}
@@ -460,11 +492,9 @@ export function ManufacturingPage() {
         .mf-dash{animation:mfDash 2.2s linear infinite}
         @keyframes mfStep{0%,100%{box-shadow:0 10px 20px -14px rgba(31,41,51,.5);border-color:${CG}}12%{box-shadow:0 0 0 4px ${PB},0 14px 26px -14px rgba(37,99,235,.6);border-color:${BL}}24%{box-shadow:0 10px 20px -14px rgba(31,41,51,.5);border-color:${CG}}}
         .mf-stepic{animation:mfStep 8.4s ease-in-out infinite}
-        @keyframes mfNode{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-        .mf-flow>*{animation:mfNode 5s ease-in-out infinite}
         .mf-card-h{transition:transform .25s ease,box-shadow .25s ease}
         .mf-card-h:hover{transform:translateY(-5px);box-shadow:0 30px 56px -28px rgba(31,41,51,.6)}
-        @media (prefers-reduced-motion:reduce){.mf-float,.mf-pop,.mf-dash,.mf-stepic,.mf-flow>*{animation:none}}
+        @media (prefers-reduced-motion:reduce){.mf-float,.mf-pop,.mf-dash,.mf-stepic,.mf-an,.mf-an svg,.mf-cf{animation:none!important}}
       `}</style>
       <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: `1px solid ${PG}` }}>
         <Topbar darkCTA={false} light ctaColor={G} />

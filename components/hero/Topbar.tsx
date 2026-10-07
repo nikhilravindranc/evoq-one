@@ -139,6 +139,7 @@ const SOLUTIONS: {
   name: string;
   sub: string;
   href: string;
+  icon?: string;
   children?: { name: string; href: string }[];
 }[] = [
   {
@@ -155,7 +156,25 @@ const SOLUTIONS: {
     sub: "From enquiry to the field",
     href: "/manufacturing",
   },
+  { name: "Construction & Real Estate", sub: "Projects, sites and property", href: "#", icon: "building" },
+  { name: "Field Service", sub: "Dispatch, visits and repairs", href: "#", icon: "wrench" },
+  { name: "Facilities & Maintenance", sub: "Assets, upkeep and requests", href: "#", icon: "tools" },
+  { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "#", icon: "hotel" },
+  { name: "More industries", sub: "Explore every EVOQ solution", href: "#", icon: "grid" },
 ];
+
+const SOLUTION_ICONS: Record<string, React.ReactNode> = {
+  building: <><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14 10h5a1 1 0 0 1 1 1v10M2 21h20" /><path d="M8 8h2M8 12h2M8 16h2" /></>,
+  wrench: <path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z" />,
+  tools: <><path d="M3 21l7-7M14 4l6 6-3 3-6-6zM9 9 4 4" /></>,
+  hotel: <><path d="M3 20V8M3 14h18v6M21 14v-2a3 3 0 0 0-3-3h-7v5" /><circle cx="7" cy="11" r="1.6" /></>,
+  grid: <><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></>,
+};
+const SolutionMark = ({ icon }: { icon: string }) => (
+  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#F2F2FF]">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#4747E0" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">{SOLUTION_ICONS[icon]}</svg>
+  </span>
+);
 
 const HealthcareMark = () => (
   <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#E7F7F5]">
@@ -407,6 +426,8 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                           <HealthcareMark />
                         ) : s.name === "Manufacturing" ? (
                           <ManufacturingMark />
+                        ) : s.icon ? (
+                          <SolutionMark icon={s.icon} />
                         ) : (
                           <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-content-center rounded-[9px] bg-[#F2F2FF] p-[6px]">
                             <EvoqMonogram color="#000099" />
