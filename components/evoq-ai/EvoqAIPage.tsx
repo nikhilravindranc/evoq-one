@@ -389,7 +389,7 @@ const INDUSTRIES: {
     name: "Healthcare", tabLabel: "Healthcare",
     title: "Turn patient and practice information into action.",
     desc: "Review patient, appointment, treatment, and follow-up information to identify what needs attention and prepare the next step.",
-    cta: "Explore healthcare", href: "/healthcare", icon: StethoscopeIcon, fg: "#5C5CFF", bg: "#ECE9FF",
+    cta: "Explore healthcare", href: "/solutions/healthcare", icon: StethoscopeIcon, fg: "#5C5CFF", bg: "#ECE9FF",
     main: "/industries/v2/hc-main-hd.jpg", mainPos: "50% 20%", circle: "/industries/v2/hc-circle-hd.jpg", circlePos: "40% 30%", detail: "/industries/v2/hc-detail-hd.jpg", detailPos: "50% 30%",
     cards: [
       { icon: DocIcon, title: "Patient summary", desc: "Recent visits, treatments and upcoming appointments", fg: "#5C5CFF", bg: "#ECE9FF" },

@@ -37,7 +37,7 @@ export function SectionAI() {
                 The result is AI that works with the information and processes
                 behind your everyday work, rather than sitting outside them.
               </p>
-              <a href="/ai" className="ai-cta">
+              <a href="/products/ai" className="ai-cta">
                 <span>Explore EVOQ AI</span>
                 <span className="ic"><ArrowRt size={11} color="#fff" /></span>
               </a>

@@ -5,10 +5,10 @@ import { HealthcareLogo } from "./HealthcareLogo";
 
 const MENU = [
   { name: "Overview", href: "#overview", active: true },
-  { name: "CRM", href: "/healthcare/crm", active: false },
+  { name: "CRM", href: "/solutions/healthcare/crm", active: false },
   {
     name: "Practice Management",
-    href: "/healthcare/practice-management",
+    href: "/solutions/healthcare/practice-management",
     active: false,
   },
   { name: "Patient Engagement", href: "#patient-engagement", active: false },
@@ -19,7 +19,7 @@ export function HealthcareNav() {
     <div className="border-b border-[#E2E8EC] bg-white/90 backdrop-blur-lg">
       <div className="px-5 sm:px-6 lg:px-6">
         <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
-          <Link href="/healthcare" className="shrink-0 no-underline">
+          <Link href="/solutions/healthcare" className="shrink-0 no-underline">
             <HealthcareLogo />
           </Link>
 

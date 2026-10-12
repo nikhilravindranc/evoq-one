@@ -648,7 +648,7 @@ export function HealthcarePmGrow() {
                   Information can move between the applications as the patient journey continues, giving each
                   application a clear role without forcing every function into Practice Management.
                 </p>
-                <Link href="/healthcare" className={`mt-8 ${BTN_PRIMARY}`}>
+                <Link href="/solutions/healthcare" className={`mt-8 ${BTN_PRIMARY}`}>
                   Explore Healthcare Solutions
                   <Arrow />
                 </Link>
@@ -666,8 +666,8 @@ export function HealthcarePmGrow() {
                 <div className="mx-auto h-8 w-px bg-[#26B9CF]/45" />
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
-                    { icon: "users", title: "Healthcare CRM", body: "Manage enquiries, referrals, patient relationships, follow-ups, and conversion before the patient reaches the appointment stage.", tile: "bg-[#E7F7F5]", stroke: "#3FA99B", href: "/healthcare/crm" },
-                    { icon: "heart", title: "Patient Engagement", body: "Extend the experience with Booking Engine, Billing, Campaigns, Surveys, and Loyalty.", tile: "bg-[#FFF3DF]", stroke: "#D98E1F", href: "/healthcare" },
+                    { icon: "users", title: "Healthcare CRM", body: "Manage enquiries, referrals, patient relationships, follow-ups, and conversion before the patient reaches the appointment stage.", tile: "bg-[#E7F7F5]", stroke: "#3FA99B", href: "/solutions/healthcare/crm" },
+                    { icon: "heart", title: "Patient Engagement", body: "Extend the experience with Booking Engine, Billing, Campaigns, Surveys, and Loyalty.", tile: "bg-[#FFF3DF]", stroke: "#D98E1F", href: "/solutions/healthcare" },
                   ].map((c) => (
                     <Link key={c.title} href={c.href} className="block rounded-[22px] bg-white p-6 no-underline shadow-[0_22px_50px_-34px_rgba(38,56,75,0.4)] ring-1 ring-[#E2E7EB] transition-all hover:-translate-y-1">
                       <span className={`flex h-12 w-12 items-center justify-center rounded-full ${c.tile}`}>

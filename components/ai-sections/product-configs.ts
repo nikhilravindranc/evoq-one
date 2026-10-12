@@ -6,7 +6,7 @@ import type { ProductAIConfig } from "./ProductAISection";
  * product-accurate examples before release.
  */
 
-const learnMore = { label: "Explore EVOQ AI", href: "/ai" };
+const learnMore = { label: "Explore EVOQ AI", href: "/products/ai" };
 const demo = { label: "Book a Demo", href: "/contact" };
 
 /* ------------------------------------------------------------------- CRM */

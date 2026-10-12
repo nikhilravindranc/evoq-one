@@ -377,7 +377,7 @@ export function HealthcareCrmFeaturesScroll() {
    ============================================================ */
 
 const INTEGRATIONS = [
-  { icon: "cal" as IconName, tile: "bg-[#DDF5F0]", stroke: "#0F766E", title: "Healthcare Practice Management", desc: "Connect patient relationships with providers, schedules, services, appointments, and operational workflows.", href: "/healthcare/practice-management" },
+  { icon: "cal" as IconName, tile: "bg-[#DDF5F0]", stroke: "#0F766E", title: "Healthcare Practice Management", desc: "Connect patient relationships with providers, schedules, services, appointments, and operational workflows.", href: "/solutions/healthcare/practice-management" },
   { icon: "check", tile: "bg-[#EEF6FF]", stroke: "#1777F0", title: "Booking Engine", desc: "Connect enquiries and patient relationships with online appointment booking.", href: "#" },
   { icon: "file", tile: "bg-[#FEF3DC]", stroke: "#B7791F", title: "Billing", desc: "Connect patient relationships with invoices, payments, and outstanding balances.", href: "#" },
   { icon: "megaphone", tile: "bg-[#FDEAF3]", stroke: "#C2477F", title: "Campaigns", desc: "Use CRM context to support targeted patient campaigns and outreach.", href: "#" },
@@ -494,14 +494,14 @@ export function HealthcareCrmFeaturesCTA() {
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
                 <a
-                  href="/healthcare/crm#pricing"
+                  href="/solutions/healthcare/crm#pricing"
                   className="inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3.5 text-[15px] font-semibold text-[#0F766E] no-underline shadow-[0_14px_30px_-14px_rgba(0,0,0,0.4)] transition-all hover:-translate-y-px hover:bg-[#F1F5F7]"
                 >
                   Explore pricing
                   <ArrowRight />
                 </a>
                 <a
-                  href="/healthcare/crm#expert"
+                  href="/solutions/healthcare/crm#expert"
                   className="inline-flex items-center gap-2.5 rounded-full border border-white/50 px-6 py-3.5 text-[15px] font-semibold text-white no-underline transition-all hover:-translate-y-px hover:bg-white/10"
                 >
                   Talk to an expert

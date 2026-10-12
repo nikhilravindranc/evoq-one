@@ -46,7 +46,7 @@ Both are optional: the section renders without them.
 | `title` | `<Outcome>, with EVI and AI agents.` Keep it under ~55 characters. |
 | `lead` | Three short sentences: *Find… Prepare… Keep…* |
 | `body` | Fixed formula: EVI helps find X and prepares the next step; agents handle defined tasks such as Y, then return the result for review. |
-| `primaryCta` / `secondaryCta` | Primary = the page's existing demo CTA. Secondary = `/ai`. |
+| `primaryCta` / `secondaryCta` | Primary = the page's existing demo CTA. Secondary = `/products/ai`. |
 | `visualSide` | `"left"` or `"right"`. **Alternate it between neighbouring sections**, and match it to the page's rhythm. |
 | `accent` | Product colour for the mock window's button and avatars. |
 | `window` | The mock product screen. `layout: "board"` (columns of cards) or `"list"` (rows). Flag the 2–3 items EVI will talk about with `flag: true`. |

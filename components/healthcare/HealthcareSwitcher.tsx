@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const DESTINATIONS = [
-  { key: "solutions", name: "Healthcare Solutions", sub: "Overview", href: "/healthcare" },
-  { key: "crm", name: "Healthcare CRM", sub: "Patient relationships", href: "/healthcare/crm" },
-  { key: "pm", name: "Healthcare Practice Management", sub: "Practice operations", href: "/healthcare/practice-management" },
+  { key: "solutions", name: "Healthcare Solutions", sub: "Overview", href: "/solutions/healthcare" },
+  { key: "crm", name: "Healthcare CRM", sub: "Patient relationships", href: "/solutions/healthcare/crm" },
+  { key: "pm", name: "Healthcare Practice Management", sub: "Practice operations", href: "/solutions/healthcare/practice-management" },
 ] as const;
 
 type DestKey = (typeof DESTINATIONS)[number]["key"];

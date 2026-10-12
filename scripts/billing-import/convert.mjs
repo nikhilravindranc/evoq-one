@@ -144,9 +144,9 @@ function styleToObject(css) {
 
 function rewriteUrl(v) {
   v = v.replace(/^assets\/images\//, "/billing/images/");
-  v = v.replace(/^index\.html(#.*)?$/, (_, h) => "/billing" + (h || ""));
-  v = v.replace(/^features\.html(#.*)?$/, (_, h) => "/billing/features" + (h || ""));
-  v = v.replace(/^pricing\.html(#.*)?$/, (_, h) => "/billing/pricing" + (h || ""));
+  v = v.replace(/^index\.html(#.*)?$/, (_, h) => "/products/billing" + (h || ""));
+  v = v.replace(/^features\.html(#.*)?$/, (_, h) => "/products/billing/features" + (h || ""));
+  v = v.replace(/^pricing\.html(#.*)?$/, (_, h) => "/products/billing/pricing" + (h || ""));
   return v;
 }
 

@@ -10,14 +10,14 @@ export function BillingHomeContent() {
       <header className="z-40 transition-all duration-300 sticky top-0 border-b border-slate-200/80" style={{ backgroundColor: "#eef1ef" }} data-submenu="">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
           <div className="flex min-h-16 flex-col items-stretch gap-3 py-3 sm:flex-row sm:items-center sm:gap-4 sm:py-0">
-            <a className="inline-flex min-w-0 flex-shrink-0 items-center gap-3 rounded-xl py-1 transition-opacity hover:opacity-80 sm:gap-6 sm:px-6" aria-label="Go to Billing home" href="/billing">
+            <a className="inline-flex min-w-0 flex-shrink-0 items-center gap-3 rounded-xl py-1 transition-opacity hover:opacity-80 sm:gap-6 sm:px-6" aria-label="Go to Billing home" href="/products/billing">
               <img src="/billing/images/billing-logo.png" alt="Billing" className="h-9 w-auto object-contain" />
             </a>
             <nav className="flex items-center gap-1 overflow-x-auto px-0 py-1.5 sm:px-1.5" aria-label="Billing navigation">
-              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors hover:bg-black/5" style={{ color: "#00ab87" }} href="/billing/features">
+              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors hover:bg-black/5" style={{ color: "#00ab87" }} href="/products/billing/features">
                 Features
               </a>
-              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors hover:bg-black/5" style={{ color: "#00ab87" }} href="/billing/pricing">
+              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors hover:bg-black/5" style={{ color: "#00ab87" }} href="/products/billing/pricing">
                 Pricing
               </a>
             </nav>
@@ -876,7 +876,7 @@ export function BillingHomeContent() {
                 )}
               </div>
             ))}
-            <a href="/billing/features" className="inline-flex flex-shrink-0 whitespace-nowrap items-center justify-center gap-3 rounded-[12px] px-6 py-4 text-[14.5px] font-semibold text-white lg:ml-2" style={{ background: "linear-gradient(90deg, #0e342c 0%, #124a3d 100%)" }}>
+            <a href="/products/billing/features" className="inline-flex flex-shrink-0 whitespace-nowrap items-center justify-center gap-3 rounded-[12px] px-6 py-4 text-[14.5px] font-semibold text-white lg:ml-2" style={{ background: "linear-gradient(90deg, #0e342c 0%, #124a3d 100%)" }}>
               Explore all features
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M5 12h14" />
@@ -1057,7 +1057,7 @@ export function BillingHomeContent() {
                 <a href="#get-started" className="inline-flex items-center justify-center rounded-full px-8 py-3.5 text-[15px] font-bold text-white no-underline transition-all duration-200 hover:-translate-y-0.5 hover:brightness-105" style={{ background: "var(--billing-primary, #00ab88)", boxShadow: "0 16px 32px -18px rgba(0, 171, 136, 0.45)" }}>
                   Get Started
                 </a>
-                <a href="/billing/pricing" className="group inline-flex items-center gap-3 rounded-full border px-8 py-3.5 text-[15px] font-bold no-underline transition-all duration-200 hover:-translate-y-0.5" style={{ borderColor: "var(--billing-soft, #7ec9b5)", background: "#ffffff", color: "var(--billing-action, #2f695d)" }}>
+                <a href="/products/billing/pricing" className="group inline-flex items-center gap-3 rounded-full border px-8 py-3.5 text-[15px] font-bold no-underline transition-all duration-200 hover:-translate-y-0.5" style={{ borderColor: "var(--billing-soft, #7ec9b5)", background: "#ffffff", color: "var(--billing-action, #2f695d)" }}>
                   View Pricing
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M5 12h14" />

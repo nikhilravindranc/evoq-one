@@ -111,7 +111,7 @@ const PRODUCT_GROUPS: {
   {
     title: "AI",
     items: [
-      { name: "AI", sub: "Assistants · Agents", icon: AIMark, tile: "bg-[#F2F2FF]", href: "/ai" },
+      { name: "AI", sub: "Assistants · Agents", icon: AIMark, tile: "bg-[#F2F2FF]", href: "/products/ai" },
     ],
   },
   {
@@ -125,7 +125,7 @@ const PRODUCT_GROUPS: {
   {
     title: "Finance",
     items: [
-      { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]", href: "/billing" },
+      { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]", href: "/products/billing" },
       { name: "Inventory", sub: "Stock & supply tracking", icon: BoxGlyph, tile: "bg-[#C2477F]" },
     ],
   },
@@ -145,22 +145,35 @@ const SOLUTIONS: {
   {
     name: "Healthcare",
     sub: "Connected care workflows",
-    href: "/healthcare",
+    href: "/solutions/healthcare",
     children: [
-      { name: "Healthcare CRM", href: "/healthcare/crm" },
-      { name: "Healthcare Practice Management", href: "/healthcare/practice-management" },
+      { name: "Healthcare CRM", href: "/solutions/healthcare/crm" },
+      { name: "Healthcare Practice Management", href: "/solutions/healthcare/practice-management" },
     ],
   },
   {
     name: "Manufacturing",
     sub: "From enquiry to the field",
-    href: "/manufacturing",
+    href: "/solutions/manufacturing",
   },
   { name: "Construction & Real Estate", sub: "Projects, sites and property", href: "#", icon: "building" },
   { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "#", icon: "wrench" },
   { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "#", icon: "hotel" },
   { name: "More industries", sub: "Explore every EVOQ solution", href: "#", icon: "grid" },
 ];
+
+const SOLUTION_BRAND: Record<string, { fg: string; tint: string }> = {
+  Healthcare: { fg: "#18B8D1", tint: "#E3F6F9" },
+  Manufacturing: { fg: "#1F2933", tint: "#E6EAEF" },
+  "Construction & Real Estate": { fg: "#B5532F", tint: "#F8ECDC" },
+  "Field Service, Facilities & Maintenance": { fg: "#1F5FE0", tint: "#E6EFFF" },
+  "Hospitality, Travel & F&B": { fg: "#1F4D3A", tint: "#F4ECD9" },
+  "More industries": { fg: "#1E40AF", tint: "#E9EDF7" },
+};
+const brandVars = (name: string) => {
+  const b = SOLUTION_BRAND[name] ?? { fg: "#4747E0", tint: "#F2F2FF" };
+  return { "--h-fg": b.fg, "--h-tint": b.tint } as React.CSSProperties;
+};
 
 const SOLUTION_ICONS: Record<string, React.ReactNode> = {
   building: <><path d="M4 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14 10h5a1 1 0 0 1 1 1v10M2 21h20" /><path d="M8 8h2M8 12h2M8 16h2" /></>,
@@ -406,7 +419,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
           {solutionsOpen && (
             <div
               role="menu"
-              className="absolute left-1/2 top-[calc(100%+14px)] w-[360px] -translate-x-1/2 rounded-[22px] bg-white p-3.5 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
+              className="absolute left-1/2 top-[calc(100%+14px)] w-[640px] -translate-x-1/2 rounded-[22px] bg-white p-3.5 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
               style={{ animation: "menuIn 0.15s ease forwards" }}
             >
               <style>{`
@@ -422,14 +435,17 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                 Industry Solutions
               </div>
 
-              <ul className="flex flex-col gap-0.5 p-0 list-none m-0">
-                {SOLUTIONS.map((s) => (
+              <div className="grid grid-cols-2 items-start gap-x-1">
+                {[[0, 2, 4], [1, 3, 5]].map((col, ci) => (
+                <ul key={ci} className="m-0 flex list-none flex-col gap-0.5 p-0">
+                {col.map((idx) => { const s = SOLUTIONS[idx]; return (
                   <li key={s.name} role="menuitem" onMouseEnter={() => s.children && setSubOpen(true)}>
                     <div className="flex items-center">
                       <Link
                         href={s.href}
                         onClick={() => setSolutionsOpen(false)}
-                        className="group flex flex-1 items-center gap-3 rounded-xl p-2.5 no-underline text-[#1F2430] transition-colors hover:bg-[#F2F2FF]"
+                        style={brandVars(s.name)}
+                        className="group flex flex-1 items-center gap-3 rounded-xl p-2.5 no-underline text-[#1F2430] transition-colors hover:bg-[var(--h-tint)]"
                       >
                         {s.name === "Healthcare" ? (
                           <HealthcareMark />
@@ -447,7 +463,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                           <span className="mt-px text-[12px] font-normal text-[#5F6B7A]">{s.sub}</span>
                         </span>
                         {!s.children && (
-                          <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#4747E0] text-white opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
+                          <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[var(--h-fg)] text-white opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
                             <ArrowRight size={12} />
                           </span>
                         )}
@@ -458,7 +474,8 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                           aria-label={`${subOpen ? "Collapse" : "Expand"} ${s.name}`}
                           aria-expanded={subOpen}
                           onClick={() => setSubOpen((o) => !o)}
-                          className="ml-1 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-[#5F6B7A] transition-colors hover:bg-[#F2F2FF]"
+                          style={brandVars(s.name)}
+                          className="ml-1 flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-[#5F6B7A] transition-colors hover:bg-[var(--h-tint)] hover:text-[var(--h-fg)]"
                         >
                           <span className="inline-flex transition-transform duration-200" style={{ transform: subOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
                             <Chevron />
@@ -473,10 +490,11 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                             <Link
                               href={c.href}
                               onClick={() => setSolutionsOpen(false)}
-                              className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-semibold text-[#1F2430] no-underline transition-colors hover:bg-[#F2F2FF]"
+                              style={brandVars("Healthcare")}
+                              className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13.5px] font-semibold text-[#1F2430] no-underline transition-colors hover:bg-[var(--h-tint)]"
                             >
                               <span className="flex-1">{c.name}</span>
-                              <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-[#4747E0] text-white opacity-0 -translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-x-0">
+                              <span className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-[var(--h-fg)] text-white opacity-0 -translate-x-1 transition-all group-hover:translate-x-0 group-hover:opacity-100">
                                 <ArrowRight size={12} />
                               </span>
                             </Link>
@@ -485,8 +503,10 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                       </ul>
                     )}
                   </li>
+                ); })}
+                </ul>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
         </div>

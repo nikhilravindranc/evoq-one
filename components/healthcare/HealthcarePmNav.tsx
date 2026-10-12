@@ -13,7 +13,7 @@ export function HealthcarePmNav() {
     <div className="border-b border-[#E2E7EB] bg-white">
       <div className="px-5 sm:px-6 lg:px-6">
         <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
-          <Link href="/healthcare/practice-management" className="shrink-0 no-underline">
+          <Link href="/solutions/healthcare/practice-management" className="shrink-0 no-underline">
             <HealthcareLogo label="Healthcare Practice Management" />
           </Link>
 

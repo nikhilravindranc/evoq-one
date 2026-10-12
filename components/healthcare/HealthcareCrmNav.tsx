@@ -4,7 +4,7 @@ import { HealthcareSwitcher } from "./HealthcareSwitcher";
 
 const MENU = [
   { name: "Overview", href: "#overview" },
-  { name: "Features", href: "/healthcare/crm/features" },
+  { name: "Features", href: "/solutions/healthcare/crm/features" },
   { name: "Pricing", href: "#pricing" },
   { name: "Resources", href: "#resources" },
 ];
@@ -14,7 +14,7 @@ export function HealthcareCrmNav() {
     <div className="border-b border-[#102A43]/8 bg-white">
       <div className="px-5 sm:px-6 lg:px-6">
         <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
-          <Link href="/healthcare/crm" className="shrink-0 no-underline">
+          <Link href="/solutions/healthcare/crm" className="shrink-0 no-underline">
             <HealthcareLogo label="Healthcare CRM" />
           </Link>
 

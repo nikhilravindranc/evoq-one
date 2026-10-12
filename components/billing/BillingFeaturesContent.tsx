@@ -10,14 +10,14 @@ export function BillingFeaturesContent() {
       <header className="z-40 transition-all duration-300 sticky top-0 border-b border-slate-200/80" style={{ backgroundColor: "#eef1ef" }} data-submenu="">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
           <div className="flex min-h-16 flex-col items-stretch gap-3 py-3 sm:flex-row sm:items-center sm:gap-4 sm:py-0">
-            <a className="inline-flex min-w-0 flex-shrink-0 items-center gap-3 rounded-xl py-1 transition-opacity hover:opacity-80 sm:gap-6 sm:px-6" aria-label="Go to Billing home" href="/billing">
+            <a className="inline-flex min-w-0 flex-shrink-0 items-center gap-3 rounded-xl py-1 transition-opacity hover:opacity-80 sm:gap-6 sm:px-6" aria-label="Go to Billing home" href="/products/billing">
               <img src="/billing/images/billing-logo.png" alt="Billing" className="h-9 w-auto object-contain" />
             </a>
             <nav className="flex items-center gap-1 overflow-x-auto px-0 py-1.5 sm:px-1.5" aria-label="Billing navigation">
-              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors shadow-sm" style={{ backgroundColor: "#00ab87", color: "#ffffff" }} href="/billing/features">
+              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors shadow-sm" style={{ backgroundColor: "#00ab87", color: "#ffffff" }} href="/products/billing/features">
                 Features
               </a>
-              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors hover:bg-black/5" style={{ color: "#00ab87" }} href="/billing/pricing">
+              <a className="inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[0.95rem] font-semibold transition-colors hover:bg-black/5" style={{ color: "#00ab87" }} href="/products/billing/pricing">
                 Pricing
               </a>
             </nav>
@@ -71,7 +71,7 @@ export function BillingFeaturesContent() {
                   Get Started
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
                 </a>
-                <a href="/billing/pricing" className="no-underline transition-all duration-200 hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#fff", fontSize: 15, fontWeight: 700, padding: "15px 30px", borderRadius: 99, textDecoration: "none", border: "1.5px solid rgba(255,255,255,.45)", background: "rgba(255,255,255,.08)" }}>
+                <a href="/products/billing/pricing" className="no-underline transition-all duration-200 hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#fff", fontSize: 15, fontWeight: 700, padding: "15px 30px", borderRadius: 99, textDecoration: "none", border: "1.5px solid rgba(255,255,255,.45)", background: "rgba(255,255,255,.08)" }}>
                   View Pricing
                 </a>
               </div>

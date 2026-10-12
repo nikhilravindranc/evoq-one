@@ -11,7 +11,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 A Next.js microsite for **EVOQ Healthcare**, built on top of the EVOQ main-site
 codebase (imported from `github.com/nikhilravindranc/evoq-one`). The main EVOQ
 site (home, why-evoq, about, implementation, integrations, contact) is intact;
-the healthcare microsite lives at the `/healthcare` route.
+the healthcare microsite lives at the `/solutions/healthcare` route.
 
 - Stack: Next.js 16 (App Router), React 19, Tailwind CSS 4, TypeScript
 - Fonts: Figtree (`--font-display`), DM Sans (`--font-sans`) via next/font
@@ -84,7 +84,7 @@ the healthcare microsite lives at the `/healthcare` route.
 ## Header (main site)
 
 `components/hero/Topbar.tsx` — nav: Products dropdown, Why EVOQ?, **Solutions
-dropdown** (contains Healthcare → `/healthcare`; `SOLUTIONS` array). The old
+dropdown** (contains Healthcare → `/solutions/healthcare`; `SOLUTIONS` array). The old
 Implementation / Customers / Resources header links were removed per request
 (they still exist in `Footer`).
 
@@ -119,3 +119,9 @@ by about/contact/implementation/integrations/why-evoq — leave that one as-is.
 - Footer still lists legacy Resources/Customers links (awaiting decision)
 - Git: work is committed locally on `master`; not yet pushed to a
   healthcare-specific branch/repo
+
+## URL structure
+
+Products live under `/products/<product>`, industry solutions under `/solutions/<industry>`; company pages stay at the root.
+Old top-level URLs are 301-redirected in `next.config.ts` (exact paths only, because `public/` assets share the prefixes).
+Full rules and a migration prompt for other teams: `docs/url-structure.md`.

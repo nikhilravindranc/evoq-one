@@ -59,8 +59,8 @@ const ChevronIcon = () => (
 
 const BREADCRUMB = [
   { label: "Home", href: "/" },
-  { label: "Healthcare", href: "/healthcare" },
-  { label: "Healthcare CRM", href: "/healthcare/crm" },
+  { label: "Healthcare", href: "/solutions/healthcare" },
+  { label: "Healthcare CRM", href: "/solutions/healthcare/crm" },
 ];
 
 const PATIENT_ROWS = [
@@ -110,7 +110,7 @@ export function HealthcareCrmFeaturesHero() {
                   and keep the patient journey moving.
                 </p>
                 <a
-                  href="/healthcare/crm#expert"
+                  href="/solutions/healthcare/crm#expert"
                   className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-[#0F766E] px-7 py-3.5 text-[15px] font-semibold text-white no-underline shadow-[0_12px_28px_-12px_rgba(15,118,110,0.6)] transition-all hover:-translate-y-px hover:bg-[#0B5F58]"
                 >
                   Talk to an expert
