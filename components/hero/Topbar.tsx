@@ -169,11 +169,21 @@ const SOLUTION_ICONS: Record<string, React.ReactNode> = {
   hotel: <><path d="M3 20V8M3 14h18v6M21 14v-2a3 3 0 0 0-3-3h-7v5" /><circle cx="7" cy="11" r="1.6" /></>,
   grid: <><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></>,
 };
-const SolutionMark = ({ icon }: { icon: string }) => (
-  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#F2F2FF]">
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#4747E0" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">{SOLUTION_ICONS[icon]}</svg>
-  </span>
-);
+const SOLUTION_TONES: Record<string, { bg: string; fg: string; dot?: string }> = {
+  building: { bg: "#F3E6D3", fg: "#B5532F" }, // terracotta + sand
+  wrench: { bg: "#E1ECFF", fg: "#1F5FE0", dot: "#F28C28" }, // blue + orange
+  hotel: { bg: "#F6EFE0", fg: "#1F4D3A" }, // deep green + cream
+  grid: { bg: "#ECEFF5", fg: "#1E40AF" }, // sapphire + neutral
+};
+const SolutionMark = ({ icon }: { icon: string }) => {
+  const t = SOLUTION_TONES[icon] ?? { bg: "#F2F2FF", fg: "#4747E0" };
+  return (
+    <span className="relative flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px]" style={{ background: t.bg }}>
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke={t.fg} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">{SOLUTION_ICONS[icon]}</svg>
+      {t.dot && <i className="absolute right-[5px] top-[5px] h-[7px] w-[7px] rounded-full" style={{ background: t.dot }} />}
+    </span>
+  );
+};
 
 const HealthcareMark = () => (
   <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#E7F7F5]">
@@ -186,8 +196,8 @@ const HealthcareMark = () => (
 );
 
 const ManufacturingMark = () => (
-  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#F1F5F9]">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#E6EAEF]">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F2933" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="3" />
       <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" />
     </svg>
