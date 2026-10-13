@@ -436,7 +436,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
               </div>
 
               <div className="grid grid-cols-2 items-start gap-x-1">
-                {[[0, 2, 4], [1, 3, 5]].map((col, ci) => (
+                {[[0, 1, 2], [3, 4, 5]].map((col, ci) => (
                 <ul key={ci} className="m-0 flex list-none flex-col gap-0.5 p-0">
                 {col.map((idx) => { const s = SOLUTIONS[idx]; return (
                   <li key={s.name} role="menuitem" onMouseEnter={() => s.children && setSubOpen(true)}>

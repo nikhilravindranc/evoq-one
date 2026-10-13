@@ -4,6 +4,7 @@ import { Footer } from "@/components/sections/Footer";
 import { ConfigXWindow } from "./ConfigX";
 import { MfMotion } from "./MfMotion";
 import { EnquiryModal } from "./EnquiryModal";
+import { SolutionsTabs } from "./SolutionsTabs";
 import { HeroVisual } from "./HeroVisual";
 
 const G = "#1F2933";
@@ -24,7 +25,7 @@ const IMG = {
   warehouse: U("1644079446600-219068676743", 1800),
   delivery: U("1683252162057-07215f03d1ad", 1400),
   manager: U("1532634902-bbce41c89ef6", 900),
-  technician: U("1610259998914-d1b9afe0dc55", 900),
+  technician: U("1581094487600-9d2381d4eeef", 900),
   coordinator: U("1766066014237-00645c74e9c6", 900),
   robots: U("1647427060118-4911c9821b82", 800),
   excavator: U("1649807533255-bbc9c9fb7d77", 800),
@@ -33,6 +34,9 @@ const IMG = {
   cleanroom: U("1748000970909-845f4aa144d2", 800),
   cnc: U("1740209475472-aa7d280f7452", 800),
   plant: U("1717386255767-52643970d483", 1800),
+  factoryMan: U("1598299803204-b73796f43289", 1800),
+  truck: U("1543510425-1eccdf3ae819", 1400),
+  techTablet: U("1778074762033-c6595907684d", 1400),
 };
 
 const STEP = 12.5;
@@ -40,8 +44,8 @@ const NB = `border-color:${CG};box-shadow:0 14px 30px -20px rgba(31,41,51,.5)`;
 const NA = `border-color:${BL};box-shadow:0 0 0 4px ${PB},0 20px 40px -22px rgba(37,99,235,.6)`;
 const CB = `border-color:${CG};box-shadow:0 24px 50px -28px rgba(31,41,51,.45)`;
 const FLOWCSS = (() => {
-  let c = ".mf-opszone{position:relative;height:250px}.mf-fn{position:relative;background:#fff;border-radius:10px;border:1px solid " + CG + ";box-shadow:0 14px 30px -20px rgba(31,41,51,.5);padding:12px 10px;text-align:center}";
-  c += ".mf-vl{position:absolute;top:172px;bottom:0;width:2px}.mf-vl-l{left:calc((100% - 170px)/12 - 1px)}.mf-vl-r{right:calc((100% - 170px)/12 - 1px)}";
+  let c = ".mf-opszone{position:relative;height:186px}.mf-fn{position:relative;background:#fff;border-radius:10px;border:1px solid " + CG + ";box-shadow:0 14px 30px -20px rgba(31,41,51,.5);padding:12px 10px;text-align:center}";
+  c += ".mf-vl{position:absolute;top:126px;bottom:0;width:2px}.mf-vl-l{left:calc((100% - 170px)/12 - 1px)}.mf-vl-r{right:calc((100% - 170px)/12 - 1px)}";
   c += `.mf-vline{position:absolute;inset:0;background:repeating-linear-gradient(180deg,${CG} 0 5px,transparent 5px 9px)}`;
   c += `.mf-vhead{position:absolute;left:-4px;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent}.mf-vhead-d{bottom:-2px;border-top:8px solid ${BL}}.mf-vhead-u{top:-2px;border-bottom:8px solid ${BL}}`;
   c += `.mf-vdot{position:absolute;left:-4px;top:0;width:10px;height:10px;border-radius:50%;background:${BL};box-shadow:0 0 0 4px ${PB};opacity:0}`;
@@ -64,8 +68,8 @@ const FLOWCSS = (() => {
     }
   }
   c += ".mf-cf,.mf-fhb{animation-duration:11.2s;animation-timing-function:linear;animation-iteration-count:infinite}";
-  c += "@keyframes mfV0{0%{opacity:0;transform:translateY(0)}1%{opacity:1;transform:translateY(0)}10%{opacity:1;transform:translateY(68px)}11%,100%{opacity:0;transform:translateY(68px)}}";
-  c += `@keyframes mfV7{0%,${7 * STEP}%{opacity:0;transform:translateY(68px)}${7 * STEP + 1}%{opacity:1;transform:translateY(68px)}${7 * STEP + 10}%{opacity:1;transform:translateY(0)}${7 * STEP + 11}%,100%{opacity:0;transform:translateY(0)}}`;
+  c += "@keyframes mfV0{0%{opacity:0;transform:translateY(0)}1%{opacity:1;transform:translateY(0)}10%{opacity:1;transform:translateY(50px)}11%,100%{opacity:0;transform:translateY(50px)}}";
+  c += `@keyframes mfV7{0%,${7 * STEP}%{opacity:0;transform:translateY(50px)}${7 * STEP + 1}%{opacity:1;transform:translateY(50px)}${7 * STEP + 10}%{opacity:1;transform:translateY(0)}${7 * STEP + 11}%,100%{opacity:0;transform:translateY(0)}}`;
   c += ".mf-vd0{animation:mfV0 11.2s linear infinite}.mf-vd7{animation:mfV7 11.2s linear infinite}";
   return c;
 })();
@@ -151,6 +155,27 @@ function Hero() {
 }
 
 /* ------------------------------------------------------------------ 2. Lifecycle */
+/* The dashed route is drawn through the centre of every chip, so the line meets each touchpoint (x in %, y in px of a 1000 x 280 frame). */
+const LIFE_CHIPS = [
+  { icon: "chat", title: "Customer enquiry", sub: "Industrial equipment", x: 9, y: 90 },
+  { icon: "doc", title: "Quote", sub: "₹4,820", x: 26, y: 160 },
+  { icon: "cart", title: "Order #4021", sub: "Confirmed", x: 42, y: 85 },
+  { icon: "box", title: "In stock", sub: "12 units", x: 58, y: 165 },
+  { icon: "truck", title: "Out for delivery", sub: undefined, x: 74, y: 90 },
+  { icon: "wrench", title: "Service visit", sub: "Scheduled", x: 90, y: 170 },
+];
+const LIFE_PATH = (() => {
+  const pts = LIFE_CHIPS.map((c) => [c.x * 10, c.y]);
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] ?? pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] ?? p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+})();
+
 function Lifecycle() {
   const steps = [["chat", "Enquiry", "Customer requirement"], ["cog", "Configure", "Product options"], ["doc", "Quote", "Price and specification"], ["cart", "Order", "Confirmed requirement"], ["box", "Inventory", "Products and availability"], ["truck", "Delivery", "Project and fulfilment"], ["wrench", "Service", "Installation, maintenance and support"]];
   return (
@@ -173,13 +198,12 @@ function Lifecycle() {
       <div style={{ position: "relative", marginTop: 28, height: 280, borderRadius: 14, overflow: "hidden", border: `1px solid ${CG}` }}>
         <div style={{ position: "absolute", inset: 0, ...photoStyle(IMG.floor, { backgroundPosition: "center 55%" }) }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(15,23,42,.35), rgba(15,23,42,.05) 60%)" }} />
-        <svg aria-hidden="true" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1000 280" style={{ position: "absolute", inset: 0 }} fill="none"><path className="mf-dash" d="M40 200 C 200 120, 330 200, 480 150 S 780 110, 960 170" stroke="#fff" strokeWidth="2" strokeDasharray="6 8" vectorEffect="non-scaling-stroke" opacity=".9" /></svg>
-        <Chip icon="chat" title="Customer enquiry" sub="Industrial equipment" style={{ left: "5%", top: 70 }} />
-        <Chip icon="doc" title="Quote" sub="₹4,820" style={{ left: "26%", top: 120 }} />
-        <Chip icon="cart" title="Order #4021" sub="Confirmed" style={{ left: "43%", top: 60 }} />
-        <Chip icon="box" title="In stock" sub="12 units" style={{ left: "58%", top: 140 }} />
-        <Chip icon="truck" title="Out for delivery" style={{ left: "72%", top: 70 }} />
-        <Chip icon="wrench" title="Service visit" sub="Scheduled" style={{ left: "84%", top: 150 }} />
+        <svg aria-hidden="true" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1000 280" style={{ position: "absolute", inset: 0 }} fill="none"><path className="mf-dash" d={LIFE_PATH} stroke="#fff" strokeWidth="2" strokeDasharray="6 8" vectorEffect="non-scaling-stroke" opacity=".9" /></svg>
+        {LIFE_CHIPS.map((c) => (
+          <div key={c.title} style={{ position: "absolute", left: `${c.x}%`, top: c.y, width: "max-content", transform: "translate(-50%, -50%)" }}>
+            <Chip icon={c.icon} title={c.title} sub={c.sub} style={{ position: "relative" }} />
+          </div>
+        ))}
       </div>
       <div className="mf-g4" style={{ marginTop: 28, gridTemplateColumns: "1.5fr 1fr 1fr 1fr", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -226,26 +250,23 @@ function ConfigX() {
 function Operations() {
   const nodes = [["users", "Customer", "Account and requirement"], ["layers", "Opportunity", "Deal and pipeline"], ["doc", "Quote", "Price and specification"], ["cart", "Order", "Confirmed requirement"], ["box", "Availability", "Stock and allocation"], ["truck", "Fulfilment", "Delivery and shipment"]];
   return (
-    <Sec bg="#fff" pad="88px 0 72px">
+    <Sec bg="#fff" pad="64px 0 56px">
       <div style={{ textAlign: "center", maxWidth: 760, margin: "0 auto" }}>
         <Eyebrow>Commercial operations</Eyebrow>
         <h2 className="mf-h2">Keep the order moving</h2>
         <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: ST }}>Winning the order is only the beginning. Customer information, pricing, stock and delivery all need to move with the sale. The less information gets lost between these steps, the easier it is to keep the order on track.</p>
       </div>
-      <div style={{ position: "relative", marginTop: 44, minHeight: 650 }}>
-        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 290, borderRadius: 14, ...photoStyle(IMG.warehouse, { backgroundPosition: "center 60%" }), maskImage: "linear-gradient(180deg, transparent, #000 45%)", WebkitMaskImage: "linear-gradient(180deg, transparent, #000 45%)" }} />
+      <div style={{ position: "relative", marginTop: 30 }}>
         <div style={{ position: "relative", maxWidth: 960, margin: "0 auto" }}>
           <div className="mf-opszone">
-            <Card cls="mf-an mf-n0" style={{ position: "absolute", left: 0, top: 0, width: 230, minHeight: 172, padding: 14 }}>
+            <Card cls="mf-an mf-n0" style={{ position: "absolute", left: 0, top: 0, width: 230, height: 126, padding: 14 }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: SL, display: "flex", alignItems: "center", gap: 6 }}><Ic n="users" s={14} />CRM</div>
-              <div style={{ marginTop: 8, fontSize: 10.5, color: SL }}>Customers and opportunities</div>
               <div style={{ marginTop: 8, padding: 8, borderRadius: 8, background: PG, fontSize: 11.5, fontWeight: 700, color: G }}>ABC Industries<span style={{ display: "block", fontSize: 10, fontWeight: 500, color: SL }}>Industrial equipment · Opportunity</span></div>
               <div style={{ marginTop: 8, display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10.5, fontWeight: 700, color: BL }}><Dots />Deal won · starts the order</div>
             </Card>
-            <Card cls="mf-an mf-n7 mf-bill" style={{ position: "absolute", right: 0, top: 0, width: 230, minHeight: 172, padding: 14 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: SL, display: "flex", alignItems: "center", gap: 6 }}><Ic n="doc" s={14} />Billing</div>
-              <div style={{ marginTop: 8, fontSize: 10.5, color: SL }}>Quotes, invoices and payments</div>
-              {[["Invoice #INV-4871", "Paid"], ["Amount", "₹4,820"], ["Payment term", "Net 30"], ["Due date", "Nov 28, 2026"]].map(([a, b]) => (
+            <Card cls="mf-an mf-n7 mf-bill" style={{ position: "absolute", right: 0, top: 0, width: 230, height: 126, padding: 14 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: SL, display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}><Ic n="doc" s={14} />Billing</div>
+              {[["Invoice #INV-4871", "Paid"], ["Amount", "₹4,820"], ["Due date", "Nov 28, 2026"]].map(([a, b]) => (
                 <div key={a} style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, padding: "5px 0", color: SL, borderBottom: `1px solid ${PG}` }}><span>{a}</span><b style={{ color: G }}>{b}</b></div>
               ))}
             </Card>
@@ -263,12 +284,12 @@ function Operations() {
             ))}
           </div>
         </div>
-        <div className="mf-g3" style={{ position: "absolute", left: "8%", right: "8%", bottom: 10 }}>
-          {[["box", "Inventory", "Products and availability"], ["layers", "Projects", "Delivery and project coordination"], ["wrench", "ServiceOps", "Service and maintenance"]].map(([ic, t, d]) => (
-            <Card key={t} style={{ padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ width: 34, height: 34, borderRadius: 8, background: PG, display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Ic n={ic} s={17} c={G} /></span>
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: G }}>{t}<span style={{ display: "block", fontSize: 10.5, fontWeight: 500, color: SL }}>{d}</span></span>
-            </Card>
+        <div style={{ marginTop: 28, display: "flex", justifyContent: "center", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: LS }}>Also connected</span>
+          {[["box", "Inventory", "Products and availability"], ["layers", "Projects", "Delivery and coordination"], ["wrench", "ServiceOps", "Service and maintenance"]].map(([ic, t, d]) => (
+            <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 9, padding: "7px 14px 7px 8px", borderRadius: 99, border: `1px solid ${CG}`, background: "#fff", fontSize: 12.5, fontWeight: 700, color: G }}>
+              <span style={{ width: 26, height: 26, borderRadius: "50%", background: PG, display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Ic n={ic} s={14} c={G} /></span>{t}<span style={{ fontWeight: 400, color: SL }}>{d}</span>
+            </span>
           ))}
         </div>
       </div>
@@ -278,47 +299,50 @@ function Operations() {
 
 /* ------------------------------------------------------------------ 5. Factory to field */
 function Field() {
-  const apps = [["/evoq-ai/apps/projects.png", "Projects", "Delivery and installation"], ["/evoq-ai/apps/serviceops.png", "ServiceOps", "Service and maintenance"], ["/evoq-ai/apps/inventory.png", "Inventory", "Stock and spare parts"], ["/evoq-ai/apps/desk.png", "Desk", "Customer support"]];
+  const apps = [
+    ["/evoq-ai/apps/projects.png", "Projects", "Plan and coordinate delivery and installation."],
+    ["/evoq-ai/apps/serviceops.png", "ServiceOps", "Manage service visits, maintenance and repairs."],
+    ["/evoq-ai/apps/inventory.png", "Inventory", "Track products, spare parts and stock availability."],
+    ["/evoq-ai/apps/desk.png", "Desk", "Support customers with questions and service requests."],
+  ];
+  const tag = { position: "absolute", background: "#fff", borderRadius: 10, border: `1px solid ${CG}`, boxShadow: "0 18px 36px -20px rgba(31,41,51,.55)", padding: "9px 13px", display: "flex", alignItems: "center", gap: 10 } as CSSProperties;
   return (
-    <Sec bg={PG} grid id="field">
-      <div className="mf-split2" style={{ alignItems: "center", gap: 48 }}>
-        <div>
-          <Eyebrow>From factory to field</Eyebrow>
-          <h2 className="mf-h2">The product keeps moving</h2>
-          <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "46ch" }}>Delivery is not always the end of the relationship. Installation, commissioning, maintenance, service visits, spare parts and customer support can continue long after the original order.</p>
-          <div style={{ marginTop: 28 }}><Btn enquiry>Connect with an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn></div>
+    <section id="field" style={{ background: "#fff", position: "relative" }}>
+      <div className="mf-fs" style={{ position: "relative", overflow: "hidden", height: 540 }}>
+        <div className="mf-fs-p mf-fs-a" style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "62%", ...photoStyle(IMG.factoryMan, { backgroundPosition: "center 55%" }) }} />
+        <div className="mf-fs-p mf-fs-b" style={{ position: "absolute", left: "46%", top: 0, bottom: 0, width: "33%", clipPath: "polygon(16% 0, 100% 0, 84% 100%, 0 100%)", ...photoStyle(IMG.truck) }} />
+        <div className="mf-fs-p mf-fs-c" style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "30%", clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0 100%)", ...photoStyle(IMG.techTablet, { backgroundPosition: "62% center" }) }} />
+
+        <div className="mf-wrap" style={{ position: "relative", height: "100%" }}>
+          <div className="mf-fs-card" style={{ position: "absolute", left: 24, top: 36, width: 590, padding: "28px 30px 30px", borderRadius: 18, background: "rgba(255,255,255,.93)", backdropFilter: "blur(10px)", boxShadow: "0 30px 60px -30px rgba(15,23,42,.55)", border: "1px solid rgba(255,255,255,.7)" }}>
+            <Eyebrow>From factory to field</Eyebrow>
+            <h2 className="mf-h2">The product keeps moving</h2>
+            <p style={{ margin: "16px 0 0", fontSize: 15, lineHeight: 1.65, color: ST }}>Delivery is not always the end of the relationship. Installation, commissioning, maintenance, service visits, spare parts and customer support can continue long after the original order.</p>
+            <div style={{ marginTop: 22 }}><Btn enquiry>Connect with an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn></div>
+          </div>
         </div>
-        <div className="mf-fieldvis" style={{ position: "relative", height: 460 }}>
-          <div style={{ position: "absolute", inset: 0, borderRadius: 14, ...photoStyle(IMG.delivery), boxShadow: "0 40px 80px -40px rgba(31,41,51,.6)" }} />
-          <Card style={{ position: "absolute", right: 16, top: 16, width: 190, padding: 12 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: G, display: "flex", gap: 8, alignItems: "center" }}><Ic n="wrench" s={15} />Field service</div>
-            <div style={{ fontSize: 10.5, color: SL, marginTop: 6, lineHeight: 1.6 }}>Installation<br />Maintenance<br />Ongoing support</div>
-          </Card>
-          <Card style={{ position: "absolute", right: 16, bottom: 16, width: 236, padding: 12 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: G, display: "flex", justifyContent: "space-between", alignItems: "center" }}>EVOQ applications<span style={{ fontSize: 9.5, fontWeight: 700, color: BL, background: "#DBEAFE", padding: "2px 7px", borderRadius: 99 }}>Included</span></div>
-            <div style={{ marginTop: 8, display: "grid", gap: 7 }}>
-              {apps.map(([img, t, d]) => (
-                <div key={t} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{ width: 86, flexShrink: 0 }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={img} alt={`EVOQ ${t}`} height={19} style={{ height: 19, width: "auto", maxWidth: "100%", objectFit: "contain", display: "block" }} />
-                  </span>
-                  <span style={{ fontSize: 10.5, color: SL, lineHeight: 1.3 }}>{d}</span>
-                </div>
-              ))}
+        <div aria-hidden="true" style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 170, background: "linear-gradient(180deg, rgba(15,23,42,0), rgba(15,23,42,.55))", pointerEvents: "none" }} />
+        {[["01", "Factory", { left: "4%" }], ["02", "Delivery", { left: "56%" }], ["03", "Field service", { right: "4%" }]].map(([n, t, pos]) => (
+          <div key={t as string} className="mf-fs-tag" style={{ position: "absolute", bottom: 64, color: "#fff", display: "flex", alignItems: "baseline", gap: 9, textShadow: "0 2px 12px rgba(15,23,42,.7)", ...(pos as CSSProperties) }}>
+            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: ".18em", opacity: 0.8 }}>{n as string}</span>
+            <span style={{ fontSize: 15, fontWeight: 600, letterSpacing: ".02em", paddingBottom: 3, borderBottom: "1.5px solid rgba(255,255,255,.7)" }}>{t as string}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mf-wrap">
+        <div className="mf-fs-apps" style={{ position: "relative", marginTop: -44, background: "#fff", borderRadius: 14, border: `1px solid ${CG}`, boxShadow: "0 30px 60px -36px rgba(31,41,51,.5)", display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
+          {apps.map(([img, t, d], i) => (
+            <div key={t} style={{ padding: "20px 24px", display: "flex", flexDirection: "column", gap: 9, borderLeft: i ? `1px solid ${PG}` : 0 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img} alt={`EVOQ ${t}`} height={24} style={{ height: 24, width: "auto", objectFit: "contain", alignSelf: "flex-start" }} />
+              <span style={{ fontSize: 12.5, lineHeight: 1.5, color: SL }}>{d}</span>
             </div>
-          </Card>
-          <Card style={{ position: "absolute", left: 16, bottom: 16, width: 190, padding: 12 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: G, display: "flex", gap: 8, alignItems: "center" }}><Ic n="truck" s={15} />Delivery</div>
-            <div style={{ fontSize: 10.5, color: SL, marginTop: 6, lineHeight: 1.6 }}>Shipment · Tracking<br />Delivery · Out for delivery</div>
-          </Card>
-          <Card style={{ position: "absolute", left: 16, top: 16, width: 170, padding: 12 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, color: G, display: "flex", gap: 8, alignItems: "center" }}><Ic n="cog" s={15} />Factory</div>
-            <div style={{ fontSize: 10.5, color: SL, marginTop: 6, lineHeight: 1.6 }}>Production · Quality<br />Ready for delivery</div>
-          </Card>
+          ))}
         </div>
       </div>
-    </Sec>
+      <div style={{ height: 56 }} />
+    </section>
   );
 }
 
@@ -326,7 +350,7 @@ function Field() {
 function People() {
   const roles = [
     { img: IMG.manager, pos: "center 30%", role: "Operations manager", ic: "users", chip: ["Production plan", "On track"], pts: ["Production and delivery planning", "Team coordination", "Visibility across orders, inventory and service"] },
-    { img: IMG.technician, pos: "center 30%", role: "Field technician", ic: "wrench", chip: ["Service visit", "Completed"], pts: ["Service visits and maintenance", "Access to product and customer information", "Parts and warranty support"] },
+    { img: IMG.technician, pos: "center 42%", role: "Field technician", ic: "wrench", chip: ["Service visit", "Completed"], pts: ["Service visits and maintenance", "Access to product and customer information", "Parts and warranty support"] },
     { img: IMG.coordinator, pos: "center 30%", role: "Service coordinator", ic: "headset", chip: ["Open requests", "12"], pts: ["Schedule and dispatch service visits", "Track ongoing requests", "Keep customers informed"] },
   ];
   return (
@@ -393,60 +417,16 @@ function Segments() {
   );
 }
 
-/* ------------------------------------------------------------------ 8. Applications */
-function Apps() {
-  const main = [
-    ["/evoq-ai/apps/crm.png", "CRM", "Customers, opportunities and quotes", "users"],
-    ["/evoq-ai/apps/billing.png", "Billing", "Quotes, invoices and payments", "doc"],
-    ["/evoq-ai/apps/inventory.png", "Inventory", "Products, stock and availability", "box"],
-    ["/evoq-ai/apps/projects.png", "Projects", "Delivery, installation and implementation", "layers"],
-    ["/evoq-ai/apps/serviceops.png", "ServiceOps", "Service, maintenance and field operations", "wrench"],
-  ] as const;
-  const sup = [["/evoq-ai/apps/desk.png", "Desk", "Customer support and service requests"], ["/logos/hrms.png", "HRMS", "People, attendance and workforce management"], ["/logos/skillberry.png", "Skillberry", "Training and skills development"], ["/evoq-ai/apps/sync.png", "Sync", "Integrations and data synchronization"]];
-  return (
-    <Sec bg="#fff" pad="76px 0">
-      <div className="mf-split2" style={{ alignItems: "end", marginBottom: 32 }}>
-        <div><Eyebrow>EVOQ applications</Eyebrow><h2 className="mf-h2" style={{ fontSize: 34 }}>The applications behind the operation</h2></div>
-        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: ST }}>From customer relationships and quoting to inventory, delivery and service, EVOQ brings together the manufacturing teams need to manage the work around the product.</p>
-      </div>
-      <div className="mf-g5">
-        {main.map(([img, t, d, ic]) => (
-          <Card key={t} cls="mf-card-h" style={{ padding: 16, display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img} alt={`EVOQ ${t}`} height={26} style={{ height: 26, width: "auto", objectFit: "contain" }} />
-            </div>
-            <p style={{ margin: "8px 0 0", fontSize: 11.5, color: SL, lineHeight: 1.5, minHeight: 34 }}>{d}</p>
-            <div style={{ margin: "12px 0", height: 78, borderRadius: 8, background: PG, padding: 8, display: "grid", gap: 5, alignContent: "center" }}>
-              {[70, 100, 55].map((w, i) => <span key={i} style={{ display: "block", height: 8, width: `${w}%`, borderRadius: 4, background: i === 0 ? CG : "#fff", border: `1px solid ${CG}` }} />)}
-            </div>
-          </Card>
-        ))}
-      </div>
-      <div style={{ marginTop: 20, border: `1px solid ${CG}`, borderRadius: 12, background: PG, padding: "16px 20px", display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
-        <div style={{ fontSize: 12.5, color: G, fontWeight: 700, minWidth: 150 }}>Supporting applications<span style={{ display: "block", fontSize: 10.5, fontWeight: 400, color: SL }}>Additional applications that support the operation.</span></div>
-        {sup.map(([img, t, d]) => (
-          <div key={t} style={{ display: "flex", alignItems: "center", gap: 10, flex: "1 1 180px" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img} alt={`EVOQ ${t}`} height={22} style={{ height: t === "HRMS" || t === "Skillberry" ? 34 : 22, width: "auto", objectFit: "contain", flexShrink: 0, ...(t === "HRMS" || t === "Skillberry" ? { background: G, padding: "6px 10px", borderRadius: 8 } : {}) }} />
-            <span style={{ fontSize: 10.5, color: SL, lineHeight: 1.4 }}>{d}</span>
-          </div>
-        ))}
-      </div>
-    </Sec>
-  );
-}
-
 /* ------------------------------------------------------------------ 9. CTA */
 function Cta() {
   return (
-    <section id="talk" style={{ position: "relative", overflow: "hidden", background: G, color: "#fff", padding: "84px 0" }}>
-      <div style={{ position: "absolute", inset: 0, ...photoStyle(IMG.plant, { opacity: 0.55 }) }} />
-      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(90deg, ${G} 28%, rgba(31,41,51,.25))` }} />
+    <section id="talk" style={{ position: "relative", overflow: "hidden", background: "#1D4ED8", color: "#fff", padding: "84px 0" }}>
+      <div style={{ position: "absolute", inset: 0, ...photoStyle(IMG.plant, { opacity: 0.4, mixBlendMode: "luminosity" }) }} />
+      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(90deg, #1D4ED8 30%, rgba(29,78,216,.55))` }} />
       <div className="mf-wrap" style={{ position: "relative" }}>
         <Eyebrow light>Let's look at your manufacturing operation</Eyebrow>
         <h2 className="mf-h2" style={{ color: "#fff", maxWidth: "16ch" }}>Turn complex products into simpler operations.</h2>
-        <p style={{ margin: "18px 0 0", fontSize: 15, lineHeight: 1.7, color: CG, maxWidth: "50ch" }}>Every manufacturer has its own products, processes and customer journey. Start with the way your operation works today. Find where EVOQ can support the journey from enquiry to service.</p>
+        <p style={{ margin: "18px 0 0", fontSize: 15, lineHeight: 1.7, color: "#DBEAFE", maxWidth: "50ch" }}>Every manufacturer has its own products, processes and customer journey. Start with the way your operation works today. Find where EVOQ can support the journey from enquiry to service.</p>
         <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
           <Btn dark={false} enquiry>Talk to an expert <Ic n="arrow" s={15} c={G} w={2.2} /></Btn>
           <a href="/" className="mf-btn" style={{ display: "inline-flex", alignItems: "center", padding: "13px 22px", borderRadius: 8, fontSize: 13.5, fontWeight: 600, textDecoration: "none", color: "#fff", border: "1px solid rgba(255,255,255,.4)" }}>Explore EVOQ</a>
@@ -484,8 +464,12 @@ export function ManufacturingPage() {
         .mf-seg-img{transition:transform .5s ease}
         .mf-seg:hover .mf-seg-img{transform:scale(1.06)}
         @media (max-width:1100px){.mf-g6{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-g5{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-steps{grid-template-columns:repeat(4,minmax(0,1fr))}.mf-h1{font-size:50px}.mf-h2{font-size:38px}}
-        @media (max-width:900px){.mf-hero,.mf-split2{grid-template-columns:1fr}.mf-g4{grid-template-columns:repeat(2,minmax(0,1fr))!important}.mf-g3{grid-template-columns:1fr}.mf-flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.mf-opszone{height:auto!important;display:grid;gap:14px;margin-bottom:14px}.mf-opszone>.mf-bill,.mf-opszone>.mf-n0{position:static!important;width:auto!important}.mf-cfg{grid-template-columns:1fr!important}.mf-arrow{display:none}}
+        @media (max-width:900px){.mf-hero,.mf-split2{grid-template-columns:1fr}.mf-g4{grid-template-columns:repeat(2,minmax(0,1fr))!important}.mf-g3{grid-template-columns:1fr}.mf-flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.mf-opszone{height:auto!important;display:grid;gap:14px;margin-bottom:14px}.mf-opszone>.mf-bill,.mf-opszone>.mf-n0{position:static!important;width:auto!important;height:auto!important}.mf-cfg{grid-template-columns:1fr!important}.mf-arrow{display:none}}
         @media (max-width:600px){.mf-g6,.mf-g5{grid-template-columns:repeat(2,minmax(0,1fr))}.mf-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.mf-g4{grid-template-columns:1fr!important}.mf-h1{font-size:38px}.mf-h2{font-size:30px}.mf-hero-visual{height:380px}}
+        @media (max-width:900px){.mf-fs{height:auto!important;display:grid}.mf-fs-p{position:static!important;width:100%!important;height:200px;clip-path:none!important}.mf-fs-card{position:static!important;width:auto!important;margin:0 0 0!important}.mf-fs-tag{display:none!important}.mf-fs .mf-wrap{order:-1;height:auto!important;padding-bottom:24px}.mf-fs-apps{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-top:24px!important}}
+        @media (max-width:560px){.mf-fs-apps{grid-template-columns:1fr!important}}
+        .mf-fs-dot{position:absolute;top:-4px;left:0;width:10px;height:10px;border-radius:50%;background:${BL};box-shadow:0 0 0 4px rgba(255,255,255,.85);animation:mfFsDot 2.6s ease-in-out infinite}
+        @keyframes mfFsDot{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 10px);opacity:0}}
         .mf-rv{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--mf-d,0ms)}
         .mf-rv.mf-in{opacity:1;transform:none}
         @keyframes mfDash{to{stroke-dashoffset:-48}}
@@ -494,21 +478,21 @@ export function ManufacturingPage() {
         .mf-stepic{animation:mfStep 8.4s ease-in-out infinite}
         .mf-card-h{transition:transform .25s ease,box-shadow .25s ease}
         .mf-card-h:hover{transform:translateY(-5px);box-shadow:0 30px 56px -28px rgba(31,41,51,.6)}
-        @media (prefers-reduced-motion:reduce){.mf-float,.mf-pop,.mf-dash,.mf-stepic,.mf-an,.mf-an svg,.mf-cf{animation:none!important}}
+        @media (prefers-reduced-motion:reduce){.mf-fs-dot,.mf-float,.mf-pop,.mf-dash,.mf-stepic,.mf-an,.mf-an svg,.mf-cf{animation:none!important}}
       `}</style>
       <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: `1px solid ${PG}` }}>
         <Topbar darkCTA={false} light ctaColor={G} />
       </div>
       <Hero />
       <Lifecycle />
+      <SolutionsTabs />
       <ConfigX />
       <Operations />
       <Field />
       <People />
       <Segments />
-      <Apps />
       <Cta />
-      <Footer background={BL} />
+      <Footer background={G} />
     </div>
   );
 }
