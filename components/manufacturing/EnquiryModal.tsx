@@ -8,13 +8,20 @@ const CG = "#CBD5E1";
 const PG = "#F1F5F9";
 const BL = "#2563EB";
 
-const SEGMENTS = ["Industrial manufacturing", "Equipment manufacturers", "Furniture & modular products", "Building products", "Medical devices", "Other configurable products"];
+const DEFAULT_SEGMENTS = ["Industrial manufacturing", "Equipment manufacturers", "Furniture & modular products", "Building products", "Medical devices", "Other configurable products"];
 
 const input: CSSProperties = { width: "100%", boxSizing: "border-box", padding: "11px 13px", borderRadius: 9, border: `1px solid ${CG}`, fontFamily: "inherit", fontSize: 14, color: G, background: "#fff", outline: "none" };
 const label: CSSProperties = { display: "block", fontSize: 11, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: SL, marginBottom: 7 };
 
 /* Opens from any element carrying data-enquiry, so the server-rendered page needs no client wiring. */
-export function EnquiryModal() {
+export function EnquiryModal({
+  eyebrow = "EVOQ Manufacturing",
+  segments = DEFAULT_SEGMENTS,
+  segmentLabel = "What do you manufacture?",
+  placeholder = "Configurable products, quoting, delivery, service...",
+  accent = G,
+  accentSoft = BL,
+}: { eyebrow?: string; segments?: string[]; segmentLabel?: string; placeholder?: string; accent?: string; accentSoft?: string } = {}) {
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -48,13 +55,13 @@ export function EnquiryModal() {
         <button type="button" aria-label="Close" onClick={() => setOpen(false)} style={{ position: "absolute", top: 18, right: 18, width: 34, height: 34, borderRadius: 9, border: `1px solid ${CG}`, background: "#fff", color: SL, fontSize: 18, cursor: "pointer" }}>×</button>
         {done ? (
           <div style={{ padding: "36px 8px 18px", textAlign: "center" }}>
-            <div style={{ width: 54, height: 54, borderRadius: "50%", background: BL, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, margin: "0 auto 18px" }}>✓</div>
+            <div style={{ width: 54, height: 54, borderRadius: "50%", background: accentSoft, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, margin: "0 auto 18px" }}>✓</div>
             <h2 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 700, color: G }}>Thanks, we have your enquiry</h2>
             <p style={{ margin: 0, fontSize: 14.5, color: SL, lineHeight: 1.6 }}>A manufacturing specialist from EVOQ will get in touch shortly to understand your operation.</p>
           </div>
         ) : (
           <form onSubmit={(e) => { e.preventDefault(); setDone(true); }}>
-            <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: BL, marginBottom: 6 }}>EVOQ Manufacturing</div>
+            <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: accentSoft, marginBottom: 6 }}>{eyebrow}</div>
             <h2 style={{ margin: "0 0 6px", fontSize: 25, fontWeight: 700, color: G, letterSpacing: "-.01em" }}>Connect with an expert</h2>
             <p style={{ margin: 0, fontSize: 14, color: SL, lineHeight: 1.55 }}>Tell us about your products and operation. We will show how EVOQ fits.</p>
             <div style={{ height: 1, background: PG, margin: "20px 0" }} />
@@ -67,19 +74,19 @@ export function EnquiryModal() {
               <div><label style={label}>Phone</label><input type="tel" placeholder="+91 98765 43210" style={input} /></div>
             </div>
             <div style={{ marginBottom: 14 }}>
-              <label style={label}>What do you manufacture?</label>
+              <label style={label}>{segmentLabel}</label>
               <select defaultValue="" style={{ ...input, cursor: "pointer" }}>
                 <option value="" disabled>Select a segment</option>
-                {SEGMENTS.map((s) => <option key={s}>{s}</option>)}
+                {segments.map((s) => <option key={s}>{s}</option>)}
               </select>
             </div>
             <div>
               <label style={label}>How can we help?</label>
-              <textarea rows={3} placeholder="Configurable products, quoting, delivery, service..." style={{ ...input, resize: "vertical" }} />
+              <textarea rows={3} placeholder={placeholder} style={{ ...input, resize: "vertical" }} />
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 20 }}>
               <button type="button" onClick={() => setOpen(false)} style={{ padding: "11px 20px", borderRadius: 9, border: `1px solid ${CG}`, background: "#fff", color: G, fontFamily: "inherit", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Cancel</button>
-              <button type="submit" style={{ padding: "11px 22px", borderRadius: 9, border: 0, background: G, color: "#fff", fontFamily: "inherit", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Send enquiry</button>
+              <button type="submit" style={{ padding: "11px 22px", borderRadius: 9, border: 0, background: accent, color: "#fff", fontFamily: "inherit", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Send enquiry</button>
             </div>
           </form>
         )}

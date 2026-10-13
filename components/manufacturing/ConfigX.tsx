@@ -55,7 +55,7 @@ export function ConfigXWindow() {
             <div style={{ background: "#fff", border: `1px solid ${CG}`, borderRadius: 10, padding: 16, boxShadow: "0 24px 44px -28px rgba(31,41,51,.5)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <b style={{ fontSize: 13, color: G }}>Quote QT-2041</b>
-                <span style={{ fontSize: 10.5, fontWeight: 700, padding: "3px 9px", borderRadius: 99, background: sent ? "#DCFCE7" : PB, color: sent ? "#166534" : BL }}>{sent ? "Sent" : "Draft"}</span>
+                <span style={{ fontSize: 10.5, fontWeight: 700, padding: "3px 9px", borderRadius: 99, background: sent ? CG : PB, color: sent ? G : BL }}>{sent ? "Sent" : "Draft"}</span>
               </div>
               <div style={{ fontSize: 10.5, color: SL, marginTop: 2 }}>Prepared for Apex Machinery · Valid till 30 Nov</div>
               <div style={{ marginTop: 12, borderTop: `1px solid ${PG}` }}>
@@ -163,7 +163,7 @@ export function ConfigXWindow() {
           <div style={{ fontSize: 10.5, color: SL }}>Estimated price</div>
           <div key={total} className="mf-pop" style={{ fontSize: 22, fontWeight: 700, color: G }}>{fmt(total)}</div>
         </div>
-        <button type="button" onClick={() => (tab === 3 ? setSent(true) : setTab(tab + 1))} style={{ fontFamily: "inherit", cursor: "pointer", border: 0, fontSize: 11.5, fontWeight: 700, color: "#fff", background: tab === 3 && sent ? "#166534" : G, padding: "10px 14px", borderRadius: 9 }}>{["View visual", "View pricing", "Create quote", sent ? "Quote sent ✓" : "Send quote"][tab]}</button>
+        <button type="button" onClick={() => (tab === 3 ? setSent(true) : setTab(tab + 1))} style={{ fontFamily: "inherit", cursor: "pointer", border: 0, fontSize: 11.5, fontWeight: 700, color: "#fff", background: tab === 3 && sent ? ST : G, padding: "10px 14px", borderRadius: 9 }}>{["View visual", "View pricing", "Create quote", sent ? "Quote sent ✓" : "Send quote"][tab]}</button>
       </div>
     </div>
   );

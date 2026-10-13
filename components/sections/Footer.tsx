@@ -54,6 +54,9 @@ export function Footer({ background, darkText = false }: { background?: string; 
             <li><a href="/solutions/healthcare/crm">Healthcare CRM</a></li>
             <li><a href="/solutions/healthcare/practice-management">Healthcare Practice Management</a></li>
             <li><a href="/solutions/manufacturing">Manufacturing</a></li>
+            <li><a href="/solutions/construction">Construction &amp; Real Estate</a></li>
+            <li><a href="/solutions/hospitality">Hospitality, Travel &amp; F&amp;B</a></li>
+            <li><a href="/solutions/industries">More industries</a></li>
           </ul>
         </div>
 

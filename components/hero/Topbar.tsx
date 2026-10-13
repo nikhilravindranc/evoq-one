@@ -156,10 +156,10 @@ const SOLUTIONS: {
     sub: "From enquiry to the field",
     href: "/solutions/manufacturing",
   },
-  { name: "Construction & Real Estate", sub: "Projects, sites and property", href: "#", icon: "building" },
+  { name: "Construction & Real Estate", sub: "Projects, sites and property", href: "/solutions/construction", icon: "building" },
   { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "#", icon: "wrench" },
-  { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "#", icon: "hotel" },
-  { name: "More industries", sub: "Explore every EVOQ solution", href: "#", icon: "grid" },
+  { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "/solutions/hospitality", icon: "hotel" },
+  { name: "More industries", sub: "Explore every EVOQ solution", href: "/solutions/industries", icon: "grid" },
 ];
 
 const SOLUTION_BRAND: Record<string, { fg: string; tint: string }> = {
@@ -387,6 +387,19 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                   </div>
                 ))}
               </div>
+              <Link
+                href="/products"
+                onClick={() => setOpen(false)}
+                className="group mt-5 flex items-center justify-between rounded-xl bg-[#F2F2FF] px-4 py-3 no-underline transition-colors hover:bg-[#E8E8FF]"
+              >
+                <span className="flex flex-col leading-tight">
+                  <span className="text-[14px] font-semibold text-[#1A1190]">Explore all EVOQ applications</span>
+                  <span className="mt-px text-[12px] text-[#5F6B7A]">See the full suite, from CRM to EVOQ AI</span>
+                </span>
+                <span className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#4747E0] text-white transition-transform group-hover:translate-x-0.5">
+                  <ArrowRight size={13} />
+                </span>
+              </Link>
             </div>
           )}
         </div>

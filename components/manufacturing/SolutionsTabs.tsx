@@ -10,7 +10,7 @@ const CG = "#CBD5E1";
 const PG = "#F1F5F9";
 const BL = "#2563EB";
 const PB = "#DBEAFE";
-const LB = "#8DB6FF";
+const LB = "#DBEAFE";
 
 const MOTOR = "https://images.unsplash.com/photo-1736161999520-0a20fa297a89?auto=format&fit=crop&w=600&q=75";
 
@@ -21,6 +21,8 @@ const ICONS: Record<string, ReactNode> = {
   wrench: <path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z" />,
   box: <><path d="M21 8 12 3 3 8v8l9 5 9-5z" /><path d="m3 8 9 5 9-5M12 13v8" /></>,
   headset: <><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><rect x="2" y="14" width="5" height="6" rx="2" /><rect x="17" y="14" width="5" height="6" rx="2" /></>,
+  users: <><circle cx="9" cy="8" r="3.5" /><path d="M2 21a7 7 0 0 1 14 0M17 4a3.5 3.5 0 0 1 0 7M22 21a7 7 0 0 0-4-6.3" /></>,
+  sync: <path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5" />,
   arrow: <><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></>,
   check: <path d="M20 6 9 17l-5-5" />,
 };
@@ -31,7 +33,8 @@ function Ic({ n, s = 18, c = G, w = 1.8 }: { n: string; s?: number; c?: string; 
 function Pill({ t, bg, fg }: { t: string; bg: string; fg: string }) {
   return <span style={{ fontSize: 10.5, fontWeight: 600, background: bg, color: fg, padding: "3px 9px", borderRadius: 99, whiteSpace: "nowrap" }}>{t}</span>;
 }
-const OK = ["#DCFCE7", "#166534"], WARN = ["#FEF3C7", "#92400E"], BLUE = [PB, "#1D4ED8"], GREY = ["#EEF1F5", "#475569"], RED = ["#FEE2E2", "#B91C1C"];
+/* status pills stay inside the Manufacturing palette: graphite, steel and cool greys, with blue only for active states */
+const OK = [CG, G], WARN = ["#94A3B8", G], BLUE = [PB, BL], GREY = [PG, ST], RED = [G, "#fff"];
 
 function Shell({ title, children, float }: { title: string; children: ReactNode; float?: ReactNode }) {
   return (
@@ -72,7 +75,7 @@ function VisCrm() {
 function VisCpq() {
   const opts: [string, string][] = [["Housing", "Aluminium"], ["Motor", "High torque"], ["Mounting", "Base mount"], ["Seal", "IP65"]];
   return (
-    <Shell title="ConfigX · Industrial Control Unit" float={<Float style={{ left: -14, bottom: 26 }}><Ic n="check" s={14} c="#16A34A" w={2.6} />Quote ready to send</Float>}>
+    <Shell title="ConfigX · Industrial Control Unit" float={<Float style={{ left: -14, bottom: 26 }}><Ic n="check" s={14} c={BL} w={2.6} />Quote ready to send</Float>}>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, height: "100%" }}>
         <div style={{ borderRadius: 10, minHeight: 190, backgroundImage: `url(${MOTOR})`, backgroundSize: "cover", backgroundPosition: "center" }} />
         <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
@@ -124,7 +127,7 @@ function VisService() {
 function VisInvBill() {
   const stock: [string, string, string, string[]][] = [["ICU-420", "Control unit", "12", [...OK, "In stock"] as string[]], ["GBX-210", "Gearbox", "4", [...WARN, "Low"] as string[]], ["SEAL-IP65", "Seal kit", "86", [...OK, "In stock"] as string[]]];
   return (
-    <Shell title="Inventory · Billing" float={<Float style={{ right: -14, bottom: 22 }}><Ic n="check" s={14} c="#16A34A" w={2.6} />INV-4871 paid · ₹4,820</Float>}>
+    <Shell title="Inventory · Billing" float={<Float style={{ right: -14, bottom: 22 }}><Ic n="check" s={14} c={BL} w={2.6} />INV-4871 paid · ₹4,820</Float>}>
       <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: LS, marginBottom: 2 }}>Availability</div>
       {stock.map(([sku, n, q, [bg, fg, l]]) => (
         <div key={sku} style={{ ...row, padding: "9px 0" }}><span style={{ flex: 1, fontWeight: 700 }}>{sku}<span style={sub}>{n}</span></span><b>{q} units</b><Pill t={l} bg={bg} fg={fg} /></div>
@@ -153,14 +156,52 @@ function VisDesk() {
   );
 }
 
-type Tab = { tab: string; ic: string; title: string; line: [string, string]; body: string; apps: [string, string][]; vis: () => ReactNode };
+function VisPeople() {
+  const staff: [string, string, string, string[]][] = [
+    ["RK", "Ravi Kumar", "Field technician · Plant B", [...OK, "Active"] as string[]],
+    ["AD", "Anita Das", "Service coordinator", [...OK, "Active"] as string[]],
+    ["SP", "Sameer Patel", "Line supervisor", [...WARN, "On leave"] as string[]],
+  ];
+  return (
+    <Shell title="HRMS · Skillberry" float={<Float style={{ right: -14, bottom: 26 }}><Ic n="check" s={14} c={BL} w={2.6} />Safety training completed</Float>}>
+      {staff.map(([a, n, r, [bg, fg, l]]) => (
+        <div key={n} style={row}>{avatar(a)}<span style={{ flex: 1, fontWeight: 700 }}>{n}<span style={sub}>{r}</span></span><Pill t={l} bg={bg} fg={fg} /></div>
+      ))}
+      <div style={{ marginTop: 16, border: `1px solid ${CG}`, borderRadius: 10, padding: "12px 14px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, color: G }}>Machine operation certification<span style={{ color: SL, fontWeight: 600 }}>72%</span></div>
+        <div style={{ marginTop: 9, height: 7, borderRadius: 4, background: PG }}><div style={{ width: "72%", height: "100%", borderRadius: 4, background: BL }} /></div>
+        <div style={{ marginTop: 7, fontSize: 10.5, color: SL }}>Skills and training progress across the team</div>
+      </div>
+    </Shell>
+  );
+}
+
+function VisSync() {
+  const left = ["CRM", "Inventory", "Billing"];
+  const right = ["ERP", "Accounting", "Spreadsheets"];
+  const node = (t: string, on: boolean) => <span key={t} style={{ fontSize: 12, fontWeight: 700, color: on ? "#fff" : G, background: on ? BL : PG, border: on ? 0 : `1px solid ${CG}`, borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>{t}</span>;
+  return (
+    <Shell title="Sync · Connected systems" float={<Float style={{ left: -14, bottom: 30 }}><Ic n="sync" s={14} c={BL} />Last sync · 2 min ago</Float>}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 70px 1fr", alignItems: "center", gap: 6, minHeight: 190 }}>
+        <div style={{ display: "grid", gap: 12 }}>{left.map((t) => node(t, true))}</div>
+        <div style={{ display: "grid", gap: 12, justifyItems: "center" }}>
+          {[0, 1, 2].map((i) => <span key={i} style={{ width: "100%", height: 2, backgroundImage: `repeating-linear-gradient(90deg, ${BL} 0 5px, transparent 5px 9px)`, position: "relative" }}><i style={{ position: "absolute", right: -2, top: -4, borderLeft: `7px solid ${BL}`, borderTop: "5px solid transparent", borderBottom: "5px solid transparent" }} /></span>)}
+        </div>
+        <div style={{ display: "grid", gap: 12 }}>{right.map((t) => node(t, false))}</div>
+      </div>
+      <div style={{ marginTop: 14, fontSize: 11, color: SL, textAlign: "center" }}>EVOQ applications and your existing systems, kept in step</div>
+    </Shell>
+  );
+}
+
+type Tab = { tab: string; ic: string; title: string; line: string; apps: [string, string][]; vis: () => ReactNode };
+const IC = (f: string) => `/billing/images/${f}`;
 const TABS: Tab[] = [
-  { tab: "CRM", ic: "chat", title: "Manufacturing CRM", line: ["Turn enquiries into", "opportunities."], body: "Track customer accounts, enquiries, sales opportunities and follow-ups. Give sales teams the context they need to move prospective orders forward.", apps: [["/evoq-ai/apps/crm.png", "CRM"]], vis: VisCrm },
-  { tab: "CPQ", ic: "cog", title: "Manufacturing CPQ", line: ["Configure products.", "Quote with clarity."], body: "Handle product options, specifications and pricing through a guided configuration experience. Visualize product choices and prepare quotes that reflect the customer's requirements.", apps: [["/billing/images/ConfigX-menu-icn.png", "ConfigX"]], vis: VisCpq },
-  { tab: "Projects", ic: "layers", title: "Manufacturing project management", line: ["Keep customer projects", "on track."], body: "Coordinate project tasks, responsibilities, timelines and delivery milestones for equipment installation, implementation and other customer-specific projects.", apps: [["/evoq-ai/apps/projects.png", "Projects"]], vis: VisProjects },
-  { tab: "Service", ic: "wrench", title: "Manufacturing service management", line: ["Manage service", "beyond delivery."], body: "Coordinate work orders, technician dispatch, maintenance activities and service visits after products reach the field.", apps: [["/evoq-ai/apps/serviceops.png", "ServiceOps"]], vis: VisService },
-  { tab: "Inventory & Billing", ic: "box", title: "Manufacturing inventory & billing", line: ["Keep orders and commercial", "activity aligned."], body: "Track inventory information and product availability alongside quotes, invoices and payments as orders progress through the commercial process.", apps: [["/evoq-ai/apps/inventory.png", "Inventory"], ["/evoq-ai/apps/billing.png", "Billing"]], vis: VisInvBill },
-  { tab: "Support", ic: "headset", title: "Manufacturing customer support", line: ["Keep product", "support moving."], body: "Organize customer enquiries, product questions and service requests. Give support teams a clear way to track issues and follow them through to resolution.", apps: [["/evoq-ai/apps/desk.png", "Desk"]], vis: VisDesk },
+  { tab: "Growth", ic: "chat", title: "Growth", line: "Customer relationships, demand generation and product configuration.", apps: [[IC("crm-menu-icn.png"), "CRM"], [IC("campaigns-menu-icn.png"), "Campaigns"], [IC("ConfigX-menu-icn.png"), "ConfigX"]], vis: VisCrm },
+  { tab: "Operations", ic: "wrench", title: "Operations", line: "Project coordination, service delivery and customer support.", apps: [[IC("serviceops-icon.svg"), "ServiceOps"], [IC("evoq-projects-menu-icn.png"), "Projects"], [IC("desk-menu-icn.png"), "Desk"]], vis: VisService },
+  { tab: "People", ic: "users", title: "People", line: "Employee administration, learning and workforce development.", apps: [[IC("hrms-menu-icn-new.png"), "HRMS"], [IC("Skillberry-menu-icn.png"), "Skillberry"]], vis: VisPeople },
+  { tab: "Finance", ic: "box", title: "Finance", line: "Invoicing, revenue and inventory information.", apps: [[IC("billing-menu-icn.png"), "Billing"], [IC("inventory-menu-icn.png"), "Inventory"]], vis: VisInvBill },
+  { tab: "Platform", ic: "layers", title: "Platform", line: "Data synchronization across applications and systems.", apps: [[IC("sync-menu-icn.png"), "Sync"]], vis: VisSync },
 ];
 
 export function SolutionsTabs() {
@@ -168,7 +209,7 @@ export function SolutionsTabs() {
   const t = TABS[i];
   const Vis = t.vis;
   return (
-    <section id="solutions" style={{ position: "relative", overflow: "hidden", background: "linear-gradient(180deg, #0B1220 0%, #14223A 100%)", padding: "88px 0 80px", color: "#fff" }}>
+    <section id="solutions" style={{ position: "relative", overflow: "hidden", background: "linear-gradient(180deg, #111827 0%, #1F2933 100%)", padding: "88px 0 80px", color: "#fff" }}>
       <style>{`
         @keyframes stIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
         .st-in{animation:stIn .45s ease both}
@@ -180,12 +221,12 @@ export function SolutionsTabs() {
         @media (prefers-reduced-motion:reduce){.st-in,.st-float{animation:none}}
       `}</style>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)", backgroundSize: "44px 44px", maskImage: "radial-gradient(70% 80% at 50% 40%, #000, transparent)", WebkitMaskImage: "radial-gradient(70% 80% at 50% 40%, #000, transparent)" }} />
-      <div aria-hidden="true" style={{ position: "absolute", left: "55%", top: "28%", width: 640, height: 480, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(37,99,235,.35), rgba(37,99,235,0))", filter: "blur(30px)" }} />
+      <div aria-hidden="true" style={{ position: "absolute", left: "55%", top: "28%", width: 640, height: 480, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(37,99,235,.16), rgba(37,99,235,0))", filter: "blur(30px)" }} />
       <div className="mf-wrap" style={{ position: "relative" }}>
         <div style={{ textAlign: "center", maxWidth: 780, margin: "0 auto" }}>
-          <p style={{ margin: "0 0 14px", fontSize: 11, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: LB }}>Solutions for manufacturing</p>
-          <h2 className="mf-h2" style={{ color: "#fff" }}>Applications that support every stage of manufacturing</h2>
-          <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: "rgba(255,255,255,.72)", maxWidth: "62ch" }}>From managing product enquiries to coordinating field service, find the right solution for the work surrounding your products, orders and customers.</p>
+          <p style={{ margin: "0 0 14px", fontSize: 11, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: LB }}>EVOQ solutions for manufacturing</p>
+          <h2 className="mf-h2" style={{ color: "#fff" }}>Applications that support the manufacturing lifecycle</h2>
+          <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: "rgba(255,255,255,.72)", maxWidth: "62ch" }}>From customer acquisition and product configuration to service delivery and financial operations, explore the EVOQ applications relevant to your manufacturing requirements.</p>
         </div>
 
         <div className="st-tabs" role="tablist" aria-label="Manufacturing solutions" style={{ display: "flex", gap: 4, width: "fit-content", maxWidth: "100%", margin: "36px auto 0", padding: 6, background: "#fff", borderRadius: 99, boxShadow: "0 18px 40px -20px rgba(0,0,0,.6)", overflowX: "auto", scrollbarWidth: "none" }}>
@@ -199,15 +240,13 @@ export function SolutionsTabs() {
             <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: LB }}>
               <span style={{ width: 34, height: 34, borderRadius: 9, background: "rgba(255,255,255,.1)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Ic n={t.ic} s={17} c={LB} /></span>{t.title}
             </div>
-            <h3 style={{ margin: "18px 0 0", fontSize: 34, lineHeight: 1.15, fontWeight: 600, letterSpacing: "-.02em", color: "#fff" }}>{t.line[0]} <span style={{ color: LB }}>{t.line[1]}</span></h3>
-            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.7, color: "rgba(255,255,255,.78)", maxWidth: "46ch" }}>{t.body}</p>
-            <div style={{ marginTop: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)" }}>{t.apps.length > 1 ? "Applications" : "Application"}</span>
+            <h3 style={{ margin: "18px 0 0", fontSize: 32, lineHeight: 1.2, fontWeight: 600, letterSpacing: "-.02em", color: "#fff", maxWidth: "20ch" }}>{t.line}</h3>
+            <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 10 }}>
               {t.apps.map(([img, name]) => (
-                <span key={name} style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 38, padding: "0 13px", borderRadius: 10, background: "#fff" }}>
+                <span key={name} style={{ display: "inline-flex", alignItems: "center", gap: 9, height: 44, padding: "0 16px 0 10px", borderRadius: 12, background: "#fff", boxShadow: "0 14px 28px -16px rgba(0,0,0,.6)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img} alt={`EVOQ ${name}`} height={22} style={{ height: 22, width: "auto", objectFit: "contain" }} />
-                  {name === "ConfigX" && <b style={{ fontSize: 14, color: G }}>ConfigX</b>}
+                  <img src={img} alt="" width={28} height={28} style={{ width: 28, height: 28, objectFit: "contain" }} />
+                  <b style={{ fontSize: 14.5, color: G }}>{name}</b>
                 </span>
               ))}
             </div>
@@ -217,10 +256,6 @@ export function SolutionsTabs() {
           </div>
         </div>
 
-        <div style={{ marginTop: 52, borderRadius: 14, border: "1px solid rgba(255,255,255,.16)", background: "rgba(255,255,255,.06)", padding: "18px 24px", display: "flex", alignItems: "center", gap: 14 }}>
-          <span style={{ width: 40, height: 40, borderRadius: 10, background: BL, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Ic n="layers" s={20} c="#fff" /></span>
-          <span style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>Explore the EVOQ applications<span style={{ display: "block", fontSize: 12.5, fontWeight: 400, color: "rgba(255,255,255,.65)", marginTop: 2 }}>Discover the applications that support these manufacturing solutions.</span></span>
-        </div>
       </div>
     </section>
   );
