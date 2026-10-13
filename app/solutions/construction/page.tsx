@@ -1,9 +1,9 @@
 import { ConstructionPage } from "@/components/construction/ConstructionPage";
 
 export const metadata = {
-  title: "EVOQ for Construction & Real Estate — Coordinate projects and property operations",
+  title: "EVOQ for Construction, Engineering & Real Estate — Coordinate projects, technical work and property operations",
   description:
-    "EVOQ applications support client enquiries, project coordination, service requests and billing across construction, property development, real estate and property management.",
+    "EVOQ products support project coordination, client relationships and commercial processes across construction, engineering and real estate organizations.",
 };
 
 export default function Construction() {

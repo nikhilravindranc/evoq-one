@@ -3,6 +3,7 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
+import { ConstructionTabs } from "./ConstructionTabs";
 
 /* Construction & Real Estate: architectural, structural, grounded. Linework, grids and site photography. */
 const TERRA = "#B4533C";
@@ -66,14 +67,16 @@ function Hero() {
   return (
     <section style={{ background: WARM, position: "relative", overflow: "hidden", ...grid(LCON + "88", 48) }}>
       <div className="cn-wrap">
-        <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: CONCRETE }}>Home <span style={{ margin: "0 6px" }}>/</span> Solutions <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: BROWN, fontWeight: 600 }}>Construction &amp; Real Estate</b></nav>
+        <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: CONCRETE }}>Home <span style={{ margin: "0 6px" }}>/</span> Solutions <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: BROWN, fontWeight: 600 }}>Construction, Engineering &amp; Real Estate</b></nav>
         <div className="cn-hero">
           <div data-rv="0">
-            <Eyebrow>Construction &amp; Real Estate</Eyebrow>
-            <h1 style={{ margin: 0, fontSize: 58, lineHeight: 1.05, letterSpacing: "-.03em", fontWeight: 600, color: CLAY }}>Coordinate projects and property operations</h1>
-            <p style={{ margin: "24px 0 0", fontSize: 16.5, lineHeight: 1.75, color: "#44403C", maxWidth: "52ch" }}>Construction and property operations involve multiple stakeholders, ongoing project activities and commercial responsibilities. From managing client enquiries to coordinating project work and handling service requests, each stage requires clear ownership and timely follow-through.</p>
-            <p style={{ margin: "14px 0 0", fontSize: 15.5, lineHeight: 1.75, color: CONCRETE, maxWidth: "52ch" }}>EVOQ products support relevant parts of these operations, helping organizations manage relationships, coordinate activities and handle associated processes.</p>
-            <div style={{ marginTop: 32 }}><Cta>Talk to an expert</Cta></div>
+            <Eyebrow>Industry solutions</Eyebrow>
+            <h1 style={{ margin: 0, fontSize: 56, lineHeight: 1.06, letterSpacing: "-.03em", fontWeight: 600, color: CLAY }}>Coordinate projects, technical work and property operations</h1>
+            <p style={{ margin: "24px 0 0", fontSize: 16.5, lineHeight: 1.75, color: "#44403C", maxWidth: "52ch" }}>From project delivery and client relationships to commercial processes and ongoing service, construction, engineering and real estate organizations manage different kinds of work with overlapping operational needs. EVOQ products can support these activities through relevant product combinations tailored to each organization.</p>
+            <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Cta>Talk to an expert</Cta>
+              <a href="#solutions" className="cn-btn" style={{ display: "inline-flex", alignItems: "center", padding: "15px 26px", borderRadius: 4, border: `1.5px solid ${TERRA}`, color: TERRA, textDecoration: "none", fontSize: 14.5, fontWeight: 600 }}>Explore solutions</a>
+            </div>
           </div>
           <div className="cn-hero-vis" data-rv="1">
             <div style={{ position: "absolute", right: 0, top: 0, width: "84%", height: "78%", ...photo(IMG.site), borderRadius: "6px 90px 6px 6px", boxShadow: "0 40px 80px -44px rgba(124,45,31,.7)" }} />
@@ -102,68 +105,31 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ 2. People */
-function People() {
-  const items: [string, string, string, string][] = [
-    ["A", "Construction companies and contractors", "Coordinate project activities, maintain client relationships and manage related commercial processes from project planning through handover.", IMG.workers],
-    ["B", "Property developers and builders", "Manage buyer enquiries, follow up on sales opportunities and coordinate communication throughout the property development and sales journey.", IMG.dev],
-    ["C", "Real estate agencies", "Organize property-related enquiries, track prospective buyers and tenants, and maintain consistent follow-up across sales and rental opportunities.", IMG.agent],
-    ["D", "Property and facilities management companies", "Coordinate incoming service requests, organize maintenance-related activities and manage applicable billing processes.", IMG.facil],
+/* ------------------------------------------------------------------ 2. Overview */
+function Overview() {
+  const items: [string, string, string][] = [
+    ["01", "Project coordination", "Organize project activities, track responsibilities and maintain visibility into delivery progress."],
+    ["02", "Client relationships", "Capture enquiries, maintain prospect and client records, and manage follow-up throughout the relationship."],
+    ["03", "Commercial operations", "Support applicable billing, inventory-related processes and the administrative work associated with projects and services."],
   ];
   return (
     <section style={{ background: LSAND + "55", padding: "92px 0 96px", borderTop: `1px solid ${LSAND}` }}>
       <div className="cn-wrap">
-        <div className="cn-split" data-rv="0">
-          <div><Eyebrow>Who we support</Eyebrow><h2 style={h2}>For the people behind every project and property</h2></div>
-        </div>
-        <div className="cn-g4" style={{ marginTop: 48 }}>
-          {items.map(([k, t, d, img], i) => (
-            <article key={t} data-rv={String(i)} className="cn-card" style={{ background: "#fff", border: `1px solid ${LSAND}`, borderRadius: 4, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-              <div style={{ position: "relative", height: 210, ...photo(img) }}>
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(41,37,36,0) 55%, rgba(41,37,36,.5))" }} />
-                <span style={{ position: "absolute", left: 14, top: 14, width: 30, height: 30, background: "#fff", color: CLAY, fontWeight: 700, fontSize: 13, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{k}</span>
-              </div>
-              <div style={{ padding: "20px 22px 24px", borderTop: `3px solid ${TERRA}` }}>
-                <h3 style={{ margin: 0, fontSize: 18, lineHeight: 1.25, fontWeight: 700, color: CLAY }}>{t}</h3>
-                <p style={{ margin: "11px 0 0", fontSize: 13.5, lineHeight: 1.7, color: "#57534E" }}>{d}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ 3. Solutions */
-function Solutions() {
-  const items: [string, string, string, string[]][] = [
-    ["Construction and project delivery", "Coordinate project activities, maintain client relationships, manage relevant inventory and handle billing and incoming requests throughout project delivery.", "", ["CRM", "Projects", "Inventory", "Billing", "Desk"]],
-    ["Property development and sales", "Manage buyer enquiries, follow up on prospective buyers, coordinate applicable project activities and maintain communication through key milestones.", "", ["CRM", "Campaigns", "Projects", "Billing", "Desk"]],
-    ["Real estate and property operations", "Organize property-related enquiries, maintain client relationships, handle service requests and support applicable billing processes.", "", ["CRM", "Desk", "ServiceOps", "Billing"]],
-  ];
-  return (
-    <section style={{ background: CLAY, color: "#fff", padding: "96px 0 100px", position: "relative", overflow: "hidden", ...grid("rgba(255,255,255,.06)", 56) }}>
-      <div className="cn-wrap">
         <div className="cn-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow light>Solutions for construction and property</Eyebrow><h2 style={{ ...h2, color: "#fff" }}>Select the structure that fits your work</h2></div>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.75, color: "#EBD9CC", maxWidth: "52ch" }}>EVOQ products can work individually or together to support selected processes across construction, property sales and ongoing operations.</p>
+          <div><Eyebrow>Industry overview</Eyebrow><h2 style={h2}>The work behind every project and property</h2></div>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: "#57534E", maxWidth: "54ch" }}>Projects, technical engagements and property transactions follow different paths. Yet each depends on timely communication, clear responsibilities and reliable coordination between the people handling the work.</p>
         </div>
-        <div className="cn-g3" style={{ marginTop: 52 }}>
-          {items.map(([t, d, , apps], i) => (
-            <article key={t} data-rv={String(i)} className="cn-card" style={{ position: "relative", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.18)", borderRadius: 4, padding: "30px 28px 28px", display: "flex", flexDirection: "column" }}>
-              <svg aria-hidden="true" width="100%" height="86" viewBox="0 0 300 86" fill="none" stroke={SAND} strokeWidth="1.4" style={{ opacity: 0.85 }}>
-                {i === 0 && <><path d="M10 80h280M30 80V30h60v50M90 80V10h70v70M160 80V44h50v36M210 80V24h60v56" /><path d="M120 10v-6M120 4h16" /></>}
-                {i === 1 && <><path d="M10 80h280M40 80V40l40-26 40 26v40M150 80V50l32-20 32 20v30M236 80V58l22-14 22 14v22" /><path d="M64 80V58h32v22" /></>}
-                {i === 2 && <><rect x="14" y="10" width="270" height="68" /><path d="M14 44h120M134 10v68M134 54h150M208 10v44M60 10v34" /><path d="M96 78v-10a10 10 0 0 1 10-10" /></>}
+        <div className="cn-g3" style={{ marginTop: 48 }}>
+          {items.map(([n, t, d], i) => (
+            <article key={t} data-rv={String(i)} className="cn-card" style={{ position: "relative", background: "#fff", border: `1px solid ${LSAND}`, borderTop: `3px solid ${TERRA}`, borderRadius: 4, padding: "28px 26px 30px" }}>
+              <svg aria-hidden="true" width="100%" height="64" viewBox="0 0 280 64" fill="none" stroke={TAUPE} strokeWidth="1.3">
+                {i === 0 && <path d="M6 58h268M24 58V26h44v32M68 58V10h52v48M120 58V34h40v32M160 58V20h46v38M206 58V38h60v20" />}
+                {i === 1 && <><circle cx="70" cy="30" r="14" /><circle cx="140" cy="30" r="14" /><circle cx="210" cy="30" r="14" /><path d="M84 30h42M154 30h42" strokeDasharray="4 4" /></>}
+                {i === 2 && <path d="M6 58h268M30 58V30h50v28M80 58V18h50v40M130 58V30h50v28M180 58V42h50v16" />}
               </svg>
-              <div style={{ marginTop: 18, fontSize: 11, fontWeight: 700, letterSpacing: ".2em", color: SAND }}>0{i + 1}</div>
-              <h3 style={{ margin: "8px 0 0", fontSize: 24, lineHeight: 1.2, fontWeight: 600, letterSpacing: "-.01em" }}>{t}</h3>
-              <p style={{ margin: "14px 0 0", fontSize: 14.5, lineHeight: 1.75, color: "#EBD9CC" }}>{d}</p>
-              <div style={{ marginTop: "auto", paddingTop: 26 }}>
-                <div style={{ marginBottom: 10, fontSize: 10.5, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: SAND }}>Relevant products</div>
-                <Apps list={apps} dark />
-              </div>
+              <div style={{ marginTop: 18, fontSize: 11, fontWeight: 700, letterSpacing: ".2em", color: TERRA }}>{n}</div>
+              <h3 style={{ margin: "8px 0 0", fontSize: 22, fontWeight: 700, color: CLAY, letterSpacing: "-.01em" }}>{t}</h3>
+              <p style={{ margin: "12px 0 0", fontSize: 14.5, lineHeight: 1.75, color: "#57534E" }}>{d}</p>
             </article>
           ))}
         </div>
@@ -172,36 +138,33 @@ function Solutions() {
   );
 }
 
-/* ------------------------------------------------------------------ 3b. Applications */
-function Applications() {
-  const apps: [string, string][] = [
-    ["CRM", "Enquiries, buyers, tenants and follow-ups"],
-    ["Campaigns", "Promote developments and listings"],
-    ["Projects", "Tasks, timelines and milestones"],
-    ["Inventory", "Materials and stock records"],
-    ["ServiceOps", "Maintenance and service work"],
-    ["Desk", "Requests and issues to resolution"],
-    ["Billing", "Invoices and payments"],
-  ];
+/* ------------------------------------------------------------------ 4. Approach */
+function Approach() {
+  const blocks: [string, number, number, boolean][] = [["Projects", 0, 0, true], ["CRM", 1, 0, true], ["Billing", 2, 0, false], ["Inventory", 0, 1, false], ["ServiceOps", 1, 1, false], ["Add as needed", 2, 1, false]];
   return (
-    <section id="applications" style={{ background: WARM, padding: "92px 0 20px" }}>
-      <div className="cn-wrap">
-        <div className="cn-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow>EVOQ products</Eyebrow><h2 style={h2}>The products behind these solutions</h2></div>
-          <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.75, color: "#57534E", maxWidth: "52ch" }}>Discover the individual EVOQ products, understand their capabilities and identify which ones may fit your requirements.</p>
+    <section id="approach" style={{ background: WARM, padding: "96px 0 40px", ...grid(LCON + "88", 48) }}>
+      <div className="cn-wrap cn-split" style={{ alignItems: "center", gap: 64 }}>
+        <div data-rv="0">
+          <Eyebrow>Solution approach</Eyebrow>
+          <h2 style={h2}>Start with your operation, not a predefined package</h2>
+          <p style={{ margin: "22px 0 0", fontSize: 16, lineHeight: 1.8, color: "#44403C", maxWidth: "54ch" }}>Some organizations may need support for project coordination and client relationships. Others may need a combination that also addresses billing, inventory-related activities or service requests.</p>
+          <p style={{ margin: "14px 0 0", fontSize: 16, lineHeight: 1.8, color: "#44403C", maxWidth: "54ch" }}>EVOQ helps you explore which products may fit your requirements, how they could work together, and where configuration or integrations may be needed.</p>
         </div>
-        <div className="cn-apps" style={{ marginTop: 44 }}>
-          {apps.map(([a, d], i) => (
-            <div key={a} data-rv={String(i % 4)} className="cn-card" style={{ background: "#fff", border: `1px solid ${LSAND}`, borderTop: `3px solid ${TERRA}`, borderRadius: 4, padding: "22px 18px 22px" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={ICON[a]} alt="" width={44} height={44} style={{ width: 44, height: 44, objectFit: "contain", borderRadius: 10 }} />
-              <h3 style={{ margin: "16px 0 0", fontSize: 17, fontWeight: 700, color: CLAY }}>{a}</h3>
-              <p style={{ margin: "8px 0 0", fontSize: 13, lineHeight: 1.6, color: "#57534E" }}>{d}</p>
-            </div>
-          ))}
-        </div>
-        <div style={{ marginTop: 28 }} data-rv="0">
-          <a href="/products" className="cn-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 24px", borderRadius: 4, border: `1.5px solid ${TERRA}`, color: TERRA, textDecoration: "none", fontSize: 14.5, fontWeight: 700 }}>Explore all products<Arrow /></a>
+        <div data-rv="1" aria-hidden="true" style={{ position: "relative", padding: 22, border: `1px dashed ${TAUPE}`, borderRadius: 4, background: "#ffffffaa" }}>
+          <div style={{ position: "absolute", left: 22, top: -11, background: WARM, padding: "0 10px", fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: CONCRETE }}>Your combination</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 12 }}>
+            {blocks.map(([t, , , on]) => (
+              <div key={t} style={{ height: 96, borderRadius: 3, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 8, background: on ? TERRA : t === "Add as needed" ? "transparent" : LSAND, border: t === "Add as needed" ? `1.5px dashed ${TAUPE}` : "none", color: on ? "#fff" : t === "Add as needed" ? CONCRETE : CLAY, fontSize: 13, fontWeight: 700, boxShadow: on ? "0 18px 30px -20px rgba(124,45,31,.8)" : "none" }}>
+                {ICON[t] && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={ICON[t]} alt="" width={30} height={30} style={{ width: 30, height: 30, objectFit: "contain", background: "#fff", borderRadius: 7, padding: 2 }} />
+                )}
+                {t === "Add as needed" && <span style={{ fontSize: 24, lineHeight: 1 }}>+</span>}
+                {t}
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", fontSize: 11.5, color: CONCRETE, borderTop: `1px solid ${TAUPE}66`, paddingTop: 12 }}><span>Configuration</span><span>Integrations</span><span>Specialist systems</span></div>
         </div>
       </div>
     </section>
@@ -215,9 +178,9 @@ function FinalCta() {
       <div className="cn-wrap">
         <div className="cn-cta" data-rv="0" style={{ position: "relative", overflow: "hidden", background: LSAND, borderRadius: 6, borderLeft: `8px solid ${TERRA}`, display: "grid", gridTemplateColumns: "minmax(0,1.2fr) minmax(0,.8fr)", alignItems: "stretch" }}>
           <div style={{ padding: "56px 56px 60px" }}>
-            <Eyebrow>Discuss your requirements</Eyebrow>
-            <h2 style={{ ...h2, fontSize: 38 }}>Every project and property has its own way of working</h2>
-            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#44403C", maxWidth: "56ch" }}>Every construction and property operation has its own processes, priorities and system requirements. Discuss your current setup with the EVOQ team to explore suitable product combinations and clarify any configuration or integration requirements.</p>
+            <Eyebrow>Final step</Eyebrow>
+            <h2 style={{ ...h2, fontSize: 38 }}>Let&apos;s identify the right fit for your operation</h2>
+            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#44403C", maxWidth: "56ch" }}>Discuss your current processes, existing systems and priorities with EVOQ. Explore suitable product combinations and clarify the capabilities, configuration and integrations required for your organization.</p>
             <div style={{ marginTop: 30 }}><Cta>Talk to an expert</Cta></div>
           </div>
           <div className="cn-cta-img" style={{ ...photo(IMG.interior), minHeight: 260 }} />
@@ -231,7 +194,7 @@ export function ConstructionPage() {
   return (
     <div className="hs-root" style={{ minHeight: "100vh", background: WARM, color: BROWN, fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
       <HsMotion />
-      <EnquiryModal eyebrow="EVOQ Construction & Real Estate" segments={["Construction companies and contractors", "Property developers and builders", "Real estate agencies", "Property and facilities management companies", "Other"]} segmentLabel="Your business" placeholder="Projects, enquiries, service requests, billing..." accent={CLAY} accentSoft={TERRA} />
+      <EnquiryModal eyebrow="EVOQ Construction, Engineering & Real Estate" segments={["Construction companies and contractors", "Engineering firms", "Real estate agencies and developers", "Property and facilities management", "Other"]} segmentLabel="Your business" placeholder="Projects, enquiries, service requests, billing..." accent={CLAY} accentSoft={TERRA} />
       <style>{`
         .cn-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .cn-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:46px 0 72px}
@@ -255,9 +218,9 @@ export function ConstructionPage() {
         <Topbar darkCTA={false} light ctaColor={CLAY} />
       </div>
       <Hero />
-      <People />
-      <Solutions />
-      <Applications />
+      <Overview />
+      <ConstructionTabs />
+      <Approach />
       <FinalCta />
       <Footer background={CLAY} />
     </div>

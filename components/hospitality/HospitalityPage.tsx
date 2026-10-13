@@ -128,10 +128,10 @@ function Solutions() {
   return (
     <section id="solutions" style={{ background: LIGHT, padding: "96px 0 100px" }}>
       <div className="hs-wrap">
-        <div style={{ textAlign: "center", maxWidth: 760, margin: "0 auto 54px" }} data-rv="0">
+        <div style={{ textAlign: "center", maxWidth: 1000, margin: "0 auto 54px" }} data-rv="0">
           <Eyebrow>Solutions for hospitality, travel &amp; F&amp;B</Eyebrow>
-          <h2 style={h2}>Support the work behind <em style={{ color: BOTANICAL }}>every experience.</em></h2>
-          <p style={{ margin: "20px auto 0", fontSize: 16.5, lineHeight: 1.8, color: MUTE }}>Choose the solutions that match your customer interactions and operational requirements, from scheduling services to managing relationships, requests and financial activity.</p>
+          <h2 className="hs-oneline" style={h2}>Support the work behind <em style={{ color: BOTANICAL }}>every experience.</em></h2>
+          <p style={{ margin: "20px auto 0", maxWidth: 760, fontSize: 16.5, lineHeight: 1.8, color: MUTE }}>Choose the solutions that match your customer interactions and operational requirements, from scheduling services to managing relationships, requests and financial activity.</p>
         </div>
         <div className="hs-g3">
           {cards.map((c, i) => (
@@ -210,8 +210,8 @@ function Models() {
         </div>
         <div className="hs-g3" style={{ gap: 28 }}>
           {items.map(([t, d, img], i) => (
-            <div key={t} data-rv={String(i)} className="hs-card">
-              <div style={{ position: "relative", height: 330, borderRadius: "200px 200px 24px 24px", overflow: "hidden", ...photo(img) }}>
+            <div key={t} data-rv={String(i)} className="hs-mcard">
+              <div className="hs-arch" style={{ position: "relative", height: 330, borderRadius: "200px 200px 24px 24px", overflow: "hidden", ...photo(img) }}>
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(6,78,59,0) 55%, rgba(6,78,59,.35))" }} />
               </div>
               <h3 style={{ margin: "26px 0 0", fontFamily: SERIF, fontWeight: 400, fontSize: 27, color: INK, textAlign: "center" }}>{t}</h3>
@@ -264,12 +264,15 @@ export function HospitalityPage() {
         .hs-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px -16px rgba(6,78,59,.6)}
         .hs-card{transition:transform .3s ease,box-shadow .3s ease}
         .hs-card:hover{transform:translateY(-6px);box-shadow:0 34px 60px -34px rgba(6,78,59,.45)}
+        .hs-oneline{white-space:nowrap}
+        .hs-arch{transition:transform .35s ease,box-shadow .35s ease}
+        .hs-mcard:hover .hs-arch{transform:translateY(-8px);box-shadow:0 36px 56px -30px rgba(6,78,59,.55)}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1100px){.hs-steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:40px}.hs-rail{display:none}.hs-g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media (max-width:1100px){.hs-oneline{white-space:normal}.hs-steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:40px}.hs-rail{display:none}.hs-g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media (max-width:900px){.hs-hero,.hs-split,.hs-split2{grid-template-columns:1fr;gap:34px}.hs-hero-vis{height:440px}.hs-collage{height:420px}.hs-journey-pill{display:none}}
         @media (max-width:640px){.hs-steps,.hs-g3{grid-template-columns:1fr}.hs-hero h1,.hs-hero h1+*{}}
-        @media (prefers-reduced-motion:reduce){.hs-rv{transition:none}.hs-card,.hs-btn{transition:none}}
+        @media (prefers-reduced-motion:reduce){.hs-rv{transition:none}.hs-card,.hs-btn,.hs-arch{transition:none}}
       `}</style>
       <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: "1px solid #F1F5F9" }}>
         <Topbar darkCTA={false} light ctaColor={FOREST} />

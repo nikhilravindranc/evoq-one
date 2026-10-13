@@ -49,20 +49,12 @@ function Hero() {
             <h1 style={{ margin: 0, fontSize: 58, lineHeight: 1.06, letterSpacing: "-.03em", fontWeight: 600, color: DEEP }}>Applications that fit your industry&apos;s needs</h1>
             <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: "#4B5563", maxWidth: "52ch" }}>Every industry has its own processes, priorities and operational challenges. EVOQ applications can work individually or together to support relevant parts of those operations, from customer relationships and project delivery to inventory, service and billing.</p>
             <p style={{ margin: "16px 0 0", fontSize: 15, lineHeight: 1.7, color: SLATE }}>Explore the industries below to see where EVOQ applications may fit.</p>
-            <a href="#industries" className="in-btn" style={{ marginTop: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 24px", borderRadius: 10, background: SAPPHIRE, color: "#fff", textDecoration: "none", fontSize: 14.5, fontWeight: 600 }}>Explore industries <Arrow /></a>
+            <a href="#" data-enquiry="" className="in-btn" style={{ marginTop: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 24px", borderRadius: 10, background: SAPPHIRE, color: "#fff", textDecoration: "none", fontSize: 14.5, fontWeight: 600 }}>Talk to an expert <Arrow /></a>
           </div>
           <div className="in-mosaic" data-rv="1" aria-hidden="true">
             <div style={{ gridRow: "1 / 3", borderRadius: 20, ...photo(U("1517048676732-d65bc937f952", 900)) }} />
             <div style={{ borderRadius: 20, ...photo(U("1678182451047-196f22a4143e", 800)) }} />
             <div style={{ borderRadius: 20, ...photo(U("1611845061243-459aad2ab56b", 800)) }} />
-            <div style={{ gridColumn: "1 / 3", borderRadius: 20, background: PALE, display: "flex", alignItems: "center", gap: 14, padding: "0 22px", color: DEEP, fontSize: 13, fontWeight: 600 }}>
-              {["CRM", "Projects", "Inventory", "Billing", "Desk"].map((a) => (
-                <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={ICON[a]} alt="" width={22} height={22} style={{ width: 22, height: 22, objectFit: "contain" }} />{a}
-                </span>
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -76,7 +68,7 @@ function Industries() {
       <div className="in-wrap">
         <div className="in-head" data-rv="0">
           <div><Eyebrow>Explore industries</Eyebrow><h2 style={{ margin: 0, fontSize: 40, lineHeight: 1.1, letterSpacing: "-.025em", fontWeight: 600, color: DEEP }}>Find where EVOQ fits your operation</h2></div>
-          <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.7, color: SLATE, maxWidth: "46ch" }}>Each industry shows the EVOQ applications that are most relevant. Use them individually or together.</p>
+          <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.7, color: SLATE, maxWidth: "46ch" }}>Every industry has its own processes, priorities and operational challenges.</p>
         </div>
         <div className="in-grid">
           {INDUSTRIES.map((x, i) => (
@@ -87,18 +79,6 @@ function Industries() {
               <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
                 <h3 style={{ margin: 0, fontSize: 19, lineHeight: 1.25, fontWeight: 700, color: DEEP, letterSpacing: "-.01em" }}>{x.name}</h3>
                 <p style={{ margin: "10px 0 0", fontSize: 13.5, lineHeight: 1.7, color: "#4B5563" }}>{x.body}</p>
-                <div style={{ marginTop: "auto", paddingTop: 18 }}>
-                  <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: SLATE }}>Relevant applications</div>
-                  <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {x.apps.map((a) => (
-                      <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 10px 4px 5px", borderRadius: 99, background: PALE + "88", fontSize: 11.5, fontWeight: 600, color: DEEP }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={ICON[a]} alt="" width={18} height={18} style={{ width: 18, height: 18, objectFit: "contain" }} />{a}
-                      </span>
-                    ))}
-                  </div>
-                  <a href="#" data-enquiry="" className="in-link" style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${MIST}`, display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 13, fontWeight: 600, color: SAPPHIRE, textDecoration: "none" }}>Discuss this industry <Arrow /></a>
-                </div>
               </div>
             </article>
           ))}
@@ -138,7 +118,7 @@ function FinalCta() {
   return (
     <section id="talk" style={{ background: WARM, padding: "28px 0 90px" }}>
       <div className="in-wrap">
-        <div data-rv="0" style={{ position: "relative", overflow: "hidden", borderRadius: 26, background: `linear-gradient(120deg, ${DEEP}, #1D4ED8)`, color: "#fff", padding: "64px 60px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 36, flexWrap: "wrap", boxShadow: "0 50px 90px -50px rgba(30,58,138,.8)" }} className="in-cta">
+        <div data-rv="0" style={{ position: "relative", overflow: "hidden", borderRadius: 26, background: `linear-gradient(120deg, ${DEEP}, ${SAPPHIRE})`, color: "#fff", padding: "64px 60px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 36, flexWrap: "wrap", boxShadow: "0 50px 90px -50px rgba(30,58,138,.8)" }} className="in-cta">
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px)", backgroundSize: "36px 36px", maskImage: "linear-gradient(90deg, #000, rgba(0,0,0,.2))", WebkitMaskImage: "linear-gradient(90deg, #000, rgba(0,0,0,.2))" }} />
           <div style={{ position: "relative", maxWidth: 700 }}>
             <h2 style={{ margin: 0, fontSize: 40, lineHeight: 1.1, letterSpacing: "-.025em", fontWeight: 600 }}>Discuss your industry requirements</h2>
@@ -159,7 +139,7 @@ export function IndustriesPage() {
       <style>{`
         .in-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .in-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:48px 0 84px}
-        .in-mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 90px;gap:14px}
+        .in-mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:230px 230px;gap:14px}
         .in-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:44px}
         .in-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
         .in-btn{transition:transform .2s ease,box-shadow .2s ease}
@@ -170,7 +150,7 @@ export function IndustriesPage() {
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
         @media (max-width:1180px){.in-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-        @media (max-width:900px){.in-hero{grid-template-columns:1fr;gap:34px}.in-mosaic{grid-template-rows:150px 150px 84px}.in-apps,.in-cta{padding:34px 28px!important}}
+        @media (max-width:900px){.in-hero{grid-template-columns:1fr;gap:34px}.in-mosaic{grid-template-rows:170px 170px}.in-apps,.in-cta{padding:34px 28px!important}}
         @media (max-width:640px){.in-grid{grid-template-columns:1fr}.in-hero h1{font-size:40px!important}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.in-card,.in-btn{transition:none}}
       `}</style>
