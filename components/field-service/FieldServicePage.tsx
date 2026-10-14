@@ -82,7 +82,6 @@ function Hero() {
                 <path d="M-10 230 C 90 210, 120 120, 210 130 S 330 60, 460 80" stroke={CW} strokeWidth="14" strokeLinecap="round" opacity=".9" />
                 <path d="M40 270 C 100 190, 180 210, 240 170 S 360 150, 420 110" stroke={CW} strokeWidth="8" strokeLinecap="round" opacity=".7" />
                 <path id="fs-route" d="M60 246 C 120 200, 150 168, 214 150 S 330 110, 372 74" stroke={BLUE} strokeWidth="4" strokeLinecap="round" strokeDasharray="2 9" className="fs-route" />
-                <circle cx="60" cy="246" r="10" fill={NAVY} /><circle cx="60" cy="246" r="4" fill={CW} />
                 <g transform="translate(372 74)"><circle r="18" fill={ORANGE} opacity=".22" className="fs-pulse" /><circle r="9" fill={ORANGE} /><circle r="3.5" fill={CW} /></g>
                 <g><circle r="9" fill={BLUE} stroke={CW} strokeWidth="3"><animateMotion dur="7s" repeatCount="indefinite"><mpath href="#fs-route" /></animateMotion></circle></g>
               </svg>
@@ -149,66 +148,54 @@ function Operations() {
 }
 
 /* ------------------------------------------------------------------ 3. Enquiry to follow-up */
-const FLOW: [string, string, string[]][] = [
-  ["Enquiry", "Capture service enquiries and maintain customer or account information.", ["CRM"]],
-  ["Contract and service arrangements", "Maintain customer relationships and support associated commercial processes where applicable.", ["CRM", "Billing"]],
-  ["Work order", "Organize service work, responsibilities and progress through the service operation.", ["ServiceOps"]],
-  ["Scheduling and dispatch", "Coordinate service assignments and the people responsible for the work, subject to confirmed scheduling capabilities.", ["ServiceOps", "HRMS"]],
-  ["Service visit", "Coordinate service activities and record the work performed where supported.", ["ServiceOps"]],
-  ["Parts and inventory", "Support relevant inventory processes associated with service work.", ["Inventory"]],
-  ["Billing", "Handle applicable charges and billing processes associated with the service.", ["Billing"]],
-  ["Follow-up", "Maintain customer relationships and support relevant follow-up communication.", ["CRM", "Campaigns"]],
+const FLOW: [string, string, string][] = [
+  ["Enquiry", "Capture enquiries and customer details.", "M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12zM8.5 12h.01M12 12h.01M15.5 12h.01"],
+  ["Service contracts", "Keep customer and service terms in one place.", "M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6"],
+  ["Work order", "Organize work, owners and progress.", "M4 6l1.5 1.5L8 5M4 12l1.5 1.5L8 11M4 18l1.5 1.5L8 17M11 6h9M11 12h9M11 18h9"],
+  ["Dispatch", "Assign the right people to the work.", "M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"],
+  ["Service visit", "Carry out and record the work.", "M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z"],
+  ["Parts & inventory", "Account for parts and materials.", "M12 3l8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9"],
+  ["Billing", "Handle charges and billing.", "M7 3h7l5 5v13H7zM14 3v5h5M10 14h6M10 18h4"],
+  ["Follow-up", "Keep customers informed after the visit.", "M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5.5a3 3 0 0 1 0 5.5M17 14.3c2.3.6 4 2.7 4 5.7"],
 ];
-
-function FlowRow({ from }: { from: number }) {
-  const items = FLOW.slice(from, from + 4);
-  return (
-    <div className="fl-row" style={{ position: "relative" }}>
-      <div className="fl-rail" aria-hidden="true" style={{ position: "absolute", left: "12.5%", right: "12.5%", top: 21, height: 2, background: LINE }} />
-      {from === 0 && <div className="fl-rail" aria-hidden="true" style={{ position: "absolute", left: "62.5%", width: "25%", top: 20, height: 4, background: NAVY }} />}
-      <div className="fl-cols">
-        {items.map(([t, d, apps], k) => {
-          const i = from + k;
-          const core = apps[0] === "ServiceOps";
-          const dispatch = i === 3;
-          return (
-            <div key={t} className="fl-step" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <span style={{ position: "relative", zIndex: 1, width: 44, height: 44, borderRadius: "50%", background: dispatch ? ORANGE : core ? NAVY : CW, border: `2px solid ${dispatch ? ORANGE : core ? NAVY : BLUE}`, color: dispatch || core ? CW : BLUE, fontSize: 14, fontWeight: 700, display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: `0 0 0 6px ${CW}` }}>{String(i + 1).padStart(2, "0")}</span>
-              <span aria-hidden="true" style={{ width: 2, height: 18, background: dispatch ? ORANGE : core ? NAVY : LINE }} />
-              <div style={{ flex: 1, width: "100%", background: core ? NAVY : PALE, color: core ? CW : INK, border: `1px solid ${core ? NAVY : LINE}`, borderRadius: 18, padding: "20px 20px 22px" }}>
-                <h3 style={{ margin: 0, fontSize: 17.5, lineHeight: 1.25, fontWeight: 700, color: core ? CW : NAVY }}>{t}</h3>
-                {dispatch && <span style={{ display: "inline-block", marginTop: 8, fontSize: 10.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", background: POR, color: BURNT, padding: "3px 10px", borderRadius: 99 }}>Dispatch</span>}
-                <p style={{ margin: "10px 0 0", fontSize: 13.8, lineHeight: 1.7, color: core ? PALE : SOFT }}>{d}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 function Flow() {
   return (
-    <section id="flow" style={{ background: CW, padding: "96px 0 100px" }}>
+    <section id="flow" style={{ background: CW, padding: "96px 0 100px", overflow: "hidden" }}>
       <div className="fs-wrap">
         <div className="fs-split" data-rv="0" style={{ alignItems: "end" }}>
           <div><Eyebrow>From enquiry to follow-up</Eyebrow><h2 style={h2}>See how the work moves through your operation</h2></div>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Service delivery involves a sequence of related activities, from the first customer enquiry to the work performed and the follow-up that comes afterward. ServiceOps sits at the center of the proposed solution, with other EVOQ products supporting relevant stages.</p>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Service delivery involves a sequence of related activities, from the first customer enquiry to the work performed and the follow-up that comes afterward.</p>
         </div>
-        <div data-rv="1" style={{ marginTop: 56, display: "grid", gap: 14 }}>
-          <FlowRow from={0} />
-          <div className="fl-turn" aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: 12, color: SOFT, fontSize: 12.5, fontWeight: 700, padding: "0 4px" }}>
-            <span style={{ flex: 1, height: 2, background: LINE }} />
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: PALE, borderRadius: 99, padding: "6px 14px", color: NAVY }}>The work moves on<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12l7 7 7-7" /></svg></span>
-            <span style={{ flex: 1, height: 2, background: LINE }} />
-          </div>
-          <FlowRow from={4} />
+        <div data-rv="1" className="fl-wave" style={{ marginTop: 56, position: "relative" }}>
+          <svg className="fl-svg" aria-hidden="true" viewBox="-600 0 2800 120" preserveAspectRatio="none" style={{ position: "absolute", left: "-37.5%", top: 30, width: "175%", height: 120 }}>
+            <defs><linearGradient id="flfade" gradientUnits="userSpaceOnUse" x1="-600" x2="2200" y1="0" y2="0"><stop offset="0" stopColor={AZURE} stopOpacity="0"/><stop offset=".2" stopColor={AZURE} stopOpacity="1"/><stop offset=".8" stopColor={AZURE} stopOpacity="1"/><stop offset="1" stopColor={AZURE} stopOpacity="0"/></linearGradient><linearGradient id="flfade2" gradientUnits="userSpaceOnUse" x1="-600" x2="2200" y1="0" y2="0"><stop offset="0" stopColor={PALE} stopOpacity="0"/><stop offset=".2" stopColor={PALE}/><stop offset=".8" stopColor={PALE}/><stop offset="1" stopColor={PALE} stopOpacity="0"/></linearGradient></defs>
+            <path d="M-600 76 C -400 76 -200 60 100 60  C170 19.5 230 19.5 300 60 C370 100.5 430 100.5 500 60 C570 19.5 630 19.5 700 60 C770 100.5 830 100.5 900 60 C970 19.5 1030 19.5 1100 60 C1170 100.5 1230 100.5 1300 60 C1370 19.5 1430 19.5 1500 60 C1800 60 2000 60 2200 44" fill="none" stroke="url(#flfade)" strokeOpacity=".6" strokeWidth="1.75" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+          </svg>
+          <i className="fl-dot" aria-hidden="true" style={{ position: "absolute", left: "12.5%", top: 52, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: CW, border: `2px solid ${AZURE}`, boxSizing: "border-box" }} />
+          <i className="fl-dot" aria-hidden="true" style={{ position: "absolute", left: "25.0%", top: 112, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: CW, border: `2px solid ${AZURE}`, boxSizing: "border-box" }} />
+          <i className="fl-dot" aria-hidden="true" style={{ position: "absolute", left: "37.5%", top: 52, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: CW, border: `2px solid ${AZURE}`, boxSizing: "border-box" }} />
+          <i className="fl-dot" aria-hidden="true" style={{ position: "absolute", left: "50.0%", top: 112, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: CW, border: `2px solid ${AZURE}`, boxSizing: "border-box" }} />
+          <i className="fl-dot" aria-hidden="true" style={{ position: "absolute", left: "62.5%", top: 52, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: CW, border: `2px solid ${AZURE}`, boxSizing: "border-box" }} />
+          <i className="fl-dot" aria-hidden="true" style={{ position: "absolute", left: "75.0%", top: 112, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: CW, border: `2px solid ${AZURE}`, boxSizing: "border-box" }} />
+          <i className="fl-dot" aria-hidden="true" style={{ position: "absolute", left: "87.5%", top: 52, width: 16, height: 16, marginLeft: -8, borderRadius: "50%", background: CW, border: `2px solid ${AZURE}`, boxSizing: "border-box" }} />
+          <ol className="fl-grid" style={{ listStyle: "none", margin: 0, padding: 0, position: "relative", display: "grid", gridTemplateColumns: "repeat(8,minmax(0,1fr))", gap: 8 }}>
+            {FLOW.map(([t, d, path], i) => {
+              const hot = false;
+              return (
+                <li key={t} className="fl-step" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+                  <span style={{ width: 34, height: 34, borderRadius: "50%", fontSize: 13, fontWeight: 700, color: hot ? BURNT : SOFT, background: hot ? POR : PALE, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{String(i + 1).padStart(2, "0")}</span>
+                  <span style={{ marginTop: 16, width: 90, height: 90, borderRadius: "50%", background: CW, boxShadow: hot ? "0 14px 34px rgba(249,115,22,.28)" : "0 12px 30px rgba(15,61,117,.14)", display: "inline-flex", alignItems: "center", justifyContent: "center", position: "relative", zIndex: 1 }}>
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke={hot ? BURNT : NAVY} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={path} /></svg>
+                  </span>
+                  <span aria-hidden="true" style={{ width: 2, height: 26, background: hot ? ORANGE : LINE, marginTop: 10, position: "relative" }}><i style={{ position: "absolute", left: -3, top: 9, width: 8, height: 8, borderRadius: "50%", background: hot ? ORANGE : AZURE }} /></span>
+                  <h3 style={{ margin: "12px 0 0", fontSize: 17, lineHeight: 1.25, fontWeight: 700, color: INK, minHeight: 44, display: "flex", alignItems: "flex-start", justifyContent: "center" }}>{t}</h3>
+                  <p style={{ margin: "8px 0 0", fontSize: 13.5, lineHeight: 1.6, color: SOFT, maxWidth: 150 }}>{d}</p>
+                </li>
+              );
+            })}
+          </ol>
         </div>
-        <p data-rv="0" style={{ margin: "34px 0 0", display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap", fontSize: 12.5, color: SOFT }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><i style={{ width: 14, height: 14, borderRadius: 4, background: NAVY, display: "inline-block" }} />ServiceOps stages</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><i style={{ width: 10, height: 10, borderRadius: "50%", background: ORANGE, display: "inline-block" }} />Dispatch</span>
-        </p>
       </div>
     </section>
   );
@@ -305,14 +292,20 @@ function FinalCta() {
   return (
     <section id="talk" style={{ background: CW, padding: "20px 0 96px" }}>
       <div className="fs-wrap">
-        <div data-rv="0" className="fs-cta" style={{ position: "relative", overflow: "hidden", borderRadius: 28, background: PALE, border: `1px solid ${LINE}`, color: INK, padding: "60px 60px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 36, flexWrap: "wrap" }}>
+        <div data-rv="0" className="fs-cta" style={{ position: "relative", overflow: "hidden", borderRadius: 28, background: PALE, border: `1px solid ${LINE}`, color: INK, padding: "60px 60px", display: "block", minHeight: 340 }}>
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(15,61,117,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(15,61,117,.07) 1px, transparent 1px)", backgroundSize: "44px 44px", maskImage: "linear-gradient(90deg, #000, transparent 90%)", WebkitMaskImage: "linear-gradient(90deg, #000, transparent 90%)" }} />
-          <div style={{ position: "relative", maxWidth: 720 }}>
+          <div style={{ position: "relative", maxWidth: 560 }}>
             <Eyebrow>Let&apos;s talk</Eyebrow>
             <h2 style={{ ...h2, fontSize: 38 }}>Let&apos;s discuss your service operation</h2>
-            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Explain how your organization handles service requests, maintenance activities, technician coordination and related processes. Explore the EVOQ products that may fit your requirements and clarify the capabilities and integrations needed.</p>
+            <p style={{ margin: "18px 0 28px", fontSize: 15.5, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Explain how your organization handles service requests, maintenance activities, technician coordination and related processes. Explore the EVOQ products that may fit your requirements and clarify the capabilities and integrations needed.</p>
+            <Cta>Talk to an expert</Cta>
           </div>
-          <div style={{ position: "relative" }}><Cta>Talk to an expert</Cta></div>
+          <div className="fs-ctavis" aria-hidden="true" style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "52%", pointerEvents: "none" }}>
+            <span style={{ position: "absolute", right: -60, top: -50, width: 300, height: 190, borderRadius: "0 100% 0 100%", background: `linear-gradient(135deg, ${POR}, rgba(255,237,213,0))`, filter: "blur(14px)", opacity: .9 }} />
+            <span style={{ position: "absolute", right: 70, top: "12%", width: 340, height: 220, borderRadius: "0 100% 0 100%", transform: "rotate(-8deg)", background: `linear-gradient(135deg, ${AZURE}, ${BLUE})`, opacity: .28, border: "2px solid rgba(255,255,255,.9)", boxShadow: "inset 0 0 40px rgba(255,255,255,.55)" }} />
+            <span style={{ position: "absolute", right: -80, bottom: -90, width: 360, height: 230, borderRadius: "100% 0 100% 0", transform: "rotate(-8deg)", background: `linear-gradient(135deg, ${AZURE}, ${NAVY})`, opacity: .22, border: "2px solid rgba(255,255,255,.9)", boxShadow: "inset 0 0 40px rgba(255,255,255,.55)" }} />
+            <span style={{ position: "absolute", right: 250, bottom: -110, width: 300, height: 190, borderRadius: "0 100% 0 100%", transform: "rotate(-8deg)", background: `linear-gradient(135deg, ${PALE}, ${AZURE})`, opacity: .4, border: "2px solid rgba(255,255,255,.9)" }} />
+          </div>
         </div>
       </div>
     </section>
@@ -328,6 +321,7 @@ export function FieldServicePage() {
         .fs-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .fs-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:52px 0 88px}
         .fs-hero-vis{position:relative;height:500px}
+        .fs-cta{}@media (max-width:900px){.fs-cta{grid-template-columns:1fr!important;padding:36px 24px!important}}
         .fs-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
         .fs-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
         .fs-g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 22px}
@@ -337,7 +331,7 @@ export function FieldServicePage() {
         .fs-op{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:60px;align-items:center}
         .fs-op-r .fs-op-img{order:2}
         .fs-help{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-        .fl-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+        .fl-step{min-width:0}
         .fs-oneline{white-space:nowrap}
         .fs-btn{transition:transform .2s ease,box-shadow .2s ease}
         .fs-btn:hover{transform:translateY(-2px)}
@@ -352,7 +346,8 @@ export function FieldServicePage() {
         @media (max-width:1100px){.fs-g4{grid-template-columns:repeat(2,minmax(0,1fr))}.fs-arr{display:none}.fs-g3{grid-template-columns:1fr}}
         @media (max-width:760px){        @media (max-width:1180px){.fs-oneline{white-space:normal}}
         @media (max-width:980px){.fs-hcard{grid-template-columns:1fr!important}.fs-op{grid-template-columns:1fr;gap:28px}.fs-op-r .fs-op-img{order:0}.fs-op-img{min-height:300px!important}.fs-hero,.fs-split,.fs-fit,.fs-cta{grid-template-columns:1fr!important;gap:34px}.fs-hero-vis{height:470px}.fs-eco{grid-template-columns:1fr}.fs-hub-lines{display:none}.fs-cta{padding:38px 28px!important}}
-        @media (max-width:640px){.fl-cols{grid-template-columns:1fr}.fs-help{grid-template-columns:1fr}.fs-g4{grid-template-columns:1fr}.fs-hero h1{font-size:40px!important}.fs-phone{width:190px!important}}
+        @media (max-width:1100px){.fl-svg,.fl-glow,.fl-dot{display:none}.fl-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;row-gap:36px!important}}
+        @media (max-width:640px){.fl-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fs-help{grid-template-columns:1fr}.fs-g4{grid-template-columns:1fr}.fs-hero h1{font-size:40px!important}.fs-phone{width:190px!important}}
         @media (prefers-reduced-motion:reduce){.fs-route,.fs-pulse.hs-rv,.fs-card,.fs-btn{transition:none}}
       `}</style>
       <div style={{ background: CW, position: "relative", zIndex: 60, borderBottom: `1px solid ${LINE}` }}>

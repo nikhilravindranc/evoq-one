@@ -176,14 +176,19 @@ function FinalCta() {
   return (
     <section id="talk" style={{ background: WARM, padding: "88px 0 92px", ...grid(LCON + "88", 48) }}>
       <div className="cn-wrap">
-        <div className="cn-cta" data-rv="0" style={{ position: "relative", overflow: "hidden", background: LSAND, borderRadius: 6, borderLeft: `8px solid ${TERRA}`, display: "grid", gridTemplateColumns: "minmax(0,1.2fr) minmax(0,.8fr)", alignItems: "stretch" }}>
-          <div style={{ padding: "56px 56px 60px" }}>
+        <div className="cn-cta" data-rv="0" style={{ position: "relative", overflow: "hidden", background: LSAND, borderRadius: 6, borderLeft: `8px solid ${TERRA}`, display: "block" }}>
+          <div style={{ position: "relative", padding: "56px 56px 60px", maxWidth: 700 }}>
             <Eyebrow>Final step</Eyebrow>
             <h2 style={{ ...h2, fontSize: 38 }}>Let&apos;s identify the right fit for your operation</h2>
             <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#44403C", maxWidth: "56ch" }}>Discuss your current processes, existing systems and priorities with EVOQ. Explore suitable product combinations and clarify the capabilities, configuration and integrations required for your organization.</p>
             <div style={{ marginTop: 30 }}><Cta>Talk to an expert</Cta></div>
           </div>
-          <div className="cn-cta-img" style={{ ...photo(IMG.interior), minHeight: 260 }} />
+          <div className="cn-cta-img" aria-hidden="true" style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "46%", pointerEvents: "none" }}>
+            <span style={{ position: "absolute", right: -60, top: -50, width: 300, height: 190, borderRadius: "0 100% 0 100%", background: `linear-gradient(135deg, ${SAND}, rgba(214,184,140,0))`, filter: "blur(14px)", opacity: .8 }} />
+            <span style={{ position: "absolute", right: 60, top: "14%", width: 330, height: 210, borderRadius: "0 100% 0 100%", transform: "rotate(-8deg)", background: `linear-gradient(135deg, ${SAND}, ${TERRA})`, opacity: .3, border: "2px solid rgba(255,255,255,.85)", boxShadow: "inset 0 0 40px rgba(255,255,255,.5)" }} />
+            <span style={{ position: "absolute", right: -80, bottom: -90, width: 360, height: 230, borderRadius: "100% 0 100% 0", transform: "rotate(-8deg)", background: `linear-gradient(135deg, ${TERRA}, ${CLAY})`, opacity: .22, border: "2px solid rgba(255,255,255,.85)", boxShadow: "inset 0 0 40px rgba(255,255,255,.5)" }} />
+            <span style={{ position: "absolute", right: 250, bottom: -110, width: 300, height: 190, borderRadius: "0 100% 0 100%", transform: "rotate(-8deg)", background: `linear-gradient(135deg, #fff, ${SAND})`, opacity: .45, border: "2px solid rgba(255,255,255,.85)" }} />
+          </div>
         </div>
       </div>
     </section>
@@ -210,7 +215,7 @@ export function ConstructionPage() {
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
         @media (max-width:1100px){.cn-g4{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g3{grid-template-columns:1fr}.cn-apps{grid-template-columns:repeat(4,minmax(0,1fr))}}
-        @media (max-width:900px){.cn-hero,.cn-split{grid-template-columns:1fr;gap:34px}.cn-hero-vis{height:380px}.cn-cta{grid-template-columns:1fr!important}.cn-cta>div:first-child{padding:38px 28px 40px!important}.cn-cta-img{min-height:200px!important}}
+        @media (max-width:900px){.cn-hero,.cn-split{grid-template-columns:1fr;gap:34px}.cn-hero-vis{height:380px}.cn-cta{grid-template-columns:1fr!important}.cn-cta>div:first-child{padding:38px 28px 40px!important}.cn-cta-img{display:none}}
         @media (max-width:640px){.cn-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g4{grid-template-columns:1fr}.cn-hero h1{font-size:40px!important}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.cn-card,.cn-btn{transition:none}}
       `}</style>

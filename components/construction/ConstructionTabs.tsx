@@ -14,92 +14,99 @@ const ICON: Record<string, string> = {
   Desk: I("desk-menu-icn.png"), Campaigns: I("campaigns-menu-icn.png"), ServiceOps: I("serviceops-icon.svg"), HRMS: I("hrms-menu-icn-new.png"),
 };
 
-type Tab = { tab: string; sub: string; title: string; body: string; help: [string, string][]; products: string[]; img: string };
+type Tab = { tab: string; sub: string; on: string; off: string; icon: string; who: string; title: string; body: string; help: [string, string, string][]; img: string };
 const TABS: Tab[] = [
   {
-    tab: "Construction", sub: "Projects, sites and handovers", title: "From project planning to site handover",
-    body: "Construction companies and contractors coordinate project activities, client communication, materials-related processes and commercial responsibilities throughout project delivery. EVOQ products may support relevant parts of this work, depending on your requirements.",
-    help: [["Project coordination", "Organize project activities, responsibilities and delivery milestones."], ["Client relationships", "Track enquiries, maintain contact records and manage follow-up."], ["Inventory and commercial processes", "Support relevant inventory activities and billing."], ["Post-handover service", "Coordinate applicable service requests and related activities."]],
-    products: ["Projects", "CRM", "Inventory", "Billing", "ServiceOps"], img: U("1778074762022-c33cc42f79ae", 1100),
+    tab: "Construction", sub: "Projects, sites and handovers", on: "#A2563B", off: "#F7EFE9", icon: "M3 18h18M5 18a7 7 0 0 1 14 0M12 6v5M9 8.5V11M15 8.5V11", who: "Contractors, builders and site teams", title: "From project planning to site handover",
+    body: "Keep project activities, client communication, materials and commercial work connected through delivery.",
+    help: [["Projects", "Project coordination", "Organize activities, responsibilities and delivery milestones."], ["CRM", "Client relationships", "Track enquiries, keep contact records and follow up."], ["Inventory", "Materials and stock", "Support inventory activities tied to project work."], ["ServiceOps", "Post-handover service", "Coordinate service requests after the project is delivered."]],
+    img: "/construction/tab-construction.webp",
   },
   {
-    tab: "Engineering", sub: "Technical projects and delivery", title: "Coordinate technical projects and delivery",
-    body: "Engineering firms manage client engagements, project responsibilities, delivery milestones and the commercial administration associated with technical work. EVOQ products may support these operational requirements alongside existing specialist engineering systems.",
-    help: [["Project delivery", "Organize activities, responsibilities and milestones."], ["Client relationships", "Maintain enquiry records, opportunities and communication."], ["Resource administration", "Support relevant people administration."], ["Commercial coordination", "Handle applicable billing and inventory-related activities."]],
-    products: ["Projects", "CRM", "HRMS", "Billing", "Inventory"], img: U("1705579611777-ed5eced0a9e9", 1100),
+    tab: "Engineering", sub: "Technical projects and delivery", on: "#274B7A", off: "#EEF3F8", icon: "M12 3l-6 17M12 3l6 17M8 14h8M9.5 9.5h5M4 20h16", who: "Engineering and technical consulting firms", title: "Coordinate technical projects and delivery",
+    body: "Manage client engagements, responsibilities and milestones, and the commercial side of technical work, alongside your specialist engineering tools.",
+    help: [["Projects", "Project delivery", "Organize activities, responsibilities and milestones."], ["CRM", "Client relationships", "Maintain enquiry records, opportunities and communication."], ["HRMS", "Resource administration", "Support relevant people administration."], ["Billing", "Commercial coordination", "Handle applicable billing for the work delivered."]],
+    img: "/construction/tab-engineering.webp",
   },
   {
-    tab: "Real Estate", sub: "Property enquiries and transactions", title: "Move property enquiries towards a decision",
-    body: "Real estate agencies, developers and property organizations manage enquiries, prospective buyers and tenants, ongoing communication and transaction-related administration. EVOQ products may support these activities across the sales relationship and applicable property-related service processes.",
-    help: [["Enquiry management", "Capture prospects and maintain property-related enquiry records."], ["Sales follow-up", "Track opportunities and maintain communication throughout the sales process."], ["Prospect engagement", "Support relevant campaigns and follow-up activities."], ["Commercial and service processes", "Handle applicable billing and property-related service requests."]],
-    products: ["CRM", "Campaigns", "Billing", "Desk", "ServiceOps"], img: U("1748063578185-3d68121b11ff", 1100),
+    tab: "Real Estate", sub: "Property enquiries and transactions", on: "#2E5A47", off: "#EEF4EF", icon: "M5 21V4h9v17M14 9h5v12M8 8h3M8 12h3M8 16h3M3 21h18", who: "Agencies, developers and property managers", title: "Move property enquiries towards a decision",
+    body: "Capture buyer and tenant enquiries, keep the conversation going, and handle the paperwork and service requests that follow.",
+    help: [["CRM", "Enquiries and sales follow-up", "Capture prospects and track opportunities through the sales process."], ["Campaigns", "Prospect engagement", "Support relevant campaigns and follow-up activities."], ["Billing", "Commercial processes", "Handle applicable billing and transaction administration."], ["Desk", "Property service requests", "Manage tenant and owner requests in one place."]],
+    img: "/construction/tab-real-estate.webp",
   },
 ];
 
 export function ConstructionTabs() {
   const [i, setI] = useState(0);
   const t = TABS[i];
-  const photo: CSSProperties = { backgroundImage: `url(${t.img})`, backgroundSize: "cover", backgroundPosition: "center" };
+  const INK = "#1F2A37";
+  const MUTE = "#5B6470";
   return (
-    <section id="solutions" style={{ position: "relative", overflow: "hidden", background: CLAY, color: "#fff", padding: "96px 0 100px", backgroundImage: "linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px)", backgroundSize: "56px 56px" }}>
+    <section id="solutions" style={{ background: "#FFFDFB", color: INK, padding: "92px 0 96px" }}>
       <style>{`
         @keyframes ctIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
         .ct-in{animation:ctIn .45s ease both}
-        .ct-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px;align-items:start}
-        .ct-help{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-        .ct-tabs::-webkit-scrollbar{display:none}
-        @media (max-width:980px){.ct-grid{grid-template-columns:1fr;gap:34px}}
-        @media (max-width:560px){.ct-help{grid-template-columns:1fr}}
+        .ct-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+        .ct-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));row-gap:24px}
+        .ct-col{padding:0 24px 0 0}
+        .ct-col:nth-child(even){padding:0 0 0 24px;border-left:1px solid #E6E0D8}
+        @media (max-width:1100px){.ct-cols{max-width:none!important}.ct-photo{display:none!important}.ct-copy{max-width:none!important}}
+        @media (max-width:760px){.ct-tabs{grid-template-columns:1fr}.ct-cols{grid-template-columns:1fr}.ct-col{padding:0!important;border-left:0!important}.ct-panel{padding:26px 22px!important}}
         @media (prefers-reduced-motion:reduce){.ct-in{animation:none}}
       `}</style>
       <div className="cn-wrap">
-        <div style={{ maxWidth: 760 }}>
-          <p style={{ margin: "0 0 16px", display: "flex", alignItems: "center", gap: 12, fontSize: 11.5, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: SAND }}><span style={{ width: 28, height: 2, background: SAND }} />Solutions by industry</p>
-          <h2 style={{ margin: 0, fontSize: 42, lineHeight: 1.1, letterSpacing: "-.025em", fontWeight: 600, color: "#fff" }}>Find the right product combination for your operation</h2>
-          <p style={{ margin: "18px 0 0", fontSize: 16, lineHeight: 1.75, color: "#EBD9CC", maxWidth: "58ch" }}>Explore how EVOQ products may support the operational needs of construction companies, engineering firms and real estate organizations.</p>
-        </div>
+        <p style={{ margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "#A2563B" }}>Solutions by industry</p>
+        <h2 style={{ margin: 0, fontSize: 42, lineHeight: 1.1, letterSpacing: "-.025em", fontWeight: 600, color: INK, maxWidth: 900 }}>Find the right product combination for your operation</h2>
+        <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.7, color: MUTE, maxWidth: "62ch" }}>Explore how EVOQ products may support the operational needs of construction companies, engineering firms and real estate organizations.</p>
 
-        <div className="ct-tabs" role="tablist" aria-label="Industry solutions" style={{ marginTop: 40, display: "flex", gap: 0, borderBottom: "1px solid rgba(255,255,255,.2)", overflowX: "auto", scrollbarWidth: "none" }}>
-          {TABS.map((x, n) => (
-            <button key={x.tab} type="button" role="tab" aria-selected={n === i} onClick={() => setI(n)} style={{ fontFamily: "inherit", cursor: "pointer", border: 0, background: n === i ? "rgba(255,255,255,.1)" : "transparent", color: n === i ? "#fff" : "#E0C9BD", padding: "16px 28px", textAlign: "left", borderBottom: `3px solid ${n === i ? SAND : "transparent"}`, marginBottom: -1, whiteSpace: "nowrap", transition: "background .2s" }}>
-              <span style={{ display: "block", fontSize: 16, fontWeight: 700 }}>{x.tab}</span>
-              <span style={{ display: "block", fontSize: 12, fontWeight: 400, opacity: 0.8, marginTop: 2 }}>{x.sub}</span>
-            </button>
-          ))}
-        </div>
-
-        <div key={i} className="ct-grid ct-in" style={{ marginTop: 44 }}>
-          <div>
-            <h3 style={{ margin: 0, fontSize: 32, lineHeight: 1.2, fontWeight: 600, letterSpacing: "-.02em" }}>{t.title}</h3>
-            <p style={{ margin: "16px 0 0", fontSize: 15.5, lineHeight: 1.8, color: "#EBD9CC" }}>{t.body}</p>
-            <div style={{ marginTop: 28, fontSize: 10.5, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: SAND }}>Relevant EVOQ products</div>
-            <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {t.products.map((a) => (
-                <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px 6px 7px", borderRadius: 4, background: "#fff", color: CLAY, fontSize: 13, fontWeight: 700 }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={ICON[a]} alt="" width={22} height={22} style={{ width: 22, height: 22, objectFit: "contain", borderRadius: 5 }} />{a}
+        <div className="ct-tabs" role="tablist" aria-label="Industry solutions" style={{ marginTop: 36 }}>
+          {TABS.map((x, n) => {
+            const act = n === i;
+            return (
+              <button key={x.tab} type="button" role="tab" aria-selected={act} onClick={() => setI(n)} style={{ fontFamily: "inherit", cursor: "pointer", border: `1px solid ${act ? x.on : "rgba(31,42,55,.06)"}`, borderRadius: 14, background: act ? x.on : x.off, color: act ? "#fff" : INK, display: "flex", alignItems: "center", gap: 18, padding: "20px 22px", textAlign: "left", transition: "background .2s, color .2s", boxShadow: act ? `0 14px 30px -14px ${x.on}` : "none" }}>
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke={act ? "#fff" : x.on} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flex: "none" }}><path d={x.icon} /></svg>
+                <span style={{ width: 1, alignSelf: "stretch", background: act ? "rgba(255,255,255,.35)" : "rgba(31,42,55,.14)" }} />
+                <span>
+                  <span style={{ display: "block", fontSize: 17, fontWeight: 700 }}>{x.tab}</span>
+                  <span style={{ display: "block", marginTop: 3, fontSize: 13, opacity: act ? 0.9 : 0.7 }}>{x.sub}</span>
                 </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div key={i} className="ct-panel ct-in" style={{ position: "relative", overflow: "hidden", marginTop: 14, background: "#fff", border: "1px solid #ECE5DC", borderRadius: 18, padding: "36px 40px 40px", boxShadow: "0 24px 60px -40px rgba(31,42,55,.25)" }}>
+          <div className="ct-photo" aria-hidden="true" style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "56%", backgroundImage: `url(${t.img})`, backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "right center" }} />
+          <div style={{ position: "relative" }}>
+            <div className="ct-copy" style={{ maxWidth: "54%" }}>
+              <p style={{ margin: 0, fontSize: 12, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: t.on }}>{t.tab}</p>
+              <h3 style={{ margin: "8px 0 0", fontSize: 32, lineHeight: 1.18, fontWeight: 600, letterSpacing: "-.02em", color: INK }}>{t.title}</h3>
+              <p style={{ margin: "12px 0 0", fontSize: 15.5, lineHeight: 1.7, color: MUTE }}>{t.body}</p>
+            </div>
+            <div style={{ margin: "26px 0 24px", height: 1, background: "#E6E0D8", maxWidth: "54%" }} />
+            <div className="ct-cols" style={{ maxWidth: "54%" }}>
+              {t.help.map(([prod, need, d], n) => (
+                <div key={prod} className="ct-col">
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ width: 38, height: 38, borderRadius: "50%", background: t.off, color: t.on, fontSize: 14, fontWeight: 700, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{String(n + 1).padStart(2, "0")}</span>
+                  </div>
+                  <div style={{ marginTop: 12, fontSize: 16, lineHeight: 1.25, fontWeight: 700, color: INK }}>{need}</div>
+                  <p style={{ margin: "6px 0 0", fontSize: 13.5, lineHeight: 1.6, color: MUTE }}>{d}</p>
+                </div>
               ))}
             </div>
-          </div>
-          <div>
-            <div style={{ position: "relative", height: 250, borderRadius: 4, ...photo, boxShadow: "0 40px 70px -40px rgba(0,0,0,.7)" }}>
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(41,37,36,0) 55%, rgba(41,37,36,.55))" }} />
-              <span style={{ position: "absolute", left: 16, bottom: 14, fontSize: 11, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "#fff" }}>{t.tab}</span>
-            </div>
-            <div style={{ marginTop: 20, fontSize: 10.5, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: SAND }}>Where products may help</div>
-            <div className="ct-help" style={{ marginTop: 12 }}>
-              {t.help.map(([h, d], n) => (
-                <div key={h} style={{ background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.16)", borderTop: `3px solid ${n === 0 ? SAND : TERRA}`, borderRadius: 4, padding: "16px 16px 18px" }}>
-                  <div style={{ fontSize: 15, fontWeight: 700 }}>{h}</div>
-                  <p style={{ margin: "7px 0 0", fontSize: 13, lineHeight: 1.65, color: "#EBD9CC" }}>{d}</p>
-                </div>
+            <div style={{ marginTop: 28, paddingTop: 22, borderTop: "1px solid #E6E0D8", maxWidth: "54%", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: t.on, marginRight: 4 }}>EVOQ products you may need</span>
+              {t.help.map(([prod]) => (
+                <span key={prod} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px 6px 7px", borderRadius: 99, background: t.off, color: INK, fontSize: 13, fontWeight: 700 }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={ICON[prod]} alt="" width={22} height={22} style={{ width: 22, height: 22, objectFit: "contain", borderRadius: 6, background: "#fff", padding: 2 }} />{prod}
+                </span>
               ))}
             </div>
           </div>
         </div>
       </div>
-      <span style={{ display: "none", color: LSAND }} />
     </section>
   );
 }
