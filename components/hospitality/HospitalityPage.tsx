@@ -104,7 +104,7 @@ function Journey() {
           {steps.map(([t, d], i) => (
             <div key={t} data-rv={String(i)} style={{ position: "relative" }}>
               <div style={{ position: "relative", zIndex: 1, width: 44, height: 44, borderRadius: "50%", background: i === 5 ? FOREST : LIGHT, border: `1.5px solid ${i === 5 ? FOREST : BOTANICAL}`, color: i === 5 ? CREAM : FOREST, fontFamily: SERIF, fontSize: 19, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</div>
-              <h3 style={{ margin: "20px 0 0", fontFamily: SERIF, fontWeight: 400, fontSize: 21, lineHeight: 1.2, color: INK }}>{t}</h3>
+              <h4 style={{ margin: "20px 0 0", fontFamily: SERIF, fontWeight: 400, fontSize: 21, lineHeight: 1.2, color: INK }}>{t}</h4>
               <p style={{ margin: "10px 0 0", fontSize: 14, lineHeight: 1.7, color: MUTE }}>{d}</p>
             </div>
           ))}

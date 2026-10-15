@@ -21,26 +21,26 @@ const CATEGORIES: Cat[] = [
     title: "Growth",
     line: "Win customers and keep the relationship moving.",
     apps: [
-      { name: "CRM", icon: I("crm-menu-icn.png"), line: "Manage customer accounts, enquiries, opportunities and follow-ups throughout the sales process." },
-      { name: "Campaigns", icon: I("campaigns-menu-icn.png"), line: "Plan and launch marketing campaigns to reach prospective customers and support demand generation." },
-      { name: "ConfigX", icon: I("ConfigX-menu-icn.png"), line: "Configure products, visualize options, calculate pricing and prepare customer quotes." },
+      { name: "CRM", icon: I("crm-menu-icn.png"), line: "Manage customer accounts, enquiries, opportunities and follow-ups throughout the sales process.", href: "/products/crm" },
+      { name: "Campaigns", icon: I("campaigns-menu-icn.png"), line: "Plan and launch marketing campaigns to reach prospective customers and support demand generation.", href: "/products/campaigns" },
+      { name: "ConfigX", icon: I("ConfigX-menu-icn.png"), line: "Configure products, visualize options, calculate pricing and prepare customer quotes.", href: "/products/configx" },
     ],
   },
   {
     title: "Operations",
     line: "Deliver the work and support the customer after the sale.",
     apps: [
-      { name: "ServiceOps", icon: I("serviceops-icon.svg"), line: "Manage work orders, technician dispatch, maintenance activities and service visits." },
-      { name: "Projects", icon: I("evoq-projects-menu-icn.png"), line: "Plan and coordinate project tasks, responsibilities and delivery-related work." },
-      { name: "Desk", icon: I("desk-menu-icn.png"), line: "Track customer enquiries, product questions and service issues through resolution." },
+      { name: "ServiceOps", icon: I("serviceops-icon.svg"), line: "Manage work orders, technician dispatch, maintenance activities and service visits.", href: "/products/serviceops" },
+      { name: "Projects", icon: I("evoq-projects-menu-icn.png"), line: "Plan and coordinate project tasks, responsibilities and delivery-related work.", href: "/products/projects" },
+      { name: "Desk", icon: I("desk-menu-icn.png"), line: "Track customer enquiries, product questions and service issues through resolution.", href: "/products/desk" },
     ],
   },
   {
     title: "People",
     line: "Look after the team behind the work.",
     apps: [
-      { name: "HRMS", icon: I("hrms-menu-icn-new.png"), line: "Manage employee information and workforce administration." },
-      { name: "Skillberry", icon: I("Skillberry-menu-icn.png"), line: "Support employee learning, training and skills development." },
+      { name: "HRMS", icon: I("hrms-menu-icn-new.png"), line: "Manage employee information and workforce administration.", href: "/products/hrms" },
+      { name: "Skillberry", icon: I("Skillberry-menu-icn.png"), line: "Support employee learning, training and skills development.", href: "/products/skillberry" },
     ],
   },
   {
@@ -48,13 +48,13 @@ const CATEGORIES: Cat[] = [
     line: "Keep revenue and stock records in view.",
     apps: [
       { name: "Billing", icon: I("billing-menu-icn.png"), line: "Manage invoicing, payments and revenue-related activity.", href: "/products/billing" },
-      { name: "Inventory", icon: I("inventory-menu-icn.png"), line: "Track stock and supply information relevant to product availability and fulfillment." },
+      { name: "Inventory", icon: I("inventory-menu-icn.png"), line: "Track stock and supply information relevant to product availability and fulfillment.", href: "/products/inventory" },
     ],
   },
   {
     title: "Platform",
     line: "Connect applications and existing systems.",
-    apps: [{ name: "Sync", icon: I("sync-menu-icn.png"), line: "Synchronize data between EVOQ applications and existing systems through supported integrations." }],
+    apps: [{ name: "Sync", icon: I("sync-menu-icn.png"), line: "Synchronize data between EVOQ applications and existing systems through supported integrations.", href: "/products/sync" }],
   },
 ];
 
@@ -216,7 +216,7 @@ function Grow() {
           {steps.map(([n, t, d], i) => (
             <div key={n} data-rv={String(i)} className="pd-card" style={{ position: "relative", background: SOFT, borderRadius: 20, padding: "30px 28px 32px", border: "1px solid #E6E4FF" }}>
               <div style={{ fontSize: 40, fontWeight: 800, color: P, opacity: 0.25, letterSpacing: "-.03em" }}>{n}</div>
-              <h3 style={{ margin: "6px 0 0", fontSize: 21, fontWeight: 700, color: DEEP }}>{t}</h3>
+              <h4 style={{ margin: "6px 0 0", fontSize: 21, fontWeight: 700, color: DEEP }}>{t}</h4>
               <p style={{ margin: "12px 0 0", fontSize: 14.5, lineHeight: 1.7, color: BODY }}>{d}</p>
               {i < 2 && <span aria-hidden="true" className="pd-arr" style={{ position: "absolute", right: -22, top: "50%", width: 30, height: 30, borderRadius: "50%", background: "#fff", border: `1px solid ${LINE}`, color: P, display: "inline-flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}><Arrow s={14} /></span>}
             </div>
@@ -240,7 +240,7 @@ function FinalCta() {
           </div>
           <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, minWidth: 220 }}>
             <a href="#" data-enquiry="" className="pd-btn" style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", gap: 10, padding: "15px 26px", borderRadius: 12, background: "#fff", color: DEEP, textDecoration: "none", fontSize: 15, fontWeight: 700 }}>Talk to an expert <Arrow /></a>
-            <a href="/solutions/industries" className="pd-btn" style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", padding: "14px 26px", borderRadius: 12, border: "1px solid rgba(255,255,255,.45)", color: "#fff", textDecoration: "none", fontSize: 15, fontWeight: 600 }}>Explore industries</a>
+            <a href="/industries" className="pd-btn" style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", padding: "14px 26px", borderRadius: 12, border: "1px solid rgba(255,255,255,.45)", color: "#fff", textDecoration: "none", fontSize: 15, fontWeight: 600 }}>Explore industries</a>
           </div>
         </div>
       </div>

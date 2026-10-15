@@ -4,7 +4,7 @@ import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 
-/* More industries: a broad, editorial discovery page. Neutral warm-white canvas with sapphire accents. */
+/* All Industries: a broad, editorial discovery page. Neutral warm-white canvas with sapphire accents. */
 const SAPPHIRE = "#2563EB";
 const DEEP = "#1E3A8A";
 const BLUE = "#3B82F6";
@@ -33,6 +33,16 @@ const INDUSTRIES: { name: string; tag: string; body: string; apps: string[]; img
   { name: "Energy and utilities", tag: "Utilities", body: "Support customer relationships, coordinate applicable service and project activities, track relevant inventory and manage billing processes.", apps: ["CRM", "ServiceOps", "Projects", "Inventory", "Billing", "Desk"], img: U("1611845061243-459aad2ab56b") },
 ];
 
+const FEATURED: { name: string; tag: string; body: string; href: string; img: string }[] = [
+  { name: "Healthcare", tag: "Healthcare", body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.", href: "/solutions/healthcare", img: "/healthcare/stock/hc-cta-team.jpg" },
+  { name: "Construction, Engineering & Real Estate", tag: "Built environment", body: "Support project delivery, engineering coordination, property enquiries and related operations with applications suited to the needs of the industry.", href: "/solutions/construction", img: U("1778074762022-c33cc42f79ae") },
+  { name: "Manufacturing", tag: "Production", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ applications.", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
+  { name: "Field Service, Facilities & Maintenance", tag: "Service", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ applications.", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
+  { name: "Hospitality, Travel & F&B", tag: "Hospitality", body: "Address operational needs across hospitality and related service activities with relevant EVOQ applications.", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
+];
+
+const ALL: { name: string; tag: string; body: string; img: string; href?: string }[] = [...FEATURED, ...INDUSTRIES];
+
 function Eyebrow({ children }: { children: string }) {
   return <p style={{ margin: "0 0 16px", fontSize: 11.5, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: SAPPHIRE }}>{children}</p>;
 }
@@ -42,7 +52,7 @@ function Hero() {
   return (
     <section style={{ background: WARM, position: "relative", overflow: "hidden" }}>
       <div className="in-wrap">
-        <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: SLATE }}>Home <span style={{ margin: "0 6px" }}>/</span> Solutions <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: INK, fontWeight: 600 }}>More industries</b></nav>
+        <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: SLATE }}><a href="/" style={{ color: "inherit", textDecoration: "none" }}>Home</a> <span style={{ margin: "0 6px" }}>/</span> <a href="/solutions" style={{ color: "inherit", textDecoration: "none" }}>Solutions</a> <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: INK, fontWeight: 600 }}>All Industries</b></nav>
         <div className="in-hero">
           <div data-rv="0">
             <Eyebrow>Solutions for your industry</Eyebrow>
@@ -71,17 +81,24 @@ function Industries() {
           <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.7, color: SLATE, maxWidth: "46ch" }}>Every industry has its own processes, priorities and operational challenges.</p>
         </div>
         <div className="in-grid">
-          {INDUSTRIES.map((x, i) => (
-            <article key={x.name} data-rv={String(i % 4)} className="in-card" style={{ background: "#fff", border: `1px solid ${MIST}`, borderRadius: 18, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-              <div style={{ position: "relative", aspectRatio: "16 / 10", ...photo(x.img) }}>
-                <span style={{ position: "absolute", left: 14, top: 14, background: "rgba(255,255,255,.94)", color: DEEP, fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", padding: "5px 11px", borderRadius: 99 }}>0{i + 1} · {x.tag}</span>
-              </div>
-              <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
-                <h3 style={{ margin: 0, fontSize: 19, lineHeight: 1.25, fontWeight: 700, color: DEEP, letterSpacing: "-.01em" }}>{x.name}</h3>
-                <p style={{ margin: "10px 0 0", fontSize: 13.5, lineHeight: 1.7, color: "#4B5563" }}>{x.body}</p>
-              </div>
-            </article>
-          ))}
+          {ALL.map((x, i) => {
+            const body = (
+              <>
+                <div style={{ position: "relative", aspectRatio: "16 / 10", ...photo(x.img) }}>
+                  <span style={{ position: "absolute", left: 14, top: 14, background: "rgba(255,255,255,.94)", color: DEEP, fontSize: 10.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", padding: "5px 11px", borderRadius: 99 }}>{String(i + 1).padStart(2, "0")} · {x.tag}</span>
+                </div>
+                <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: 1 }}>
+                  <h3 style={{ margin: 0, fontWeight: 700, color: DEEP, letterSpacing: "-.01em" }}>{x.name}</h3>
+                  <p style={{ margin: "10px 0 0", fontSize: 13.5, lineHeight: 1.7, color: "#4B5563", flex: 1 }}>{x.body}</p>
+                  {x.href && <span style={{ marginTop: 16, display: "inline-flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 600, color: SAPPHIRE }}>Explore solutions <Arrow /></span>}
+                </div>
+              </>
+            );
+            const st: CSSProperties = { background: "#fff", border: `1px solid ${MIST}`, borderRadius: 18, overflow: "hidden", display: "flex", flexDirection: "column", textDecoration: "none", color: INK };
+            return x.href
+              ? <a key={x.name} href={x.href} data-rv={String(i % 4)} className="in-card" style={st}>{body}</a>
+              : <article key={x.name} data-rv={String(i % 4)} className="in-card" style={st}>{body}</article>;
+          })}
         </div>
       </div>
     </section>

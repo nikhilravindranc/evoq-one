@@ -92,20 +92,21 @@ const SparklesGlyph = (p: ProductIconProps) => (
 );
 const PRODUCT_GROUPS: {
   title: string;
-  items: { name: string; sub: string; icon: (p: ProductIconProps) => React.ReactElement; tile: string; href?: string }[];
+  items: { name: string; sub: string; icon: (p: ProductIconProps) => React.ReactElement; tile: string; href?: string; logo?: string }[];
 }[] = [
   {
     title: "Growth",
     items: [
-      { name: "CRM", sub: "Sales & customer relationships", icon: UsersGlyph, tile: "bg-[#4747E0]" },
-      { name: "Campaigns", sub: "Plan and launch marketing", icon: TrendGlyph, tile: "bg-[#7C3AED]" },
+      { name: "CRM", sub: "Sales & customer relationships", icon: UsersGlyph, tile: "bg-[#4747E0]", href: "/products/crm", logo: "crm-menu-icn.png" },
+      { name: "Campaigns", sub: "Plan and launch marketing", icon: TrendGlyph, tile: "bg-[#7C3AED]", href: "/products/campaigns", logo: "campaigns-menu-icn.png" },
+      { name: "ConfigX", sub: "Product configuration & CPQ", icon: BoxGlyph, tile: "bg-[#4747E0]", href: "/products/configx", logo: "ConfigX-menu-icn.png" },
     ],
   },
   {
     title: "People",
     items: [
-      { name: "HRMS", sub: "Core HR & workforce data", icon: LeafGlyph, tile: "bg-[#0F9D74]" },
-      { name: "Skillberry", sub: "Learning & talent development", icon: GrapeGlyph, tile: "bg-[#C2477F]" },
+      { name: "HRMS", sub: "Core HR & workforce data", icon: LeafGlyph, tile: "bg-[#0F9D74]", href: "/products/hrms", logo: "hrms-menu-icn-new.png" },
+      { name: "Skillberry", sub: "Learning & talent development", icon: GrapeGlyph, tile: "bg-[#C2477F]", href: "/products/skillberry", logo: "Skillberry-menu-icn.png" },
     ],
   },
   {
@@ -117,21 +118,21 @@ const PRODUCT_GROUPS: {
   {
     title: "Operations",
     items: [
-      { name: "ServiceOps", sub: "Field service & operations", icon: WrenchGlyph, tile: "bg-[#E8792C]" },
-      { name: "Projects", sub: "Plan and run work end-to-end", icon: RocketGlyph, tile: "bg-[#7C3AED]" },
-      { name: "Desk", sub: "Support tickets & helpdesk", icon: ChatGlyph, tile: "bg-[#0FA3BC]" },
+      { name: "ServiceOps", sub: "Field service & operations", icon: WrenchGlyph, tile: "bg-[#E8792C]", href: "/products/serviceops", logo: "serviceops-logos-serviceops-icon.svg" },
+      { name: "Projects", sub: "Plan and run work end-to-end", icon: RocketGlyph, tile: "bg-[#7C3AED]", href: "/products/projects", logo: "evoq-projects-menu-icn.png" },
+      { name: "Desk", sub: "Support tickets & helpdesk", icon: ChatGlyph, tile: "bg-[#0FA3BC]", href: "/products/desk", logo: "desk-menu-icn.png" },
     ],
   },
   {
     title: "Finance",
     items: [
-      { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]", href: "/products/billing" },
-      { name: "Inventory", sub: "Stock & supply tracking", icon: BoxGlyph, tile: "bg-[#C2477F]" },
+      { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]", href: "/products/billing", logo: "billing-menu-icn.png" },
+      { name: "Inventory", sub: "Stock & supply tracking", icon: BoxGlyph, tile: "bg-[#C2477F]", href: "/products/inventory", logo: "inventory-menu-icn.png" },
     ],
   },
   {
     title: "Platform",
-    items: [{ name: "Sync", sub: "Unify data across systems", icon: SyncGlyph, tile: "bg-[#0F9D74]" }],
+    items: [{ name: "Sync", sub: "Unify data across systems", icon: SyncGlyph, tile: "bg-[#0F9D74]", href: "/products/sync", logo: "sync-menu-icn.png" }],
   },
 ];
 
@@ -159,7 +160,6 @@ const SOLUTIONS: {
   { name: "Construction, Engineering & Real Estate", sub: "Projects, technical work and property", href: "/solutions/construction", icon: "building" },
   { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "/solutions/field-service", icon: "wrench" },
   { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "/solutions/hospitality", icon: "hotel" },
-  { name: "More industries", sub: "Explore every EVOQ solution", href: "/solutions/industries", icon: "grid" },
 ];
 
 const SOLUTION_BRAND: Record<string, { fg: string; tint: string }> = {
@@ -168,7 +168,7 @@ const SOLUTION_BRAND: Record<string, { fg: string; tint: string }> = {
   "Construction & Real Estate": { fg: "#B5532F", tint: "#F8ECDC" },
   "Field Service, Facilities & Maintenance": { fg: "#1F5FE0", tint: "#E6EFFF" },
   "Hospitality, Travel & F&B": { fg: "#1F4D3A", tint: "#F4ECD9" },
-  "More industries": { fg: "#1E40AF", tint: "#E9EDF7" },
+  "All Industries": { fg: "#1E40AF", tint: "#E9EDF7" },
 };
 const brandVars = (name: string) => {
   const b = SOLUTION_BRAND[name] ?? { fg: "#4747E0", tint: "#F2F2FF" };
@@ -217,7 +217,9 @@ const ManufacturingMark = () => (
   </span>
 );
 
-export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string }) {
+export type TopbarTheme = { navBg: string; navFg: string; ctaBg: string; ctaFg: string; loginFg: string };
+
+export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor, theme }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string; theme?: TopbarTheme }) {
   const [open, setOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [subOpen, setSubOpen] = useState(false);
@@ -285,6 +287,13 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
 
   return (
     <header className="relative z-50">
+      {theme && (
+        <style>{`
+          .tb-themed > a, .tb-themed > div > button { color: ${theme.navFg} !important; }
+          .tb-themed > a:hover, .tb-themed > div > button:hover { background: ${theme.navFg}1F !important; }
+          .tb-login, .tb-login:hover { color: ${theme.loginFg} !important; }
+        `}</style>
+      )}
       <div className={
         constrained
           ? "px-5 sm:px-[40px] lg:px-[60px]"
@@ -309,13 +318,13 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
 
       {/* Nav pill */}
       <nav
-        className={`flex items-center gap-1 rounded-full px-1.5 py-1.5 text-sm font-medium backdrop-blur-lg ${
+        className={`${theme ? "tb-themed " : ""}flex items-center gap-1 rounded-full px-1.5 py-1.5 text-sm font-medium backdrop-blur-lg ${
           light
             ? "border border-[#E6EAF0] bg-white/80 text-[#1F2430]/90"
             : "border border-white/20 bg-white/14 text-white/90"
         }`}
         aria-label="Primary"
-        style={{ backdropFilter: "blur(18px) saturate(140%)" }}
+        style={{ backdropFilter: "blur(18px) saturate(140%)", ...(theme ? { background: theme.navBg, color: theme.navFg, borderColor: "rgba(255,255,255,0.2)" } : {}) }}
       >
         {/* Products with dropdown */}
         <div className="relative" ref={wrapRef}>
@@ -371,6 +380,9 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                           >
                             {p.name === "AI" ? (
                               <AIBadge size={34} />
+                            ) : p.logo ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={`/site/images/${p.logo}`} alt="" width={34} height={34} className="h-[34px] w-[34px] shrink-0 rounded-[9px] object-contain" />
                             ) : (
                               <span className={`flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] ${p.tile}`}>
                                 <p.icon size={17} />
@@ -449,7 +461,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
               </div>
 
               <div className="grid grid-cols-2 items-start gap-x-1">
-                {[[0, 1, 2], [3, 4, 5]].map((col, ci) => (
+                {[[0, 1], [2, 3, 4]].map((col, ci) => (
                 <ul key={ci} className="m-0 flex list-none flex-col gap-0.5 p-0">
                 {col.map((idx) => { const s = SOLUTIONS[idx]; return (
                   <li key={s.name} role="menuitem" onMouseEnter={() => s.children && setSubOpen(true)}>
@@ -520,6 +532,22 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                 </ul>
                 ))}
               </div>
+              <div className="mt-2 flex items-center justify-between gap-3 border-t border-[#E3E6F0] px-2.5 pt-3">
+                <Link
+                  href="/solutions"
+                  onClick={() => setSolutionsOpen(false)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#C7D2EA] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#1E40AF] no-underline transition-colors hover:bg-[#F3F6FD]"
+                >
+                  Solutions overview <ArrowRight size={12} />
+                </Link>
+                <Link
+                  href="/industries"
+                  onClick={() => setSolutionsOpen(false)}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[#E9EDF7] px-3.5 py-2 text-[13px] font-semibold text-[#1E40AF] no-underline transition-colors hover:bg-[#DBEAFE]"
+                >
+                  View all industries <ArrowRight size={12} />
+                </Link>
+              </div>
             </div>
           )}
         </div>
@@ -536,7 +564,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
       <div className="flex items-center gap-4">
         <Link
           href="/login"
-          className={`inline-flex cursor-pointer text-sm font-semibold no-underline transition-colors ${
+          className={`${theme ? "tb-login " : ""}inline-flex cursor-pointer text-sm font-semibold no-underline transition-colors ${
             light ? "text-[#1F2430]/80 hover:text-[#1F2430]" : "text-white/88 hover:text-white"
           }`}
         >
@@ -605,9 +633,11 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
         <button
           type="button"
           onClick={() => setShowGetStarted(true)}
-          style={ctaColor ? { background: ctaColor } : undefined}
+          style={theme ? { background: theme.ctaBg, color: theme.ctaFg } : ctaColor ? { background: ctaColor } : undefined}
           className={`inline-flex cursor-pointer items-center gap-3 rounded-full border-0 py-3 pl-[22px] pr-3.5 text-sm font-semibold transition-all hover:-translate-y-px ${
-            ctaColor
+            theme
+              ? "shadow-[0_10px_30px_-10px_rgba(0,0,0,0.22)] hover:brightness-95"
+              : ctaColor
               ? "text-white shadow-[0_10px_30px_-12px_rgba(31,36,48,0.4)] hover:brightness-95"
               : darkCTA
               ? "bg-[#4747E0] text-white shadow-[0_10px_30px_-10px_rgba(0,0,153,0.55),inset_0_0_0_1px_rgba(255,255,255,0.08)] hover:bg-[#3333CC]"

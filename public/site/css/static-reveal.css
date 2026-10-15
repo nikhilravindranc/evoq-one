@@ -1,0 +1,64 @@
+/*
+ * Entrance animations for the static export (generated).
+ * Elements are written visible in the HTML. When the page's scripts run, js/static-reveal.js
+ * adds html.evoq-anim and these rules restore each element's starting state; the site's own
+ * animation code then fades it in exactly as on the original site.
+ */
+html.evoq-anim [data-evoq-reveal="0"]{opacity:0;transform:translateY(24px)}
+html.evoq-anim [data-evoq-reveal="1"]{opacity:0;transform:translateX(30px)}
+html.evoq-anim [data-evoq-reveal="2"]{opacity:0;transform:translateY(14px)}
+html.evoq-anim [data-evoq-reveal="3"]{opacity:0;transform:translateY(28px)}
+html.evoq-anim [data-evoq-reveal="4"]{transform:scale(0.9);opacity:0}
+html.evoq-anim [data-evoq-reveal="5"]{opacity:0;transform:translateY(20px)}
+html.evoq-anim [data-evoq-reveal="6"]{opacity:0;transform:translateX(24px)}
+html.evoq-anim [data-evoq-reveal="7"]{opacity:0}
+html.evoq-anim [data-evoq-reveal="8"]{opacity:0;transform:translateX(-64px) translateY(16px) scale(0.92) rotate(-2.5deg)}
+html.evoq-anim [data-evoq-reveal="9"]{opacity:0;transform:translateY(56px) scale(0.92)}
+html.evoq-anim [data-evoq-reveal="10"]{opacity:0;transform:translateX(64px) translateY(16px) scale(0.92) rotate(2.5deg)}
+html.evoq-anim [data-evoq-reveal="11"]{opacity:0;transform:translateY(10px) scale(0.9) rotate(-9deg)}
+html.evoq-anim [data-evoq-reveal="12"]{opacity:0;transform:translateY(10px) scale(0.9) rotate(9deg)}
+html.evoq-anim [data-evoq-reveal="13"]{opacity:0;transform:translateY(30px)}
+html.evoq-anim [data-evoq-reveal="14"]{opacity:0;transform:translateY(10px)}
+html.evoq-anim [data-evoq-reveal="15"]{transform:translateY(15px);opacity:0}
+html.evoq-anim [data-evoq-reveal="16"]{opacity:0;transform:translateY(80px)}
+html.evoq-anim [data-evoq-reveal="17"]{opacity:0;transform:translateX(-30px) translateY(34px)}
+html.evoq-anim [data-evoq-reveal="18"]{opacity:0;transform:translateY(14px) scale(0.97)}
+html.evoq-anim [data-evoq-reveal="19"]{opacity:0;transform:translateX(30px) translateY(34px)}
+html.evoq-anim [data-evoq-reveal="20"]{opacity:0;transform:scale(0.4)}
+html.evoq-anim [data-evoq-reveal="21"]{opacity:0;transform:translateY(24px) scale(0.97)}
+html.evoq-anim [data-evoq-reveal="22"]{visibility:hidden}
+html.evoq-anim [data-evoq-reveal="23"]{opacity:0;transform:translateY(50px) scale(0.97)}
+html.evoq-anim [data-evoq-reveal="24"]{opacity:0;transform:translateX(-22px)}
+html.evoq-anim [data-evoq-reveal="25"]{opacity:0;transform:scale(0.85) rotate(-4deg)}
+html.evoq-anim [data-evoq-reveal="26"]{opacity:0;transform:translateY(30px) scale(0.92)}
+html.evoq-anim [data-evoq-reveal="27"]{opacity:0;transform:scale(0.4) rotate(-25deg)}
+html.evoq-anim [data-evoq-reveal="28"]{opacity:0;transform:translateX(-30px)}
+html.evoq-anim [data-evoq-reveal="29"]{opacity:0;transform:translateY(10px) scale(0.9)}
+html.evoq-anim [data-evoq-reveal="30"]{opacity:0;transform:translateY(50px) scale(0.96)}
+html.evoq-anim [data-evoq-reveal="31"]{opacity:0;transform:translateY(16px)}
+html.evoq-anim [data-evoq-reveal="32"]{opacity:0;transform:translateY(12px)}
+html.evoq-anim [data-evoq-reveal="33"]{opacity:0;transform:translateY(18px)}
+html.evoq-anim [data-evoq-reveal="34"]{opacity:0;transform:translateX(-8px)}
+html.evoq-anim [data-evoq-reveal="35"]{opacity:0;transform:translateY(-6px)}
+html.evoq-anim [data-evoq-reveal="36"]{opacity:0;transform:translateY(18px) scale(0.94)}
+html.evoq-anim [data-evoq-reveal="37"]{opacity:0;transform:translateY(12px) scale(0.9)}
+html.evoq-anim [data-evoq-reveal="38"]{transform:scale(0.85);opacity:0}
+html.evoq-anim [data-evoq-reveal="39"]{opacity:0;transform:scale(0.8)}
+html.evoq-anim [data-evoq-reveal="40"]{opacity:0;transform:translateY(16px) scale(0.9)}
+html.evoq-anim [data-evoq-reveal="41"]{opacity:0;transform:translateY(26px)}
+html.evoq-anim [data-evoq-reveal="42"]{opacity:0;transform:translateY(22px)}
+html.evoq-anim [data-evoq-reveal="43"]{opacity:0;transform:translateY(16px) scale(0.96)}
+html.evoq-anim [data-evoq-reveal="44"]{opacity:0;transform:scale(1.1)}
+html.evoq-anim [data-evoq-reveal="45"]{opacity:0;transform:scale(1.08)}
+html.evoq-anim [data-evoq-reveal="46"]{opacity:0;transform:translateX(-18px)}
+html.evoq-anim [data-evoq-reveal="47"]{opacity:0;transform:translateX(18px)}
+html.evoq-anim [data-evoq-reveal="48"]{opacity:0;transform:translateX(-14px) translateY(8px)}
+html.evoq-anim [data-evoq-reveal="49"]{opacity:0;transform:translateX(14px) translateY(8px)}
+html.evoq-anim [data-evoq-reveal="50"]{opacity:0;transform:none}
+/* Print shows every section, including ones not yet scrolled into view. Once the app runs,
+   the animation code holds them at their starting state inline, hence !important. Elements
+   marked data-evoq-end finish on a transform of their own (e.g. a tilt), which is kept. */
+@media print {
+  [data-evoq-reveal], [data-evoq-svg] { opacity: 1 !important; visibility: visible !important; }
+  [data-evoq-reveal]:not([data-evoq-end]) { transform: none !important; }
+}

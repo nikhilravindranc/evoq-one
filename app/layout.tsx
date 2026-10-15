@@ -17,6 +17,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://evoq.one"),
   title: "EVOQ Healthcare — Every team. Every workflow. Finally connected.",
   description:
     "EVOQ Healthcare is a unified healthcare software ecosystem designed to connect clinical, administrative, and operational workflows into one structured platform.",

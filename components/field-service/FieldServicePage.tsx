@@ -189,7 +189,7 @@ function Flow() {
                     <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke={hot ? BURNT : NAVY} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={path} /></svg>
                   </span>
                   <span aria-hidden="true" style={{ width: 2, height: 26, background: hot ? ORANGE : LINE, marginTop: 10, position: "relative" }}><i style={{ position: "absolute", left: -3, top: 9, width: 8, height: 8, borderRadius: "50%", background: hot ? ORANGE : AZURE }} /></span>
-                  <h3 style={{ margin: "12px 0 0", fontSize: 17, lineHeight: 1.25, fontWeight: 700, color: INK, minHeight: 44, display: "flex", alignItems: "flex-start", justifyContent: "center" }}>{t}</h3>
+                  <h4 style={{ margin: "12px 0 0", fontSize: 17, lineHeight: 1.25, fontWeight: 700, color: INK, minHeight: 44, display: "flex", alignItems: "flex-start", justifyContent: "center" }}>{t}</h4>
                   <p style={{ margin: "8px 0 0", fontSize: 13.5, lineHeight: 1.6, color: SOFT, maxWidth: 150 }}>{d}</p>
                 </li>
               );
@@ -255,7 +255,7 @@ function Ecosystem() {
   ];
   const card = (g: (typeof groups)[number], i: number) => (
     <div key={g[0]} data-rv={String(i)} className="fs-card" style={{ background: PALE, border: `1px solid ${LINE}`, borderRadius: 18, padding: "22px 22px 24px" }}>
-      <h3 style={{ margin: 0, fontSize: 17.5, fontWeight: 700, color: NAVY, lineHeight: 1.25 }}>{g[0]}</h3>
+      <h4 style={{ margin: 0, fontSize: 17.5, fontWeight: 700, color: NAVY, lineHeight: 1.25 }}>{g[0]}</h4>
       <div style={{ marginTop: 12 }}><Chips list={g[1]} /></div>
       <p style={{ margin: "12px 0 0", fontSize: 13.5, lineHeight: 1.7, color: SOFT }}>{g[2]}</p>
     </div>

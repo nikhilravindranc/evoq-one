@@ -231,7 +231,7 @@ function Segments() {
               <span style={{ position: "absolute", left: 32, top: 12, fontSize: 10.5, fontWeight: 600, letterSpacing: ".18em", color: "#fff", textShadow: "0 1px 6px rgba(15,23,42,.6)" }}>0{i + 1}</span>
             </div>
             <div style={{ padding: "18px 20px 22px" }}>
-              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: G, letterSpacing: "-.005em" }}>{t}</h3>
+              <h4 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: G, letterSpacing: "-.005em" }}>{t}</h4>
               <p style={{ margin: "8px 0 0", fontSize: 13.5, lineHeight: 1.65, color: ST }}>{d}</p>
             </div>
           </div>

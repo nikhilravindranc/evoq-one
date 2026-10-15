@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
+  async headers() {
+    // The embedded product pages in public/site are edited in place, so make browsers re-check them instead of reusing a stale copy.
+    return [{ source: "/site/:file*.html", headers: [{ key: "Cache-Control", value: "no-cache, must-revalidate" }] }];
+  },
   async redirects() {
     const moved: [string, string][] = [
       ["/ai", "/products/ai"],
@@ -21,6 +25,7 @@ const nextConfig: NextConfig = {
       ["/healthcare/crm/features", "/solutions/healthcare/crm/features"],
       ["/healthcare/practice-management", "/solutions/healthcare/practice-management"],
       ["/manufacturing", "/solutions/manufacturing"],
+      ["/solutions/industries", "/industries"],
     ];
     return moved.map(([source, destination]) => ({ source, destination, permanent: true }));
   },

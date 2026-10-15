@@ -1099,9 +1099,9 @@ export function HeroSection() {
                     margin: 0,
                   }}
                 >
-                  Every part of your business.
+                  Human intelligence. Agentic action.
                   <br />
-                  <span style={{ color: "#BDBDFF" }}>Working together.</span>
+                  <span style={{ color: "#BDBDFF" }}>Connected platforms.</span>
                 </h1>
 
                 <p
@@ -1114,9 +1114,8 @@ export function HeroSection() {
                     color: "rgba(255,255,255,0.75)",
                   }}
                 >
-                  From growth and customer relationships to daily operations
-                  and people management, EVOQ gives your business the tools
-                  to work better together.
+                  Turning intelligence into coordinated action across the
+                  organization.
                 </p>
               </div>
 
