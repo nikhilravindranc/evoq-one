@@ -1118,11 +1118,52 @@ export function HeroSection() {
 
               <div>
                 <div
+                  role="tablist"
+                  aria-label="Hero product focus"
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    alignItems: "center",
+                    marginTop: 32,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {HERO_TABS.map((tab) => {
+                    const isActive = tab.key === activeTab;
+                    return (
+                      <button
+                        key={tab.key}
+                        role="tab"
+                        aria-selected={isActive}
+                        onClick={() => {
+                          setActiveTab(tab.key);
+                          startTabTimer();
+                        }}
+                        style={{
+                          padding: "9px 18px",
+                          borderRadius: 999,
+                          fontFamily: "var(--font-sans)",
+                          fontSize: 13.5,
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          transition: "background .18s ease, color .18s ease, border-color .18s ease",
+                          border: isActive ? "1px solid rgba(255,255,255,0)" : "1px solid rgba(255,255,255,0.28)",
+                          background: isActive ? "#fff" : "transparent",
+                          color: isActive ? "#4747E0" : "rgba(255,255,255,0.85)",
+                        }}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div
                   style={{
                     display: "flex",
                     gap: 14,
                     alignItems: "center",
-                    marginTop: 32,
+                    marginTop: 20,
                   }}
                 >
                   <button
@@ -1162,37 +1203,6 @@ export function HeroSection() {
                   </button>
                 </div>
 
-                <div
-                  role="tablist"
-                  aria-label="Hero scenes"
-                  style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 36 }}
-                >
-                  {HERO_TABS.map((tab) => {
-                    const isActive = tab.key === activeTab;
-                    return (
-                      <button
-                        key={tab.key}
-                        role="tab"
-                        aria-selected={isActive}
-                        aria-label={tab.label}
-                        onClick={() => {
-                          setActiveTab(tab.key);
-                          startTabTimer();
-                        }}
-                        style={{
-                          width: isActive ? 30 : 8,
-                          height: 8,
-                          padding: 0,
-                          borderRadius: 999,
-                          border: 0,
-                          cursor: "pointer",
-                          background: isActive ? "#fff" : "rgba(255,255,255,0.4)",
-                          transition: "width .3s ease, background .3s ease",
-                        }}
-                      />
-                    );
-                  })}
-                </div>
               </div>
             </motion.section>
 

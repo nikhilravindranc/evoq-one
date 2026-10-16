@@ -2659,7 +2659,7 @@
 .sol-more-btn { display: inline-flex; align-items: center; gap: 6px; padding: 4px 0; color: #4747E0; white-space: nowrap; font-size: 15px; font-weight: 600; text-decoration: none; border-bottom: 1.5px solid transparent; transition: border-color .18s ease, gap .18s ease; }
 .sol-more-btn:hover { border-bottom-color: currentColor; gap: 10px; }
 .sol-cta {
-  display: inline-flex; align-items: center; gap: 8px; margin-top: 0; padding: 13px 22px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; padding: 13px 22px; border-radius: 999px;
   color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; transition: filter .18s ease, transform .18s ease;
 }
 .sol-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
