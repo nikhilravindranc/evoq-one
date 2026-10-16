@@ -1,0 +1,151 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, type Easing } from "framer-motion";
+import { Eyebrow } from "./shared";
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-60px" },
+  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as Easing },
+});
+
+/* One featured industry at a time. Each wears its own industry page's
+   palette (Healthcare teal, Manufacturing graphite, Construction
+   terracotta, Field Service blue, Hospitality forest) for the active
+   pill, accent word and button -- no new colours. */
+type Industry = {
+  key: string; tab: string; name: string;
+  lead: string; accent: string; body: string;
+  href: string; img: string; pos: string;
+  color: string; deep: string; soft: string;
+  card: { app: string; title: string; sub: string };
+};
+
+const INDUSTRIES: Industry[] = [
+  { key: "healthcare", tab: "Healthcare", name: "Healthcare",
+    lead: "Every patient. ", accent: "Every follow-up.",
+    body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.",
+    href: "/solutions/healthcare", img: "/solutions/healthcare.jpg", pos: "50% 30%",
+    color: "#0F766E", deep: "#123B3A", soft: "#DDF5F0",
+    card: { app: "crm", title: "Appointment confirmed", sub: "Follow-up booked for Friday" } },
+  { key: "manufacturing", tab: "Manufacturing", name: "Manufacturing",
+    lead: "From configured order to ", accent: "shipped product.",
+    body: "Address operational needs across product configuration, order management, inventory and production-related processes.",
+    href: "/solutions/manufacturing", img: "/solutions/manufacturing.jpg", pos: "50% 40%",
+    color: "#2563EB", deep: "#1F2933", soft: "#DBEAFE",
+    card: { app: "inventory", title: "Stock updated", sub: "Order released to the floor" } },
+  { key: "construction", tab: "Construction", name: "Construction, Engineering & Real Estate",
+    lead: "Plans, projects and ", accent: "people, in sync.",
+    body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the industry.",
+    href: "/solutions/construction", img: "/solutions/construction.jpg", pos: "50% 30%",
+    color: "#B4533C", deep: "#7C2D1F", soft: "#E8D8BF",
+    card: { app: "projects", title: "Milestone completed", sub: "Phase 2 handed to the client" } },
+  { key: "field-service", tab: "Field Service", name: "Field Service, Facilities & Maintenance",
+    lead: "Jobs scheduled. ", accent: "Work completed.",
+    body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.",
+    href: "/solutions/field-service", img: "/solutions/field-service.jpg", pos: "40% 40%",
+    color: "#1777F0", deep: "#0F3D75", soft: "#DBEAFE",
+    card: { app: "serviceops", title: "Work order closed", sub: "Parts logged, invoice raised" } },
+  { key: "hospitality", tab: "Hospitality", name: "Hospitality, Travel & F&B",
+    lead: "Guests first. ", accent: "Operations in step.",
+    body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.",
+    href: "/solutions/hospitality", img: "/solutions/hospitality.jpg", pos: "50% 40%",
+    color: "#14532D", deep: "#064E3B", soft: "#F7F1E3",
+    card: { app: "crm", title: "Returning guest recognised", sub: "Preferences noted at check-in" } },
+];
+
+const AUTO_MS = 7000;
+
+export function SectionSolutions() {
+  const [active, setActive] = useState(0);
+  const [stopped, setStopped] = useState(false);
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Gentle auto-advance so the hidden industries get seen; stops for good
+  // once the visitor picks one themselves.
+  useEffect(() => {
+    if (stopped) return;
+    timer.current = setInterval(() => setActive((i) => (i + 1) % INDUSTRIES.length), AUTO_MS);
+    return () => { if (timer.current) clearInterval(timer.current); };
+  }, [stopped]);
+
+  const x = INDUSTRIES[active];
+
+  return (
+    <section className="s-solutions">
+      <div className="s-solutions-inner">
+        <div className="sol-top">
+          <motion.div className="evoq-section-head sol-head" {...fadeUp(0)}>
+            <Eyebrow>Solutions</Eyebrow>
+            <h2 className="evoq-h2">
+              Built for how <span className="accent">your industry works.</span>
+            </h2>
+          </motion.div>
+          <motion.div className="sol-links" {...fadeUp(0.04)}>
+            <a href="/solutions" className="sol-more-btn">Solutions overview <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></a>
+            <a href="/industries" className="sol-more-btn">All industries <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></a>
+          </motion.div>
+        </div>
+
+        <motion.div className="sol-tabs-wrap" {...fadeUp(0.08)}>
+          <div className="sol-tabs" role="tablist" aria-label="Industries">
+            {INDUSTRIES.map((s, i) => {
+              const on = i === active;
+              return (
+                <button
+                  key={s.key}
+                  role="tab"
+                  aria-selected={on}
+                  className={`sol-tab${on ? " on" : ""}`}
+                  style={on ? ({ "--sol-c": s.color, "--sol-soft": s.soft } as React.CSSProperties) : undefined}
+                  onClick={() => { setActive(i); setStopped(true); }}
+                >
+                  {s.tab}
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={x.key}
+            className="sol-stage"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            style={{ "--sol-c": x.color, "--sol-deep": x.deep, "--sol-soft": x.soft } as React.CSSProperties}
+          >
+            <div className="sol-copy">
+              <h3 className="sol-title">
+                {x.lead}<span style={{ color: x.color }}>{x.accent}</span>
+              </h3>
+              <p className="sol-name">{x.name}</p>
+              <p className="sol-desc">{x.body}</p>
+              <a href={x.href} className="sol-cta" style={{ background: x.color }}>
+                Explore {x.tab.toLowerCase()}
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </a>
+            </div>
+
+            <div className="sol-frame">
+              <img className="sol-photo" src={x.img} alt="" decoding="async" style={{ objectPosition: x.pos }} />
+              <span className="sol-tint" aria-hidden />
+              <div className="sol-float">
+                <span className="sol-float-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.4l3 3 6-6.4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
+                <div>
+                  <div className="sol-float-t">{x.card.title}</div>
+                  <div className="sol-float-s">{x.card.sub}</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+      </div>
+    </section>
+  );
+}

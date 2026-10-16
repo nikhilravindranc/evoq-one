@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, type Easing } from "framer-motion";
-import { ProductBadge } from "@/components/shared/ProductBadge";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -41,6 +40,31 @@ const GlyphShield = () => (
     <path d="M9 12.2 11.2 14.4 15.5 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+const GlyphTrend = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path d="M4 17 9.5 11.5l3.5 3.5L20 7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M15 7.5h5V12.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const GlyphWrench = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path d="M14.5 6.5a4 4 0 0 0 4.8 4.8L11 19.6a2.1 2.1 0 0 1-3-3l8.3-8.3Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    <path d="M14.5 6.5a4 4 0 0 1 5-2.5l-2.5 2.5 1 1 2.5-2.5a4 4 0 0 1-4.8 4.8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const GlyphCard = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <rect x="3" y="6" width="18" height="12" rx="2.4" stroke="currentColor" strokeWidth="1.8" />
+    <path d="M3 10.5h18" stroke="currentColor" strokeWidth="1.8" />
+    <path d="M7 15h3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+const GlyphSync20 = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M17.6 3.8v3h-3M6.4 20.2v-3h3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 const GlyphRoute = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
     <circle cx="6" cy="6" r="2.4" stroke="currentColor" strokeWidth="1.8" />
@@ -65,10 +89,11 @@ const GlyphSync = () => (
    gradient — mirrors the reference's "every model" card almost exactly
    (big circles, generous whitespace, soft multi-tone background). */
 const MODULES = [
-  { label: "CRM", glyph: GlyphUsers, bg: "#EEF0FF", fg: "#4747E0" },
-  { label: "Service", glyph: GlyphHeadset, bg: "#E6F7FB", fg: "#0E8C9E" },
-  { label: "Commerce", glyph: GlyphCart, bg: "#FFF1DF", fg: "#C97A16" },
-  { label: "Support", glyph: GlyphShield, bg: "#E7FBF0", fg: "#128A57" },
+  { label: "Growth", glyph: GlyphTrend, bg: "#EEF0FF", fg: "#4747E0" },
+  { label: "People", glyph: GlyphUsers, bg: "#E7FBF0", fg: "#128A57" },
+  { label: "Operations", glyph: GlyphWrench, bg: "#FFF1DF", fg: "#C97A16" },
+  { label: "Finance", glyph: GlyphCard, bg: "#FDE8F1", fg: "#C2477F" },
+  { label: "Platform", glyph: GlyphSync20, bg: "#E6F7FB", fg: "#0E8C9E" },
 ];
 function TcModules() {
   return (
@@ -208,9 +233,18 @@ function TcAutomations() {
 /* 20 cells (10x2), real logos scattered across the full width rather
    than clustered on one side, so the grid uses the whole 2-column card
    instead of leaving half of it empty. */
+/* The same square icons the Products menu uses -- the /logos files are
+   wide lockups that blur or vanish when cropped to a tile. */
+const MENU_ICON: Record<string, string> = {
+  crm: "crm-menu-icn.png", campaigns: "campaigns-menu-icn.png", configx: "ConfigX-menu-icn.png",
+  hrms: "hrms-menu-icn-new.png", skillberry: "Skillberry-menu-icn.png",
+  serviceops: "serviceops-logos-serviceops-icon.svg", projects: "evoq-projects-menu-icn.png",
+  desk: "desk-menu-icn.png", billing: "billing-menu-icn.png", inventory: "inventory-menu-icn.png",
+  sync: "sync-menu-icn.png",
+};
 const APP_GRID = [
-  "crm", null, "serviceops", null, "campaigns", null, "desk", null, "sync", null,
-  null, "projects", null, "hrms", null, "skillberry", null, null, null, null,
+  "crm", null, "campaigns", null, "configx", null, "hrms", null, "skillberry", null,
+  "serviceops", null, "projects", null, "desk", null, "billing", "inventory", null, "sync",
 ];
 function TcAppGrid() {
   return (
@@ -219,9 +253,12 @@ function TcAppGrid() {
         {APP_GRID.map((key, i) => (
           <span
             key={i}
-            className={`tc-app-tile${key ? "" : " ghost"}${i % 7 === 2 ? " stagger" : ""}`}
+            className={`tc-app-tile${key ? "" : " ghost"}${(i === 2 || i === 9) ? " stagger" : ""}`}
           >
-            {key && <ProductBadge productKey={key} size={24} />}
+            {key && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={`/site/images/${MENU_ICON[key]}`} alt="" width={28} height={28} style={{ borderRadius: 8 }} />
+            )}
           </span>
         ))}
       </div>
@@ -230,7 +267,7 @@ function TcAppGrid() {
           <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><path d="M4.5 10.4 8.2 14.1 15.5 6.4" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </span>
         <div>
-          <div className="tc-summary-title">8 / 8 apps active</div>
+          <div className="tc-summary-title">11 / 11 products active</div>
           <div className="tc-summary-sub">All working. All connected.</div>
         </div>
       </div>
@@ -285,7 +322,7 @@ export function SectionTeams() {
             Engineered for <span className="accent">modern teams.</span>
           </h2>
           <p className="evoq-sub">
-            EVOQ runs sales, service, operations, and support, so your teams stay in
+            EVOQ runs sales, service, operations, finance, and people, so your teams stay in
             sync and decisions happen faster.
           </p>
         </motion.div>
@@ -295,7 +332,7 @@ export function SectionTeams() {
           <motion.div className="team-card featured" {...fadeUp(0.05)}>
             <div className="tc-content">
               <h3>Everything works together.</h3>
-              <p>One source of truth across sales, service, commerce, and support.</p>
+              <p>One source of truth across growth, people, operations, and finance.</p>
             </div>
             <div className="tc-visual">
               <TcModules />

@@ -38,18 +38,22 @@ export const PRODUCT_LOGO_SRC: Record<string, string> = {
   hrms: "/logos/hrms-icon.png",
   skillberry: "/logos/skillberry-icon.png",
   serviceops: "/logos/serviceops-icon.png",
-  campaigns: "/logos/campaigns.png",
-  sync: "/logos/sync.png",
-  projects: "/logos/projects.png",
-  inventory: "/logos/inventory.svg",
-  billing: "/logos/billing.svg",
+  // Square menu icons (same as the Products dropdown) instead of cropping
+  // the wide lockups, which came out blurry or showed the wrong mark.
+  campaigns: "/site/images/campaigns-menu-icn.png",
+  sync: "/site/images/sync-menu-icn.png",
+  projects: "/site/images/evoq-projects-menu-icn.png",
+  inventory: "/site/images/inventory-menu-icn.png",
+  billing: "/site/images/billing-menu-icn.png",
+  configx: "/site/images/ConfigX-menu-icn.png",
+  ai: "/site/images/ai-menu-icn.png",
 };
 
 // Products whose PNG is a bare glyph and needs a color wrapper drawn here.
 const NEEDS_WRAPPER = new Set(["hrms", "skillberry"]);
 
 // Products with no icon-only crop — get one via CSS from the full lockup.
-const CROP_ICON = new Set(["campaigns", "sync", "projects", "inventory", "billing"]);
+const CROP_ICON = new Set<string>();
 
 export function hexToRgba(hex: string, alpha: number) {
   const h = hex.replace("#", "");

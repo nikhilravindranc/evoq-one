@@ -1,7 +1,8 @@
 import { HeroSection } from "@/components/hero/HeroSection";
 import { SectionPlatform } from "@/components/sections/SectionPlatform";
+import { SectionSolutions } from "@/components/sections/SectionSolutions";
 import { SectionAI } from "@/components/sections/SectionAI";
-import { SectionTeams } from "@/components/sections/SectionTeams";
+import { SectionContext } from "@/components/sections/SectionContext";
 import { SectionImpact } from "@/components/sections/SectionImpact";
 import { SectionCTA } from "@/components/sections/SectionCTA";
 import { Footer } from "@/components/sections/Footer";
@@ -15,9 +16,10 @@ export default function Home() {
       <PageJsonLd path="/" />
     <main className="min-h-screen bg-white">
       <HeroSection />
+      <SectionContext />
       <SectionPlatform />
+      <SectionSolutions />
       <SectionAI />
-      <SectionTeams />
       <SectionImpact />
       <SectionCTA />
       <Footer />

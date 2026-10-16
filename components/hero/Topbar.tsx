@@ -98,21 +98,8 @@ const PRODUCT_GROUPS: {
     title: "Growth",
     items: [
       { name: "CRM", sub: "Sales & customer relationships", icon: UsersGlyph, tile: "bg-[#4747E0]", href: "/products/crm", logo: "crm-menu-icn.png" },
-      { name: "Campaigns", sub: "Plan and launch marketing", icon: TrendGlyph, tile: "bg-[#7C3AED]", href: "/products/campaigns", logo: "campaigns-menu-icn.png" },
       { name: "ConfigX", sub: "Product configuration & CPQ", icon: BoxGlyph, tile: "bg-[#4747E0]", href: "/products/configx", logo: "ConfigX-menu-icn.png" },
-    ],
-  },
-  {
-    title: "People",
-    items: [
-      { name: "HRMS", sub: "Core HR & workforce data", icon: LeafGlyph, tile: "bg-[#0F9D74]", href: "/products/hrms", logo: "hrms-menu-icn-new.png" },
-      { name: "Skillberry", sub: "Learning & talent development", icon: GrapeGlyph, tile: "bg-[#C2477F]", href: "/products/skillberry", logo: "Skillberry-menu-icn.png" },
-    ],
-  },
-  {
-    title: "AI",
-    items: [
-      { name: "AI", sub: "Assistants · Agents", icon: AIMark, tile: "bg-[#F2F2FF]", href: "/products/ai" },
+      { name: "Campaigns", sub: "Plan and launch marketing", icon: TrendGlyph, tile: "bg-[#7C3AED]", href: "/products/campaigns", logo: "campaigns-menu-icn.png" },
     ],
   },
   {
@@ -121,6 +108,13 @@ const PRODUCT_GROUPS: {
       { name: "ServiceOps", sub: "Field service & operations", icon: WrenchGlyph, tile: "bg-[#E8792C]", href: "/products/serviceops", logo: "serviceops-logos-serviceops-icon.svg" },
       { name: "Projects", sub: "Plan and run work end-to-end", icon: RocketGlyph, tile: "bg-[#7C3AED]", href: "/products/projects", logo: "evoq-projects-menu-icn.png" },
       { name: "Desk", sub: "Support tickets & helpdesk", icon: ChatGlyph, tile: "bg-[#0FA3BC]", href: "/products/desk", logo: "desk-menu-icn.png" },
+    ],
+  },
+  {
+    title: "People",
+    items: [
+      { name: "HRMS", sub: "Core HR & workforce data", icon: LeafGlyph, tile: "bg-[#0F9D74]", href: "/products/hrms", logo: "hrms-menu-icn-new.png" },
+      { name: "Skillberry", sub: "Learning & talent development", icon: GrapeGlyph, tile: "bg-[#C2477F]", href: "/products/skillberry", logo: "Skillberry-menu-icn.png" },
     ],
   },
   {
@@ -133,6 +127,12 @@ const PRODUCT_GROUPS: {
   {
     title: "Platform",
     items: [{ name: "Sync", sub: "Unify data across systems", icon: SyncGlyph, tile: "bg-[#0F9D74]", href: "/products/sync", logo: "sync-menu-icn.png" }],
+  },
+  {
+    title: "AI",
+    items: [
+      { name: "AI", sub: "Assistants · Agents", icon: AIMark, tile: "bg-[#F2F2FF]", href: "/products/ai" },
+    ],
   },
 ];
 
@@ -339,9 +339,6 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
             aria-haspopup="menu"
             onClick={() => setOpen((o) => !o)}
           >
-            {open && (
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#BDBDFF]" />
-            )}
             <span>Products</span>
             <span
               className="inline-flex transition-transform duration-200"
@@ -429,9 +426,6 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
             aria-haspopup="menu"
             onClick={() => setSolutionsOpen((o) => !o)}
           >
-            {solutionsOpen && (
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#BDBDFF]" />
-            )}
             <span>Solutions</span>
             <span
               className="inline-flex transition-transform duration-200"

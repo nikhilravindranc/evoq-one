@@ -3,66 +3,43 @@
 import { motion } from "framer-motion";
 import { ArrowRt } from "./shared";
 
+const STEPS = [
+  "Pick the problem you would fix first",
+  "Add another product and your data connects",
+  "Run the whole business from one suite",
+];
+
 export function SectionCTA() {
   return (
     <section className="s-cta">
       <motion.div
-        className="s-cta-inner"
+        className="cta3"
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="cta-left">
-          <h2 className="evoq-h2">
-            Start with one.
-            <br/>
-            <span className="accent">Scale with all.</span>
-          </h2>
-          <p>
-            Every EVOQ app is complete on its own. Connect two and your data flows
-            automatically. Use all four and you have a fully unified business operating
-            system.
-          </p>
-          <button className="cta-talk">
-            <span>Talk to us</span>
-            <span className="ic"><ArrowRt color="#fff"/></span>
-          </button>
+        <h2 className="cta3-title">
+          Start with one. <span>Scale with all.</span>
+        </h2>
+        <p className="cta3-sub">
+          Every EVOQ product works on its own. Add another and your data connects
+          automatically.
+        </p>
+
+        <div className="cta3-actions">
+          <a className="cta3-primary" href="/contact">
+            <span>Book a demo</span>
+            <span className="ic"><ArrowRt color="#4747E0" /></span>
+          </a>
+          <a className="cta3-ghost" href="/contact">Talk to us</a>
         </div>
 
-        <div className="steps">
-          <div className="step">
-            <div className="num">01</div>
-            <div className="text">
-              <h4>Pick the app your team needs today</h4>
-              <p>
-                Each app is fully standalone. Start with whichever solves your most
-                immediate challenge &mdash; no compromises, no dependencies required.
-              </p>
-            </div>
-          </div>
-          <div className="step">
-            <div className="num">02</div>
-            <div className="text">
-              <h4>Add another app, data connects automatically</h4>
-              <p>
-                No imports, no re-entry. The moment you add a second app, EVOQ
-                recognises it and begins sharing data in real time across your
-                business.
-              </p>
-            </div>
-          </div>
-          <div className="step">
-            <div className="num">03</div>
-            <div className="text">
-              <h4>Run your entire business from one suite</h4>
-              <p>
-                All four apps work as a single operating system &mdash; one source of
-                truth, zero duplication, complete visibility across every team.
-              </p>
-            </div>
-          </div>
-        </div>
+        <ol className="cta3-steps">
+          {STEPS.map((t, i) => (
+            <li key={t}><b>{String(i + 1).padStart(2, "0")}</b>{t}</li>
+          ))}
+        </ol>
       </motion.div>
     </section>
   );

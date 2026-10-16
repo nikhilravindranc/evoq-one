@@ -7,12 +7,15 @@ import { ArrowRight } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 import { ProductBadge } from "@/components/shared/ProductBadge";
 
-type HeroTab = "growth" | "operations" | "people";
+type HeroTab = "growth" | "operations" | "people" | "finance" | "platform" | "ai";
 
 const HERO_TABS: { key: HeroTab; label: string }[] = [
   { key: "growth", label: "Growth" },
   { key: "operations", label: "Operations" },
   { key: "people", label: "People" },
+  { key: "finance", label: "Finance" },
+  { key: "platform", label: "Platform" },
+  { key: "ai", label: "AI" },
 ];
 
 /* Growth's tab renders a layered composite instead of a clip --
@@ -45,7 +48,7 @@ const HERO_TABS: { key: HeroTab; label: string }[] = [
  */
 const GROWTH_FIGURES = [
   { src: "/team/growth-left.jpg",   pos: "50% 20%" },
-  { src: "/team/growth-center.jpg", pos: "50% 16%" },
+  { src: "/team/growth-center2.jpg", pos: "35% 40%" },
   { src: "/team/growth-right.jpg",  pos: "50% 18%" },
 ];
 
@@ -70,9 +73,29 @@ const OPERATIONS_FIGURES = [
  * three are natural-light, near-neutral-background shots (no solid
  * studio backdrop this time), so no colour-correction filter is needed
  * for them to read as one shoot. */
+const FINANCE_FIGURES = [
+  { src: "/team/fin-left.jpg",   pos: "40% 85%" },
+  { src: "/team/fin-center.jpg", pos: "50% 45%" },
+  { src: "/team/fin-right.jpg",  pos: "50% 50%" },
+];
+
+/* Platform: eCommerce, ERP, accounting -- three of the systems Sync
+   connects, each its own photo. */
+const PLATFORM_FIGURES = [
+  { src: "/team/plat-left.jpg",       pos: "50% 88%" },
+  { src: "/team/card-sync-photo.jpg", pos: "50% 40%" },
+  { src: "/team/plat-right.jpg",      pos: "50% 50%" },
+];
+
+/* AI is EVOQ AI (EVI plus agents): one wide photo card, with EVI and an
+   agent character as the callout avatars instead of the photo. */
+const AI_FIGURES = [
+  { src: "/team/ai-wide.jpg", pos: "50% 30%" },
+];
+
 const PEOPLE_FIGURES = [
   { src: "/team/people-hrms.jpg",       pos: "54% 20%" },
-  { src: "/team/people-center.jpg",     pos: "50% 10%" },
+  { src: "/team/people-center2.jpg",     pos: "50% 30%" },
   { src: "/team/people-skillberry.jpg", pos: "48% 22%" },
 ];
 
@@ -99,9 +122,9 @@ function Cursor({ style }: { style: React.CSSProperties }) {
 }
 
 function PersonCallout({
-  src, pos, name, status, delay, style, cursorStyle, appKey, cardRef, imgFilter,
+  src, pos, name, status, delay, style, cursorStyle, appKey, cardRef, imgFilter, contain,
 }: {
-  src: string; pos: string; name: string; status: string; delay: number;
+  src: string; pos: string; name: string; status: string; delay: number; contain?: boolean;
   style: React.CSSProperties; cursorStyle: React.CSSProperties; appKey: string;
   cardRef?: React.Ref<HTMLDivElement>; imgFilter?: string;
 }) {
@@ -137,10 +160,10 @@ function PersonCallout({
             width: "100%",
             aspectRatio: "1 / 1",
             borderRadius: "12px",
-            objectFit: "cover",
+            objectFit: contain ? "contain" : "cover",
             objectPosition: pos,
             display: "block",
-            background: "#EEF1F8",
+            background: contain ? "#F1F2FF" : "#EEF1F8",
             filter: imgFilter,
           }}
         />
@@ -338,157 +361,6 @@ function CheckIcon() {
   );
 }
 
-/* Connects Alex's and Priya's cards with the same lit-cable style as
- * the traces above them -- self-measured (its own ResizeObserver),
- * since these two cards are plain siblings in a flex row rather than
- * part of TabComposite's own geometry. Replaces an earlier gradient
- * disc + chevron "button" sitting between the cards, which read as a
- * UI control (a carousel arrow, a "next" button) rather than part of
- * the connection itself -- a plain cable reads as the connection. */
-function CardLink({
-  fromRef, toRef, wrapRef, delay,
-}: {
-  fromRef: React.RefObject<HTMLDivElement | null>;
-  toRef: React.RefObject<HTMLDivElement | null>;
-  wrapRef: React.RefObject<HTMLDivElement | null>;
-  delay: number;
-}) {
-  const gradId = useId();
-  const [geom, setGeom] = useState<{ w: number; h: number; d: string } | null>(null);
-
-  useEffect(() => {
-    function measure() {
-      const wrap = wrapRef.current;
-      const from = fromRef.current;
-      const to = toRef.current;
-      if (!wrap || !from || !to) return;
-      const wr = wrap.getBoundingClientRect();
-      const fr = from.getBoundingClientRect();
-      const tr = to.getBoundingClientRect();
-      const start = { x: fr.right - wr.left, y: fr.top + fr.height / 2 - wr.top };
-      const end = { x: tr.left - wr.left, y: tr.top + tr.height / 2 - wr.top };
-      // The gap between two adjacent cards is short -- a flat chord
-      // across it reads as barely-there, not as a connection. Bowing
-      // the curve down (past both endpoints' own y) gives it real
-      // visible arc even over a small span, the same "cable" read as
-      // the taller traces above rather than a hairline.
-      const bow = Math.max(10, Math.abs(end.x - start.x) * 0.35);
-      setGeom({
-        w: wr.width,
-        h: wr.height,
-        d: `M ${start.x} ${start.y} Q ${(start.x + end.x) / 2} ${Math.max(start.y, end.y) + bow}, ${end.x} ${end.y}`,
-      });
-    }
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (wrapRef.current) ro.observe(wrapRef.current);
-    return () => ro.disconnect();
-  }, [fromRef, toRef, wrapRef]);
-
-  if (!geom) return null;
-  return (
-    <svg
-      aria-hidden
-      width={geom.w}
-      height={geom.h}
-      viewBox={`0 0 ${geom.w} ${geom.h}`}
-      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1, overflow: "visible", pointerEvents: "none" }}
-    >
-      <defs>
-        <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#9C8CFF" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0.9)" />
-        </linearGradient>
-      </defs>
-      <motion.path
-        d={geom.d}
-        fill="none"
-        stroke={`url(#${gradId})`}
-        strokeWidth={2}
-        strokeLinecap="round"
-        style={{ filter: "drop-shadow(0 0 5px rgba(151,140,255,0.5))" }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
-      />
-    </svg>
-  );
-}
-
-/* Operations' action slot: three more person-cards, in the exact same
- * language as Raj and Mia above -- real photo, name, live status, app
- * badge, cursor accent -- rather than an icon-only card. A row of app
- * logos or a generic "checkmark" card has nothing to recognize and
- * tells no story; a person finishing a concrete task does.
- *
- * This maps the actual hand-off: Alex syncs the job into the ERP and
- * it's auto-tracked as a project (card one -- also the real merge
- * point, where both Raj's and Mia's traces land), then Ravi pulls the
- * parts from stock, then Priya bills it out -- tied back to Raj's own
- * job number so all five cards read as one continuous story. All four
- * remaining products (Sync, Projects, Inventory, Billing) are still
- * represented, through what each person actually does. */
-function OperationsAction({ firstRef }: { firstRef: React.Ref<HTMLDivElement> }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-  const card3Ref = useRef<HTMLDivElement>(null);
-  const cardWidth = "clamp(134px, 28cqw, 168px)";
-  const spacer = <span aria-hidden style={{ width: "4.5cqw", flexShrink: 0 }} />;
-
-  // firstRef comes from TabComposite (it needs card one's node for the
-  // main connector's own measurement) and card1Ref is needed locally
-  // for CardLink -- one callback ref feeds both without fighting over
-  // who owns the DOM node.
-  const setCard1 = (node: HTMLDivElement | null) => {
-    card1Ref.current = node;
-    if (typeof firstRef === "function") firstRef(node);
-    else if (firstRef && "current" in firstRef) (firstRef as React.RefObject<HTMLDivElement | null>).current = node;
-  };
-
-  return (
-    <div ref={wrapRef} style={{ position: "relative", display: "flex", alignItems: "center" }}>
-      <CardLink fromRef={card1Ref} toRef={card2Ref} wrapRef={wrapRef} delay={1.36} />
-      <CardLink fromRef={card2Ref} toRef={card3Ref} wrapRef={wrapRef} delay={1.52} />
-      <PersonCallout
-        cardRef={setCard1}
-        src="/team/ops-sync.jpg"
-        pos="50% 20%"
-        name="Alex, Ops"
-        status="Synced to ERP"
-        delay={0.88}
-        style={{ position: "relative", width: cardWidth }}
-        cursorStyle={{ right: -8, bottom: -8, transform: "rotate(-6deg)" }}
-        appKey="sync"
-      />
-      {spacer}
-      <PersonCallout
-        cardRef={card2Ref}
-        src="/team/ops-inventory.jpg"
-        pos="50% 22%"
-        name="Ravi, Stock"
-        status="3 parts pulled"
-        delay={1.09}
-        style={{ position: "relative", width: cardWidth }}
-        cursorStyle={{ left: -8, top: -8, transform: "rotate(170deg)" }}
-        appKey="inventory"
-      />
-      {spacer}
-      <PersonCallout
-        cardRef={card3Ref}
-        src="/team/ops-billing.jpg"
-        pos="50% 18%"
-        name="Priya, Billing"
-        status="#482 billed"
-        delay={1.3}
-        style={{ position: "relative", width: cardWidth }}
-        cursorStyle={{ right: -8, bottom: -8, transform: "rotate(-6deg)" }}
-        appKey="billing"
-      />
-    </div>
-  );
-}
-
 /* A smooth S-curve between two points, tangent-straight at both ends
  * (each control point sits directly below the start / above the end)
  * so the curve leaves each card moving straight down and arrives
@@ -587,6 +459,8 @@ function Connector({ geom }: { geom: ConnectorGeom }) {
 type FigureSpec = { src: string; pos: string; filter?: string };
 type CalloutSpec = {
   figureIndex: number;
+  // A different thumbnail from the figure behind it (e.g. a character).
+  avatar?: { src: string; pos?: string; contain?: boolean };
   name: string;
   status: string;
   appKey: string;
@@ -602,9 +476,11 @@ type CalloutSpec = {
  * above) applies to every tab automatically instead of drifting between
  * copies. */
 function TabComposite({
-  figures, calloutA, calloutB, renderAction,
+  figures, calloutA, calloutB, renderAction, wide,
 }: {
   figures: FigureSpec[];
+  // One full-width photo card instead of the three-portrait trio.
+  wide?: boolean;
   calloutA: CalloutSpec;
   calloutB: CalloutSpec;
   // Render-prop rather than a fixed icon/title/subtitle shape: Growth's
@@ -690,11 +566,14 @@ function TabComposite({
           tilt (rot) held constant throughout -- an expo-out ease gives
           the strong initial drift and firm, no-bounce landing that
           "settling" calls for, versus tumble's springy overshoot. */}
-      {[
-        { i: 0, left: "1%",  w: "30%", bottom: "-20%", z: 1, rot: -2.5, fromX: -64, fromY: 16 },
-        { i: 1, left: "32%", w: "36%", bottom: "-30%", z: 2, rot: 0, fromX: 0, fromY: 56 },
-        { i: 2, left: "69%", w: "30%", bottom: "-20%", z: 1, rot: 2.5, fromX: 64, fromY: 16 },
-      ].map(({ i, left, w, bottom, z, rot, fromX, fromY }) => (
+      {(wide
+        ? [{ i: 0, left: "4%", w: "92%", bottom: "0%", z: 1, rot: 0, fromX: 0, fromY: 40 }]
+        : [
+            { i: 0, left: "1%",  w: "30%", bottom: "-20%", z: 1, rot: -2.5, fromX: -64, fromY: 16 },
+            { i: 1, left: "32%", w: "36%", bottom: "-30%", z: 2, rot: 0, fromX: 0, fromY: 56 },
+            { i: 2, left: "69%", w: "30%", bottom: "-20%", z: 1, rot: 2.5, fromX: 64, fromY: 16 },
+          ]
+      ).map(({ i, left, w, bottom, z, rot, fromX, fromY }) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, x: fromX, y: fromY, rotate: rot, scale: 0.92 }}
@@ -705,7 +584,7 @@ function TabComposite({
             left,
             bottom,
             width: w,
-            aspectRatio: "1 / 1.85",
+            aspectRatio: wide ? "16 / 9" : "1 / 1.85",
             zIndex: z,
             borderRadius: "18px",
             overflow: "hidden",
@@ -730,9 +609,10 @@ function TabComposite({
 
       <PersonCallout
         cardRef={aRef}
-        src={figures[calloutA.figureIndex].src}
-        pos={figures[calloutA.figureIndex].pos}
-        imgFilter={figures[calloutA.figureIndex].filter}
+        src={calloutA.avatar?.src ?? figures[calloutA.figureIndex].src}
+        pos={calloutA.avatar?.pos ?? figures[calloutA.figureIndex].pos}
+        contain={calloutA.avatar?.contain}
+        imgFilter={calloutA.avatar ? undefined : figures[calloutA.figureIndex].filter}
         name={calloutA.name}
         status={calloutA.status}
         delay={0.48}
@@ -742,9 +622,10 @@ function TabComposite({
       />
       <PersonCallout
         cardRef={bRef}
-        src={figures[calloutB.figureIndex].src}
-        pos={figures[calloutB.figureIndex].pos}
-        imgFilter={figures[calloutB.figureIndex].filter}
+        src={calloutB.avatar?.src ?? figures[calloutB.figureIndex].src}
+        pos={calloutB.avatar?.pos ?? figures[calloutB.figureIndex].pos}
+        contain={calloutB.avatar?.contain}
+        imgFilter={calloutB.avatar ? undefined : figures[calloutB.figureIndex].filter}
         name={calloutB.name}
         status={calloutB.status}
         delay={0.72}
@@ -761,7 +642,7 @@ function TabComposite({
         lands on top of them instead of under them. This same clear band
         is also where the connector's horizontal leg runs. */}
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <div style={{ marginTop: "24%" }}>
+      <div style={{ marginTop: wide ? "8%" : "24%" }}>
         {renderAction(actionRef)}
       </div>
     </div>
@@ -796,7 +677,7 @@ function GrowthComposite() {
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
       renderAction={(ref) => (
-        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Q3 growth target set" subtitle="$500K pipeline · on track" />
+        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Q3 growth target set" subtitle="$500K pipeline · 18 quotes configured" />
       )}
     />
   );
@@ -813,7 +694,7 @@ function GrowthComposite() {
  * nothing to recognize), the action slot maps the actual hand-off in the
  * same card language as the callouts above: Sync pulls the ticket/job
  * into the ERP and Projects tracks it (card one), then Inventory covers
- * the parts and Billing closes it out (card two). See OperationsAction.
+ * the parts and Billing closes it out (card two).
  *
  * Photos: the ServiceOps solid-colour-backdrop studio shot gets a
  * saturate+brightness filter (see OPERATIONS_FIGURES) to pull its punchy
@@ -839,7 +720,9 @@ function OperationsComposite() {
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
-      renderAction={(ref) => <OperationsAction firstRef={ref} />}
+      renderAction={(ref) => (
+        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Jobs and tickets on track" subtitle="Job #482 done · 6 min response" />
+      )}
     />
   );
 }
@@ -873,6 +756,120 @@ function PeopleComposite() {
       }}
       renderAction={(ref) => (
         <ActionCard cardRef={ref} icon={<CheckIcon />} title="Growing and upskilled" subtitle="3 hires · 2 certifications" />
+      )}
+    />
+  );
+}
+
+/* Finance covers Billing and Inventory -- two person-cards, the same
+ * skeleton as Growth, with a matched centre portrait and no callout. */
+function FinanceComposite() {
+  return (
+    <TabComposite
+      figures={FINANCE_FIGURES}
+      calloutA={{
+        figureIndex: 2,
+        name: "Payments, Billing",
+        status: "Card payment received",
+        appKey: "billing",
+        style: { right: "-2%", top: "-6%", width: "50%" },
+        cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
+      }}
+      calloutB={{
+        figureIndex: 0,
+        name: "Stock value, Inventory",
+        status: "$48K across 6 locations",
+        appKey: "inventory",
+        style: { left: "-2%", bottom: "5%", width: "50%" },
+        cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
+      }}
+      renderAction={(ref) => (
+        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Books closed, on time" subtitle="Invoices paid · stock valued" />
+      )}
+    />
+  );
+}
+
+/* Platform is Sync: an integration layer between CRM, ERP, eCommerce and
+ * accounting. Three photos for three of those systems, two callouts, and
+ * two outcome cards for what Sync does (two-way sync, and agents retrying
+ * failed records -- both straight from the Sync page). */
+function PlatformComposite() {
+  return (
+    <TabComposite
+      figures={PLATFORM_FIGURES}
+      calloutA={{
+        figureIndex: 2,
+        name: "Invoices, Accounting",
+        status: "Matched in ERP",
+        appKey: "sync",
+        style: { right: "-2%", top: "-6%", width: "50%" },
+        cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
+      }}
+      calloutB={{
+        figureIndex: 0,
+        name: "Orders, eCommerce",
+        status: "Synced to ERP",
+        appKey: "sync",
+        style: { left: "-2%", bottom: "5%", width: "50%" },
+        cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
+      }}
+      renderAction={(ref) => (
+        <div ref={ref} style={{ display: "flex", gap: "2.4cqw", justifyContent: "center", width: "100%" }}>
+          <ActionCard icon={<CheckIcon />} title="CRM to ERP" subtitle="1,248 contacts synced" />
+          <ActionCard icon={<CheckIcon />} title="Failed records" subtitle="3 retried and fixed" />
+        </div>
+      )}
+    />
+  );
+}
+
+function AgentStack() {
+  const agents = ["tasks", "calendar", "report"];
+  return (
+    <span style={{ display: "flex", flexShrink: 0 }}>
+      {agents.map((n, i) => (
+        <img
+          key={n}
+          src={`/team/agent-${n}.png`}
+          alt=""
+          aria-hidden
+          style={{
+            width: "clamp(24px, 6.6cqw, 34px)", aspectRatio: "1 / 1", objectFit: "contain",
+            borderRadius: "50%", background: "#F1F2FF", boxShadow: "0 0 0 2px #fff",
+            marginLeft: i === 0 ? 0 : "-1.6cqw",
+          }}
+        />
+      ))}
+    </span>
+  );
+}
+
+function AiComposite() {
+  return (
+    <TabComposite
+      wide
+      figures={AI_FIGURES}
+      calloutA={{
+        figureIndex: 0,
+        avatar: { src: "/evoq-ai/evi-avatar.webp", pos: "50% 40%", contain: true },
+        name: "EVI, Assistant",
+        status: "Summary ready for review",
+        appKey: "ai",
+        style: { right: "-2%", top: "-6%", width: "50%" },
+        cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
+      }}
+      calloutB={{
+        figureIndex: 0,
+        avatar: { src: "/team/agent-calendar.png", pos: "50% 50%", contain: true },
+        name: "Follow-up agent",
+        status: "12 reminders sent",
+        appKey: "ai",
+        style: { left: "-2%", bottom: "5%", width: "50%" },
+        cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
+      }}
+      renderAction={(ref) => (
+        <ActionCard cardRef={ref} icon={<AgentStack />} title="3 agents at work" subtitle="Tasks · Follow-ups · Reports" />
       )}
     />
   );
@@ -988,7 +985,7 @@ export function HeroSection() {
       {GROWTH_FIGURES.map((f) => (
         <link key={f.src} rel="preload" as="image" href={f.src} fetchPriority="high" />
       ))}
-      {[...OPERATIONS_FIGURES, ...PEOPLE_FIGURES].map((f) => (
+      {[...OPERATIONS_FIGURES, ...PEOPLE_FIGURES, ...FINANCE_FIGURES, ...PLATFORM_FIGURES, ...AI_FIGURES].map((f) => (
         <link key={f.src} rel="preload" as="image" href={f.src} />
       ))}
       {/* Full-width hero — no max-width cap, no rounded card */}
@@ -1121,52 +1118,11 @@ export function HeroSection() {
 
               <div>
                 <div
-                  role="tablist"
-                  aria-label="Hero product focus"
-                  style={{
-                    display: "flex",
-                    gap: 10,
-                    alignItems: "center",
-                    marginTop: 32,
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {HERO_TABS.map((tab) => {
-                    const isActive = tab.key === activeTab;
-                    return (
-                      <button
-                        key={tab.key}
-                        role="tab"
-                        aria-selected={isActive}
-                        onClick={() => {
-                          setActiveTab(tab.key);
-                          startTabTimer();
-                        }}
-                        style={{
-                          padding: "9px 18px",
-                          borderRadius: 999,
-                          fontFamily: "var(--font-sans)",
-                          fontSize: 13.5,
-                          fontWeight: 600,
-                          cursor: "pointer",
-                          transition: "background .18s ease, color .18s ease, border-color .18s ease",
-                          border: isActive ? "1px solid rgba(255,255,255,0)" : "1px solid rgba(255,255,255,0.28)",
-                          background: isActive ? "#fff" : "transparent",
-                          color: isActive ? "#4747E0" : "rgba(255,255,255,0.85)",
-                        }}
-                      >
-                        {tab.label}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div
                   style={{
                     display: "flex",
                     gap: 14,
                     alignItems: "center",
-                    marginTop: 20,
+                    marginTop: 32,
                   }}
                 >
                   <button
@@ -1204,6 +1160,38 @@ export function HeroSection() {
                       <ArrowRight color="#fff" />
                     </span>
                   </button>
+                </div>
+
+                <div
+                  role="tablist"
+                  aria-label="Hero scenes"
+                  style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 36 }}
+                >
+                  {HERO_TABS.map((tab) => {
+                    const isActive = tab.key === activeTab;
+                    return (
+                      <button
+                        key={tab.key}
+                        role="tab"
+                        aria-selected={isActive}
+                        aria-label={tab.label}
+                        onClick={() => {
+                          setActiveTab(tab.key);
+                          startTabTimer();
+                        }}
+                        style={{
+                          width: isActive ? 30 : 8,
+                          height: 8,
+                          padding: 0,
+                          borderRadius: 999,
+                          border: 0,
+                          cursor: "pointer",
+                          background: isActive ? "#fff" : "rgba(255,255,255,0.4)",
+                          transition: "width .3s ease, background .3s ease",
+                        }}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </motion.section>
@@ -1327,7 +1315,10 @@ export function HeroSection() {
                 >
                   {activeTab === "growth" ? <GrowthComposite />
                     : activeTab === "operations" ? <OperationsComposite />
-                    : <PeopleComposite />}
+                    : activeTab === "people" ? <PeopleComposite />
+                    : activeTab === "finance" ? <FinanceComposite />
+                    : activeTab === "platform" ? <PlatformComposite />
+                    : <AiComposite />}
                 </motion.div>
               </AnimatePresence>
             </motion.section>

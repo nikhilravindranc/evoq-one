@@ -21,13 +21,16 @@ const fadeUp = (delay = 0) => ({
  * a real control rather than decoration.
  * ------------------------------------------------------------- */
 
-type Category = "growth" | "operations" | "people";
+type Category = "growth" | "operations" | "people" | "finance" | "platform" | "ai";
 type CategoryFilter = "all" | Category;
 
 const CATEGORY_META: Record<Category, { label: string; ink: string }> = {
   growth:     { label: "Growth",     ink: "#4F3FAE" },
   operations: { label: "Operations", ink: "#2C63B0" },
   people:     { label: "People",     ink: "#21815A" },
+  finance:    { label: "Finance",    ink: "#2C63B0" },
+  platform:   { label: "Platform",   ink: "#21815A" },
+  ai:         { label: "AI",         ink: "#4F46E5" },
 };
 
 const FILTERS: { key: CategoryFilter; label: string }[] = [
@@ -35,6 +38,9 @@ const FILTERS: { key: CategoryFilter; label: string }[] = [
   { key: "growth", label: "Growth" },
   { key: "operations", label: "Operations" },
   { key: "people", label: "People" },
+  { key: "finance", label: "Finance" },
+  { key: "platform", label: "Platform" },
+  { key: "ai", label: "AI" },
 ];
 
 /* =================================================================
@@ -68,7 +74,7 @@ type Palette = {
 const PALETTE: Record<string, Palette> = {
   crm:        { depth: "#0C2472", primary: "#1D4ED8", soft: "#93C5FD", tint: "#E3ECFC", surface: "#EFF6FF" },
   campaigns:  { depth: "#3D1E5C", primary: "#7C3AED", soft: "#DDD6FE", tint: "#F3E8FF", surface: "#FAF5FF" },
-  serviceops: { depth: "#78350F", primary: "#F59E0B", soft: "#FDE68A", tint: "#FAF2DB", surface: "#FFFBEB" },
+  serviceops: { depth: "#7C2D12", primary: "#EA580C", soft: "#FDBA74", tint: "#FFEDD5", surface: "#FFF7ED" },
   desk:       { depth: "#0F2F3F", primary: "#0D9488", soft: "#99F6E4", tint: "#F0FDFA", surface: "#F8FFFE" },
   projects:   { depth: "#5D1E99", primary: "#7C3AED", soft: "#C4B5FD", tint: "#DDD6FE", surface: "#F5F3FF" },
   sync:       { depth: "#064E3B", primary: "#059669", soft: "#6EE7B7", tint: "#A7F3D0", surface: "#ECFDF5" },
@@ -86,6 +92,10 @@ const PALETTE: Record<string, Palette> = {
      evoq.one/skillberry's hero runs on this exact pink (#E94E77), not
      a navy "dark mode" of it. Sampled off the real hero, not guessed:
      confirmed via getComputedStyle on the hero section, rgb(233,78,119). */
+  /* AI: the product page's own indigo (#1A1190 footer) as depth. */
+  ai:         { depth: "#1A1190", primary: "#4F46E5", soft: "#C7D2FE", tint: "#E0E7FF", surface: "#F5F7FF" },
+  /* ConfigX: its page's yellow (#FFD400) on warm ink, footer #FCF3D6. */
+  configx:    { depth: "#1C1A15", primary: "#B8860B", soft: "#FFE680", tint: "#FCF3D6", surface: "#FFFDF2" },
   skillberry: { depth: "#E94E77", primary: "#E94E77", soft: "#FCDDE5", tint: "#FDA4AF", surface: "#FAFBFC" },
 };
 
@@ -444,8 +454,9 @@ function ArtProjects() {
    connects ecommerce and general business apps too, and showing only
    half the categories undersold what it actually does. All four now
    reproduce the real hero's own quadrant layout at card scale. */
-function ArtSync() {
+function ArtSync({ photo }: { photo?: { src: string; position?: string } } = {}) {
   const p = PALETTE.sync;
+  const line = photo ? "rgba(255,255,255,0.85)" : hexToRgba(p.primary, 0.5);
   const endpoints: { key: string; label: string; left?: number; right?: number; top: number; icon: React.ReactNode }[] = [
     {
       key: "crm", label: "CRM", left: 18, top: 30,
@@ -465,12 +476,12 @@ function ArtSync() {
     },
   ];
   return (
-    <ArtFrame pk="sync" variant={2}>
+    <ArtFrame pk="sync" variant={2} photo={photo}>
       <svg className="pf-orbit" viewBox="0 0 312 312" fill="none">
-        <path d="M136 136 L 92 78" stroke={hexToRgba(p.primary, 0.5)} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
-        <path d="M176 136 L 220 78" stroke={hexToRgba(p.primary, 0.5)} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
-        <path d="M136 176 L 92 234" stroke={hexToRgba(p.primary, 0.5)} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
-        <path d="M176 176 L 220 234" stroke={hexToRgba(p.primary, 0.5)} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
+        <path d="M136 136 L 92 78" stroke={line} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
+        <path d="M176 136 L 220 78" stroke={line} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
+        <path d="M136 176 L 92 234" stroke={line} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
+        <path d="M176 176 L 220 234" stroke={line} strokeWidth="2" strokeDasharray="1 6" strokeLinecap="round" />
       </svg>
 
       {/* The product's own node mark, not a generic glyph -- same
@@ -484,7 +495,7 @@ function ArtSync() {
       {endpoints.map((e) => (
         <div key={e.key} className="pf-sync-endpoint" style={{ left: e.left, right: e.right, top: e.top }}>
           <span className="ic">{e.icon}</span>
-          <span className="lb">{e.label}</span>
+          <span className="lb" style={photo ? { color: "#fff", textShadow: "0 1px 6px rgba(0,0,0,0.45)" } : undefined}>{e.label}</span>
         </div>
       ))}
     </ArtFrame>
@@ -639,17 +650,152 @@ function ArtSkillberry() {
   );
 }
 
+/* ---- 11. AI -- ask EVI, and an agent picks up the work ---- */
+function ArtAi() {
+  const p = PALETTE.ai;
+  return (
+    <ArtFrame pk="ai" variant={1}>
+      <div className="pf-art-panel" style={{ left: 30, right: 30, top: 46, height: 150, padding: 14 }}>
+        <div style={{ fontSize: 10, fontWeight: 700, color: p.primary, marginBottom: 8 }}>Ask EVI</div>
+        <div style={{ fontSize: 11, color: "#1F2430", background: p.tint, borderRadius: 10, padding: "8px 10px", marginBottom: 8 }}>
+          Follow up with every quote waiting on a reply.
+        </div>
+        <div style={{ fontSize: 11, color: "#1F2430", display: "flex", alignItems: "center", gap: 6 }}>
+          <Check color={p.primary} /> Agent assigned
+        </div>
+      </div>
+      <Chip label="AI agents at work" style={{ left: 30, bottom: 28 }} />
+    </ArtFrame>
+  );
+}
+
+/* ---- 12. ConfigX -- pick options, see the product update ---- */
+function ArtConfigx() {
+  const p = PALETTE.configx;
+  const opts = ["Oak", "Walnut", "Matte black"];
+  return (
+    <ArtFrame pk="configx" variant={0}>
+      <div className="pf-art-panel" style={{ left: 30, right: 30, top: 46, height: 150, padding: 14 }}>
+        <div style={{ fontSize: 10, fontWeight: 700, color: "#1C1A15", marginBottom: 8 }}>Configure your product</div>
+        <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
+          {opts.map((o, i) => (
+            <span key={o} style={{
+              fontSize: 10, padding: "4px 8px", borderRadius: 999,
+              background: i === 1 ? "#FFD400" : p.tint, color: "#1C1A15", fontWeight: i === 1 ? 700 : 500,
+            }}>{o}</span>
+          ))}
+        </div>
+        <div style={{ height: 52, borderRadius: 10, background: `linear-gradient(135deg, ${p.soft}, ${p.tint})` }} />
+      </div>
+      <Chip label="2D · 3D · AR" style={{ left: 30, bottom: 28 }} />
+    </ArtFrame>
+  );
+}
+
+/* ---- Alternating visuals --------------------------------------------
+   The carousel alternates photo / graphic cards: CRM (photo), ConfigX
+   (graphic), Campaigns (photo), ServiceOps (graphic), Projects (photo),
+   Desk (graphic), HRMS (photo), Skillberry (graphic), Billing (photo),
+   Inventory (graphic), Sync (photo), AI (graphic). The components below
+   are the photo versions of Campaigns/HRMS/Billing/Sync and the graphic
+   version of ServiceOps; the earlier versions further up are kept. */
+function ArtCampaignsPhoto() {
+  const p = PALETTE.campaigns;
+  return (
+    <ArtFrame pk="campaigns" photo={{ src: "/team/card-campaigns-photo.jpg", position: "center 30%" }}>
+      <div className="pf-float" style={{ left: 22, top: 22 }}>
+        <div className="pf-float-hd">
+          <span className="pf-float-dot" style={{ background: p.primary }} />
+          Campaign live
+        </div>
+        <div className="pf-float-nm">Spring launch</div>
+        <div className="pf-float-amt" style={{ color: p.primary }}>312 opened</div>
+      </div>
+      <span className="pf-art-caption" style={{ left: 22, bottom: 24 }}>Campaigns that convert</span>
+    </ArtFrame>
+  );
+}
+
+function ArtHrmsPhoto() {
+  const p = PALETTE.hrms;
+  return (
+    <ArtFrame pk="hrms" photo={{ src: "/team/card-hrms-photo.jpg", position: "center 35%" }}>
+      <div className="pf-float" style={{ left: 22, bottom: 74 }}>
+        <div className="pf-float-hd">
+          <span className="pf-float-dot" style={{ background: p.primary }} />
+          Leave approved
+        </div>
+        <div className="pf-float-nm">Priya S. · 2 days</div>
+      </div>
+      <span className="pf-art-caption" style={{ left: 22, bottom: 24 }}>People, without the paperwork</span>
+    </ArtFrame>
+  );
+}
+
+function ArtBillingPhoto() {
+  const p = PALETTE.billing;
+  return (
+    <ArtFrame pk="billing" photo={{ src: "/team/card-billing-photo.jpg", position: "center" }}>
+      <div className="pf-float" style={{ left: 22, top: 22 }}>
+        <div className="pf-float-hd">
+          <span className="pf-float-dot" style={{ background: p.primary }} />
+          Invoice paid
+        </div>
+        <div className="pf-float-nm">#2481</div>
+        <div className="pf-float-amt" style={{ color: p.primary }}>$2,750</div>
+      </div>
+      <span className="pf-art-caption" style={{ left: 22, bottom: 24 }}>Collected and reconciled</span>
+    </ArtFrame>
+  );
+}
+
+/* Sync, photo version: an operator at a laptop in a warehouse, with the
+   hub-and-four-systems diagram (CRM, ERP, eCommerce, Apps) laid over it
+   -- the photo sets the scene, the diagram says what Sync actually does. */
+function ArtSyncPhoto() {
+  return <ArtSync photo={{ src: "/team/card-sync-photo.jpg", position: "center 40%" }} />;
+}
+
+function ArtServiceOpsGraphic() {
+  const p = PALETTE.serviceops;
+  const jobs = [
+    { id: "#SR-482", t: "HVAC repair", s: "On site", on: true },
+    { id: "#SR-483", t: "Boiler service", s: "11:20", on: false },
+    { id: "#SR-484", t: "Meter install", s: "14:00", on: false },
+  ];
+  return (
+    <ArtFrame pk="serviceops" variant={2}>
+      <div className="pf-art-panel" style={{ left: 28, right: 28, top: 40, padding: 14 }}>
+        <div style={{ fontSize: 10, fontWeight: 700, color: p.primary, marginBottom: 10, letterSpacing: ".04em" }}>TODAY&apos;S JOBS</div>
+        {jobs.map((j) => (
+          <div key={j.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderTop: "1px solid rgba(31,36,48,0.07)" }}>
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: j.on ? "#0E9F6E" : p.soft, flexShrink: 0 }} />
+            <span style={{ flex: 1 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: "#1F2430" }}>{j.t}</div>
+              <div style={{ fontSize: 10, color: "rgba(31,36,48,0.5)" }}>{j.id}</div>
+            </span>
+            <span style={{ fontSize: 10.5, fontWeight: 600, color: j.on ? "#0E9F6E" : "rgba(31,36,48,0.55)" }}>{j.s}</span>
+          </div>
+        ))}
+      </div>
+      <Chip label="ETA 11:20 · 2 stops left" style={{ left: 28, bottom: 28 }} />
+    </ArtFrame>
+  );
+}
+
 const ART: Record<string, () => React.ReactElement> = {
   crm: ArtCrm,
-  campaigns: ArtCampaigns,
-  serviceops: ArtServiceOps,
+  campaigns: ArtCampaignsPhoto,
+  serviceops: ArtServiceOpsGraphic,
   desk: ArtDesk,
   projects: ArtProjects,
-  sync: ArtSync,
+  sync: ArtSyncPhoto,
   inventory: ArtInventory,
-  billing: ArtBilling,
-  hrms: ArtHrms,
+  billing: ArtBillingPhoto,
+  hrms: ArtHrmsPhoto,
   skillberry: ArtSkillberry,
+  ai: ArtAi,
+  configx: ArtConfigx,
 };
 
 /* -- products ------------------------------------------------------ */
@@ -665,29 +811,34 @@ type Product = {
      real clip the moment the file lands, no code change required.
      Clips should be authored square, to match the art slot. */
   video: string;
+  href?: string;
 };
 
 const PRODUCTS: Product[] = ([
   { key: "crm", name: "CRM", category: "growth",
     desc: "Manage leads, contacts and deals from first touch to closed-won." },
+  { key: "configx", name: "ConfigX", category: "growth", href: "/products/configx",
+    desc: "Visual product configuration with 2D, 3D and AR, CPQ and commerce." },
   { key: "campaigns", name: "Campaigns", category: "growth",
     desc: "Turn customer data into campaigns that actually convert." },
   { key: "serviceops", name: "ServiceOps", category: "operations",
     desc: "Plan, schedule and dispatch field service work with less back-and-forth." },
-  { key: "desk", name: "Desk", category: "operations",
-    desc: "The support essentials your team already reaches for, every day." },
   { key: "projects", name: "Projects", category: "operations",
     desc: "Plan the work, track progress, and ship with confidence." },
-  { key: "sync", name: "Sync", category: "operations",
-    desc: "Move data seamlessly across your CRM, ERP, eCommerce and other systems." },
-  { key: "inventory", name: "Inventory", category: "operations",
-    desc: "Track stock, movements and reorder points across every location." },
-  { key: "billing", name: "Billing", category: "operations",
-    desc: "Raise invoices, collect payments and reconcile accounts automatically." },
+  { key: "desk", name: "Desk", category: "operations",
+    desc: "The support essentials your team already reaches for, every day." },
   { key: "hrms", name: "HRMS", category: "people",
     desc: "Employee records, time and leave, handled without the spreadsheets." },
   { key: "skillberry", name: "Skillberry", category: "people",
     desc: "Help your people learn, grow and build the skills your business needs next." },
+  { key: "billing", name: "Billing", category: "finance",
+    desc: "Raise invoices, collect payments and reconcile accounts automatically." },
+  { key: "inventory", name: "Inventory", category: "finance",
+    desc: "Track stock, movements and reorder points across every location." },
+  { key: "sync", name: "Sync", category: "platform",
+    desc: "Move data seamlessly across your CRM, ERP, eCommerce and other systems." },
+  { key: "ai", name: "AI", category: "ai", href: "/products/ai",
+    desc: "Ask EVI for help, assign work to AI agents, or let AI work automatically." },
 ] as Omit<Product, "video">[]).map((p) => ({ ...p, video: `/videos/products/${p.key}.mp4` }));
 
 /* -- card + carousel ------------------------------------------------ */
@@ -714,7 +865,7 @@ function ProductCard({
     // same node. Splitting static positioning (this <a>) from animation
     // (the motion.div, opacity/y only) avoids that fight.
     <a
-      href="#"
+      href={product.href ?? "#"}
       className="pf-card"
       aria-label={`Explore ${product.name}`}
     >

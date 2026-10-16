@@ -96,9 +96,8 @@ export const EvoqWord = ({ height = 14, color = "currentColor" }: { height?: num
   </svg>
 );
 
-export const Eyebrow = ({ children, dark, noDot }: { children: React.ReactNode; dark?: boolean; noDot?: boolean }) => (
+export const Eyebrow = ({ children, dark }: { children: React.ReactNode; dark?: boolean; noDot?: boolean }) => (
   <div className={`evoq-eyebrow${dark ? " dark" : ""}`}>
-    {!noDot && <span className="dot"/>}
     <span>{children}</span>
   </div>
 );

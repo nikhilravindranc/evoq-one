@@ -25,26 +25,35 @@ export function Footer({ background, darkText = false, socialHover }: { backgrou
         <div className="footer-col">
           <h6>Growth</h6>
           <ul>
-            <li><a href="/products/crm">CRM</a></li>
-            <li><a href="/products/campaigns">Campaigns</a></li>
-            <li><a href="/products/configx">ConfigX</a></li>
+            <li><a href="/products/crm"><img className="footer-pic" src="/footer-icons/crm.png" alt="" width={18} height={18} />CRM</a></li>
+            <li><a href="/products/campaigns"><img className="footer-pic" src="/footer-icons/campaigns.png" alt="" width={18} height={18} />Campaigns</a></li>
+            <li><a href="/products/configx"><img className="footer-pic" src="/footer-icons/configx.png" alt="" width={18} height={18} />ConfigX</a></li>
           </ul>
           <h6 className="footer-subhead">People</h6>
           <ul>
-            <li><a href="/products/hrms">HRMS</a></li>
-            <li><a href="/products/skillberry">Skillberry</a></li>
-            <li><a href="/products/campaigns">Campaigns</a></li>
+            <li><a href="/products/hrms"><img className="footer-pic" src="/footer-icons/hrms.png" alt="" width={18} height={18} />HRMS</a></li>
+            <li><a href="/products/skillberry"><img className="footer-pic" src="/footer-icons/skillberry.png" alt="" width={18} height={18} />Skillberry</a></li>
+          </ul>
+          <ul className="footer-ai">
+            <li><a href="/products/ai"><img className="footer-pic" src="/footer-icons/ai.svg" alt="" width={18} height={18} />EVOQ AI</a></li>
           </ul>
         </div>
 
         <div className="footer-col">
           <h6>Operations</h6>
           <ul>
-            <li><a href="/products/serviceops">ServiceOps</a></li>
-            <li><a href="/products/desk">Desk</a></li>
-            <li><a href="/products/inventory">Inventory</a></li>
-            <li><a href="/products/projects">Projects</a></li>
-            <li><a href="/products/sync">Sync</a></li>
+            <li><a href="/products/serviceops"><img className="footer-pic" src="/footer-icons/serviceops.svg" alt="" width={18} height={18} />ServiceOps</a></li>
+            <li><a href="/products/projects"><img className="footer-pic" src="/footer-icons/projects.png" alt="" width={18} height={18} />Projects</a></li>
+            <li><a href="/products/desk"><img className="footer-pic" src="/footer-icons/desk.png" alt="" width={18} height={18} />Desk</a></li>
+          </ul>
+          <h6 className="footer-subhead">Finance</h6>
+          <ul>
+            <li><a href="/products/billing"><img className="footer-pic" src="/footer-icons/billing.png" alt="" width={18} height={18} />Billing</a></li>
+            <li><a href="/products/inventory"><img className="footer-pic" src="/footer-icons/inventory.png" alt="" width={18} height={18} />Inventory</a></li>
+          </ul>
+          <h6 className="footer-subhead">Platform</h6>
+          <ul>
+            <li><a href="/products/sync"><img className="footer-pic" src="/footer-icons/sync.png" alt="" width={18} height={18} />Sync</a></li>
           </ul>
         </div>
 

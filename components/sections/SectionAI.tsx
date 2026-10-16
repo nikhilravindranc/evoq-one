@@ -27,15 +27,9 @@ export function SectionAI() {
                 EVOQ brings AI into the applications your teams already use.
               </p>
               <p className="body">
-                EVI, the EVOQ AI assistant, helps you find information, understand
-                activity, prepare outputs, and take action across your applications.
-                AI agents handle defined tasks that involve multiple steps, from
-                preparing a customer follow-up to reviewing service activity or
-                identifying invoices that need attention.
-              </p>
-              <p className="body strong">
-                The result is AI that works with the information and processes
-                behind your everyday work, rather than sitting outside them.
+                EVI answers questions and takes action across your apps. AI agents
+                handle multi-step tasks, like preparing a customer follow-up or
+                flagging invoices that need attention.
               </p>
               <a href="/products/ai" className="ai-cta">
                 <span>Explore EVOQ AI</span>
