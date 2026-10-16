@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const INK = "#1F2A37";
 const MUTE = "#5B6470";
@@ -317,55 +317,31 @@ function RealEstateChapter() {
 }
 
 const NAV = [
-  { id: "ind-construction", n: "01", label: "Construction", p: CON, subs: [] as { id: string; label: string }[] },
-  { id: "ind-engineering", n: "02", label: "Engineering", p: ENG, subs: [] as { id: string; label: string }[] },
-  { id: "ind-real-estate", n: "03", label: "Real Estate", p: REA, subs: REAL_ESTATE.map((a) => ({ id: `re-${a.key}`, label: a.tab })) },
+  { id: "ind-construction", n: "01", label: "Construction", p: CON },
+  { id: "ind-engineering", n: "02", label: "Engineering", p: ENG },
+  { id: "ind-real-estate", n: "03", label: "Real Estate", p: REA },
 ];
 
+/* Same tab pattern as the home "Built for how your industry works" section:
+   one pill bar on top, the active pill tinted with that industry's colour,
+   one industry shown at a time. */
 export function ConstructionIndustries() {
-  const [active, setActive] = useState("ind-construction");
-  const [sub, setSub] = useState("");
-
-  // Scroll-spy: whichever chapter (and Real Estate audience) crosses the
-  // reading line just above the middle of the screen is highlighted.
-  useEffect(() => {
-    const ids = [...NAV.map((x) => x.id), ...NAV[2].subs.map((s) => s.id)];
-    const els = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (!e.isIntersecting) return;
-          const id = e.target.id;
-          if (id.startsWith("re-")) { setSub(id); setActive("ind-real-estate"); }
-          else { setActive(id); if (id !== "ind-real-estate") setSub(""); }
-        });
-      },
-      { rootMargin: "-38% 0px -58% 0px" }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  const go = (id: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
-  };
+  const [active, setActive] = useState(0);
+  const on = NAV[active];
 
   return (
     <section id="solutions" style={{ background: "#FFFDFB", color: INK, padding: "92px 0 100px" }}>
       <style>{`
-        .ci-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:56px;align-items:start;margin-top:48px}
-        .ci-nav{position:sticky;top:96px}
-        .ci-nav a{text-decoration:none}
-        .ci-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;color:${MUTE};font-weight:600;font-size:15px;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s}
-        .ci-item:hover{background:#F5F1EC;color:${INK}}
-        .ci-num{flex:none;width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#F1ECE6;color:${MUTE};transition:background .2s,color .2s}
-        .ci-subs{margin:4px 0 6px 27px;padding-left:16px;border-left:1px solid ${LINE};display:grid;gap:2px}
-        .ci-sub{display:block;padding:7px 10px;border-radius:7px;font-size:13.5px;color:${MUTE};margin-left:-17px;border-left:2px solid transparent;padding-left:25px}
-        .ci-sub:hover{color:${INK}}
-        .ci-chapters{display:grid;gap:88px}
-        .ci-chapter{display:grid;gap:36px;scroll-margin-top:96px}
-        .ci-aud{display:grid;gap:24px;padding:28px;border:1px solid ${LINE};border-radius:16px;background:#fff;scroll-margin-top:96px}
+        .ci-tabs-wrap{position:sticky;top:12px;z-index:20;display:flex;justify-content:flex-start;margin-top:36px}
+        .ci-tabs{display:flex;gap:4px;padding:6px;border-radius:999px;background:#fff;max-width:100%;overflow-x:auto;scrollbar-width:none;box-shadow:0 10px 34px -14px rgba(20,24,60,.28),0 0 0 1px rgba(31,36,48,.06)}
+        .ci-tabs::-webkit-scrollbar{display:none}
+        .ci-tab{flex-shrink:0;display:inline-flex;align-items:center;gap:9px;padding:11px 22px 11px 12px;border-radius:999px;border:0;background:transparent;cursor:pointer;font-family:inherit;font-size:14.5px;font-weight:500;color:rgba(31,36,48,.62);white-space:nowrap;transition:background .18s ease,color .18s ease}
+        .ci-tab:hover{color:${INK}}
+        .ci-tab.on{font-weight:700}
+        .ci-num{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;background:#F1ECE6;color:${MUTE};transition:background .18s ease,color .18s ease}
+        .ci-chapters{margin-top:44px}
+        .ci-chapter{display:grid;gap:36px}
+        .ci-aud{display:grid;gap:24px;padding:28px;border:1px solid ${LINE};border-radius:16px;background:#fff}
         .ci-aud-top{display:grid;grid-template-columns:220px minmax(0,1fr);gap:26px;align-items:center}
         .ci-aud-img{height:160px;border-radius:10px;background-size:cover;background-position:center;background-color:#E5ECE7}
         .ci-intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:36px;align-items:center}
@@ -373,59 +349,48 @@ export function ConstructionIndustries() {
         .ci-g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 40px}
         .ci-g2.ci-tight{gap:14px}
         .ci-apps{display:flex;flex-wrap:wrap;gap:16px 32px}
-        @media (max-width:1024px){
-          .ci-layout{grid-template-columns:1fr;gap:0}
-          .ci-nav{top:0;z-index:20;margin:0 -24px 32px;padding:10px 24px;background:rgba(255,253,251,.94);backdrop-filter:blur(8px);border-bottom:1px solid ${LINE}}
-          .ci-nav-list{display:flex;gap:8px;overflow-x:auto}
-          .ci-subs,.ci-nav-title{display:none}
-          .ci-item{padding:8px 14px 8px 8px;white-space:nowrap;border-color:${LINE};background:#fff}
-          .ci-num{width:24px;height:24px}
-          .ci-chapter,.ci-aud{scroll-margin-top:80px}
-        }
+        @keyframes ciIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+        .ci-in{animation:ciIn .4s ease both}
         @media (max-width:760px){
           .ci-intro,.ci-g2,.ci-aud-top{grid-template-columns:1fr}
           .ci-img{height:220px}.ci-aud-img{height:180px}
           .ci-aud{padding:20px}
-          .ci-chapters{gap:64px}
+          .ci-tab{padding:9px 16px 9px 9px;font-size:13.5px}
         }
+        @media (prefers-reduced-motion:reduce){.ci-in{animation:none}}
       `}</style>
       <div className="cn-wrap">
         <p style={{ margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "#A2563B" }}>Industries</p>
         <h2 style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: INK }}>Solutions by industry</h2>
         <p style={{ margin: "14px 0 0", fontSize: 16, lineHeight: 1.7, color: MUTE, maxWidth: "62ch" }}>Explore the challenges, priorities and operational requirements specific to your industry.</p>
 
-        <div className="ci-layout">
-          <nav className="ci-nav" aria-label="Industries on this page">
-            <p className="ci-nav-title" style={{ margin: "0 0 10px 14px", fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: MUTE }}>On this page</p>
-            <div className="ci-nav-list">
-              {NAV.map((x) => {
-                const on = active === x.id;
-                return (
-                  <div key={x.id}>
-                    <a href={`#${x.id}`} onClick={go(x.id)} aria-current={on ? "true" : undefined} className="ci-item" style={on ? { background: x.p.off, color: x.p.on, borderColor: x.p.on + "33" } : undefined}>
-                      <span className="ci-num" style={on ? { background: x.p.on, color: "#fff" } : undefined}>{x.n}</span>{x.label}
-                    </a>
-                    {x.subs.length > 0 && (
-                      <div className="ci-subs">
-                        {x.subs.map((s) => {
-                          const sOn = sub === s.id;
-                          return (
-                            <a key={s.id} href={`#${s.id}`} onClick={go(s.id)} aria-current={sOn ? "true" : undefined} className="ci-sub" style={sOn ? { color: x.p.on, fontWeight: 700, borderLeftColor: x.p.on } : undefined}>{s.label}</a>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </nav>
-
-          <div className="ci-chapters">
-            <Chapter id="ind-construction" n="01" d={CONSTRUCTION} p={CON} />
-            <Chapter id="ind-engineering" n="02" d={ENGINEERING} p={ENG} />
-            <RealEstateChapter />
+        <div className="ci-tabs-wrap">
+          <div className="ci-tabs" role="tablist" aria-label="Industries">
+            {NAV.map((x, i) => {
+              const sel = i === active;
+              return (
+                <button
+                  key={x.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={sel}
+                  aria-controls={x.id}
+                  className={`ci-tab${sel ? " on" : ""}`}
+                  style={sel ? { background: x.p.off, color: x.p.on } : undefined}
+                  onClick={() => setActive(i)}
+                >
+                  <span className="ci-num" style={sel ? { background: x.p.on, color: "#fff" } : undefined}>{x.n}</span>
+                  {x.label}
+                </button>
+              );
+            })}
           </div>
+        </div>
+
+        <div key={on.id} className="ci-chapters ci-in" role="tabpanel">
+          {active === 0 && <Chapter id="ind-construction" n="01" d={CONSTRUCTION} p={CON} />}
+          {active === 1 && <Chapter id="ind-engineering" n="02" d={ENGINEERING} p={ENG} />}
+          {active === 2 && <RealEstateChapter />}
         </div>
       </div>
     </section>

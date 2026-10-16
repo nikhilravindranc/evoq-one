@@ -90,7 +90,7 @@ const PLATFORM_FIGURES = [
 /* AI is EVOQ AI (EVI plus agents): one wide photo card, with EVI and an
    agent character as the callout avatars instead of the photo. */
 const AI_FIGURES = [
-  { src: "/team/ai-wide.jpg", pos: "50% 30%" },
+  { src: "/team/ai-wide2.jpg", pos: "50% 50%" },
 ];
 
 const PEOPLE_FIGURES = [
@@ -891,8 +891,9 @@ function AiComposite() {
       }}
       calloutB={{
         figureIndex: 0,
-        name: "Alex, Sales Lead",
-        status: "Asked EVI: which deals are at risk?",
+        avatar: { src: "/team/ai-person.jpg", pos: "50% 30%" },
+        name: "Anita, Sales Lead",
+        status: "Asked EVI: deals at risk?",
         appKey: "ai",
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },

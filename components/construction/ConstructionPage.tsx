@@ -104,9 +104,10 @@ function Together() {
         </div>
 
         <div data-rv="1" style={{ marginTop: 52 }}>
-          <div className="cn-band" aria-hidden="true">
-            <span style={{ position: "relative", zIndex: 1, background: CLAY, color: "#fff", fontSize: 12, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", padding: "9px 18px", borderRadius: 99 }}>Your operation</span>
+          <div className="cn-root" aria-hidden="true">
+            <span className="cn-pill">Your operation</span>
           </div>
+          <div className="cn-g3 cn-tree" aria-hidden="true"><i /><i /><i /></div>
           <div className="cn-g3 cn-groups">
             {groups.map((g, i) => (
               <article key={g.label} className="cn-group" style={{ background: "#fff", border: `1px solid ${LSAND}`, borderTop: `4px solid ${[TERRA, CLAY, SAND][i]}`, borderRadius: 6, padding: "26px 26px 28px", display: "flex", flexDirection: "column" }}>
@@ -199,11 +200,16 @@ export function ConstructionPage() {
         .cn-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .cn-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:46px 0 72px}
         .cn-hero-vis{position:relative;height:460px}
-        .cn-band{position:relative;display:flex;justify-content:center;padding-bottom:30px}
-        .cn-band::before{content:"";position:absolute;left:50%;top:50%;bottom:0;width:2px;background:#A89B8C}
-        .cn-band::after{content:"";position:absolute;left:calc((100% - 44px) / 6);right:calc((100% - 44px) / 6);bottom:0;height:2px;background:#A89B8C}
-        .cn-group{position:relative}
-        .cn-group::before{content:"";position:absolute;left:50%;top:-30px;height:26px;width:2px;background:#A89B8C}
+        .cn-root{display:flex;justify-content:center}
+        .cn-pill{background:#7C2D1F;color:#fff;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;border-radius:99px}
+        .cn-tree{height:44px}
+        .cn-tree i{position:relative;display:block}
+        .cn-tree i::before{content:"";position:absolute;top:21px;height:2px;background:#A89B8C}
+        .cn-tree i::after{content:"";position:absolute;left:calc(50% - 1px);width:2px;bottom:0;top:21px;background:#A89B8C}
+        .cn-tree i:nth-child(1)::before{left:50%;right:-11px}
+        .cn-tree i:nth-child(2)::before{left:-11px;right:-11px}
+        .cn-tree i:nth-child(2)::after{top:0}
+        .cn-tree i:nth-child(3)::before{left:-11px;right:50%}
         .cn-faq summary::-webkit-details-marker{display:none}
         .cn-faq[open] .cn-plus{background:#B4533C;color:#fff;transform:rotate(45deg)}
         .cn-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
@@ -216,7 +222,7 @@ export function ConstructionPage() {
         .cn-card:hover{transform:translateY(-5px);box-shadow:0 30px 56px -34px rgba(41,37,36,.6)}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1100px){.cn-band{display:none}.cn-group::before{display:none}.cn-g4{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g3{grid-template-columns:1fr}.cn-apps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+        @media (max-width:1100px){.cn-root,.cn-tree{display:none}.cn-g4{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g3{grid-template-columns:1fr}.cn-apps{grid-template-columns:repeat(4,minmax(0,1fr))}}
         @media (max-width:900px){.cn-hero,.cn-split{grid-template-columns:1fr;gap:34px}.cn-hero-vis{height:380px}.cn-cta{grid-template-columns:1fr!important}.cn-cta>div:first-child{padding:38px 28px 40px!important}.cn-cta-img{display:none}}
         @media (max-width:640px){.cn-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g4{grid-template-columns:1fr}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.cn-card,.cn-btn{transition:none}}

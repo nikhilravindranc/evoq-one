@@ -928,6 +928,75 @@
   margin: 0 -8% 0 0;
 }
 
+/* Coded EVI visual (EviVisual.tsx): drawn on the artwork's 1630x965 canvas, scaled to fit */
+.evi-fit { position: relative; width: 108%; margin-right: -8%; aspect-ratio: 1630 / 965; }
+.evi-canvas { position: absolute; left: 0; top: 0; transform-origin: 0 0; font-family: var(--font-sans), system-ui, sans-serif; color: #1F2430; }
+.evi-canvas * { transition: none; }
+.evi-app { position: absolute; width: 118px; height: 122px; z-index: 2; }
+.evi-app-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  background: #fff; border-radius: 24px; font-size: 18px; font-weight: 500;
+  box-shadow: 0 14px 30px -14px rgba(60,60,160,0.45), 0 0 0 1.5px rgba(71,71,224,0.12);
+}
+.evi-app-body.lift { animation: eviLift 1.1s cubic-bezier(.3,1.4,.5,1) both; }
+.evi-app-glow { position: absolute; inset: -8px; border-radius: 30px; background: radial-gradient(closest-side, rgba(124,108,255,0.55), rgba(124,108,255,0)); opacity: 0; animation: eviGlow 1.4s ease-out both; }
+@keyframes eviLift { 0% { transform: none; } 35% { transform: translateY(-10px) scale(1.06); } 100% { transform: none; } }
+@keyframes eviGlow { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+.evi-packet {
+  position: absolute; left: 0; top: 0; z-index: 3; width: 18px; height: 18px; border-radius: 50%; background: #fff; opacity: 0;
+  offset-rotate: 0deg; offset-anchor: 50% 50%;
+  box-shadow: 0 0 0 4px rgba(124,108,255,0.6), 0 0 22px 6px rgba(124,108,255,0.85);
+  animation-name: relayRide; animation-timing-function: cubic-bezier(.45,0,.25,1); animation-fill-mode: both;
+}
+.evi-window {
+  position: absolute; left: 35px; top: 193px; width: 1165px; height: 650px; z-index: 1; display: flex; padding: 16px 20px 16px 18px;
+  border-radius: 46px; background: linear-gradient(160deg, #E9E7FF, #D7D3FF);
+  box-shadow: 0 30px 60px -30px rgba(60,60,170,0.45);
+}
+.evi-side { flex: none; width: 156px; background: #fff; border-radius: 34px; display: flex; flex-direction: column; align-items: center; padding-top: 40px; gap: 26px; box-shadow: 4px 0 20px -12px rgba(60,60,160,0.25); position: relative; z-index: 1; }
+.evi-logo { width: 62px; height: 62px; margin-bottom: 14px; background: url(/black-logo.png) left center / auto 62px no-repeat; }
+.evi-nav { width: 76px; height: 72px; border-radius: 18px; display: flex; align-items: center; justify-content: center; }
+.evi-nav.on { background: #EEEDFF; }
+.evi-main { position: relative; flex: 1; margin-left: -20px; padding-left: 20px; background: #FCFCFF; border-radius: 0 34px 34px 0; display: flex; flex-direction: column; align-items: center; }
+.evi-me { position: absolute; right: 26px; top: 26px; width: 80px; height: 80px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; box-shadow: 0 0 0 5px #fff, 0 8px 20px -8px rgba(0,0,0,.35); }
+.evi-h { margin: 132px 0 0; font-family: var(--font-display), var(--font-sans), sans-serif; font-size: 44px !important; line-height: 1.1 !important; font-weight: 700; letter-spacing: -0.02em; color: #12131A; }
+.evi-input { margin-top: 42px; width: 802px; height: 176px; border-radius: 24px; border: 1.5px solid #CFCBFF; background: #fff; padding: 26px 28px 22px; display: flex; flex-direction: column; justify-content: space-between; }
+.evi-input.typing { border-color: #8F86FF; box-shadow: 0 0 0 5px rgba(124,108,255,0.12); }
+.evi-q { font-size: 24px; color: #1F2430; min-height: 32px; }
+.evi-ph { color: #8A8FA3; }
+.evi-caret { display: inline-block; width: 2px; height: 26px; margin-left: 2px; vertical-align: -4px; background: #4747E0; animation: eviCaret 1s steps(1) infinite; }
+@keyframes eviCaret { 50% { opacity: 0; } }
+.evi-tools { display: flex; align-items: center; gap: 32px; }
+.evi-send { margin-left: auto; display: inline-flex; }
+.evi-chips { display: flex; gap: 18px; margin-top: 38px; }
+.evi-chip { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 12px; height: 62px; padding: 0 28px; border-radius: 31px; background: #fff; font-size: 22px; font-weight: 600; color: #1F2430; box-shadow: 0 8px 20px -12px rgba(60,60,160,0.35), 0 0 0 1px rgba(71,71,224,0.1); }
+.evi-chip > svg { position: relative; }
+.evi-chip-hi { position: absolute; inset: 0; border-radius: 31px; background: #EEEDFF; box-shadow: inset 0 0 0 2px #8F86FF; }
+.evi-robot { position: absolute; left: 1118px; top: 310px; width: 356px; z-index: 4; transform-origin: 40% 90%; }
+.evi-robot.wave { animation: eviBob 3.2s ease-in-out infinite; }
+@keyframes eviBob { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-6px) rotate(-2deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-4px) rotate(1.5deg); } }
+.evi-star { z-index: 5; animation: eviTwinkle 2.4s ease-in-out infinite; }
+.evi-star + .evi-star { animation-delay: .8s; }
+@keyframes eviTwinkle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.72); opacity: .7; } }
+.evi-card {
+  position: absolute; left: 1137px; top: 585px; width: 430px; height: 320px; z-index: 3; padding: 22px 30px 0 30px;
+  background: #fff; border-radius: 34px; box-shadow: 0 0 0 2px #CFCBFF, 0 24px 50px -24px rgba(60,60,170,0.5);
+}
+.evi-card-h { display: flex; align-items: center; gap: 16px; font-size: 24px; }
+.evi-card-h b { font-weight: 600; }
+.evi-card-ic { width: 52px; height: 52px; border-radius: 12px; background: #6C3BF5; display: flex; align-items: center; justify-content: center; }
+.evi-more { margin-left: auto; display: flex; gap: 4px; }
+.evi-more i { width: 5px; height: 5px; border-radius: 50%; background: #3A3D4A; }
+.evi-rows { display: grid; gap: 6px; margin-top: 14px; padding-left: 10px; }
+.evi-row { display: flex; align-items: center; gap: 22px; height: 36px; font-size: 21px; color: #5B6070; }
+.evi-row.warn { color: #2F2FB8; font-weight: 600; }
+.evi-row-ic { width: 36px; height: 36px; border-radius: 50%; background: #22A05A; display: flex; align-items: center; justify-content: center; flex: none; }
+.evi-row.warn .evi-row-ic { background: #F59E0B; color: #fff; font-size: 22px; animation: eviPulse 1.6s ease-in-out infinite; }
+@keyframes eviPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.45); } 50% { box-shadow: 0 0 0 8px rgba(245,158,11,0); } }
+.evi-card-rule { height: 1px; background: #E7E8EF; margin: 18px 0 22px; }
+.evi-view { display: inline-flex; align-items: center; gap: 12px; height: 56px; padding: 0 30px; border-radius: 28px; border: 2px solid #4747E0; color: #2F2FB8; font-size: 22px; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .evi-robot.wave, .evi-star, .evi-row.warn .evi-row-ic, .evi-caret { animation: none; } }
+
 @media (max-width: 1024px) {
   .s-ai { padding: 80px 40px 100px; }
   /* Stack: copy, then the visual -- each row owns the full width once
@@ -937,6 +1006,7 @@
   .ai-copy p.body { max-width: none; }
   .ai-right { width: 100%; max-width: 560px; }
   .ai-right-img { width: 100%; margin: 0; }
+  .evi-fit { width: 100%; margin: 0; }
 }
 @media (max-width: 640px) {
   .s-ai { padding: 64px 20px 72px; }
