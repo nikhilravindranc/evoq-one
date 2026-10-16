@@ -1,11 +1,13 @@
 import { LivePage } from "@/components/live/LivePage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ Campaigns — Turn customer engagement into business opportunities",
-  description: "Segment audiences, run email and SMS campaigns, automate journeys and track results.",
-  alternates: { canonical: "/products/campaigns" },
-};
+export const metadata = pageMeta("/products/campaigns");
 
 export default function Page() {
-  return <LivePage file="products-campaigns.html" title="EVOQ Campaigns — Turn customer engagement into business opportunities" />;
+  return (
+    <>
+      <PageJsonLd path="/products/campaigns" />
+      <LivePage file="products-campaigns.html" title="EVOQ Campaigns — Turn customer engagement into business opportunities" />
+    </>
+  );
 }

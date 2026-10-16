@@ -1,11 +1,13 @@
 import { LivePage } from "@/components/live/LivePage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ CRM features — Sell smarter, faster and better",
-  description: "Pipeline, deal tracking, quotes, forecasting, follow-ups and multichannel engagement in EVOQ CRM.",
-  alternates: { canonical: "/products/crm/features" },
-};
+export const metadata = pageMeta("/products/crm/features");
 
 export default function Page() {
-  return <LivePage file="products-crm-features.html" title="EVOQ CRM features — Sell smarter, faster and better" />;
+  return (
+    <>
+      <PageJsonLd path="/products/crm/features" />
+      <LivePage file="products-crm-features.html" title="EVOQ CRM features — Sell smarter, faster and better" />
+    </>
+  );
 }

@@ -1,11 +1,13 @@
 import { LegalPage } from "@/components/legal/LegalPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Cookie Policy — EVOQ",
-  description: "How EVOQ uses cookies and how you can manage them.",
-  alternates: { canonical: "/cookie-policy" },
-};
+export const metadata = pageMeta("/cookie-policy");
 
 export default function Page() {
-  return <LegalPage doc="cookie-policy" />;
+  return (
+    <>
+      <PageJsonLd path="/cookie-policy" />
+      <LegalPage doc="cookie-policy" />
+    </>
+  );
 }

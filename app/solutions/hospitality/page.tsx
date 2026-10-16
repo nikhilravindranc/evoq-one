@@ -1,11 +1,13 @@
 import { HospitalityPage } from "@/components/hospitality/HospitalityPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ for Hospitality, Travel & F&B — A better customer experience starts behind the scenes",
-  description:
-    "From the first enquiry to the service that brings customers back, EVOQ applications support the customer-facing and operational work behind each hospitality experience.",
-};
+export const metadata = pageMeta("/solutions/hospitality");
 
 export default function Hospitality() {
-  return <HospitalityPage />;
+  return (
+    <>
+      <PageJsonLd path="/solutions/hospitality" />
+      <HospitalityPage />
+    </>
+  );
 }

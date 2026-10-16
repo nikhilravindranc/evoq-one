@@ -1,15 +1,14 @@
 import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { ContactPage } from "@/components/contact/ContactPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Contact Us — EVOQ",
-  description:
-    "Get in touch with EVOQ. Tell us what you want to do and we'll connect you to the right team.",
-};
+export const metadata = pageMeta("/contact");
 
 export default function Contact() {
   return (
+    <>
+      <PageJsonLd path="/contact" />
     <div style={{ minHeight: "100vh", background: "var(--white)" }}>
       {/* Header band — flat dark brand colour, no gradient */}
       <div
@@ -28,5 +27,6 @@ export default function Contact() {
       {/* Shared footer */}
       <Footer />
     </div>
+    </>
   );
 }

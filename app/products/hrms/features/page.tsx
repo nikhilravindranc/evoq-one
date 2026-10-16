@@ -1,11 +1,13 @@
 import { LivePage } from "@/components/live/LivePage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ HRMS features — EVOQ",
-  description: "Features of EVOQ HRMS.",
-  alternates: { canonical: "/products/hrms/features" },
-};
+export const metadata = pageMeta("/products/hrms/features");
 
 export default function Page() {
-  return <LivePage file="products-hrms-features.html" title="EVOQ HRMS features" />;
+  return (
+    <>
+      <PageJsonLd path="/products/hrms/features" />
+      <LivePage file="products-hrms-features.html" title="EVOQ HRMS features" />
+    </>
+  );
 }

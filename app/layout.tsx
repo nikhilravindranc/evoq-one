@@ -3,6 +3,7 @@ import { Figtree, DM_Sans } from "next/font/google";
 import "./globals.css";
 import "./sections.css";
 import { RegionProvider } from "@/components/shared/RegionContext";
+import { PAGES, SITE, SiteJsonLd } from "@/lib/seo";
 
 const figtree = Figtree({
   variable: "--font-display",
@@ -17,10 +18,21 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://evoq.one"),
-  title: "EVOQ Healthcare — Every team. Every workflow. Finally connected.",
-  description:
-    "EVOQ Healthcare is a unified healthcare software ecosystem designed to connect clinical, administrative, and operational workflows into one structured platform.",
+  metadataBase: new URL(SITE.url),
+  applicationName: SITE.name,
+  title: { default: PAGES["/"].title, template: "%s" },
+  description: PAGES["/"].description,
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    locale: SITE.locale,
+    url: SITE.url,
+    title: PAGES["/"].title,
+    description: PAGES["/"].description,
+    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: `${SITE.name} — ${SITE.tagline}` }],
+  },
+  twitter: { card: "summary_large_image", title: PAGES["/"].title, description: PAGES["/"].description, images: [SITE.ogImage] },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -35,6 +47,7 @@ export default function RootLayout({
       suppressHydrationWarning /* the Billing pages add a "js" class to <html> before hydration */
     >
       <body className="min-h-full bg-white font-[var(--font-sans)]">
+        <SiteJsonLd />
         <RegionProvider>{children}</RegionProvider>
       </body>
     </html>

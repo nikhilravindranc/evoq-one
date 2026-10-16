@@ -1,12 +1,13 @@
 import { IndustriesPage } from "@/components/industries/IndustriesPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  alternates: { canonical: "/industries" },
-  title: "EVOQ for your industry — Applications that fit your industry's needs",
-  description:
-    "EVOQ applications can work individually or together to support relevant parts of your operations, from customer relationships and project delivery to inventory, service and billing.",
-};
+export const metadata = pageMeta("/industries");
 
 export default function Industries() {
-  return <IndustriesPage />;
+  return (
+    <>
+      <PageJsonLd path="/industries" />
+      <IndustriesPage />
+    </>
+  );
 }

@@ -1,15 +1,16 @@
 import { BillingShell } from "@/components/billing/BillingShell";
 import { BillingFeaturesContent } from "@/components/billing/BillingFeaturesContent";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ Billing features — Invoicing, payments, tax and automation",
-  description: "Explore EVOQ Billing features: invoicing, product catalog, payments, tax compliance, workflow automation and financial insight.",
-};
+export const metadata = pageMeta("/products/billing/features");
 
 export default function BillingFeaturesPage() {
   return (
+    <>
+      <PageJsonLd path="/products/billing/features" />
     <BillingShell>
       <BillingFeaturesContent />
     </BillingShell>
+    </>
   );
 }

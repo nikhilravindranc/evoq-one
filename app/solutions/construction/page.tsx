@@ -1,11 +1,13 @@
 import { ConstructionPage } from "@/components/construction/ConstructionPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ for Construction, Engineering & Real Estate — Coordinate projects, technical work and property operations",
-  description:
-    "EVOQ products support project coordination, client relationships and commercial processes across construction, engineering and real estate organizations.",
-};
+export const metadata = pageMeta("/solutions/construction");
 
 export default function Construction() {
-  return <ConstructionPage />;
+  return (
+    <>
+      <PageJsonLd path="/solutions/construction" />
+      <ConstructionPage />
+    </>
+  );
 }

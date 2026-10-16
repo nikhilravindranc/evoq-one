@@ -5,9 +5,14 @@ import { SectionTeams } from "@/components/sections/SectionTeams";
 import { SectionImpact } from "@/components/sections/SectionImpact";
 import { SectionCTA } from "@/components/sections/SectionCTA";
 import { Footer } from "@/components/sections/Footer";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
+
+export const metadata = pageMeta("/");
 
 export default function Home() {
   return (
+    <>
+      <PageJsonLd path="/" />
     <main className="min-h-screen bg-white">
       <HeroSection />
       <SectionPlatform />
@@ -17,5 +22,6 @@ export default function Home() {
       <SectionCTA />
       <Footer />
     </main>
+    </>
   );
 }

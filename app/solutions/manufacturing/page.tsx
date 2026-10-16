@@ -1,11 +1,13 @@
 import { ManufacturingPage } from "@/components/manufacturing/ManufacturingPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ Manufacturing — From product enquiry to the field",
-  description:
-    "Manage the commercial and operational work around your products, from complex configuration and quoting to delivery and service.",
-};
+export const metadata = pageMeta("/solutions/manufacturing");
 
 export default function Manufacturing() {
-  return <ManufacturingPage />;
+  return (
+    <>
+      <PageJsonLd path="/solutions/manufacturing" />
+      <ManufacturingPage />
+    </>
+  );
 }

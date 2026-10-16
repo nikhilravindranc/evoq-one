@@ -1,11 +1,13 @@
 import { LegalPage } from "@/components/legal/LegalPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "Privacy Policy — EVOQ",
-  description: "How EVOQ collects, uses and protects your information.",
-  alternates: { canonical: "/privacy-policy" },
-};
+export const metadata = pageMeta("/privacy-policy");
 
 export default function Page() {
-  return <LegalPage doc="privacy-policy" />;
+  return (
+    <>
+      <PageJsonLd path="/privacy-policy" />
+      <LegalPage doc="privacy-policy" />
+    </>
+  );
 }

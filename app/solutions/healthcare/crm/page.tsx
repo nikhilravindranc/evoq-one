@@ -1,11 +1,13 @@
 import { HealthcareCrmPage } from "@/components/healthcare/HealthcareCrmPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ Healthcare CRM — Turn every patient interaction into a lasting relationship.",
-  description:
-    "Keep patient conversations, relationships, and activities connected from the first enquiry to every follow-up.",
-};
+export const metadata = pageMeta("/solutions/healthcare/crm");
 
 export default function HealthcareCrm() {
-  return <HealthcareCrmPage />;
+  return (
+    <>
+      <PageJsonLd path="/solutions/healthcare/crm" />
+      <HealthcareCrmPage />
+    </>
+  );
 }

@@ -1,11 +1,13 @@
 import { FieldServicePage } from "@/components/field-service/FieldServicePage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ for Field Service, Facilities & Maintenance — Keep service work moving from request to resolution",
-  description:
-    "EVOQ products support service requests, technicians, parts and follow-up across field service, facilities management and maintenance operations.",
-};
+export const metadata = pageMeta("/solutions/field-service");
 
 export default function FieldService() {
-  return <FieldServicePage />;
+  return (
+    <>
+      <PageJsonLd path="/solutions/field-service" />
+      <FieldServicePage />
+    </>
+  );
 }

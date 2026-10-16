@@ -1,11 +1,13 @@
 import { HealthcarePmPage } from "@/components/healthcare/HealthcarePmPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ Healthcare Practice Management — Keep your practice moving.",
-  description:
-    "Manage patients, appointments, providers, visits, services, and daily practice activity from a workspace that keeps the day organized.",
-};
+export const metadata = pageMeta("/solutions/healthcare/practice-management");
 
 export default function HealthcarePracticeManagement() {
-  return <HealthcarePmPage />;
+  return (
+    <>
+      <PageJsonLd path="/solutions/healthcare/practice-management" />
+      <HealthcarePmPage />
+    </>
+  );
 }

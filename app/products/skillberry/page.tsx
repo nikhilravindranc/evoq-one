@@ -1,11 +1,13 @@
 import { LivePage } from "@/components/live/LivePage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ Skillberry — EVOQ",
-  description: "Learning and talent development with EVOQ Skillberry.",
-  alternates: { canonical: "/products/skillberry" },
-};
+export const metadata = pageMeta("/products/skillberry");
 
 export default function Page() {
-  return <LivePage file="products-skillberry.html" title="EVOQ Skillberry" />;
+  return (
+    <>
+      <PageJsonLd path="/products/skillberry" />
+      <LivePage file="products-skillberry.html" title="EVOQ Skillberry" />
+    </>
+  );
 }

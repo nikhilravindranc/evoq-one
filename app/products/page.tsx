@@ -1,11 +1,13 @@
 import { ProductsPage } from "@/components/products/ProductsPage";
+import { pageMeta, PageJsonLd } from "@/lib/seo";
 
-export const metadata = {
-  title: "EVOQ Applications — One suite for growth, operations, people and finance",
-  description:
-    "Explore the EVOQ applications: CRM, Campaigns, ConfigX, ServiceOps, Projects, Desk, HRMS, Skillberry, Billing, Inventory, Sync and EVOQ AI. Use one or connect them all.",
-};
+export const metadata = pageMeta("/products");
 
 export default function Products() {
-  return <ProductsPage />;
+  return (
+    <>
+      <PageJsonLd path="/products" />
+      <ProductsPage />
+    </>
+  );
 }
