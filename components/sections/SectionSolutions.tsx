@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Easing } from "framer-motion";
 import { Eyebrow } from "./shared";
+import { SolutionDash } from "./SolutionDash";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -18,45 +19,50 @@ const fadeUp = (delay = 0) => ({
 type Industry = {
   key: string; tab: string; name: string;
   lead: string; accent: string; body: string;
-  href: string; img: string; pos: string;
+  href: string;
   color: string; deep: string; soft: string;
-  card: { app: string; title: string; sub: string };
+  cards: [FloatCard, FloatCard];   // [top-right, bottom-left] over the dashboard
 };
+type FloatCard = { tone: "ok" | "warn" | "info"; title: string; sub: string };
 
 const INDUSTRIES: Industry[] = [
   { key: "healthcare", tab: "Healthcare", name: "Healthcare",
     lead: "Every patient. ", accent: "Every follow-up.",
     body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.",
-    href: "/solutions/healthcare", img: "/solutions/healthcare.jpg", pos: "50% 30%",
+    href: "/solutions/healthcare",
     color: "#0F766E", deep: "#123B3A", soft: "#DDF5F0",
-    card: { app: "crm", title: "Appointment confirmed", sub: "Follow-up booked for Friday" } },
+    cards: [{ tone: "warn", title: "2 follow-ups overdue", sub: "Review and complete" }, { tone: "ok", title: "Appointment confirmed", sub: "Follow-up booked for Friday" }] },
   { key: "manufacturing", tab: "Manufacturing", name: "Manufacturing",
     lead: "From configured order to ", accent: "shipped product.",
     body: "Address operational needs across product configuration, order management, inventory and production-related processes.",
-    href: "/solutions/manufacturing", img: "/solutions/manufacturing.jpg", pos: "50% 40%",
+    href: "/solutions/manufacturing",
     color: "#2563EB", deep: "#1F2933", soft: "#DBEAFE",
-    card: { app: "inventory", title: "Stock updated", sub: "Order released to the floor" } },
+    cards: [{ tone: "warn", title: "Low stock · Steel sheet 2 mm", sub: "120 units · reorder flagged" }, { tone: "ok", title: "Stock updated", sub: "Order released to the floor" }] },
   { key: "construction", tab: "Construction", name: "Construction, Engineering & Real Estate",
     lead: "Plans, projects and ", accent: "people, in sync.",
     body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the industry.",
-    href: "/solutions/construction", img: "/solutions/construction.jpg", pos: "50% 30%",
+    href: "/solutions/construction",
     color: "#B4533C", deep: "#7C2D1F", soft: "#E8D8BF",
-    card: { app: "projects", title: "Milestone completed", sub: "Phase 2 handed to the client" } },
+    cards: [{ tone: "info", title: "Client follow-up", sub: "Quote sent to Nova Residences" }, { tone: "ok", title: "Milestone completed", sub: "Phase 2 handed to the client" }] },
   { key: "field-service", tab: "Field Service", name: "Field Service, Facilities & Maintenance",
     lead: "Jobs scheduled. ", accent: "Work completed.",
     body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.",
-    href: "/solutions/field-service", img: "/solutions/field-service.jpg", pos: "40% 40%",
+    href: "/solutions/field-service",
     color: "#1777F0", deep: "#0F3D75", soft: "#DBEAFE",
-    card: { app: "serviceops", title: "Work order closed", sub: "Parts logged, invoice raised" } },
+    cards: [{ tone: "info", title: "Technician en route", sub: "Arjun · ETA 12 min" }, { tone: "ok", title: "Work order closed", sub: "Parts logged, invoice raised" }] },
   { key: "hospitality", tab: "Hospitality", name: "Hospitality, Travel & F&B",
     lead: "Guests first. ", accent: "Operations in step.",
     body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.",
-    href: "/solutions/hospitality", img: "/solutions/hospitality.jpg", pos: "50% 40%",
+    href: "/solutions/hospitality",
     color: "#14532D", deep: "#064E3B", soft: "#F7F1E3",
-    card: { app: "crm", title: "Returning guest recognised", sub: "Preferences noted at check-in" } },
+    cards: [{ tone: "info", title: "Table for 4 · 8:00 PM", sub: "Confirmed at The Terrace" }, { tone: "ok", title: "Returning guest recognised", sub: "Preferences noted at check-in" }] },
 ];
 
 const AUTO_MS = 7000;
+
+// Keep hyphenated words ("follow-up") on one line so titles never break at the hyphen.
+const keep = (t: string) =>
+  t.split(/(\S*-\S*)/).map((p, i) => (p.includes("-") ? <span key={i} style={{ whiteSpace: "nowrap" }}>{p}</span> : p));
 
 export function SectionSolutions() {
   const [active, setActive] = useState(0);
@@ -121,7 +127,7 @@ export function SectionSolutions() {
           >
             <div className="sol-copy">
               <h3 className="sol-title">
-                {x.lead}<span style={{ color: x.color }}>{x.accent}</span>
+                {keep(x.lead)}<span style={{ color: x.color }}>{keep(x.accent)}</span>
               </h3>
               <p className="sol-name">{x.name}</p>
               <p className="sol-desc">{x.body}</p>
@@ -131,16 +137,29 @@ export function SectionSolutions() {
               </a>
             </div>
 
-            <div className="sol-frame">
-              <img className="sol-photo" src={x.img} alt="" decoding="async" style={{ objectPosition: x.pos }} />
-              <span className="sol-tint" aria-hidden />
-              <div className="sol-float">
-                <span className="sol-float-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.4l3 3 6-6.4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
-                <div>
-                  <div className="sol-float-t">{x.card.title}</div>
-                  <div className="sol-float-s">{x.card.sub}</div>
-                </div>
+            <div className="sol-visual">
+              <div className="sol-frame">
+                <SolutionDash k={x.key} c={x.color} />
               </div>
+              {x.cards.map((cd, n) => (
+                <motion.div
+                  key={cd.title}
+                  className={`sol-float ${n === 0 ? "tr" : "bl"}`}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.25 + n * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <span className={`sol-float-ic ${cd.tone}`}>
+                    {cd.tone === "ok" && <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.4l3 3 6-6.4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                    {cd.tone === "warn" && <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 4.5v4.2M8 11.2v.3" stroke="#fff" strokeWidth="2" strokeLinecap="round" /></svg>}
+                    {cd.tone === "info" && <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 4.8V8l2.2 1.6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                  </span>
+                  <div>
+                    <div className="sol-float-t">{cd.title}</div>
+                    <div className="sol-float-s">{cd.sub}</div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </AnimatePresence>

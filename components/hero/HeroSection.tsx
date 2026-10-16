@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Topbar } from "./Topbar";
 import { ArrowRight } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
@@ -234,108 +234,6 @@ function PersonCallout({
   );
 }
 
-/* The action-item card: not a person, so no avatar -- an icon slot
- * instead (a checkmark for Growth, a badge cluster for Operations).
- * Sits below the whole composite in normal flow rather than absolutely
- * positioned inside it, since the frame above is already full (three
- * figures bleeding past its own edges, two callouts) -- there's no
- * clear space left inside the 16:9 box for a third floating card
- * without new collisions, but plenty of room below it. Shared between
- * tabs so both composites get the same sizing/clipping fixes for free. */
-function ActionCard({
-  icon, title, subtitle, cardRef,
-}: {
-  icon: React.ReactNode; title: string; subtitle: React.ReactNode;
-  cardRef?: React.Ref<HTMLDivElement>;
-}) {
-  return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 10, rotate: 9, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, rotate: 0, scale: 1 }}
-      transition={{ duration: 0.65, delay: 0.95, ease: [0.34, 1.4, 0.64, 1] }}
-      style={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        gap: "2.8cqw",
-        // Fixed px padding/gap here made this card the one element in
-        // the composite that didn't scale with it -- fine at hero size,
-        // but at a narrower composite width (e.g. a smaller viewport)
-        // the same 10-16px eats proportionally more room and the text
-        // has nowhere left to fit. cqw here matches the pattern already
-        // used for its own font sizes. The card sizes to its own content
-        // (no explicit width) with real slack under the 99% cap, so
-        // there was room to open the padding back up without bringing
-        // back the clipping this was originally tightened to avoid.
-        padding: "2.6cqw 3.6cqw 2.6cqw 2.4cqw",
-        background: "#fff",
-        borderRadius: "14px",
-        boxShadow: "0 18px 36px -16px rgba(16,20,50,0.45), 0 0 0 1px rgba(16,20,50,0.05)",
-        // A block-level flex container (this is flex, but not
-        // inline-flex) defaults to width:auto = fill the parent's
-        // width, NOT shrink-to-fit its own content -- the card was
-        // still letting the flex algorithm shrink the text span below
-        // its natural size even with room to spare. fit-content forces
-        // it to size to what the icon+text actually need; maxWidth
-        // stays on as a ceiling for genuinely narrow viewports.
-        width: "fit-content",
-        maxWidth: "99%",
-      }}
-    >
-      {icon}
-      {/* width:max-content, not just minWidth:0 on the card -- the card
-          itself was already sizing to fit-content, but this inner
-          wrapper (holding both text lines) was still being flexed to
-          fit-content's *own* content-box estimate rather than its
-          widest child line, landing 2-3px short of the longer of the
-          two and clipping it by a hair. Forcing this span to its
-          widest child directly removes that gap. */}
-      <span style={{ minWidth: 0, width: "max-content" }}>
-        <span
-          style={{
-            display: "block",
-            fontFamily: "var(--font-sans)",
-            fontWeight: 700,
-            fontSize: "clamp(11px, 2.9cqw, 15px)",
-            lineHeight: 1.25,
-            color: "#1F2430",
-            whiteSpace: "nowrap",
-            // Same sub-pixel max-content buffer as the subtitle below --
-            // whichever of the two lines is wider hits this discrepancy,
-            // not just the subtitle, so both carry the same fix.
-            paddingRight: 3,
-          }}
-        >
-          {title}
-        </span>
-        <span
-          style={{
-            display: "block",
-            fontFamily: "var(--font-sans)",
-            fontWeight: 500,
-            fontSize: "clamp(10px, 2.4cqw, 13px)",
-            lineHeight: 1.3,
-            color: "rgba(31,36,48,0.55)",
-            marginTop: 3,
-            whiteSpace: "nowrap",
-            // A few px of intrinsic-sizing slack: the browser's
-            // max-content estimate for this line (used to size its
-            // parent) lands a couple px short of what the "·" glyph
-            // actually renders at, clipping the last letter. Padding
-            // is included in max-content's own measurement, so this
-            // closes the gap instead of fighting it.
-            paddingRight: 4,
-          }}
-        >
-          {subtitle}
-        </span>
-      </span>
-      <Cursor style={{ right: -8, bottom: -8, transform: "rotate(-6deg)" }} />
-    </motion.div>
-  );
-}
-
 /* Growth's own icon slot: a checkmark, as if the cursor just clicked
  * it -- kept as a small wrapper so the call site reads the same way
  * the old hardcoded card did. */
@@ -358,6 +256,134 @@ function CheckIcon() {
         <path d="M3 8.5 6.5 12 13 4.5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </span>
+  );
+}
+
+/* ---------------------------------------------------------------------
+ * Cross-app relay. Each tab plays one short story over its photo
+ * composite: a person starts something in one app (callout B), an EVI
+ * agent carries it along the connector into the relay card, three EVOQ
+ * apps light up one after another, and the result lands with a second
+ * person (callout A). The point is the suite handing work along -- not a
+ * single board filling in -- so the motion runs between apps.
+ * ------------------------------------------------------------------- */
+type RelayStep = { app: string; name: string; status: string };
+type Relay = {
+  agent: { src: string; label: string };
+  steps: [RelayStep, RelayStep, RelayStep];
+  outcome: { title: string; sub: string };
+};
+
+type Timeline = {
+  bIn: number; bLine: number; ride: number; rideDur: number; card: number;
+  steps: [number, number, number]; outcome: number; aLine: number; back: number; backDur: number; aIn: number;
+};
+const TIMELINE: Timeline = {
+  bIn: 0.45, bLine: 0.95, ride: 1.2, rideDur: 1.25, card: 0.9,
+  steps: [2.35, 3.05, 3.75], outcome: 4.3, aLine: 4.45, back: 4.55, backDur: 1.0, aIn: 5.35,
+};
+const STILL: Timeline = {
+  bIn: 0, bLine: 0, ride: 0, rideDur: 0, card: 0, steps: [0, 0, 0], outcome: 0, aLine: 0, back: 0, backDur: 0, aIn: 0,
+};
+
+function RelayCard({ relay, T, cardRef }: { relay: Relay; T: Timeline; cardRef: React.Ref<HTMLDivElement> }) {
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: T.card, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        position: "relative",
+        background: "#fff",
+        borderRadius: 14,
+        padding: "2.4cqw 3cqw 2.2cqw",
+        boxShadow: "0 18px 36px -16px rgba(16,20,50,0.45), 0 0 0 1px rgba(16,20,50,0.05)",
+        width: "fit-content",
+        maxWidth: "99%",
+        fontFamily: "var(--font-sans)",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "flex-start" }}>
+        {relay.steps.map((s, i) => (
+          <div key={s.app + i} style={{ display: "flex", alignItems: "flex-start" }}>
+            {i > 0 && (
+              <span style={{ position: "relative", width: "5cqw", height: 2, marginTop: "calc(clamp(22px, 6cqw, 30px) / 2)", background: "#E7E8F0", borderRadius: 2, overflow: "hidden" }}>
+                <motion.i
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.45, delay: Math.max(0, T.steps[i] - 0.45), ease: "easeOut" }}
+                  style={{ position: "absolute", inset: 0, background: "#4747E0", transformOrigin: "left center", display: "block" }}
+                />
+              </span>
+            )}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "19cqw", textAlign: "center" }}>
+              <span style={{ position: "relative", width: "clamp(22px, 6cqw, 30px)", height: "clamp(22px, 6cqw, 30px)" }}>
+                <motion.span
+                  initial={{ opacity: 0.35, filter: "grayscale(1)" }}
+                  animate={{ opacity: 1, filter: "grayscale(0)" }}
+                  transition={{ duration: 0.35, delay: T.steps[i] }}
+                  style={{ display: "block", width: "100%", height: "100%" }}
+                >
+                  <ProductBadge productKey={s.app} size={30} />
+                </motion.span>
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.35, delay: T.steps[i] + 0.1, ease: [0.34, 1.6, 0.64, 1] }}
+                  style={{ position: "absolute", right: -5, bottom: -5, width: 14, height: 14, borderRadius: "50%", background: "#22C55E", boxShadow: "0 0 0 2px #fff", display: "flex", alignItems: "center", justifyContent: "center" }}
+                >
+                  <svg width="8" height="8" viewBox="0 0 16 16" fill="none"><path d="M3 8.5 6.5 12 13 4.5" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </motion.span>
+              </span>
+              <motion.span
+                initial={{ opacity: 0.4 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.35, delay: T.steps[i] }}
+                style={{ display: "block", marginTop: "1.4cqw" }}
+              >
+                <span style={{ display: "block", fontSize: "clamp(9px, 2.3cqw, 12px)", fontWeight: 700, color: "#1F2430", whiteSpace: "nowrap" }}>{s.name}</span>
+                <span style={{ display: "block", marginTop: 1, fontSize: "clamp(8px, 2cqw, 11px)", color: "rgba(31,36,48,0.55)", whiteSpace: "nowrap" }}>{s.status}</span>
+              </motion.span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: T.outcome, ease: [0.22, 1, 0.36, 1] }}
+        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1.6cqw", marginTop: "2cqw", paddingTop: "1.8cqw", borderTop: "1px solid #EEF0F4" }}
+      >
+        <CheckIcon />
+        <span style={{ fontSize: "clamp(10px, 2.7cqw, 14px)", fontWeight: 700, color: "#1F2430", whiteSpace: "nowrap" }}>{relay.outcome.title}</span>
+        <span style={{ fontSize: "clamp(9px, 2.3cqw, 12px)", color: "rgba(31,36,48,0.55)", whiteSpace: "nowrap" }}>{relay.outcome.sub}</span>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* The EVI agent riding the connector from the first person into the
+   relay card, then a single glowing packet carrying the result back out
+   to the second person. Rides the measured cable paths via CSS
+   offset-path, so it follows the exact curve the connector draws. */
+function RelayRiders({ geom, relay, T }: { geom: ConnectorGeom; relay: Relay; T: Timeline }) {
+  if (!geom || T.rideDur === 0) return null;
+  return (
+    <>
+      <span
+        className="relay-chip"
+        style={{ offsetPath: `path('${geom.b}')`, animationDelay: `${T.ride}s`, animationDuration: `${T.rideDur}s` } as React.CSSProperties}
+      >
+        <img src={relay.agent.src} alt="" aria-hidden />
+        {relay.agent.label}
+        <span className="relay-dots"><i /><i /><i /></span>
+      </span>
+      <span
+        className="relay-packet"
+        style={{ offsetPath: `path('${geom.a}')`, animationDelay: `${T.back}s`, animationDuration: `${T.backDur}s` } as React.CSSProperties}
+      />
+    </>
   );
 }
 
@@ -398,7 +424,7 @@ type ConnectorGeom = {
  * Visual style: a soft white-to-violet gradient with a glow, drawn as
  * one continuous cable rather than a right-angled trace, so it reads as
  * a live connection instead of a flowchart diagram. */
-function Connector({ geom }: { geom: ConnectorGeom }) {
+function Connector({ geom, T }: { geom: ConnectorGeom; T: Timeline }) {
   if (!geom) return null;
   return (
     <svg
@@ -429,7 +455,7 @@ function Connector({ geom }: { geom: ConnectorGeom }) {
           strokeLinecap="round"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.65, delay: 0.88, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.65, delay: T.aLine, ease: [0.22, 1, 0.36, 1] }}
         />
         <motion.path
           d={geom.b}
@@ -439,19 +465,19 @@ function Connector({ geom }: { geom: ConnectorGeom }) {
           strokeLinecap="round"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.65, delay: 1.09, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.65, delay: T.bLine, ease: [0.22, 1, 0.36, 1] }}
         />
       </g>
       {/* Matching dots at both ends of each cable -- "node to node"
           rather than a line that just stops. */}
       <motion.circle cx={geom.aDot.x} cy={geom.aDot.y} r={3} fill="#fff" stroke="#9C8CFF" strokeWidth={1.5}
-        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: 0.88 }} />
+        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: T.aLine }} />
       <motion.circle cx={geom.bDot.x} cy={geom.bDot.y} r={3} fill="#fff" stroke="#9C8CFF" strokeWidth={1.5}
-        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: 1.09 }} />
+        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: T.bLine }} />
       <motion.circle cx={geom.aEnd.x} cy={geom.aEnd.y} r={2.5} fill="#9C8CFF"
-        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: 1.36 }} />
+        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: T.aLine + 0.3 }} />
       <motion.circle cx={geom.bEnd.x} cy={geom.bEnd.y} r={2.5} fill="#9C8CFF"
-        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: 1.57 }} />
+        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.35, delay: T.bLine + 0.3 }} />
     </svg>
   );
 }
@@ -476,25 +502,22 @@ type CalloutSpec = {
  * above) applies to every tab automatically instead of drifting between
  * copies. */
 function TabComposite({
-  figures, calloutA, calloutB, renderAction, wide,
+  figures, calloutA, calloutB, relay, wide,
 }: {
   figures: FigureSpec[];
   // One full-width photo card instead of the three-portrait trio.
   wide?: boolean;
   calloutA: CalloutSpec;
   calloutB: CalloutSpec;
-  // Render-prop rather than a fixed icon/title/subtitle shape: Growth's
-  // action slot is one card, Operations' is a multi-step journey strip,
-  // and the connector only needs a ref to whichever element is the real
-  // merge point -- the render-prop is what lets each composite decide
-  // that without TabComposite knowing the difference.
-  renderAction: (ref: React.Ref<HTMLDivElement>) => React.ReactNode;
+  relay: Relay;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const aRef = useRef<HTMLDivElement>(null);
   const bRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
   const [geom, setGeom] = useState<ConnectorGeom>(null);
+  const rm = useReducedMotion();
+  const T = rm ? STILL : TIMELINE;
 
   // Real measurement instead of guessed percentages -- the connector has
   // to land exactly on each card's own corner and dip through a gap that
@@ -545,7 +568,8 @@ function TabComposite({
   // not just the inner box.
   return (
     <div ref={wrapRef} style={{ width: "100%", position: "relative", containerType: "inline-size" }}>
-    <Connector geom={geom} />
+    <Connector geom={geom} T={T} />
+    <RelayRiders geom={geom} relay={relay} T={T} />
     <div
       style={{
         position: "relative",
@@ -615,7 +639,7 @@ function TabComposite({
         imgFilter={calloutA.avatar ? undefined : figures[calloutA.figureIndex].filter}
         name={calloutA.name}
         status={calloutA.status}
-        delay={0.48}
+        delay={T.aIn}
         style={calloutA.style}
         cursorStyle={calloutA.cursorStyle}
         appKey={calloutA.appKey}
@@ -628,7 +652,7 @@ function TabComposite({
         imgFilter={calloutB.avatar ? undefined : figures[calloutB.figureIndex].filter}
         name={calloutB.name}
         status={calloutB.status}
-        delay={0.72}
+        delay={T.bIn}
         style={calloutB.style}
         cursorStyle={calloutB.cursorStyle}
         appKey={calloutB.appKey}
@@ -643,7 +667,7 @@ function TabComposite({
         is also where the connector's horizontal leg runs. */}
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div style={{ marginTop: wide ? "8%" : "24%" }}>
-        {renderAction(actionRef)}
+        <RelayCard relay={relay} T={T} cardRef={actionRef} />
       </div>
     </div>
     </div>
@@ -663,7 +687,7 @@ function GrowthComposite() {
       calloutA={{
         figureIndex: 2,
         name: "Sara, Campaigns",
-        status: "312 leads captured",
+        status: "Added to onboarding journey",
         appKey: "campaigns",
         style: { right: "-2%", top: "-6%", width: "50%" },
         cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
@@ -671,14 +695,20 @@ function GrowthComposite() {
       calloutB={{
         figureIndex: 0,
         name: "Marcus, Sales Lead",
-        status: "3 deals closed today",
+        status: "Deal won · Nova Retail",
         appKey: "crm",
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
-      renderAction={(ref) => (
-        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Q3 growth target set" subtitle="$500K pipeline · 18 quotes configured" />
-      )}
+      relay={{
+        agent: { src: "/team/agent-tasks.png", label: "Creating invoice" },
+        steps: [
+          { app: "crm", name: "CRM", status: "Deal won" },
+          { app: "billing", name: "Billing", status: "Invoice #2481 sent" },
+          { app: "inventory", name: "Inventory", status: "Stock reserved" },
+        ],
+        outcome: { title: "Deal to delivery", sub: "3 apps · 0 handoffs" },
+      }}
     />
   );
 }
@@ -707,7 +737,7 @@ function OperationsComposite() {
       calloutA={{
         figureIndex: 2,
         name: "Mia, Support Lead",
-        status: "Ticket resolved in 6 min",
+        status: "Ticket #4821 · AC failure",
         appKey: "desk",
         style: { right: "-2%", top: "-6%", width: "50%" },
         cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
@@ -715,14 +745,20 @@ function OperationsComposite() {
       calloutB={{
         figureIndex: 0,
         name: "Raj, Field Tech",
-        status: "Job #482 completed",
+        status: "Job #482 completed on site",
         appKey: "serviceops",
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
-      renderAction={(ref) => (
-        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Jobs and tickets on track" subtitle="Job #482 done · 6 min response" />
-      )}
+      relay={{
+        agent: { src: "/team/agent-calendar.png", label: "Dispatching job" },
+        steps: [
+          { app: "desk", name: "Desk", status: "Ticket triaged" },
+          { app: "serviceops", name: "ServiceOps", status: "Job #482 scheduled" },
+          { app: "billing", name: "Billing", status: "Invoice raised" },
+        ],
+        outcome: { title: "Ticket to invoice", sub: "3 apps · 0 handoffs" },
+      }}
     />
   );
 }
@@ -741,7 +777,7 @@ function PeopleComposite() {
       calloutA={{
         figureIndex: 2,
         name: "Dana, Skillberry",
-        status: "12 learners enrolled",
+        status: "Priya enrolled in 3 courses",
         appKey: "skillberry",
         style: { right: "-2%", top: "-6%", width: "50%" },
         cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
@@ -749,14 +785,20 @@ function PeopleComposite() {
       calloutB={{
         figureIndex: 0,
         name: "Sam, People Ops",
-        status: "Leave request approved",
+        status: "New hire · Priya joins Monday",
         appKey: "hrms",
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
-      renderAction={(ref) => (
-        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Growing and upskilled" subtitle="3 hires · 2 certifications" />
-      )}
+      relay={{
+        agent: { src: "/team/agent-docs.png", label: "Setting up onboarding" },
+        steps: [
+          { app: "hrms", name: "HRMS", status: "Profile created" },
+          { app: "skillberry", name: "Skillberry", status: "Training assigned" },
+          { app: "projects", name: "Projects", status: "Added to team board" },
+        ],
+        outcome: { title: "Hire to first day", sub: "3 apps · 0 handoffs" },
+      }}
     />
   );
 }
@@ -770,22 +812,28 @@ function FinanceComposite() {
       calloutA={{
         figureIndex: 2,
         name: "Payments, Billing",
-        status: "Card payment received",
+        status: "Supplier paid on time",
         appKey: "billing",
         style: { right: "-2%", top: "-6%", width: "50%" },
         cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
       }}
       calloutB={{
         figureIndex: 0,
-        name: "Stock value, Inventory",
-        status: "$48K across 6 locations",
+        name: "Stock, Inventory",
+        status: "Reorder point reached",
         appKey: "inventory",
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
-      renderAction={(ref) => (
-        <ActionCard cardRef={ref} icon={<CheckIcon />} title="Books closed, on time" subtitle="Invoices paid · stock valued" />
-      )}
+      relay={{
+        agent: { src: "/team/agent-alert.png", label: "Raising reorder" },
+        steps: [
+          { app: "inventory", name: "Inventory", status: "Low stock flagged" },
+          { app: "billing", name: "Billing", status: "Supplier bill recorded" },
+          { app: "sync", name: "Accounting", status: "Posted to ledger" },
+        ],
+        outcome: { title: "Stock to books", sub: "3 apps · 0 handoffs" },
+      }}
     />
   );
 }
@@ -801,7 +849,7 @@ function PlatformComposite() {
       calloutA={{
         figureIndex: 2,
         name: "Invoices, Accounting",
-        status: "Matched in ERP",
+        status: "Invoice matched in ERP",
         appKey: "sync",
         style: { right: "-2%", top: "-6%", width: "50%" },
         cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
@@ -809,39 +857,21 @@ function PlatformComposite() {
       calloutB={{
         figureIndex: 0,
         name: "Orders, eCommerce",
-        status: "Synced to ERP",
+        status: "Order #1093 placed",
         appKey: "sync",
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
-      renderAction={(ref) => (
-        <div ref={ref} style={{ display: "flex", gap: "2.4cqw", justifyContent: "center", width: "100%" }}>
-          <ActionCard icon={<CheckIcon />} title="CRM to ERP" subtitle="1,248 contacts synced" />
-          <ActionCard icon={<CheckIcon />} title="Failed records" subtitle="3 retried and fixed" />
-        </div>
-      )}
+      relay={{
+        agent: { src: "/team/agent-sync.png", label: "Syncing order" },
+        steps: [
+          { app: "sync", name: "eCommerce", status: "Order received" },
+          { app: "sync", name: "ERP", status: "Sales order created" },
+          { app: "crm", name: "CRM", status: "Customer updated" },
+        ],
+        outcome: { title: "Order to ledger", sub: "1,248 records in sync" },
+      }}
     />
-  );
-}
-
-function AgentStack() {
-  const agents = ["tasks", "calendar", "report"];
-  return (
-    <span style={{ display: "flex", flexShrink: 0 }}>
-      {agents.map((n, i) => (
-        <img
-          key={n}
-          src={`/team/agent-${n}.png`}
-          alt=""
-          aria-hidden
-          style={{
-            width: "clamp(24px, 6.6cqw, 34px)", aspectRatio: "1 / 1", objectFit: "contain",
-            borderRadius: "50%", background: "#F1F2FF", boxShadow: "0 0 0 2px #fff",
-            marginLeft: i === 0 ? 0 : "-1.6cqw",
-          }}
-        />
-      ))}
-    </span>
   );
 }
 
@@ -854,23 +884,28 @@ function AiComposite() {
         figureIndex: 0,
         avatar: { src: "/evoq-ai/evi-avatar.webp", pos: "50% 40%", contain: true },
         name: "EVI, Assistant",
-        status: "Summary ready for review",
+        status: "Follow-ups ready for review",
         appKey: "ai",
         style: { right: "-2%", top: "-6%", width: "50%" },
         cursorStyle: { left: -8, bottom: -8, transform: "rotate(8deg)" },
       }}
       calloutB={{
         figureIndex: 0,
-        avatar: { src: "/team/agent-calendar.png", pos: "50% 50%", contain: true },
-        name: "Follow-up agent",
-        status: "12 reminders sent",
+        name: "Alex, Sales Lead",
+        status: "Asked EVI: which deals are at risk?",
         appKey: "ai",
         style: { left: "-2%", bottom: "5%", width: "50%" },
         cursorStyle: { right: -8, top: -8, transform: "rotate(-170deg)" },
       }}
-      renderAction={(ref) => (
-        <ActionCard cardRef={ref} icon={<AgentStack />} title="3 agents at work" subtitle="Tasks · Follow-ups · Reports" />
-      )}
+      relay={{
+        agent: { src: "/team/agent-report.png", label: "Drafting follow-ups" },
+        steps: [
+          { app: "crm", name: "CRM", status: "3 deals flagged" },
+          { app: "campaigns", name: "Campaigns", status: "Follow-ups drafted" },
+          { app: "projects", name: "Projects", status: "Tasks assigned" },
+        ],
+        outcome: { title: "Question to action", sub: "3 apps · 0 handoffs" },
+      }}
     />
   );
 }
@@ -907,7 +942,7 @@ export function HeroSection() {
   // already mid-flight -- the visitor's own choice gets a full fresh
   // interval before the loop resumes.
   const tabTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const AUTO_TAB_MS = 6000;
+  const AUTO_TAB_MS = 8000;
 
   const startTabTimer = () => {
     if (tabTimerRef.current) clearInterval(tabTimerRef.current);
@@ -1044,6 +1079,21 @@ export function HeroSection() {
             }}
           />
 
+          {/* Bottom fade into the lavender the next section starts on, so the
+              page flows on instead of cutting from navy to white. */}
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 200,
+              background: "linear-gradient(180deg, rgba(246,245,255,0) 0%, rgba(246,245,255,0.5) 55%, #F6F5FF 100%)",
+              pointerEvents: "none",
+            }}
+          />
+
           {/* Topbar -- shrinks to its natural height */}
           <div style={{ position: "relative", zIndex: 3, flexShrink: 0 }}>
             <Topbar darkCTA />
@@ -1121,10 +1171,11 @@ export function HeroSection() {
                   role="tablist"
                   aria-label="Hero product focus"
                   style={{
+                    maxWidth: 330,
                     display: "flex",
-                    gap: 10,
+                    gap: 8,
                     alignItems: "center",
-                    marginTop: 32,
+                    marginTop: 28,
                     flexWrap: "wrap",
                   }}
                 >
@@ -1140,18 +1191,28 @@ export function HeroSection() {
                           startTabTimer();
                         }}
                         style={{
-                          padding: "9px 18px",
-                          borderRadius: 999,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 5,
+                          padding: isActive ? "5px 11px 5px 8px" : "5px 11px",
+                          borderRadius: 8,
                           fontFamily: "var(--font-sans)",
-                          fontSize: 13.5,
-                          fontWeight: 600,
+                          fontSize: 13,
+                          fontWeight: 500,
+                          lineHeight: 1.4,
                           cursor: "pointer",
-                          transition: "background .18s ease, color .18s ease, border-color .18s ease",
-                          border: isActive ? "1px solid rgba(255,255,255,0)" : "1px solid rgba(255,255,255,0.28)",
-                          background: isActive ? "#fff" : "transparent",
-                          color: isActive ? "#4747E0" : "rgba(255,255,255,0.85)",
+                          transition: "background .18s ease, color .18s ease",
+                          border: 0,
+                          background: isActive ? "#fff" : "rgba(255,255,255,0.14)",
+                          color: isActive ? "#4747E0" : "rgba(255,255,255,0.9)",
                         }}
                       >
+                        {isActive && (
+                          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <circle cx="8" cy="8" r="7" fill="#4747E0" />
+                            <path d="M5 8.2l2 2 4-4.3" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
                         {tab.label}
                       </button>
                     );
@@ -1163,7 +1224,7 @@ export function HeroSection() {
                     display: "flex",
                     gap: 14,
                     alignItems: "center",
-                    marginTop: 20,
+                    marginTop: 28,
                   }}
                 >
                   <button
@@ -1172,34 +1233,21 @@ export function HeroSection() {
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
-                      gap: 12,
-                      padding: "12px 14px 12px 22px",
-                      background: "#4747E0",
-                      color: "#fff",
+                      gap: 8,
+                      padding: "14px 26px",
+                      background: "#fff",
+                      color: "#3A3AC9",
                       borderRadius: 999,
                       fontFamily: "var(--font-sans)",
-                      fontSize: 14,
+                      fontSize: 15,
                       fontWeight: 600,
                       border: 0,
                       cursor: "pointer",
-                      boxShadow:
-                        "0 10px 30px -10px rgba(0,0,153,0.55), inset 0 0 0 1px rgba(255,255,255,0.08)",
+                      boxShadow: "0 12px 30px -12px rgba(10,10,80,0.55)",
                     }}
                   >
-                    <span>Get Started</span>
-                    <span
-                      style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: "50%",
-                        background: "rgba(255,255,255,0.18)",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <ArrowRight color="#fff" />
-                    </span>
+                    Get Started
+                    <ArrowRight color="#3A3AC9" />
                   </button>
                 </div>
 
@@ -1210,6 +1258,7 @@ export function HeroSection() {
                 tab (Growth / Operations / People), each its own pair of
                 person-cards, connector traces and outcome card. */}
             <motion.section
+              className="hero-showcase"
               style={{
                 position: "relative",
                 height: "100%",

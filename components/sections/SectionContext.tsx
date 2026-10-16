@@ -107,18 +107,47 @@ function NewTile({ s, i, p, mobile }: { s: Step; i: number; p: MotionValue<numbe
   const y = useTransform(p, (v) => (mobile ? (1 - t(v)) * -40 : (1 - t(v)) * -rowY(i)));
   const scale = useTransform(p, (v) => 0.5 + 0.5 * t(v));
   const opacity = useTransform(p, (v) => (v * N < i ? 0 : seg(local(v, i), 0.55, 0.7)));
+  // a brief indigo glow as the card lands, fading once it has settled
+  const land = useTransform(p, (v) => {
+    const l = local(v, i);
+    return v * N < i ? 0 : seg(l, 0.8, 0.9) * (1 - seg(l, 0.96, 1));
+  });
   return (
     <div className="ctx-slot" style={mobile ? undefined : { top: i * PITCH }}>
       <motion.div className="ctx-new" style={{ x, y, scale, opacity }}>
+        {!mobile && <motion.span className="ctx-land" style={{ opacity: land }} aria-hidden />}
         {s.rows.map((r) => (
           <div className="ctx-new-row" key={r.k}>
-            <svg className="ctx-tick" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#22C55E" /><path d="M4.6 8.2l2.3 2.3 4.5-4.8" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <svg className="ctx-tick" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#4747E0" /><path d="M4.6 8.2l2.3 2.3 4.5-4.8" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
             <div className="ctx-new-txt"><b>{r.k}</b><em>{r.v}</em></div>
           </div>
         ))}
       </motion.div>
     </div>
   );
+}
+
+/* Board geometry for the packet: the narrator sits at the centre column,
+   slots in the right column (starting ~71cqw). Rows begin 26px below the
+   column top; the narrator's figure centre is ~294px down. */
+const NARR_Y = 294;
+const slotY = (i: number) => 26 + i * PITCH + 44;
+
+function Packet({ i, p, mobile }: { i: number; p: MotionValue<number> ; mobile: boolean }) {
+  // .5-.82: leaves the narrator ahead of the card and lands in the slot.
+  const t = (v: number) => easeOut(seg(local(v, i), 0.5, 0.82));
+  const x = useTransform(p, (v) => `${50 + 24 * t(v)}cqw`);
+  const y = useTransform(p, (v) => {
+    const k = t(v);
+    return NARR_Y + (slotY(i) - NARR_Y) * k - Math.sin(k * Math.PI) * 40;
+  });
+  const opacity = useTransform(p, (v) => {
+    if (v * N < i) return 0;
+    const l = local(v, i);
+    return seg(l, 0.5, 0.55) * (1 - seg(l, 0.8, 0.86));
+  });
+  if (mobile) return null;
+  return <motion.span className="ctx-packet" style={{ x, y, opacity }} aria-hidden />;
 }
 
 type Nar = { step: number; phase: "intro" | "problem" | "think" | "fix"; done: number };
@@ -207,10 +236,12 @@ export function SectionContext() {
                 />
               ))}
             </motion.div>
-            <div className="ctx-count">
+            <div className={`ctx-count${finished ? " all" : ""}`}>
               <b>{nar.done}</b> of {N} connected
             </div>
           </div>
+
+          {!reduce && STEPS.map((st, i) => <Packet key={st.key} i={i} p={p} mobile={mobile} />)}
 
           <div className="ctx-col ctx-right">
             <span className="ctx-label good">With EVOQ · connected</span>

@@ -3,12 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowRt } from "./shared";
 
-const STEPS = [
-  "Pick the problem you would fix first",
-  "Add another product and your data connects",
-  "Run the whole business from one suite",
-];
-
 export function SectionCTA() {
   return (
     <section className="s-cta">
@@ -34,12 +28,6 @@ export function SectionCTA() {
           </a>
           <a className="cta3-ghost" href="/contact">Talk to us</a>
         </div>
-
-        <ol className="cta3-steps">
-          {STEPS.map((t, i) => (
-            <li key={t}><b>{String(i + 1).padStart(2, "0")}</b>{t}</li>
-          ))}
-        </ol>
       </motion.div>
     </section>
   );
