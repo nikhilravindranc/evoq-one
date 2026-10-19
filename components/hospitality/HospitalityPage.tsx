@@ -83,37 +83,6 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ 4. Behind the experience */
-function Behind() {
-  return (
-    <section style={{ background: SAGE, padding: "100px 0", overflow: "hidden" }}>
-      <div className="hs-wrap hs-split2">
-        <div className="hs-collage" data-rv="0">
-          <div style={{ position: "absolute", left: 0, top: 0, width: "70%", height: "78%", borderRadius: "28px 200px 28px 28px", ...photo(IMG.desk), boxShadow: "0 40px 80px -40px rgba(6,78,59,.6)" }} />
-          <div style={{ position: "absolute", right: 0, bottom: 0, width: "52%", height: "52%", borderRadius: "200px 28px 28px 28px", border: `6px solid ${SAGE}`, ...photo(IMG.cafe) }} />
-          <div style={{ position: "absolute", left: "8%", bottom: "6%", background: CREAM, borderRadius: 16, padding: "14px 18px", boxShadow: "0 26px 44px -26px rgba(6,78,59,.55)", fontSize: 12.5, color: INK, maxWidth: 210 }}>
-            <b style={{ display: "block", fontFamily: SERIF, fontWeight: 400, fontSize: 16, color: FOREST }}>Reservation confirmed</b>
-            <span style={{ color: MUTE }}>Special requirements noted for arrival</span>
-          </div>
-        </div>
-        <div data-rv="1">
-          <h2 style={h2}>The customer sees the experience. <em style={{ color: BOTANICAL }}>Your team manages the details.</em></h2>
-          <p style={{ margin: "24px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#33443A", maxWidth: "52ch" }}>A guest stay, restaurant visit or organized trip may appear straightforward to the customer. Behind it are enquiries to answer, responsibilities to coordinate, requests to resolve and records to maintain.</p>
-          <p style={{ margin: "16px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#33443A", maxWidth: "52ch" }}>EVOQ products support these activities, helping staff manage their responsibilities and maintain the information needed for day-to-day operations.</p>
-          <div className="hs-labels" style={{ marginTop: 28 }}>
-            {[["Enquiries", "Customer details and follow-up."], ["Requests", "Issues and service follow-up."], ["Internal work", "Responsibilities and assigned tasks."], ["Financial records", "Invoicing and payment administration."], ["Stock records", "Product and inventory information."]].map(([t, d]) => (
-              <div key={t} style={{ padding: "12px 16px", borderRadius: 14, border: `1px solid ${BOTANICAL}44`, background: "#ffffff66" }}>
-                <b style={{ display: "block", fontSize: 14, color: FOREST }}>{t}</b>
-                <span style={{ fontSize: 13, lineHeight: 1.5, color: MUTE }}>{d}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ------------------------------------------------------------------ 6. Final CTA */
 function FinalCta() {
   return (
@@ -169,7 +138,6 @@ export function HospitalityPage() {
       </div>
       <Hero />
       <HsModels eyebrow={<Eyebrow>Solutions for different hospitality models</Eyebrow>} />
-      <Behind />
       <FinalCta />
       <Footer background={FOREST} />
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
+import { useScrollSpy } from "@/components/shared/useScrollSpy";
 
 /* Field Service solutions: one pill-tab bar, one operating area at a time
    (same pattern as the home Solutions and Construction pages). Copy is the
@@ -146,35 +147,39 @@ const Tick = ({ c }: { c: string }) => (
 const Arrow = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>;
 
 export function FsSolutions() {
-  const [i, setI] = useState(0);
-  const t = TABS[i];
+  const { active: i, go } = useScrollSpy(TABS.map((x) => `fx-${x.key}`));
   const panel: CSSProperties = { marginTop: 40 };
   return (
     <section id="solutions" style={{ background: CW, padding: "96px 0 104px" }}>
       <style>{`
-        .fx-tabs-wrap{position:sticky;top:12px;z-index:20;display:flex;justify-content:flex-start;margin-top:34px}
+        .fx-tabs-wrap{position:sticky;top:0;z-index:20;display:flex;justify-content:flex-start;margin-top:30px;padding:12px 0 14px;background:linear-gradient(180deg,${CW} 78%,rgba(248,250,252,0))}
         .fx-tabs{display:flex;gap:4px;padding:6px;border-radius:999px;background:#fff;max-width:100%;overflow-x:auto;scrollbar-width:none;box-shadow:0 10px 34px -14px rgba(15,61,117,.3),0 0 0 1px rgba(15,61,117,.08)}
         .fx-tabs::-webkit-scrollbar{display:none}
-        .fx-tab{flex-shrink:0;display:inline-flex;align-items:center;gap:9px;padding:11px 22px 11px 12px;border-radius:999px;border:0;background:transparent;cursor:pointer;font-family:inherit;font-size:14.5px;font-weight:500;color:rgba(23,32,51,.62);white-space:nowrap;transition:background .18s ease,color .18s ease}
-        .fx-tab:hover{color:${INK}}
-        .fx-tab.on{font-weight:700}
-        .fx-num{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#E8EEF7;color:${SOFT};transition:background .18s ease,color .18s ease}
-        .fx-in{animation:fxIn .4s ease both}
+        .fx-tab{flex-shrink:0;display:inline-flex;align-items:center;gap:9px;padding:12px 24px 12px 12px;border-radius:999px;border:0;background:transparent;cursor:pointer;font-family:inherit;font-size:15.5px;font-weight:600;color:#33415C;white-space:nowrap;transition:background .18s ease,color .18s ease}
+        .fx-tab:hover{color:${INK};background:#F1F5FB}
+        .fx-tab.on{font-weight:700;box-shadow:inset 0 0 0 1.5px currentColor}
+        .fx-num{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#DCE5F2;color:#33415C;transition:background .18s ease,color .18s ease}
+        .fx-chapters{display:grid;gap:0}
+        .fx-chapter{scroll-margin-top:110px;padding-top:72px;margin-top:72px;border-top:1px solid ${LINE}}
+        .fx-chapter:first-child{padding-top:0;margin-top:0;border-top:0}
+        .fx-chead{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:2px solid}
+        .fx-chead span{color:#fff;font-size:13px;font-weight:700;border-radius:6px;padding:5px 9px;letter-spacing:.04em}
+        .fx-chead b{font-size:20px;letter-spacing:-.01em}
         @keyframes fxIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-        .fx-stack{display:grid;gap:40px}
+        .fx-stack{display:grid;gap:56px}
         .fx-intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:center}
         .fx-img{height:300px;border-radius:18px;background-size:cover;background-position:center;background-color:${PALE}}
         .fx-g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
         .fx-cols{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px}
         .fx-apps{display:flex;flex-wrap:wrap;gap:10px}
         @media (max-width:900px){.fx-intro,.fx-cols,.fx-g2{grid-template-columns:1fr}.fx-img{height:230px}}
-        @media (max-width:640px){.fx-tab{padding:9px 16px 9px 9px;font-size:13.5px}}
+        @media (max-width:640px){.fx-tab{padding:9px 16px 9px 9px;font-size:14px}}
         @media (prefers-reduced-motion:reduce){.fx-in{animation:none}}
       `}</style>
       <div className="fs-wrap">
-        <div style={{ maxWidth: 820 }} data-rv="0">
+        <div style={{ maxWidth: 900 }} data-rv="0">
           <p style={{ margin: "0 0 14px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: BURNT }}>Solutions</p>
-          <h2 style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 700, color: NAVY }}>Different operations. Clearer ways to get work done.</h2>
+          <h2 className="fs-h2" style={{ margin: 0, color: NAVY }}>Three kinds of service work. One clear way to run each.</h2>
           <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "70ch" }}>Whether technicians are responding to customer requests, facilities teams are resolving site issues or maintenance staff are servicing critical equipment, the work depends on clear responsibilities, timely action and reliable records.</p>
           <p style={{ margin: "10px 0 0", fontSize: 16, lineHeight: 1.8, color: INK, fontWeight: 600 }}>Explore how EVOQ supports each operating area.</p>
         </div>
@@ -184,7 +189,7 @@ export function FsSolutions() {
             {TABS.map((x, n) => {
               const sel = n === i;
               return (
-                <button key={x.key} type="button" role="tab" aria-selected={sel} className={`fx-tab${sel ? " on" : ""}`} style={sel ? { background: x.off, color: x.on } : undefined} onClick={() => setI(n)}>
+                <button key={x.key} type="button" role="tab" aria-selected={sel} className={`fx-tab${sel ? " on" : ""}`} style={sel ? { background: x.off, color: x.on } : undefined} onClick={go(n)}>
                   <span className="fx-num" style={sel ? { background: x.on, color: "#fff" } : undefined}>
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={x.icon} /></svg>
                   </span>
@@ -195,11 +200,17 @@ export function FsSolutions() {
           </div>
         </div>
 
-        <div key={t.key} className="fx-in fx-stack" role="tabpanel" style={panel}>
+        <div className="fx-chapters" style={panel}>
+        {TABS.map((t, n) => (
+        <div key={t.key} id={`fx-${t.key}`} className="fx-chapter fx-stack" role="tabpanel" aria-label={t.tab}>
+          <div className="fx-chead" style={{ borderColor: t.on }}>
+            <span style={{ background: t.on }}>{String(n + 1).padStart(2, "0")}</span>
+            <b style={{ color: t.on }}>{t.tab}</b>
+          </div>
           <div className="fx-intro">
             <div>
               <p style={{ margin: 0, fontSize: 12, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: t.on }}>{t.eyebrow}</p>
-              <h3 style={{ margin: "8px 0 0", fontWeight: 700, letterSpacing: "-.02em", color: NAVY }}>{t.title}</h3>
+              <h3 className="fs-h3" style={{ margin: "10px 0 0", color: NAVY }}>{t.title}</h3>
               {t.intro.map((p) => <p key={p} style={{ margin: "14px 0 0", fontSize: 15.5, lineHeight: 1.75, color: SOFT }}>{p}</p>)}
             </div>
             <div className="fx-img" role="img" aria-label={`${t.tab} photograph`} style={{ backgroundImage: `url(${t.img})` }} />
@@ -262,6 +273,8 @@ export function FsSolutions() {
           <div>
             <a href="/products/serviceops" className="fs-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: "none", background: t.on === NAVY ? NAVY : t.on, color: CW, boxShadow: `0 18px 32px -20px ${t.on}` }}>{t.cta}<Arrow /></a>
           </div>
+        </div>
+        ))}
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useScrollSpy } from "@/components/shared/useScrollSpy";
 
 /* Financial services segments, "ledger" style: a ruled list of three segments
    on the left, the selected segment's detail on the right (no navigation).
@@ -79,9 +79,7 @@ const SEGMENTS: Segment[] = [
 ];
 
 export function FinModels() {
-  const [open, setOpen] = useState(0);
-  const m = SEGMENTS[open];
-  const photo: CSSProperties = { backgroundImage: `url(${m.img})`, backgroundSize: "cover", backgroundPosition: m.pos };
+  const { active: open, go } = useScrollSpy(SEGMENTS.map((x) => `fm-p-${x.key}`));
   return (
     <section id="segments" style={{ background: "#fff", padding: "104px 0 108px" }}>
       <style>{`
@@ -100,19 +98,21 @@ export function FinModels() {
         .fm-sum{display:block;overflow:hidden;max-height:0;opacity:0;transition:max-height .45s ease,opacity .35s ease}
         .fm-row.on .fm-sum{max-height:220px;opacity:1}
         .fm-layout{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:56px;align-items:start}
+        .fm-index{position:sticky;top:96px}
+        .fm-panels{display:grid;gap:0}
+        .fm-panel{scroll-margin-top:96px;padding-top:72px;margin-top:72px;border-top:1px solid ${BORDER}}
+        .fm-panel:first-child{padding-top:0;margin-top:0;border-top:0}
         .fm-duo{position:relative;height:230px;border-radius:6px;overflow:hidden;background-size:cover;filter:grayscale(1) contrast(1.05)}
         .fm-duo-wrap{position:relative;border-radius:6px;overflow:hidden}
         .fm-duo-wrap::after{content:"";position:absolute;inset:0;background:${NAVY};mix-blend-mode:multiply;opacity:.78;pointer-events:none}
         .fm-duo-wrap::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(27,127,140,.35),rgba(27,127,140,0));z-index:1;pointer-events:none}
         .fm-trow{display:grid;grid-template-columns:210px minmax(0,1fr);gap:20px;padding:16px 0;border-top:1px solid ${BORDER}}
-        .fm-detail{animation:fmIn .4s ease both}
-        @keyframes fmIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-        @media (max-width:1000px){.fm-layout{grid-template-columns:1fr;gap:34px}}
-        @media (max-width:640px){.fm-trow{grid-template-columns:1fr;gap:4px}.fm-row{grid-template-columns:42px minmax(0,1fr) 18px}.fm-num{font-size:24px}}
-        @media (prefers-reduced-motion:reduce){.fm-detail{animation:none}.fm-row,.fm-sum,.fm-arrow,.fm-num,.fm-row::before{transition:none}}
+        @media (max-width:1000px){.fm-layout{grid-template-columns:1fr;gap:34px}.fm-index{position:sticky;top:0;z-index:15;background:#fff;box-shadow:0 10px 20px -16px rgba(11,45,79,.4)}.fm-row{padding:14px 14px 14px 16px}.fm-num{font-size:22px}.fm-sum{display:none}}
+        @media (max-width:640px){.fm-trow{grid-template-columns:1fr;gap:4px}.fm-row{grid-template-columns:36px minmax(0,1fr) 18px}}
+        @media (prefers-reduced-motion:reduce){.fm-row,.fm-sum,.fm-arrow,.fm-num,.fm-row::before{transition:none}}
       `}</style>
       <div className="fn-wrap">
-        <div className="fm-head" data-rv="0" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,.9fr)", gap: 56, alignItems: "end", paddingBottom: 36, borderBottom: `2px solid ${NAVY}`, marginBottom: 0 }}>
+        <div className="fm-head" data-rv="0" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,.9fr)", gap: 56, alignItems: "end", paddingBottom: 12, marginBottom: 0 }}>
           <div>
             <p style={{ margin: "0 0 16px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: TEAL }}>Solutions for different financial services</p>
             <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Different relationships. Different operational needs.</h2>
@@ -120,10 +120,10 @@ export function FinModels() {
           <p style={{ margin: 0, fontSize: 16.5, lineHeight: 1.8, color: MUTE }}>Banks, insurance providers and financial advisors serve clients in different ways. Explore the operational needs of your segment and see where EVOQ products can help.</p>
         </div>
 
-        <div className="fm-layout" style={{ marginTop: 48 }} data-rv="1">
-          <div role="tablist" aria-label="Financial services segments">
+        <div className="fm-layout" style={{ marginTop: 48 }}>
+          <div className="fm-index" role="tablist" aria-label="Financial services segments">
             {SEGMENTS.map((x, i) => (
-              <button key={x.key} type="button" role="tab" aria-selected={i === open} aria-controls="fm-detail" className={`fm-row${i === open ? " on" : ""}`} onClick={() => setOpen(i)}>
+              <button key={x.key} type="button" role="tab" aria-selected={i === open} aria-controls={`fm-p-${x.key}`} className={`fm-row${i === open ? " on" : ""}`} onClick={go(i)}>
                 <span className="fm-num">{String(i + 1).padStart(2, "0")}</span>
                 <span>
                   <span style={{ display: "block", fontSize: 21, fontWeight: 600, lineHeight: 1.25, letterSpacing: "-.01em", color: NAVY }}>{x.name}</span>
@@ -134,32 +134,36 @@ export function FinModels() {
             ))}
           </div>
 
-          <div id="fm-detail" key={m.key} role="tabpanel" className="fm-detail">
-            <div className="fm-duo-wrap"><div className="fm-duo" style={photo} role="img" aria-label={`${m.name} photograph`} /></div>
-            <h3 style={{ margin: "30px 0 0", fontFamily: SERIF, fontWeight: 500, letterSpacing: "-.01em", color: NAVY }}>{m.title}</h3>
-            {m.intro.map((p) => <p key={p} style={{ margin: "14px 0 0", fontSize: 16, lineHeight: 1.8, color: "#334155" }}>{p}</p>)}
-            <div style={{ marginTop: 26, borderBottom: `1px solid ${BORDER}` }}>
-              {m.points.map(([h, d]) => (
-                <div key={h} className="fm-trow">
-                  <div style={{ fontSize: 15.5, fontWeight: 700, color: NAVY }}>{h}</div>
-                  <div style={{ fontSize: 14.5, lineHeight: 1.65, color: MUTE }}>{d}</div>
+          <div className="fm-panels">
+            {SEGMENTS.map((m) => (
+              <div key={m.key} id={`fm-p-${m.key}`} role="tabpanel" aria-label={m.name} className="fm-panel">
+                <div className="fm-duo-wrap"><div className="fm-duo" style={{ backgroundImage: `url(${m.img})`, backgroundSize: "cover", backgroundPosition: m.pos }} role="img" aria-label={`${m.name} photograph`} /></div>
+                <h3 style={{ margin: "30px 0 0", fontFamily: SERIF, fontWeight: 500, letterSpacing: "-.01em", color: NAVY }}>{m.title}</h3>
+                {m.intro.map((p) => <p key={p} style={{ margin: "14px 0 0", fontSize: 16, lineHeight: 1.8, color: "#334155" }}>{p}</p>)}
+                <div style={{ marginTop: 26, borderBottom: `1px solid ${BORDER}` }}>
+                  {m.points.map(([h, d]) => (
+                    <div key={h} className="fm-trow">
+                      <div style={{ fontSize: 15.5, fontWeight: 700, color: NAVY }}>{h}</div>
+                      <div style={{ fontSize: 14.5, lineHeight: 1.65, color: MUTE }}>{d}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 22, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: TEAL, marginRight: 6 }}>Relevant products</span>
-              {m.products.map((a) => (
-                <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 13px 5px 6px", borderRadius: 6, background: MINT, fontSize: 12.5, fontWeight: 700, color: NAVY }}>
-                  {ICON[a] ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={ICON[a]} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain" }} />
-                  ) : (
-                    <span style={{ width: 20, height: 20, borderRadius: 4, background: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: TEAL }}>{a[0]}</span>
-                  )}
-                  {a}
-                </span>
-              ))}
-            </div>
+                <div style={{ marginTop: 22, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: TEAL, marginRight: 6 }}>Relevant products</span>
+                  {m.products.map((a) => (
+                    <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 13px 5px 6px", borderRadius: 6, background: MINT, fontSize: 12.5, fontWeight: 700, color: NAVY }}>
+                      {ICON[a] ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={ICON[a]} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain" }} />
+                      ) : (
+                        <span style={{ width: 20, height: 20, borderRadius: 4, background: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: TEAL }}>{a[0]}</span>
+                      )}
+                      {a}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

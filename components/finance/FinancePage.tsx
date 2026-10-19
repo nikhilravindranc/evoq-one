@@ -72,6 +72,14 @@ function Hero() {
             ))}
           </ul>
         </div>
+        <div className="fn-mini fn-mini-a" aria-hidden="true">
+          <span className="fn-mini-ic" style={{ background: MINT }}><Line d="M5 12.5l4.5 4.5L19 7" c={TEAL} /></span>
+          <span><b>Service request resolved</b><i>Statement query · closed in 3 days</i></span>
+        </div>
+        <div className="fn-mini fn-mini-b" aria-hidden="true">
+          <span className="fn-mini-ic" style={{ background: "#F6EFDF" }}><Line d="M4 6h16v14H4zM4 10h16M9 3v4M15 3v4" c="#A9893F" /></span>
+          <span><b>Meeting scheduled</b><i>Annual review · Thursday 10:00</i></span>
+        </div>
         <ul aria-hidden="true" className="fn-vlabels">
           {["People", "Insights", "Growth"].map((t) => <li key={t}>{t}</li>)}
         </ul>
@@ -123,7 +131,7 @@ function Behind() {
               <div role="img" aria-label="A client meeting" style={{ height: 210, backgroundImage: "url(/finance/team.jpg)", backgroundSize: "cover", backgroundPosition: "50% 45%", filter: "grayscale(1) contrast(1.05)" }} />
             </div>
           </div>
-          <ol data-rv="1" style={{ listStyle: "none", margin: 0, padding: 0, borderTop: `2px solid ${NAVY}` }}>
+          <ol data-rv="1" style={{ listStyle: "none", margin: 0, padding: 0 }}>
             {labels.map(([t, d], i) => (
               <li key={t} className="fn-lrow" style={{ display: "grid", gridTemplateColumns: "64px minmax(0,1fr)", gap: 16, padding: "24px 4px", borderBottom: `1px solid ${BORDER}`, alignItems: "baseline" }}>
                 <span className="fn-lnum" style={{ fontSize: 28, fontWeight: 300, letterSpacing: "-.02em", color: "#B8C4D2", fontVariantNumeric: "tabular-nums" }}>{String(i + 1).padStart(2, "0")}</span>
@@ -145,7 +153,7 @@ function FinalCta() {
   return (
     <section id="talk" style={{ background: "#fff", padding: "96px 0 100px" }}>
       <div className="fn-wrap">
-        <div data-rv="0" className="fn-cta" style={{ borderTop: `2px solid ${NAVY}`, paddingTop: 40, display: "grid", gridTemplateColumns: "minmax(0,1.1fr) minmax(0,.9fr)", gap: 64, alignItems: "end" }}>
+        <div data-rv="0" className="fn-cta" style={{ paddingTop: 8, display: "grid", gridTemplateColumns: "minmax(0,1.1fr) minmax(0,.9fr)", gap: 64, alignItems: "end" }}>
           <div>
             <p style={{ margin: "0 0 16px", display: "flex", alignItems: "center", gap: 12, fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: TEAL }}><span aria-hidden="true" style={{ width: 28, height: 1.5, background: GOLD }} />Financial Services</p>
             <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Let&apos;s look at how your financial services operation works.</h2>
@@ -172,6 +180,13 @@ export function FinancePage() {
         .fn-heroshade{position:absolute;inset:0;background:linear-gradient(90deg,#F7F9FB 0%,rgba(247,249,251,.88) 8%,rgba(247,249,251,.4) 20%,rgba(247,249,251,0) 38%),linear-gradient(0deg,rgba(247,249,251,.9) 0%,rgba(247,249,251,0) 28%)}
         .fn-arc{position:absolute;right:0;top:0;width:58%;height:auto;opacity:.9}
         .fn-panel{position:absolute;left:24%;top:9%;width:292px;background:#fff;border-radius:10px;padding:18px 20px 8px;box-shadow:0 30px 60px -28px rgba(11,45,79,.45),0 0 0 1px ${BORDER}}
+        .fn-mini{position:absolute;display:flex;align-items:center;gap:12px;background:#fff;border-radius:10px;padding:12px 16px 12px 12px;box-shadow:0 26px 50px -26px rgba(11,45,79,.5),0 0 0 1px ${BORDER};opacity:0;animation:fnPop .6s ease forwards}
+        .fn-mini b{display:block;font-size:13px;font-weight:700;color:${NAVY}}
+        .fn-mini i{display:block;font-style:normal;font-size:11.5px;color:${MUTE};margin-top:1px}
+        .fn-mini-ic{width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+        .fn-mini-a{right:4%;top:46%;animation-delay:1.6s}
+        .fn-mini-b{right:9%;bottom:13%;animation-delay:1.9s}
+        @keyframes fnPop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
         .fn-spark{stroke-dasharray:420;stroke-dashoffset:420;animation:fnDraw 1.6s .4s ease forwards}
         @keyframes fnDraw{to{stroke-dashoffset:0}}
         .fn-prow{opacity:0;transform:translateX(8px);animation:fnRow .5s ease forwards}
@@ -196,9 +211,9 @@ export function FinancePage() {
         .fm-head{}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1180px){.fn-panel,.fn-vlabels,.fn-arc{display:none}}
+        @media (max-width:1180px){.fn-panel,.fn-vlabels,.fn-arc,.fn-mini{display:none}}
         @media (max-width:1000px){.fn-behind,.fn-cta,.fm-head{grid-template-columns:1fr!important;gap:36px!important}.fn-herosec{display:flex;flex-direction:column}.fn-heroimg{position:relative;order:2;width:100%;height:300px}.fn-heroshade{background:linear-gradient(180deg,#F7F9FB,rgba(247,249,251,0) 35%)}.fn-hero{padding:48px 0 40px}.fn-benefits{order:3;grid-template-columns:1fr;gap:22px;padding:30px 0 44px}.fn-benefit,.fn-benefit:first-child{border-left:0;padding:0}}
-        @media (prefers-reduced-motion:reduce){.hs-rv,.fn-btn,.fn-lrow{transition:none}.fn-spark{animation:none;stroke-dashoffset:0}.fn-prow{animation:none;opacity:1;transform:none}}
+        @media (prefers-reduced-motion:reduce){.hs-rv,.fn-btn,.fn-lrow{transition:none}.fn-spark{animation:none;stroke-dashoffset:0}.fn-prow,.fn-mini{animation:none;opacity:1;transform:none}}
       `}</style>
       <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: `1px solid ${BORDER}` }}>
         <Topbar darkCTA={false} light ctaColor={NAVY} />

@@ -160,7 +160,7 @@ const SOLUTIONS: {
   { name: "Construction, Engineering & Real Estate", sub: "Projects, technical work and property", href: "/solutions/construction", icon: "building" },
   { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "/solutions/field-service", icon: "wrench" },
   { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "/solutions/hospitality", icon: "hotel" },
-  { name: "Finance", sub: "Clients, follow-ups and service", href: "/solutions/finance", icon: "bank" },
+  { name: "Financial Services", sub: "Clients, follow-ups and service", href: "/solutions/finance", icon: "bank" },
   { name: "All industries", sub: "One suite, every industry", href: "/industries", icon: "grid" },
 ];
 
@@ -170,7 +170,7 @@ const SOLUTION_BRAND: Record<string, { fg: string; tint: string }> = {
   "Construction, Engineering & Real Estate": { fg: "#B5532F", tint: "#F8ECDC" },
   "Field Service, Facilities & Maintenance": { fg: "#1F5FE0", tint: "#E6EFFF" },
   "Hospitality, Travel & F&B": { fg: "#1F4D3A", tint: "#F4ECD9" },
-  Finance: { fg: "#0B2D4F", tint: "#E7F3EE" },
+  "Financial Services": { fg: "#0B2D4F", tint: "#E7F3EE" },
   "All industries": { fg: "#1E40AF", tint: "#E9EDF7" },
 };
 const brandVars = (name: string) => {
@@ -531,7 +531,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                 </ul>
                 ))}
               </div>
-              <div className="mt-2 flex items-center justify-between gap-3 border-t border-[#E3E6F0] px-2.5 pt-3">
+              <div className="mt-2 flex items-center justify-end gap-3 border-t border-[#E3E6F0] px-2.5 pt-3">
                 <Link
                   href="/solutions"
                   onClick={() => setSolutionsOpen(false)}

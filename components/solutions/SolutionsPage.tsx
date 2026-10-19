@@ -31,6 +31,17 @@ const Icon = ({ n, c = "currentColor", s = 22 }: { n: string; c?: string; s?: nu
   <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{ICONS[n]}</svg>
 );
 
+/* Each solution's own colours: fg = icon and link, deep = headings, tint = soft fills. */
+const BRAND: Record<string, { fg: string; deep: string; tint: string }> = {
+  "Healthcare": { fg: "#18B8D1", deep: "#0F766E", tint: "#E3F6F9" },
+  "Construction, Engineering & Real Estate": { fg: "#B5532F", deep: "#7C2D1F", tint: "#F8ECDC" },
+  "Manufacturing": { fg: "#1F2933", deep: "#1F2933", tint: "#E6EAEF" },
+  "Field Service, Facilities & Maintenance": { fg: "#1F5FE0", deep: "#0F3D75", tint: "#E6EFFF" },
+  "Hospitality, Travel & F&B": { fg: "#1F4D3A", deep: "#14532D", tint: "#F4ECD9" },
+  "Financial Services": { fg: "#1B7F8C", deep: "#0B2D4F", tint: "#E7F3EE" },
+  "All industries": { fg: "#2563EB", deep: "#1E3A8A", tint: "#E9EDF7" },
+};
+
 type Industry = { name: string; short: string; icon: string; body: string; link: string; href: string; img: string };
 const INDUSTRIES: Industry[] = [
   { name: "Healthcare", short: "Healthcare", icon: "heart", body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.", link: "Explore healthcare solutions", href: "/solutions/healthcare", img: "/healthcare/stock/hc-cta-team.jpg" },
@@ -38,7 +49,7 @@ const INDUSTRIES: Industry[] = [
   { name: "Manufacturing", short: "Manufacturing", icon: "gear", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ products.", link: "Explore manufacturing solutions", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
   { name: "Field Service, Facilities & Maintenance", short: "Field service", icon: "wrench", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.", link: "Explore Field Service, Facilities & Maintenance solutions", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
   { name: "Hospitality, Travel & F&B", short: "Hospitality", icon: "hotel", body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.", link: "Explore Hospitality, Travel & F&B solutions", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
-  { name: "Finance", short: "Finance", icon: "bank", body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.", link: "Explore finance solutions", href: "/solutions/finance", img: U("1714974528737-3e6c7e4d11af") },
+  { name: "Financial Services", short: "Financial services", icon: "bank", body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.", link: "Explore financial services solutions", href: "/solutions/finance", img: U("1714974528737-3e6c7e4d11af") },
   { name: "All industries", short: "All industries", icon: "grid", body: "Don't see your industry? EVOQ products combine to fit how your organization works, so you can start with what you need.", link: "Explore all industries", href: "/industries", img: U("1542744173-8e7e53415bb0") },
 ];
 
@@ -87,7 +98,7 @@ function Hero() {
         <div className="sl-hero">
           <div data-rv="0">
             <Eyebrow>Solutions</Eyebrow>
-            <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: DEEP }}>Software solutions for the way your industry operates</h1>
+            <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: DEEP }}>Solutions for the way your industry operates</h1>
             <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.75, color: "#4B5563", maxWidth: "52ch" }}>Every industry has its own processes, priorities and operational challenges. EVOQ brings together products that address these needs, helping organizations manage industry-specific activities with greater visibility and coordination.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 14, flexWrap: "wrap" }}>
               <Btn href="#" enquiry>Talk to an expert</Btn>
@@ -124,20 +135,23 @@ function ByIndustry() {
           <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.7, color: "#4B5563" }}>Explore how EVOQ products address the specific needs of different industries.</p>
         </div>
         <div className="sl-grid" style={{ marginTop: 48 }}>
-          {INDUSTRIES.map((x, i) => (
-            <a key={x.name} href={x.href} data-rv={String(i % 3)} className={`sl-card sl-c${i}`} style={{ display: "flex", flexDirection: "column", background: "#fff", border: `1px solid ${MIST}`, borderRadius: 20, overflow: "hidden", textDecoration: "none", color: INK, boxShadow: "0 18px 40px -34px rgba(30,58,138,.5)" }}>
+          {INDUSTRIES.map((x, i) => {
+            const bc = BRAND[x.name] ?? { fg: SAPPHIRE, deep: DEEP, tint: PALE };
+            return (
+            <a key={x.name} href={x.href} data-rv={String(i % 3)} className={`sl-card sl-c${i}`} style={{ ["--ic" as string]: bc.fg, ["--it" as string]: bc.tint, display: "flex", flexDirection: "column", background: "#fff", border: `1px solid ${MIST}`, borderTop: `3px solid ${bc.fg}`, borderRadius: 20, overflow: "hidden", textDecoration: "none", color: INK, boxShadow: "0 18px 40px -34px rgba(30,58,138,.5)" } as CSSProperties}>
               <span aria-hidden="true" className="sl-cimg" style={{ position: "relative", display: "block", height: 200, ...photo(x.img) }}>
-                <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(23,37,84,0) 50%, rgba(23,37,84,.45))" }} />
-                <span style={{ position: "absolute", left: 16, top: 16, fontSize: 11, fontWeight: 700, letterSpacing: ".14em", color: "#fff", background: "rgba(23,37,84,.55)", borderRadius: 99, padding: "5px 11px", backdropFilter: "blur(4px)" }}>{String(i + 1).padStart(2, "0")}</span>
+                <span style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, rgba(0,0,0,0) 45%, ${bc.deep}99)` }} />
+                <span style={{ position: "absolute", left: 16, top: 16, fontSize: 11, fontWeight: 700, letterSpacing: ".14em", color: "#fff", background: `${bc.deep}b3`, borderRadius: 99, padding: "5px 11px", backdropFilter: "blur(4px)" }}>{String(i + 1).padStart(2, "0")}</span>
               </span>
               <span style={{ position: "relative", display: "flex", flexDirection: "column", flex: 1, padding: "34px 26px 26px" }}>
-                <span aria-hidden="true" style={{ position: "absolute", left: 22, top: -24, width: 48, height: 48, borderRadius: 14, background: SAPPHIRE, color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 24px -10px rgba(37,99,235,.9), 0 0 0 5px #fff" }}><Icon n={x.icon} /></span>
-                <h3 style={{ margin: 0, fontWeight: 600, letterSpacing: "-.015em", color: DEEP }}>{x.name}</h3>
+                <span aria-hidden="true" style={{ position: "absolute", left: 22, top: -24, width: 48, height: 48, borderRadius: 14, background: bc.fg, color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", boxShadow: `0 12px 24px -10px ${bc.fg}, 0 0 0 5px #fff` }}><Icon n={x.icon} /></span>
+                <h3 style={{ margin: 0, fontWeight: 600, letterSpacing: "-.015em", color: bc.deep }}>{x.name}</h3>
                 <span style={{ margin: "10px 0 0", fontSize: 14.5, lineHeight: 1.7, color: "#4B5563", flex: 1 }}>{x.body}</span>
-                <span style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${MIST}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, fontSize: 14, fontWeight: 600, color: SAPPHIRE }}>{x.link} <span className="sl-go" style={{ flex: "none", width: 30, height: 30, borderRadius: "50%", background: PALE, display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Arrow /></span></span>
+                <span style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${MIST}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, fontSize: 14, fontWeight: 600, color: bc.deep }}>{x.link} <span className="sl-go" style={{ flex: "none", width: 30, height: 30, borderRadius: "50%", background: bc.tint, color: bc.deep, display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Arrow /></span></span>
               </span>
             </a>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -232,7 +246,7 @@ export function SolutionsPage() {
   return (
     <div className="hs-root" style={{ minHeight: "100vh", background: "#fff", color: INK, fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
       <HsMotion />
-      <EnquiryModal eyebrow="EVOQ Solutions" segments={["Healthcare", "Manufacturing", "Construction, Engineering & Real Estate", "Field Service, Facilities & Maintenance", "Hospitality, Travel & F&B", "Finance", "Another industry"]} segmentLabel="Your industry" placeholder="Tell us about your processes and what you would like to support..." accent={DEEP} accentSoft={SAPPHIRE} />
+      <EnquiryModal eyebrow="EVOQ Solutions" segments={["Healthcare", "Manufacturing", "Construction, Engineering & Real Estate", "Field Service, Facilities & Maintenance", "Hospitality, Travel & F&B", "Financial Services", "Another industry"]} segmentLabel="Your industry" placeholder="Tell us about your processes and what you would like to support..." accent={DEEP} accentSoft={SAPPHIRE} />
       <style>{`
         .sl-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .sl-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:46px 0 84px}
@@ -242,15 +256,15 @@ export function SolutionsPage() {
         .sl-t1{grid-column:span 3}.sl-t2,.sl-t3,.sl-t4{grid-column:span 1}
         .sl-tag{position:absolute;left:8px;bottom:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.94);color:${DEEP};font-style:normal;font-size:11px;font-weight:700;padding:4px 9px 4px 7px;border-radius:99px}
         .sl-t2 .sl-tag,.sl-t3 .sl-tag,.sl-t4 .sl-tag{display:none}
-        .sl-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:30px 22px}
-        .sl-c0,.sl-c1,.sl-c2{grid-column:span 2}.sl-c3,.sl-c4,.sl-c5,.sl-c6{grid-column:span 3}
+        .sl-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:36px 20px}
+        .sl-c0,.sl-c1,.sl-c2,.sl-c3{grid-column:span 3}.sl-c4,.sl-c5,.sl-c6{grid-column:span 4}
         .sl-oneline{white-space:nowrap}
         .sl-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 22px}
         .sl-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
         .sl-apps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-bottom:14px!important}
         .sl-card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
-        .sl-card:hover,.sl-card:focus-visible{transform:translateY(-5px);box-shadow:0 30px 56px -32px rgba(30,58,138,.6);border-color:#93C5FD}
-        .sl-card:hover .sl-go{background:${SAPPHIRE};color:#fff}
+        .sl-card:hover,.sl-card:focus-visible{transform:translateY(-5px);box-shadow:0 30px 56px -32px rgba(30,58,138,.6)}
+        .sl-card:hover .sl-go{background:var(--ic,${SAPPHIRE})!important;color:#fff!important}
         .sl-go{transition:background .2s ease,color .2s ease}
         .sl-prod{transition:background .2s ease}
         .sl-prod:hover{background:rgba(255,255,255,.18)}
@@ -259,7 +273,8 @@ export function SolutionsPage() {
         .sl-btn:focus-visible,.sl-link:focus-visible,.sl-card:focus-visible{outline:3px solid #93C5FD;outline-offset:3px}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1000px){.sl-hero,.sl-split{grid-template-columns:1fr;gap:36px}.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-oneline{white-space:normal}.sl-c0,.sl-c1,.sl-c2,.sl-c3,.sl-c4,.sl-c5{grid-column:span 1}.sl-c6{grid-column:span 2}.sl-g3{grid-template-columns:1fr}.sl-jline{display:none}}
+        @media (max-width:1100px){.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-c0,.sl-c1,.sl-c2,.sl-c3,.sl-c4,.sl-c5{grid-column:span 1}.sl-c6{grid-column:span 2}}
+        @media (max-width:1000px){.sl-hero,.sl-split{grid-template-columns:1fr;gap:36px}.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-oneline{white-space:normal}.sl-g3{grid-template-columns:1fr}.sl-jline{display:none}}
         @media (max-width:640px){.sl-grid{grid-template-columns:1fr}.sl-c6{grid-column:span 1}.sl-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-mosaic{grid-template-rows:repeat(2,110px)}.sl-close{padding:40px 24px!important}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.sl-card,.sl-btn{transition:none}}
       `}</style>

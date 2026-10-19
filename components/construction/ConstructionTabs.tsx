@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useScrollSpy } from "@/components/shared/useScrollSpy";
 
 const INK = "#1F2A37";
 const MUTE = "#5B6470";
@@ -326,21 +326,21 @@ const NAV = [
    one pill bar on top, the active pill tinted with that industry's colour,
    one industry shown at a time. */
 export function ConstructionIndustries() {
-  const [active, setActive] = useState(0);
-  const on = NAV[active];
+  const { active, go } = useScrollSpy(NAV.map((x) => x.id));
 
   return (
     <section id="solutions" style={{ background: "#FFFDFB", color: INK, padding: "92px 0 100px" }}>
       <style>{`
-        .ci-tabs-wrap{position:sticky;top:12px;z-index:20;display:flex;justify-content:flex-start;margin-top:36px}
+        .ci-tabs-wrap{position:sticky;top:0;z-index:20;display:flex;justify-content:flex-start;margin-top:30px;padding:12px 0 14px;background:linear-gradient(180deg,#FFFDFB 78%,rgba(255,253,251,0))}
         .ci-tabs{display:flex;gap:4px;padding:6px;border-radius:999px;background:#fff;max-width:100%;overflow-x:auto;scrollbar-width:none;box-shadow:0 10px 34px -14px rgba(20,24,60,.28),0 0 0 1px rgba(31,36,48,.06)}
         .ci-tabs::-webkit-scrollbar{display:none}
-        .ci-tab{flex-shrink:0;display:inline-flex;align-items:center;gap:9px;padding:11px 22px 11px 12px;border-radius:999px;border:0;background:transparent;cursor:pointer;font-family:inherit;font-size:14.5px;font-weight:500;color:rgba(31,36,48,.62);white-space:nowrap;transition:background .18s ease,color .18s ease}
-        .ci-tab:hover{color:${INK}}
-        .ci-tab.on{font-weight:700}
-        .ci-num{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;background:#F1ECE6;color:${MUTE};transition:background .18s ease,color .18s ease}
-        .ci-chapters{margin-top:44px}
-        .ci-chapter{display:grid;gap:36px}
+        .ci-tab{flex-shrink:0;display:inline-flex;align-items:center;gap:9px;padding:12px 24px 12px 12px;border-radius:999px;border:0;background:transparent;cursor:pointer;font-family:inherit;font-size:15.5px;font-weight:600;color:#3A4658;white-space:nowrap;transition:background .18s ease,color .18s ease}
+        .ci-tab:hover{color:${INK};background:#F6F1EB}
+        .ci-tab.on{font-weight:700;box-shadow:inset 0 0 0 1.5px currentColor}
+        .ci-num{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;background:#EDE6DE;color:#3A4658;transition:background .18s ease,color .18s ease}
+        .ci-chapters{margin-top:40px;display:grid;gap:0}
+        .ci-chapter{display:grid;gap:36px;scroll-margin-top:110px;padding-top:80px;margin-top:80px;border-top:1px solid ${LINE}}
+        .ci-chapter:first-child{padding-top:0;margin-top:0;border-top:0}
         .ci-aud{display:grid;gap:24px;padding:28px;border:1px solid ${LINE};border-radius:16px;background:#fff}
         .ci-aud-top{display:grid;grid-template-columns:220px minmax(0,1fr);gap:26px;align-items:center}
         .ci-aud-img{height:160px;border-radius:10px;background-size:cover;background-position:center;background-color:#E5ECE7}
@@ -349,15 +349,12 @@ export function ConstructionIndustries() {
         .ci-g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 40px}
         .ci-g2.ci-tight{gap:14px}
         .ci-apps{display:flex;flex-wrap:wrap;gap:16px 32px}
-        @keyframes ciIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-        .ci-in{animation:ciIn .4s ease both}
         @media (max-width:760px){
           .ci-intro,.ci-g2,.ci-aud-top{grid-template-columns:1fr}
           .ci-img{height:220px}.ci-aud-img{height:180px}
           .ci-aud{padding:20px}
-          .ci-tab{padding:9px 16px 9px 9px;font-size:13.5px}
+          .ci-tab{padding:9px 16px 9px 9px;font-size:14px}
         }
-        @media (prefers-reduced-motion:reduce){.ci-in{animation:none}}
       `}</style>
       <div className="cn-wrap">
         <p style={{ margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "#A2563B" }}>Industries</p>
@@ -377,7 +374,7 @@ export function ConstructionIndustries() {
                   aria-controls={x.id}
                   className={`ci-tab${sel ? " on" : ""}`}
                   style={sel ? { background: x.p.off, color: x.p.on } : undefined}
-                  onClick={() => setActive(i)}
+                  onClick={go(i)}
                 >
                   <span className="ci-num" style={sel ? { background: x.p.on, color: "#fff" } : undefined}>{x.n}</span>
                   {x.label}
@@ -387,10 +384,10 @@ export function ConstructionIndustries() {
           </div>
         </div>
 
-        <div key={on.id} className="ci-chapters ci-in" role="tabpanel">
-          {active === 0 && <Chapter id="ind-construction" n="01" d={CONSTRUCTION} p={CON} />}
-          {active === 1 && <Chapter id="ind-engineering" n="02" d={ENGINEERING} p={ENG} />}
-          {active === 2 && <RealEstateChapter />}
+        <div className="ci-chapters">
+          <Chapter id="ind-construction" n="01" d={CONSTRUCTION} p={CON} />
+          <Chapter id="ind-engineering" n="02" d={ENGINEERING} p={ENG} />
+          <RealEstateChapter />
         </div>
       </div>
     </section>

@@ -60,7 +60,7 @@ function Hero() {
         <div className="fs-hero">
           <div data-rv="0">
             <Eyebrow>Field Service · Facilities · Maintenance</Eyebrow>
-            <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Where service <span style={{ color: BLUE }}>keeps things running.</span></h1>
+            <h1 className="fs-h1" style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Where service <span style={{ color: BLUE }}>keeps things running.</span></h1>
             <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: SOFT, maxWidth: "52ch" }}>From field service visits and facility operations to equipment maintenance, explore solutions that help teams coordinate work, resolve issues and keep essential operations moving.</p>
             <div style={{ marginTop: 32 }}><Cta>Talk to an expert</Cta></div>
             <div style={{ marginTop: 40, display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap", fontSize: 13.5, fontWeight: 700, color: NAVY }}>
@@ -125,7 +125,7 @@ function Ecosystem() {
     <section style={{ background: PALE, padding: "96px 0 100px" }}>
       <div className="fs-wrap">
         <div className="fs-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow>The EVOQ ecosystem</Eyebrow><h2 style={h2}>Service operations, supported by the right products.</h2></div>
+          <div><Eyebrow>The EVOQ ecosystem</Eyebrow><h2 className="fs-h2" style={h2}>Service operations, supported by the right products.</h2></div>
           <div>
             <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Field service, facilities management and maintenance involve more than the work order itself. Requests need to be handled, technicians need the right job information, parts must be accounted for and billable work may need to be invoiced.</p>
             <p style={{ margin: "12px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>EVOQ brings together products that address different parts of these operations, with ServiceOps at the center of service delivery.</p>
@@ -140,7 +140,7 @@ function Ecosystem() {
               <article key={a.name} className="fs-card" style={{ background: a.main ? NAVY : CW, color: a.main ? CW : INK, border: `1px solid ${a.main ? NAVY : LINE}`, borderRadius: 18, padding: "24px 22px 26px", boxShadow: a.main ? `0 30px 50px -30px ${NAVY}` : "none" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ICON[a.name]} alt="" width={46} height={46} style={{ width: 46, height: 46, objectFit: "contain", background: CW, borderRadius: 12, padding: 5 }} />
-                <h3 style={{ margin: "16px 0 0", fontWeight: 700, color: a.main ? CW : NAVY }}>{a.name}</h3>
+                <h3 className="fs-h3s" style={{ margin: "16px 0 0", fontWeight: 700, color: a.main ? CW : NAVY }}>{a.name}</h3>
                 <div style={{ marginTop: 4, fontSize: 15, fontWeight: 700, color: a.main ? "#FDBA74" : BURNT }}>{a.line}</div>
                 <p style={{ margin: "10px 0 0", fontSize: 14, lineHeight: 1.7, color: a.main ? "rgba(248,250,252,.82)" : SOFT }}>{a.body}</p>
               </article>
@@ -171,7 +171,7 @@ function Faq() {
   return (
     <section style={{ background: CW, padding: "96px 0" }}>
       <div className="fs-wrap" style={{ maxWidth: 940 }}>
-        <div data-rv="0"><Eyebrow>FAQ</Eyebrow><h2 style={h2}>Frequently asked questions</h2></div>
+        <div data-rv="0"><Eyebrow>FAQ</Eyebrow><h2 className="fs-h2" style={h2}>Frequently asked questions</h2></div>
         <div data-rv="1" style={{ marginTop: 40, borderTop: `1px solid ${LINE}` }}>
           {FAQ.map(([q, a]) => (
             <details key={q} className="fs-faq" style={{ borderBottom: `1px solid ${LINE}` }}>
@@ -196,7 +196,7 @@ function FinalCta() {
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(15,61,117,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(15,61,117,.07) 1px, transparent 1px)", backgroundSize: "44px 44px", maskImage: "linear-gradient(90deg, #000, transparent 90%)", WebkitMaskImage: "linear-gradient(90deg, #000, transparent 90%)" }} />
           <div style={{ position: "relative", maxWidth: 580 }}>
             <Eyebrow>Take the next step</Eyebrow>
-            <h2 style={{ ...h2, fontSize: 38 }}>Give every service job a clearer path to completion.</h2>
+            <h2 className="fs-h2" style={h2}>Give every service job a clearer path to completion.</h2>
             <p style={{ margin: "18px 0 28px", fontSize: 15.5, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Explore how EVOQ can support your service requests, technician scheduling, facilities work orders and equipment maintenance processes.</p>
             <Cta>Talk to an expert</Cta>
           </div>
@@ -218,6 +218,10 @@ export function FieldServicePage() {
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ Field Service, Facilities & Maintenance" segments={["Field service provider", "Facilities management company", "Maintenance team", "Other service operation"]} segmentLabel="Your operation" placeholder="Service requests, technicians, parts, scheduling, follow-up..." accent={NAVY} accentSoft={BLUE} />
       <style>{`
+        .hs-root .fs-h1{font-weight:600!important;letter-spacing:-.025em!important;line-height:1.1!important;text-wrap:balance}
+        .hs-root .fs-h2{font-size:40px!important;font-weight:600!important;letter-spacing:-.02em!important;line-height:1.18!important;text-wrap:balance}
+        .hs-root .fs-h3{font-size:30px!important;font-weight:600!important;letter-spacing:-.015em!important;line-height:1.22!important;text-wrap:balance}
+        .hs-root .fs-h3s{font-size:22px!important;font-weight:700!important;letter-spacing:-.01em!important;line-height:1.25!important}
         .fs-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .fs-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:52px 0 88px}
         .fs-hero-vis{position:relative;height:500px}
@@ -247,7 +251,7 @@ export function FieldServicePage() {
         .hs-rv.hs-in{opacity:1;transform:none}
         @media (max-width:1100px){.fs-g4x{grid-template-columns:repeat(2,minmax(0,1fr))}.fs-root,.fs-tree{display:none}}
         @media (max-width:980px){.fs-hero,.fs-split,.fs-cta{grid-template-columns:1fr!important;gap:34px}.fs-hero-vis{height:470px}.fs-cta{padding:38px 28px!important}}
-        @media (max-width:640px){.fs-g4x{grid-template-columns:1fr}.fs-phone{width:190px!important}}
+        @media (max-width:640px){.hs-root .fs-h2{font-size:30px!important}.hs-root .fs-h3{font-size:24px!important}.fs-g4x{grid-template-columns:1fr}.fs-phone{width:190px!important}}
         @media (prefers-reduced-motion:reduce){.fs-route,.fs-pulse,.fs-card,.fs-btn{animation:none;transition:none}}
       `}</style>
       <div style={{ background: CW, position: "relative", zIndex: 60, borderBottom: `1px solid ${LINE}` }}>
