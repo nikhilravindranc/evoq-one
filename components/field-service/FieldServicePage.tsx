@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { FsSolutions } from "./FsSolutions";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
@@ -53,7 +54,7 @@ const h2: CSSProperties = { margin: 0, letterSpacing: "-.025em", fontWeight: 700
 /* ------------------------------------------------------------------ 1. Hero */
 function Hero() {
   return (
-    <section style={{ position: "relative", overflow: "hidden", background: CW }}>
+    <section style={{ position: "relative", overflow: "hidden" }}>
       <div aria-hidden="true" style={{ position: "absolute", right: "-10%", top: "-30%", width: 780, height: 780, borderRadius: "50%", background: `radial-gradient(closest-side, ${PALE}, rgba(219,234,254,0))` }} />
       <div className="fs-wrap" style={{ position: "relative" }}>
         <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: SOFT }}>Home <span style={{ margin: "0 6px" }}>/</span> Solutions <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: INK, fontWeight: 600 }}>Field Service, Facilities &amp; Maintenance</b></nav>
@@ -254,10 +255,9 @@ export function FieldServicePage() {
         @media (max-width:640px){.hs-root .fs-h2{font-size:30px!important}.hs-root .fs-h3{font-size:24px!important}.fs-g4x{grid-template-columns:1fr}.fs-phone{width:190px!important}}
         @media (prefers-reduced-motion:reduce){.fs-route,.fs-pulse,.fs-card,.fs-btn{animation:none;transition:none}}
       `}</style>
-      <div style={{ background: CW, position: "relative", zIndex: 60, borderBottom: `1px solid ${LINE}` }}>
-        <Topbar darkCTA={false} light ctaColor={NAVY} />
-      </div>
-      <Hero />
+      <HeroShell bg={{ background: CW }} topbar={<Topbar darkCTA={false} light ctaColor={NAVY} />}>
+        <Hero />
+      </HeroShell>
       <FsSolutions />
       <Ecosystem />
       <Faq />

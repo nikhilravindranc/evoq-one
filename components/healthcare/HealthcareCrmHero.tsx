@@ -70,7 +70,7 @@ const CARD =
 
 export function HealthcareCrmHero() {
   return (
-    <section id="overview" className="relative overflow-hidden bg-[#F4FBFA]">
+    <section id="overview" className="relative overflow-hidden">
       <style>{`
         @keyframes crmFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         .crm-float { animation: crmFloat 5.6s ease-in-out infinite; }

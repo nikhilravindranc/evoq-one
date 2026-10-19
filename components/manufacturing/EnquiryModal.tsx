@@ -24,12 +24,15 @@ export function EnquiryModal({
 }: { eyebrow?: string; segments?: string[]; segmentLabel?: string; placeholder?: string; accent?: string; accentSoft?: string } = {}) {
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
+  const [seg, setSeg] = useState("");
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const el = (e.target as HTMLElement).closest("[data-enquiry]");
       if (!el) return;
       e.preventDefault();
+      // A page can pre-select a segment: per button via data-enquiry-segment, or page-wide via <html data-enquiry-segment>.
+      setSeg(el.getAttribute("data-enquiry-segment") || document.documentElement.dataset.enquirySegment || "");
       setDone(false);
       setOpen(true);
     };
@@ -75,7 +78,7 @@ export function EnquiryModal({
             </div>
             <div style={{ marginBottom: 14 }}>
               <label style={label}>{segmentLabel}</label>
-              <select defaultValue="" style={{ ...input, cursor: "pointer" }}>
+              <select defaultValue={segments.includes(seg) ? seg : ""} style={{ ...input, cursor: "pointer" }}>
                 <option value="" disabled>Select a segment</option>
                 {segments.map((s) => <option key={s}>{s}</option>)}
               </select>

@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { ConfigXWindow } from "./ConfigX";
 import { MfMotion } from "./MfMotion";
@@ -98,7 +99,7 @@ function Dots({ ok = true }: { ok?: boolean }) {
 /* ------------------------------------------------------------------ 1. Hero */
 function Hero() {
   return (
-    <section style={{ background: "#fff", position: "relative", overflow: "hidden", backgroundImage: `linear-gradient(${CG}38 1px, transparent 1px), linear-gradient(90deg, ${CG}38 1px, transparent 1px)`, backgroundSize: "44px 44px" }}>
+    <section style={{ position: "relative", overflow: "hidden" }}>
       <div className="mf-wrap" style={{ paddingTop: 22 }}>
         <nav aria-label="Breadcrumb" style={{ fontSize: 12, color: SL }}>Home <span style={{ margin: "0 6px" }}>/</span> Solutions <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: G, fontWeight: 600 }}>Manufacturing</b></nav>
         <div className="mf-hero">
@@ -309,10 +310,9 @@ export function ManufacturingPage() {
         .mf-card-h:hover{transform:translateY(-5px);box-shadow:0 30px 56px -28px rgba(31,41,51,.6)}
         @media (prefers-reduced-motion:reduce){.mf-fs-dot,.mf-float,.mf-pop,.mf-dash,.mf-stepic,.mf-an,.mf-an svg,.mf-cf{animation:none!important}}
       `}</style>
-      <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: `1px solid ${PG}` }}>
-        <Topbar darkCTA={false} light ctaColor={G} />
-      </div>
-      <Hero />
+      <HeroShell bg={{ background: "#fff", backgroundImage: `linear-gradient(${CG}38 1px, transparent 1px), linear-gradient(90deg, ${CG}38 1px, transparent 1px)`, backgroundSize: "44px 44px" }} topbar={<Topbar darkCTA={false} light ctaColor={G} />}>
+        <Hero />
+      </HeroShell>
       <Lifecycle />
       <SolutionsTabs />
       <ConfigX />

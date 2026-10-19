@@ -116,7 +116,7 @@ export function HealthcarePmHero() {
     <section
       id="overview"
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(115deg,#DDF1FA 0%,#EEF6FC 30%,#FFFFFF 55%,#F3F3FB 100%)" }}
+      style={{ background: "transparent" }}
     >
       <div className="pointer-events-none absolute -left-40 -top-32 h-[420px] w-[520px] rounded-full bg-[#BFEAF0]/45 blur-3xl" />
 

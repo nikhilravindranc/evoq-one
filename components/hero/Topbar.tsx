@@ -149,7 +149,7 @@ const SOLUTIONS: {
     href: "/solutions/healthcare",
     children: [
       { name: "Healthcare CRM", href: "/solutions/healthcare/crm" },
-      { name: "Healthcare Practice Management", href: "/solutions/healthcare/practice-management" },
+      { name: "Practice Management", href: "/solutions/healthcare/practice-management" },
     ],
   },
   {
@@ -157,10 +157,10 @@ const SOLUTIONS: {
     sub: "From enquiry to the field",
     href: "/solutions/manufacturing",
   },
+  { name: "Financial Services", sub: "Clients, follow-ups and service", href: "/solutions/finance", icon: "bank" },
   { name: "Construction, Engineering & Real Estate", sub: "Projects, technical work and property", href: "/solutions/construction", icon: "building" },
   { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "/solutions/field-service", icon: "wrench" },
   { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "/solutions/hospitality", icon: "hotel" },
-  { name: "Financial Services", sub: "Clients, follow-ups and service", href: "/solutions/finance", icon: "bank" },
   { name: "All industries", sub: "One suite, every industry", href: "/industries", icon: "grid" },
 ];
 
@@ -401,19 +401,15 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                   </div>
                 ))}
               </div>
-              <Link
-                href="/products"
-                onClick={() => setOpen(false)}
-                className="group mt-5 flex items-center justify-between rounded-xl bg-[#F2F2FF] px-4 py-3 no-underline transition-colors hover:bg-[#E8E8FF]"
-              >
-                <span className="flex flex-col leading-tight">
-                  <span className="text-[14px] font-semibold text-[#1A1190]">Explore all EVOQ products</span>
-                  <span className="mt-px text-[12px] text-[#5F6B7A]">See the full suite, from CRM to EVOQ AI</span>
-                </span>
-                <span className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#4747E0] text-white transition-transform group-hover:translate-x-0.5">
-                  <ArrowRight size={13} />
-                </span>
-              </Link>
+              <div className="mt-4 flex justify-end border-t border-[#E3E6F0] pt-3">
+                <Link
+                  href="/products"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#D5D5F5] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#1A1190] no-underline transition-colors hover:bg-[#F2F2FF]"
+                >
+                  All products <ArrowRight size={12} />
+                </Link>
+              </div>
             </div>
           )}
         </div>

@@ -16,7 +16,7 @@ const MENU = [
 
 export function HealthcareNav() {
   return (
-    <div className="border-b border-[#E2E8EC] bg-white/90 backdrop-blur-lg">
+    <div className="border-b border-[#102A43]/8">
       <div className="px-5 sm:px-6 lg:px-6">
         <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
           <Link href="/solutions/healthcare" className="shrink-0 no-underline">

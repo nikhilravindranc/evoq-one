@@ -1,4 +1,5 @@
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
@@ -44,7 +45,7 @@ function Hero() {
     ["M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6zM8.5 12l2.5 2.5 4.5-5", "A better client experience", "Respond faster and maintain long-term relationships.", TEAL],
   ];
   return (
-    <section className="fn-herosec" style={{ position: "relative", overflow: "hidden", background: SURFACE, borderBottom: `1px solid ${BORDER}` }}>
+    <section className="fn-herosec" style={{ position: "relative", overflow: "hidden", borderBottom: `1px solid ${BORDER}` }}>
       {/* real consultation photograph, running to the right edge and fading into the page */}
       <div className="fn-heroimg" data-rv="1" role="img" aria-label="Two colleagues in a client consultation, with a city skyline behind" style={{ backgroundImage: "url(/finance/hero.jpg)" }}>
         <span aria-hidden="true" className="fn-heroshade" />
@@ -215,10 +216,9 @@ export function FinancePage() {
         @media (max-width:1000px){.fn-behind,.fn-cta,.fm-head{grid-template-columns:1fr!important;gap:36px!important}.fn-herosec{display:flex;flex-direction:column}.fn-heroimg{position:relative;order:2;width:100%;height:300px}.fn-heroshade{background:linear-gradient(180deg,#F7F9FB,rgba(247,249,251,0) 35%)}.fn-hero{padding:48px 0 40px}.fn-benefits{order:3;grid-template-columns:1fr;gap:22px;padding:30px 0 44px}.fn-benefit,.fn-benefit:first-child{border-left:0;padding:0}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.fn-btn,.fn-lrow{transition:none}.fn-spark{animation:none;stroke-dashoffset:0}.fn-prow,.fn-mini{animation:none;opacity:1;transform:none}}
       `}</style>
-      <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: `1px solid ${BORDER}` }}>
-        <Topbar darkCTA={false} light ctaColor={NAVY} />
-      </div>
-      <Hero />
+      <HeroShell bg={{ background: SURFACE }} topbar={<Topbar darkCTA={false} light ctaColor={NAVY} />}>
+        <Hero />
+      </HeroShell>
       <FinModels />
       <Behind />
       <FinalCta />

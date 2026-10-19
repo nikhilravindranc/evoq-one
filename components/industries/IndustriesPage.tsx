@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
@@ -50,7 +51,7 @@ const Arrow = ({ c = "currentColor" }: { c?: string }) => <svg width="15" height
 
 function Hero() {
   return (
-    <section style={{ background: WARM, position: "relative", overflow: "hidden" }}>
+    <section style={{ position: "relative", overflow: "hidden" }}>
       <div className="in-wrap">
         <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: SLATE }}><a href="/" style={{ color: "inherit", textDecoration: "none" }}>Home</a> <span style={{ margin: "0 6px" }}>/</span> <a href="/solutions" style={{ color: "inherit", textDecoration: "none" }}>Solutions</a> <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: INK, fontWeight: 600 }}>All Industries</b></nav>
         <div className="in-hero">
@@ -171,10 +172,9 @@ export function IndustriesPage() {
         @media (max-width:640px){.in-grid{grid-template-columns:1fr}.in-hero h1{font-size:40px!important}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.in-card,.in-btn{transition:none}}
       `}</style>
-      <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: `1px solid ${MIST}` }}>
-        <Topbar darkCTA={false} light ctaColor={DEEP} />
-      </div>
-      <Hero />
+      <HeroShell bg={{ background: WARM }} topbar={<Topbar darkCTA={false} light ctaColor={DEEP} />}>
+        <Hero />
+      </HeroShell>
       <Industries />
       <Apps />
       <FinalCta />

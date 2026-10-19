@@ -1,4 +1,5 @@
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { HealthcareNav } from "./HealthcareNav";
 import { HealthcareHero } from "./HealthcareHero";
@@ -13,18 +14,13 @@ import { HealthcareCTA } from "./HealthcareCTA";
 export function HealthcarePage() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--white)" }}>
-      <div
-        style={{
-          background: "var(--white)",
-          position: "relative",
-          zIndex: 60,
-          borderBottom: "1px solid rgba(16,42,67,0.08)",
-        }}
+      <HeroShell
+        bg={{ background: "#F1F5F7" }}
+        topbar={<Topbar darkCTA={false} light ctaColor="#18B8D1" />}
       >
-        <Topbar darkCTA={false} light ctaColor="#18B8D1" />
-      </div>
-      <HealthcareNav />
-      <HealthcareHero />
+        <HealthcareNav />
+        <HealthcareHero />
+      </HeroShell>
       <HealthcareJourney />
       <HealthcareJourneyTogether />
       <HealthcareCareSettings />

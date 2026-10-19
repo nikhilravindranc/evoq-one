@@ -122,7 +122,7 @@ export function HealthcareHero() {
     <section
       id="overview"
       className="relative overflow-hidden"
-      style={{ background: "#F1F5F7" }}
+      style={{ background: "transparent" }}
     >
       <style>{`
         @keyframes hcFloat {

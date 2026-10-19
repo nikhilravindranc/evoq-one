@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "./HsMotion";
@@ -59,7 +60,7 @@ const h2: CSSProperties = { margin: 0, fontFamily: SERIF, fontWeight: 400, lineH
 /* ------------------------------------------------------------------ 1. Hero */
 function Hero() {
   return (
-    <section style={{ position: "relative", overflow: "hidden", background: `linear-gradient(135deg, ${EVERGREEN} 0%, #0B3B2C 100%)`, color: CREAM }}>
+    <section style={{ position: "relative", overflow: "hidden", color: CREAM }}>
       <div aria-hidden="true" style={{ position: "absolute", right: "-8%", top: "-30%", width: 760, height: 760, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(102,115,74,.45), rgba(102,115,74,0))" }} />
       <div className="hs-wrap" style={{ position: "relative" }}>
         <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: "#9DBBA6" }}>Home <span style={{ margin: "0 6px" }}>/</span> Solutions <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: CREAM, fontWeight: 600 }}>Hospitality, Travel &amp; F&amp;B</b></nav>
@@ -133,10 +134,9 @@ export function HospitalityPage() {
         @media (max-width:640px){.hs-steps,.hs-g3,.hs-labels{grid-template-columns:1fr}.hs-hero h1,.hs-hero h1+*{}}
         @media (prefers-reduced-motion:reduce){.hs-rv{transition:none}.hs-card,.hs-btn,.hs-arch{transition:none}}
       `}</style>
-      <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: "1px solid #F1F5F9" }}>
-        <Topbar darkCTA={false} light ctaColor={FOREST} />
-      </div>
-      <Hero />
+      <HeroShell bg={{ background: `linear-gradient(135deg, ${EVERGREEN} 0%, #0B3B2C 100%)` }} topbar={<Topbar darkCTA={false} theme={{ navBg: "rgba(255,255,255,.08)", navFg: "#F7F1E3", ctaBg: CREAM, ctaFg: EVERGREEN, loginFg: "#F7F1E3" }} />}>
+        <Hero />
+      </HeroShell>
       <HsModels eyebrow={<Eyebrow>Solutions for different hospitality models</Eyebrow>} />
       <FinalCta />
       <Footer background={FOREST} />

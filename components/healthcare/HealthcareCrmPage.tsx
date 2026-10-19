@@ -1,4 +1,5 @@
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { HealthcareCrmNav } from "./HealthcareCrmNav";
 import { HealthcareCrmHero } from "./HealthcareCrmHero";
@@ -16,18 +17,13 @@ import { HealthcareCrmAI } from "./HealthcareAISections";
 export function HealthcareCrmPage() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--white)" }}>
-      <div
-        style={{
-          background: "var(--white)",
-          position: "relative",
-          zIndex: 60,
-          borderBottom: "1px solid rgba(16,42,67,0.08)",
-        }}
+      <HeroShell
+        bg={{ background: "#F4FBFA" }}
+        topbar={<Topbar darkCTA={false} light ctaColor="#18B8D1" />}
       >
-        <Topbar darkCTA={false} light ctaColor="#18B8D1" />
-      </div>
-      <HealthcareCrmNav />
-      <HealthcareCrmHero />
+        <HealthcareCrmNav />
+        <HealthcareCrmHero />
+      </HeroShell>
       <HealthcareCrmEnquiry />
 
       {/* Stacked scroll sequence: each panel pins full-screen for a stretch

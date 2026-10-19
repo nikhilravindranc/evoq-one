@@ -77,7 +77,7 @@ const INTERACTIONS = [
 
 export function HealthcareCrmFeaturesHero() {
   return (
-    <section id="features" className="relative overflow-hidden bg-gradient-to-br from-white via-[#DDF5F0] to-[#18B8D1]">
+    <section id="features" className="relative overflow-hidden">
       <div className="pointer-events-none absolute -right-24 -top-24 h-[340px] w-[340px] rounded-full bg-white/20 blur-3xl" />
 
       <div className="relative px-5 sm:px-6 lg:px-6">

@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
@@ -64,7 +65,7 @@ function Apps({ list, dark = false }: { list: string[]; dark?: boolean }) {
 /* ------------------------------------------------------------------ 1. Hero */
 function Hero() {
   return (
-    <section style={{ background: WARM, position: "relative", overflow: "hidden", ...grid(LCON + "88", 48) }}>
+    <section style={{ position: "relative", overflow: "hidden" }}>
       <div className="cn-wrap">
         <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: CONCRETE }}>Home <span style={{ margin: "0 6px" }}>/</span> Solutions <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: BROWN, fontWeight: 600 }}>Construction, Engineering &amp; Real Estate</b></nav>
         <div className="cn-hero">
@@ -227,10 +228,9 @@ export function ConstructionPage() {
         @media (max-width:640px){.cn-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g4{grid-template-columns:1fr}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.cn-card,.cn-btn{transition:none}}
       `}</style>
-      <div style={{ background: "#fff", position: "relative", zIndex: 60, borderBottom: `1px solid ${LCON}` }}>
-        <Topbar darkCTA={false} light ctaColor={CLAY} />
-      </div>
-      <Hero />
+      <HeroShell bg={{ background: WARM, ...grid(LCON + "88", 48) }} topbar={<Topbar darkCTA={false} light ctaColor={CLAY} />}>
+        <Hero />
+      </HeroShell>
       <ConstructionIndustries />
       <Together />
       <Faq />

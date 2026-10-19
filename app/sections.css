@@ -2698,9 +2698,8 @@
 .sol-head .evoq-eyebrow { margin: 0 0 20px; }
 .sol-tabs-wrap { display: flex; justify-content: flex-start; margin-top: 0; }
 .sol-tabs {
-  display: flex; gap: 4px; padding: 6px; border-radius: 999px; background: #fff; max-width: 100%;
+  display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; border-radius: 30px; background: #fff; max-width: 100%;
   box-shadow: 0 10px 34px -14px rgba(20,24,60,0.28), 0 0 0 1px rgba(31,36,48,0.05);
-  overflow-x: auto; scrollbar-width: none;
 }
 .sol-tabs::-webkit-scrollbar { display: none; }
 .sol-tab {

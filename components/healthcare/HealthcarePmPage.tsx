@@ -1,4 +1,5 @@
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { HealthcarePmNav } from "./HealthcarePmNav";
 import { HealthcarePmHero } from "./HealthcarePmHero";
@@ -15,18 +16,13 @@ import { HealthcarePmAI } from "./HealthcareAISections";
 export function HealthcarePmPage() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--white)" }}>
-      <div
-        style={{
-          background: "var(--white)",
-          position: "relative",
-          zIndex: 60,
-          borderBottom: "1px solid rgba(16,42,67,0.08)",
-        }}
+      <HeroShell
+        bg={{ background: "linear-gradient(115deg,#DDF1FA 0%,#EEF6FC 30%,#FFFFFF 55%,#F3F3FB 100%)" }}
+        topbar={<Topbar darkCTA={false} light ctaColor="#7ACFC5" />}
       >
-        <Topbar darkCTA={false} light ctaColor="#7ACFC5" />
-      </div>
-      <HealthcarePmNav />
-      <HealthcarePmHero />
+        <HealthcarePmNav />
+        <HealthcarePmHero />
+      </HeroShell>
       <HealthcarePmWorkflow />
       <HealthcarePmFeatures />
       <HealthcarePmAI />

@@ -98,7 +98,7 @@ const TABS: Tab[] = [
       ["For facilities management providers", "Coordinate work across client sites, manage service commitments and maintain a clearer record of work delivered."],
       ["For internal facilities teams", "Organize requests from occupants and departments, assign maintenance responsibilities and track outstanding work across your facilities."],
     ],
-    cta: "See how ServiceOps supports facilities operations",
+    cta: "Explore ServiceOps for facilities",
   },
   {
     key: "maintenance", tab: "Equipment and asset maintenance", sub: "Planned and corrective work", on: BURNT, off: POR,
@@ -134,7 +134,7 @@ const TABS: Tab[] = [
       ["For maintenance teams", "Coordinate planned servicing and corrective repairs while maintaining records of equipment-related work."],
       ["For asset-intensive organizations", "Improve visibility into maintenance activity across equipment and sites, helping teams make better-informed decisions about outstanding work and service history."],
     ],
-    cta: "Explore asset and maintenance management",
+    cta: "Explore ServiceOps for maintenance",
   },
 ];
 

@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
+import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
@@ -44,20 +45,19 @@ const BRAND: Record<string, { fg: string; deep: string; tint: string }> = {
 
 type Industry = { name: string; short: string; icon: string; body: string; link: string; href: string; img: string };
 const INDUSTRIES: Industry[] = [
-  { name: "Healthcare", short: "Healthcare", icon: "heart", body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.", link: "Explore healthcare solutions", href: "/solutions/healthcare", img: "/healthcare/stock/hc-cta-team.jpg" },
-  { name: "Construction, Engineering & Real Estate", short: "Construction", icon: "building", body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the needs of the industry.", link: "Explore Construction, Engineering & Real Estate solutions", href: "/solutions/construction", img: U("1778074762022-c33cc42f79ae") },
-  { name: "Manufacturing", short: "Manufacturing", icon: "gear", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ products.", link: "Explore manufacturing solutions", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
-  { name: "Field Service, Facilities & Maintenance", short: "Field service", icon: "wrench", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.", link: "Explore Field Service, Facilities & Maintenance solutions", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
-  { name: "Hospitality, Travel & F&B", short: "Hospitality", icon: "hotel", body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.", link: "Explore Hospitality, Travel & F&B solutions", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
-  { name: "Financial Services", short: "Financial services", icon: "bank", body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.", link: "Explore financial services solutions", href: "/solutions/finance", img: U("1714974528737-3e6c7e4d11af") },
-  { name: "All industries", short: "All industries", icon: "grid", body: "Don't see your industry? EVOQ products combine to fit how your organization works, so you can start with what you need.", link: "Explore all industries", href: "/industries", img: U("1542744173-8e7e53415bb0") },
+  { name: "Healthcare", short: "Healthcare", icon: "heart", body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.", link: "Explore healthcare", href: "/solutions/healthcare", img: "/healthcare/stock/hc-cta-team.jpg" },
+  { name: "Manufacturing", short: "Manufacturing", icon: "gear", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ products.", link: "Explore manufacturing", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
+  { name: "Financial Services", short: "Financial services", icon: "bank", body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.", link: "Explore financial services", href: "/solutions/finance", img: U("1714974528737-3e6c7e4d11af") },
+  { name: "Construction, Engineering & Real Estate", short: "Construction", icon: "building", body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the needs of the industry.", link: "Explore construction", href: "/solutions/construction", img: U("1778074762022-c33cc42f79ae") },
+  { name: "Field Service, Facilities & Maintenance", short: "Field service", icon: "wrench", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.", link: "Explore field service", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
+  { name: "Hospitality, Travel & F&B", short: "Hospitality", icon: "hotel", body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.", link: "Explore hospitality", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
 ];
 
 /* Existing routes are /solutions/healthcare/crm and /practice-management (not the /healthcare-crm paths in the brief).
    Patient Engagement has no page yet, so that card is not linked. */
 const HEALTHCARE: { name: string; body: string; link?: string; href?: string }[] = [
   { name: "Healthcare CRM", body: "Organize patient enquiries, manage follow-ups and maintain visibility into patient relationships.", link: "Explore Healthcare CRM", href: "/solutions/healthcare/crm" },
-  { name: "Healthcare Practice Management", body: "Coordinate appointments, patient visits and day-to-day practice activities.", link: "Explore Healthcare Practice Management", href: "/solutions/healthcare/practice-management" },
+  { name: "Practice Management", body: "Coordinate appointments, patient visits and day-to-day practice activities.", link: "Explore Practice Management", href: "/solutions/healthcare/practice-management" },
   { name: "Patient Engagement", body: "Support patient communication and engagement through relevant EVOQ products." },
 ];
 
@@ -89,7 +89,7 @@ const gridLines = "linear-gradient(rgba(30,58,138,.06) 1px, transparent 1px), li
 
 function Hero() {
   return (
-    <section style={{ position: "relative", overflow: "hidden", background: `radial-gradient(900px 520px at 88% 8%, #BFDBFE 0%, rgba(191,219,254,0) 60%), radial-gradient(700px 480px at -5% 90%, #E0E7FF 0%, rgba(224,231,255,0) 60%), ${WARM}` }}>
+    <section style={{ position: "relative", overflow: "hidden" }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: dots, backgroundSize: "26px 26px", WebkitMaskImage: "linear-gradient(90deg, #000 0%, transparent 55%)", maskImage: "linear-gradient(90deg, #000 0%, transparent 55%)" }} />
       <span aria-hidden="true" style={{ position: "absolute", right: -140, top: -160, width: 520, height: 520, borderRadius: "50%", border: "1.5px solid rgba(37,99,235,.18)" }} />
       <span aria-hidden="true" style={{ position: "absolute", right: 40, top: 60, width: 300, height: 300, borderRadius: "50%", border: "1.5px dashed rgba(37,99,235,.22)" }} />
@@ -97,7 +97,7 @@ function Hero() {
         <nav aria-label="Breadcrumb" style={{ paddingTop: 22, fontSize: 12, color: SLATE }}><a href="/" style={{ color: "inherit", textDecoration: "none" }}>Home</a> <span style={{ margin: "0 6px" }}>/</span> <b style={{ color: INK, fontWeight: 600 }}>Solutions</b></nav>
         <div className="sl-hero">
           <div data-rv="0">
-            <Eyebrow>Solutions</Eyebrow>
+            <Eyebrow>Industry solutions</Eyebrow>
             <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: DEEP }}>Solutions for the way your industry operates</h1>
             <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.75, color: "#4B5563", maxWidth: "52ch" }}>Every industry has its own processes, priorities and operational challenges. EVOQ brings together products that address these needs, helping organizations manage industry-specific activities with greater visibility and coordination.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 14, flexWrap: "wrap" }}>
@@ -109,6 +109,9 @@ function Hero() {
                   <Icon n={x.icon} c={SAPPHIRE} s={15} />{x.short}
                 </li>
               ))}
+              <li style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "rgba(255,255,255,.8)", border: `1px solid ${MIST}`, borderRadius: 99, padding: "6px 13px 6px 9px", fontSize: 12.5, fontWeight: 600, color: DEEP }}>
+                <Icon n="grid" c={SAPPHIRE} s={15} />All industries
+              </li>
             </ul>
           </div>
           <div data-rv="1" className="sl-mosaic" aria-hidden="true">
@@ -152,6 +155,10 @@ function ByIndustry() {
             </a>
             );
           })}
+        </div>
+        <div data-rv="0" className="sl-allrow">
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "#374151" }}>Don&apos;t see your industry? EVOQ products combine to fit how your organization works. <a href="/industries" className="sl-link" style={{ fontWeight: 700, color: DEEP, textDecoration: "underline", textUnderlineOffset: 4 }}>See all industries</a></p>
+          <Btn href="/industries">Explore all industries</Btn>
         </div>
       </div>
     </section>
@@ -232,8 +239,8 @@ function Closing() {
           <span aria-hidden="true" style={{ position: "absolute", right: -70, bottom: -110, width: 340, height: 340, borderRadius: "50%", border: "1.5px solid rgba(37,99,235,.2)" }} />
           <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
             <p style={{ margin: "0 0 16px", fontSize: 11.5, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: SAPPHIRE }}>All industries</p>
-            <h2 className="sl-oneline" style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: DEEP }}>Find the right solution for your industry</h2>
-            <p className="sl-oneline" style={{ margin: "16px 0 28px", fontSize: 16, lineHeight: 1.75, color: "#374151" }}>Explore the industries EVOQ serves and discover the solutions relevant to your organization&apos;s needs.</p>
+            <h2 className="sl-oneline" style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: DEEP }}>Let&apos;s find the right fit for your industry</h2>
+            <p className="sl-oneline" style={{ margin: "16px 0 28px", fontSize: 16, lineHeight: 1.75, color: "#374151" }}>Talk to an EVOQ expert about your processes and see which products and combinations fit.</p>
             <Btn href="#" enquiry>Talk to an expert</Btn>
           </div>
         </div>
@@ -257,7 +264,8 @@ export function SolutionsPage() {
         .sl-tag{position:absolute;left:8px;bottom:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.94);color:${DEEP};font-style:normal;font-size:11px;font-weight:700;padding:4px 9px 4px 7px;border-radius:99px}
         .sl-t2 .sl-tag,.sl-t3 .sl-tag,.sl-t4 .sl-tag{display:none}
         .sl-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:36px 20px}
-        .sl-c0,.sl-c1,.sl-c2,.sl-c3{grid-column:span 3}.sl-c4,.sl-c5,.sl-c6{grid-column:span 4}
+        .sl-c0,.sl-c1,.sl-c2,.sl-c3,.sl-c4,.sl-c5{grid-column:span 4}
+        .sl-allrow{margin-top:44px;padding:26px 30px;border-radius:16px;background:#F4F7FD;border:1px solid #DCE6F7;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
         .sl-oneline{white-space:nowrap}
         .sl-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 22px}
         .sl-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
@@ -273,13 +281,14 @@ export function SolutionsPage() {
         .sl-btn:focus-visible,.sl-link:focus-visible,.sl-card:focus-visible{outline:3px solid #93C5FD;outline-offset:3px}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1100px){.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-c0,.sl-c1,.sl-c2,.sl-c3,.sl-c4,.sl-c5{grid-column:span 1}.sl-c6{grid-column:span 2}}
+        @media (max-width:1100px){.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-c0,.sl-c1,.sl-c2,.sl-c3,.sl-c4,.sl-c5{grid-column:span 1}}
         @media (max-width:1000px){.sl-hero,.sl-split{grid-template-columns:1fr;gap:36px}.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-oneline{white-space:normal}.sl-g3{grid-template-columns:1fr}.sl-jline{display:none}}
-        @media (max-width:640px){.sl-grid{grid-template-columns:1fr}.sl-c6{grid-column:span 1}.sl-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-mosaic{grid-template-rows:repeat(2,110px)}.sl-close{padding:40px 24px!important}}
+        @media (max-width:640px){.sl-grid{grid-template-columns:1fr}.sl-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-mosaic{grid-template-rows:repeat(2,110px)}.sl-close{padding:40px 24px!important}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.sl-card,.sl-btn{transition:none}}
       `}</style>
-      <Topbar darkCTA={false} light ctaColor={DEEP} />
-      <Hero />
+      <HeroShell bg={{ background: `radial-gradient(900px 520px at 88% 8%, #BFDBFE 0%, rgba(191,219,254,0) 60%), radial-gradient(700px 480px at -5% 90%, #E0E7FF 0%, rgba(224,231,255,0) 60%), ${WARM}` }} topbar={<Topbar darkCTA={false} light ctaColor={DEEP} />}>
+        <Hero />
+      </HeroShell>
       <ByIndustry />
       <Healthcare />
       <Products />
