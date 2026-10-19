@@ -170,7 +170,7 @@ const SOLUTION_BRAND: Record<string, { fg: string; tint: string }> = {
   "Construction, Engineering & Real Estate": { fg: "#B5532F", tint: "#F8ECDC" },
   "Field Service, Facilities & Maintenance": { fg: "#1F5FE0", tint: "#E6EFFF" },
   "Hospitality, Travel & F&B": { fg: "#1F4D3A", tint: "#F4ECD9" },
-  Finance: { fg: "#A16207", tint: "#FEF3C7" },
+  Finance: { fg: "#0B2D4F", tint: "#E7F3EE" },
   "All industries": { fg: "#1E40AF", tint: "#E9EDF7" },
 };
 const brandVars = (name: string) => {
@@ -190,7 +190,7 @@ const SOLUTION_TONES: Record<string, { bg: string; fg: string; dot?: string }> =
   building: { bg: "#F3E6D3", fg: "#B5532F" }, // terracotta + sand
   wrench: { bg: "#E1ECFF", fg: "#1F5FE0", dot: "#F28C28" }, // blue + orange
   hotel: { bg: "#F6EFE0", fg: "#1F4D3A" }, // deep green + cream
-  bank: { bg: "#FDF1D2", fg: "#A16207" }, // gold
+  bank: { bg: "#E7F3EE", fg: "#1B7F8C" }, // finance page: mint + teal
   grid: { bg: "#ECEFF5", fg: "#1E40AF" }, // sapphire + neutral
 };
 const SolutionMark = ({ icon }: { icon: string }) => {

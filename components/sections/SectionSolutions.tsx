@@ -20,7 +20,7 @@ type Industry = {
   key: string; tab: string; name: string;
   lead: string; accent: string; body: string;
   href: string; cta?: string;
-  color: string; deep: string; soft: string;
+  color: string; deep: string; soft: string; btn?: string;
   cards: [FloatCard, FloatCard];   // [top-right, bottom-left] over the dashboard
 };
 type FloatCard = { tone: "ok" | "warn" | "info"; title: string; sub: string };
@@ -60,7 +60,7 @@ const INDUSTRIES: Industry[] = [
     lead: "Every client. ", accent: "Every follow-up.",
     body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.",
     href: "/solutions/finance", cta: "Explore finance",
-    color: "#A16207", deep: "#422006", soft: "#FEF3C7",
+    color: "#1B7F8C", deep: "#0B2D4F", soft: "#E7F3EE", btn: "#0B2D4F",
     cards: [{ tone: "warn", title: "Follow-up due", sub: "Annual review call · Thursday" }, { tone: "ok", title: "Client request resolved", sub: "Statement query closed" }] },
   { key: "all", tab: "All industries", name: "All industries",
     lead: "One suite. ", accent: "Every industry.",
@@ -142,7 +142,7 @@ export function SectionSolutions() {
               </h3>
               <p className="sol-name">{x.name}</p>
               <p className="sol-desc">{x.body}</p>
-              <a href={x.href} className="sol-cta" style={{ background: x.color }}>
+              <a href={x.href} className="sol-cta" style={{ background: x.btn ?? x.color }}>
                 {x.cta ?? `Explore ${x.tab.toLowerCase()}`}
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </a>
