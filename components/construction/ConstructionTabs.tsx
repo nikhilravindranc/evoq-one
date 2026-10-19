@@ -36,7 +36,7 @@ const CONSTRUCTION = {
     "A clearer view of project tasks, responsibilities and milestones.",
     "Better visibility into outstanding work and upcoming commitments.",
     "More consistent follow-up on client enquiries and opportunities.",
-    "Easier access to relevant inventory and billing information through the appropriate applications.",
+    "Easier access to relevant inventory and billing information through the appropriate products.",
   ],
   help: [
     ["Project coordination", "Organize project tasks, responsibilities and progress using Projects, subject to its available project management capabilities."],
@@ -71,7 +71,7 @@ const ENGINEERING = {
     "Better coordination of supported people-management, inventory and billing processes.",
   ],
   audiences: [
-    ["Engineering consultancies", "Coordinate project tasks, deadlines and responsibilities while keeping client relationships and opportunities visible. Use relevant applications to support project delivery and associated administrative work."],
+    ["Engineering consultancies", "Coordinate project tasks, deadlines and responsibilities while keeping client relationships and opportunities visible. Use relevant products to support project delivery and associated administrative work."],
     ["Engineering contractors", "Maintain visibility into project activities, responsibilities and delivery milestones. Where relevant, inventory and service capabilities may support associated operational requirements."],
   ] as Pair[],
   help: [
@@ -207,7 +207,7 @@ function Help({ items, p }: { items: Pair[]; p: Palette }) {
 function AppRow({ apps, p }: { apps: Pair[]; p: Palette }) {
   return (
     <div style={{ background: p.off, borderRadius: 12, padding: "20px 24px" }}>
-      <Label c={p.on}>Relevant EVOQ applications</Label>
+      <Label c={p.on}>Relevant EVOQ products</Label>
       <div className="ci-apps">
         {apps.map(([a, role]) => (
           <div key={a} style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -309,8 +309,8 @@ function RealEstateChapter() {
         </section>
       ))}
       <div style={{ borderTop: `1px solid ${LINE}`, paddingTop: 24 }}>
-        <h4 style={{ margin: 0, fontWeight: 700, color: INK }}>Choosing the right application combination</h4>
-        <p style={{ margin: "8px 0 0", fontSize: 14.5, lineHeight: 1.7, color: MUTE, maxWidth: "80ch" }}>The relevant applications depend on whether your organization primarily manages property enquiries, buyer relationships, sales follow-ups or ongoing property service. Start with the activities that need improvement and identify the application capabilities required to support them.</p>
+        <h4 style={{ margin: 0, fontWeight: 700, color: INK }}>Choosing the right product combination</h4>
+        <p style={{ margin: "8px 0 0", fontSize: 14.5, lineHeight: 1.7, color: MUTE, maxWidth: "80ch" }}>The relevant products depend on whether your organization primarily manages property enquiries, buyer relationships, sales follow-ups or ongoing property service. Start with the activities that need improvement and identify the product capabilities required to support them.</p>
       </div>
     </article>
   );

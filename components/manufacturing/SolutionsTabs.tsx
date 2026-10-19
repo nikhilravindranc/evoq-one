@@ -189,7 +189,7 @@ function VisSync() {
         </div>
         <div style={{ display: "grid", gap: 12 }}>{right.map((t) => node(t, false))}</div>
       </div>
-      <div style={{ marginTop: 14, fontSize: 11, color: SL, textAlign: "center" }}>EVOQ applications and your existing systems, kept in step</div>
+      <div style={{ marginTop: 14, fontSize: 11, color: SL, textAlign: "center" }}>EVOQ products and your existing systems, kept in step</div>
     </Shell>
   );
 }
@@ -201,7 +201,7 @@ const TABS: Tab[] = [
   { tab: "Operations", ic: "wrench", title: "Operations", line: "Project coordination, service delivery and customer support.", apps: [[IC("serviceops-icon.svg"), "ServiceOps"], [IC("evoq-projects-menu-icn.png"), "Projects"], [IC("desk-menu-icn.png"), "Desk"]], vis: VisService },
   { tab: "People", ic: "users", title: "People", line: "Employee administration, learning and workforce development.", apps: [[IC("hrms-menu-icn-new.png"), "HRMS"], [IC("Skillberry-menu-icn.png"), "Skillberry"]], vis: VisPeople },
   { tab: "Finance", ic: "box", title: "Finance", line: "Invoicing, revenue and inventory information.", apps: [[IC("billing-menu-icn.png"), "Billing"], [IC("inventory-menu-icn.png"), "Inventory"]], vis: VisInvBill },
-  { tab: "Platform", ic: "layers", title: "Platform", line: "Data synchronization across applications and systems.", apps: [[IC("sync-menu-icn.png"), "Sync"]], vis: VisSync },
+  { tab: "Platform", ic: "layers", title: "Platform", line: "Data synchronization across products and systems.", apps: [[IC("sync-menu-icn.png"), "Sync"]], vis: VisSync },
 ];
 
 export function SolutionsTabs() {
@@ -225,8 +225,8 @@ export function SolutionsTabs() {
       <div className="mf-wrap" style={{ position: "relative" }}>
         <div style={{ textAlign: "center", maxWidth: 780, margin: "0 auto" }}>
           <p style={{ margin: "0 0 14px", fontSize: 11, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: LB }}>EVOQ solutions for manufacturing</p>
-          <h2 className="mf-h2" style={{ color: "#fff" }}>Applications that support the manufacturing lifecycle</h2>
-          <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: "rgba(255,255,255,.72)", maxWidth: "62ch" }}>From customer acquisition and product configuration to service delivery and financial operations, explore the EVOQ applications relevant to your manufacturing requirements.</p>
+          <h2 className="mf-h2" style={{ color: "#fff" }}>Products that support the manufacturing lifecycle</h2>
+          <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: "rgba(255,255,255,.72)", maxWidth: "62ch" }}>From customer acquisition and product configuration to service delivery and financial operations, explore the EVOQ products relevant to your manufacturing requirements.</p>
         </div>
 
         <div className="st-tabs" role="tablist" aria-label="Manufacturing solutions" style={{ display: "flex", gap: 4, width: "fit-content", maxWidth: "100%", margin: "36px auto 0", padding: 6, background: "#fff", borderRadius: 99, boxShadow: "0 18px 40px -20px rgba(0,0,0,.6)", overflowX: "auto", scrollbarWidth: "none" }}>

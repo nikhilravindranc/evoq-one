@@ -35,10 +35,10 @@ const INDUSTRIES: { name: string; tag: string; body: string; apps: string[]; img
 
 const FEATURED: { name: string; tag: string; body: string; href: string; img: string }[] = [
   { name: "Healthcare", tag: "Healthcare", body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.", href: "/solutions/healthcare", img: "/healthcare/stock/hc-cta-team.jpg" },
-  { name: "Construction, Engineering & Real Estate", tag: "Built environment", body: "Support project delivery, engineering coordination, property enquiries and related operations with applications suited to the needs of the industry.", href: "/solutions/construction", img: U("1778074762022-c33cc42f79ae") },
-  { name: "Manufacturing", tag: "Production", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ applications.", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
-  { name: "Field Service, Facilities & Maintenance", tag: "Service", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ applications.", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
-  { name: "Hospitality, Travel & F&B", tag: "Hospitality", body: "Address operational needs across hospitality and related service activities with relevant EVOQ applications.", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
+  { name: "Construction, Engineering & Real Estate", tag: "Built environment", body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the needs of the industry.", href: "/solutions/construction", img: U("1778074762022-c33cc42f79ae") },
+  { name: "Manufacturing", tag: "Production", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ products.", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
+  { name: "Field Service, Facilities & Maintenance", tag: "Service", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
+  { name: "Hospitality, Travel & F&B", tag: "Hospitality", body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
 ];
 
 const ALL: { name: string; tag: string; body: string; img: string; href?: string }[] = [...FEATURED, ...INDUSTRIES];
@@ -56,9 +56,9 @@ function Hero() {
         <div className="in-hero">
           <div data-rv="0">
             <Eyebrow>Solutions for your industry</Eyebrow>
-            <h1 style={{ margin: 0, fontSize: 58, lineHeight: 1.06, letterSpacing: "-.03em", fontWeight: 600, color: DEEP }}>Applications that fit your industry&apos;s needs</h1>
-            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: "#4B5563", maxWidth: "52ch" }}>Every industry has its own processes, priorities and operational challenges. EVOQ applications can work individually or together to support relevant parts of those operations, from customer relationships and project delivery to inventory, service and billing.</p>
-            <p style={{ margin: "16px 0 0", fontSize: 15, lineHeight: 1.7, color: SLATE }}>Explore the industries below to see where EVOQ applications may fit.</p>
+            <h1 style={{ margin: 0, fontSize: 58, lineHeight: 1.06, letterSpacing: "-.03em", fontWeight: 600, color: DEEP }}>Products that fit your industry&apos;s needs</h1>
+            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: "#4B5563", maxWidth: "52ch" }}>Every industry has its own processes, priorities and operational challenges. EVOQ products can work individually or together to support relevant parts of those operations, from customer relationships and project delivery to inventory, service and billing.</p>
+            <p style={{ margin: "16px 0 0", fontSize: 15, lineHeight: 1.7, color: SLATE }}>Explore the industries below to see where EVOQ products may fit.</p>
             <a href="#" data-enquiry="" className="in-btn" style={{ marginTop: 28, display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 24px", borderRadius: 10, background: SAPPHIRE, color: "#fff", textDecoration: "none", fontSize: 14.5, fontWeight: 600 }}>Talk to an expert <Arrow /></a>
           </div>
           <div className="in-mosaic" data-rv="1" aria-hidden="true">
@@ -111,8 +111,8 @@ function Apps() {
       <div className="in-wrap">
         <div data-rv="0" className="in-apps" style={{ borderRadius: 22, background: PALE, padding: "40px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 32, flexWrap: "wrap", border: `1px solid ${PALE}` }}>
           <div style={{ maxWidth: 640 }}>
-            <h2 style={{ margin: 0, fontSize: 32, lineHeight: 1.15, letterSpacing: "-.02em", fontWeight: 600, color: DEEP }}>Explore EVOQ applications</h2>
-            <p style={{ margin: "12px 0 0", fontSize: 15.5, lineHeight: 1.7, color: "#374151" }}>Discover the individual EVOQ applications, understand their capabilities and identify which ones may fit your requirements.</p>
+            <h2 style={{ margin: 0, fontSize: 32, lineHeight: 1.15, letterSpacing: "-.02em", fontWeight: 600, color: DEEP }}>Explore EVOQ products</h2>
+            <p style={{ margin: "12px 0 0", fontSize: 15.5, lineHeight: 1.7, color: "#374151" }}>Discover the individual EVOQ products, understand their capabilities and identify which ones may fit your requirements.</p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "flex-start" }}>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -123,7 +123,7 @@ function Apps() {
                 </span>
               ))}
             </div>
-            <a href="/products" className="in-btn" style={{ display: "inline-flex", alignItems: "center", gap: 9, fontSize: 14.5, fontWeight: 700, color: SAPPHIRE, textDecoration: "none" }}>Explore all applications <Arrow /></a>
+            <a href="/products" className="in-btn" style={{ display: "inline-flex", alignItems: "center", gap: 9, fontSize: 14.5, fontWeight: 700, color: SAPPHIRE, textDecoration: "none" }}>Explore all products <Arrow /></a>
           </div>
         </div>
       </div>
@@ -139,7 +139,7 @@ function FinalCta() {
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px)", backgroundSize: "36px 36px", maskImage: "linear-gradient(90deg, #000, rgba(0,0,0,.2))", WebkitMaskImage: "linear-gradient(90deg, #000, rgba(0,0,0,.2))" }} />
           <div style={{ position: "relative", maxWidth: 700 }}>
             <h2 style={{ margin: 0, fontSize: 40, lineHeight: 1.1, letterSpacing: "-.025em", fontWeight: 600 }}>Discuss your industry requirements</h2>
-            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#DBEAFE", maxWidth: "58ch" }}>Every operation has its own processes and system requirements. Discuss your needs with the EVOQ team to explore suitable application combinations and identify any configuration, integration or specialist capabilities required.</p>
+            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#DBEAFE", maxWidth: "58ch" }}>Every operation has its own processes and system requirements. Discuss your needs with the EVOQ team to explore suitable product combinations and identify any configuration, integration or specialist capabilities required.</p>
           </div>
           <a href="#" data-enquiry="" className="in-btn" style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 10, background: "#fff", color: DEEP, textDecoration: "none", fontSize: 14.5, fontWeight: 700 }}>Talk to an expert <Arrow /></a>
         </div>

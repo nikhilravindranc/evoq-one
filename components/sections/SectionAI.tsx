@@ -25,7 +25,7 @@ export function SectionAI() {
             <motion.div className="ai-copy" {...fadeUp(0.04)}>
               <h2 className="evoq-h2">AI built into the work you already do</h2>
               <p className="lead">
-                EVOQ brings AI into the applications your teams already use.
+                EVOQ brings AI into the products your teams already use.
               </p>
               <p className="body">
                 EVI answers questions and takes action across your apps. AI agents

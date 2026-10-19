@@ -160,15 +160,18 @@ const SOLUTIONS: {
   { name: "Construction, Engineering & Real Estate", sub: "Projects, technical work and property", href: "/solutions/construction", icon: "building" },
   { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "/solutions/field-service", icon: "wrench" },
   { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "/solutions/hospitality", icon: "hotel" },
+  { name: "Finance", sub: "Clients, follow-ups and service", href: "/solutions/finance", icon: "bank" },
+  { name: "All industries", sub: "One suite, every industry", href: "/industries", icon: "grid" },
 ];
 
 const SOLUTION_BRAND: Record<string, { fg: string; tint: string }> = {
   Healthcare: { fg: "#18B8D1", tint: "#E3F6F9" },
   Manufacturing: { fg: "#1F2933", tint: "#E6EAEF" },
-  "Construction & Real Estate": { fg: "#B5532F", tint: "#F8ECDC" },
+  "Construction, Engineering & Real Estate": { fg: "#B5532F", tint: "#F8ECDC" },
   "Field Service, Facilities & Maintenance": { fg: "#1F5FE0", tint: "#E6EFFF" },
   "Hospitality, Travel & F&B": { fg: "#1F4D3A", tint: "#F4ECD9" },
-  "All Industries": { fg: "#1E40AF", tint: "#E9EDF7" },
+  Finance: { fg: "#A16207", tint: "#FEF3C7" },
+  "All industries": { fg: "#1E40AF", tint: "#E9EDF7" },
 };
 const brandVars = (name: string) => {
   const b = SOLUTION_BRAND[name] ?? { fg: "#4747E0", tint: "#F2F2FF" };
@@ -180,12 +183,14 @@ const SOLUTION_ICONS: Record<string, React.ReactNode> = {
   wrench: <path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z" />,
   tools: <><path d="M3 21l7-7M14 4l6 6-3 3-6-6zM9 9 4 4" /></>,
   hotel: <><path d="M3 20V8M3 14h18v6M21 14v-2a3 3 0 0 0-3-3h-7v5" /><circle cx="7" cy="11" r="1.6" /></>,
+  bank: <><path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18" /></>,
   grid: <><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></>,
 };
 const SOLUTION_TONES: Record<string, { bg: string; fg: string; dot?: string }> = {
   building: { bg: "#F3E6D3", fg: "#B5532F" }, // terracotta + sand
   wrench: { bg: "#E1ECFF", fg: "#1F5FE0", dot: "#F28C28" }, // blue + orange
   hotel: { bg: "#F6EFE0", fg: "#1F4D3A" }, // deep green + cream
+  bank: { bg: "#FDF1D2", fg: "#A16207" }, // gold
   grid: { bg: "#ECEFF5", fg: "#1E40AF" }, // sapphire + neutral
 };
 const SolutionMark = ({ icon }: { icon: string }) => {
@@ -402,7 +407,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                 className="group mt-5 flex items-center justify-between rounded-xl bg-[#F2F2FF] px-4 py-3 no-underline transition-colors hover:bg-[#E8E8FF]"
               >
                 <span className="flex flex-col leading-tight">
-                  <span className="text-[14px] font-semibold text-[#1A1190]">Explore all EVOQ applications</span>
+                  <span className="text-[14px] font-semibold text-[#1A1190]">Explore all EVOQ products</span>
                   <span className="mt-px text-[12px] text-[#5F6B7A]">See the full suite, from CRM to EVOQ AI</span>
                 </span>
                 <span className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#4747E0] text-white transition-transform group-hover:translate-x-0.5">
@@ -455,7 +460,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
               </div>
 
               <div className="grid grid-cols-2 items-start gap-x-1">
-                {[[0, 1], [2, 3, 4]].map((col, ci) => (
+                {[[0, 1, 2], [3, 4, 5, 6]].map((col, ci) => (
                 <ul key={ci} className="m-0 flex list-none flex-col gap-0.5 p-0">
                 {col.map((idx) => { const s = SOLUTIONS[idx]; return (
                   <li key={s.name} role="menuitem" onMouseEnter={() => s.children && setSubOpen(true)}>
@@ -533,13 +538,6 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                   className="inline-flex items-center gap-1.5 rounded-full border border-[#C7D2EA] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#1E40AF] no-underline transition-colors hover:bg-[#F3F6FD]"
                 >
                   Solutions overview <ArrowRight size={12} />
-                </Link>
-                <Link
-                  href="/industries"
-                  onClick={() => setSolutionsOpen(false)}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[#E9EDF7] px-3.5 py-2 text-[13px] font-semibold text-[#1E40AF] no-underline transition-colors hover:bg-[#DBEAFE]"
-                >
-                  View all industries <ArrowRight size={12} />
                 </Link>
               </div>
             </div>

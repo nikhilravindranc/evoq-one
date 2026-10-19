@@ -84,7 +84,7 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ 3. How applications work together */
+/* ------------------------------------------------------------------ 3. How products work together */
 function Together() {
   // Illustrative grouping only: no lines between apps, because integrations are not claimed here.
   const groups: { label: string; title: string; body: string; apps: [string, string][] }[] = [
@@ -99,8 +99,8 @@ function Together() {
     <section id="approach" style={{ background: LSAND + "55", padding: "96px 0", borderTop: `1px solid ${LSAND}` }}>
       <div className="cn-wrap">
         <div className="cn-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow>How EVOQ applications work together</Eyebrow><h2 style={h2}>Choose applications around the work that matters.</h2></div>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: "#57534E", maxWidth: "54ch" }}>Different organizations need different combinations of applications. Start with the activities that need better coordination, then identify the EVOQ applications that fit those requirements.</p>
+          <div><Eyebrow>How EVOQ products work together</Eyebrow><h2 style={h2}>Choose products around the work that matters.</h2></div>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: "#57534E", maxWidth: "54ch" }}>Different organizations need different combinations of products. Start with the activities that need better coordination, then identify the EVOQ products that fit those requirements.</p>
         </div>
 
         <div data-rv="1" style={{ marginTop: 52 }}>
@@ -130,7 +130,7 @@ function Together() {
           </div>
           <div style={{ marginTop: 28, display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 20, flexWrap: "wrap" }}>
             <p style={{ margin: 0, fontSize: 16, fontWeight: 600, color: BROWN }}>The right combination depends on your operating model, current processes and required capabilities.</p>
-            <p style={{ margin: 0, fontSize: 12, color: CONCRETE }}>An illustrative grouping of applications, not a technical integration map.</p>
+            <p style={{ margin: 0, fontSize: 12, color: CONCRETE }}>An illustrative grouping of products, not a technical integration map.</p>
           </div>
         </div>
       </div>
@@ -140,12 +140,12 @@ function Together() {
 
 /* ------------------------------------------------------------------ 4. FAQ */
 const FAQ: [string, string][] = [
-  ["Which EVOQ applications are relevant to my organization?", "The right combination depends on your industry, operating processes and priorities. Construction and engineering organizations may focus on project coordination and client relationships, while real estate organizations may prioritize enquiry management, sales follow-up or property service operations."],
-  ["Can I start with the applications most relevant to my needs?", "The recommended starting point depends on EVOQ's available plans, licensing and implementation arrangements. Discuss your requirements with an EVOQ expert to establish the appropriate scope."],
-  ["Can EVOQ support both engineering consultancies and contractors?", "The relevant application combination can differ. Consultancies may prioritize client relationships and project coordination, while contractors may also need inventory or service-related capabilities. Specific requirements should be assessed against the functionality available in each application."],
-  ["Which EVOQ applications are relevant to real estate?", "Agencies and brokers may benefit from CRM and campaign capabilities, developers may need support for buyer relationships and applicable billing processes, and property operations teams may prioritize service requests and maintenance coordination. The appropriate combination depends on the required functionality."],
+  ["Which EVOQ products are relevant to my organization?", "The right combination depends on your industry, operating processes and priorities. Construction and engineering organizations may focus on project coordination and client relationships, while real estate organizations may prioritize enquiry management, sales follow-up or property service operations."],
+  ["Can I start with the products most relevant to my needs?", "The recommended starting point depends on EVOQ's available plans, licensing and implementation arrangements. Discuss your requirements with an EVOQ expert to establish the appropriate scope."],
+  ["Can EVOQ support both engineering consultancies and contractors?", "The relevant product combination can differ. Consultancies may prioritize client relationships and project coordination, while contractors may also need inventory or service-related capabilities. Specific requirements should be assessed against the functionality available in each product."],
+  ["Which EVOQ products are relevant to real estate?", "Agencies and brokers may benefit from CRM and campaign capabilities, developers may need support for buyer relationships and applicable billing processes, and property operations teams may prioritize service requests and maintenance coordination. The appropriate combination depends on the required functionality."],
   ["Can EVOQ replace our existing industry-specific software?", "That depends on the capabilities your current software provides and the requirements EVOQ can meet. Specialist functions such as property leasing, construction estimating or engineering document control should be evaluated individually before considering a replacement."],
-  ["How do we identify the right application combination?", "Start by identifying the processes that need improvement, the information that must be tracked and the outcomes you expect. An EVOQ expert can help assess those requirements against the relevant applications and available capabilities."],
+  ["How do we identify the right product combination?", "Start by identifying the processes that need improvement, the information that must be tracked and the outcomes you expect. An EVOQ expert can help assess those requirements against the relevant products and available capabilities."],
 ];
 function Faq() {
   return (
@@ -176,7 +176,7 @@ function FinalCta() {
           <div style={{ position: "relative", padding: "56px 56px 60px", maxWidth: 700 }}>
             
             <h2 style={h2}>Start with the work that needs attention.</h2>
-            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#44403C", maxWidth: "56ch" }}>Whether the priority is project coordination, client follow-ups or property service operations, identify the processes that need improvement and explore the EVOQ applications that fit.</p>
+            <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#44403C", maxWidth: "56ch" }}>Whether the priority is project coordination, client follow-ups or property service operations, identify the processes that need improvement and explore the EVOQ products that fit.</p>
             <div style={{ marginTop: 30 }}><Cta>Talk to an expert</Cta></div>
           </div>
           <div className="cn-cta-img" aria-hidden="true" style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "46%", pointerEvents: "none" }}>

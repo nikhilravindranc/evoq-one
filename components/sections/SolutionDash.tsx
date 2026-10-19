@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { ProductBadge } from "@/components/shared/ProductBadge";
 
 /* Industry dashboards for the home Solutions section. Each one is drawn at a
    fixed 680 x 468 canvas and scaled to the frame, so it stays proportional
@@ -55,6 +56,7 @@ const IC = {
   truck: "M3 7h11v9H3zM14 10h4l3 3v3h-7M7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
   bed: "M3 18V8M3 14h18v4M21 14v-3a3 3 0 0 0-3-3h-7v6",
   gauge: "M4 16a8 8 0 1 1 16 0M12 16l4-5",
+  grid: "M4 4h6.5v6.5H4zM13.5 4H20v6.5h-6.5zM4 13.5h6.5V20H4zM13.5 13.5H20V20h-6.5z",
 };
 
 function Shell({ c, brand, children }: { c: string; brand: string; children: ReactNode }) {
@@ -311,12 +313,97 @@ function Hospitality({ c }: { c: string }) {
   );
 }
 
+/* ------------------------------------------------------- Financial services */
+function Finance({ c }: { c: string }) {
+  const rows: [string, string, string, string, Tone, string][] = [
+    ["Harper & Co", "Maya Chen", "2 days ago", "Annual review call", "warn", "Follow-up due"],
+    ["Northgate Holdings", "Daniel Ortiz", "Today", "Proposal sent", "ok", "On track"],
+    ["Lena Fischer", "Maya Chen", "5 days ago", "Statement query", "info", "Request open"],
+    ["Bright Path Ltd", "Sam Rivera", "Yesterday", "Renewal reminder", "ok", "On track"],
+    ["Orion Partners", "Daniel Ortiz", "1 week ago", "Intro meeting", "warn", "Follow-up due"],
+    ["Kavya Iyer", "Sam Rivera", "3 days ago", "Document request", "info", "Request open"],
+  ];
+  return (
+    <Shell c={c} brand="Financial services">
+      <div className="sd-g4">
+        <Stat n="1,284" l="Clients" c={c} icon={IC.cal} />
+        <Stat n="14" l="Follow-ups due" c="#B45309" icon={IC.clock} />
+        <Stat n="9" l="Open requests" c={c} icon={IC.alert} />
+        <Stat n="62" l="Campaign replies" c="#15803D" icon={IC.check} />
+      </div>
+      <Card title="Client follow-ups" right={<span className="sd-tabs"><b style={{ color: c, borderColor: c }}>All</b><span>Due this week</span><span>Requests</span></span>} style={{ flex: 1 }}>
+        <div className="sd-row sd-th" style={{ gridTemplateColumns: "1.3fr 1.1fr 0.8fr 1.1fr 0.9fr" }}><span>Client</span><span>Relationship manager</span><span>Last contact</span><span>Next step</span><span>Status</span></div>
+        {rows.map(([n, rm, last, step, tone, st]) => (
+          <div key={n} className="sd-row" style={{ gridTemplateColumns: "1.3fr 1.1fr 0.8fr 1.1fr 0.9fr", boxShadow: tone === "warn" ? "inset 2px 0 0 #F59E0B" : undefined }}>
+            <span className="sd-who"><Av name={n} c={c} /><b>{n}</b></span>
+            <span className="sd-who"><Av name={rm} c="#64748B" /><span>{rm}</span></span>
+            <span className="sd-mute">{last}</span>
+            <span>{step}</span>
+            <span><Pill tone={tone} c={c}>{st}</Pill></span>
+          </div>
+        ))}
+      </Card>
+    </Shell>
+  );
+}
+
+/* -------------------------------------------------------------- All industries */
+/* Rows come straight from the industry list on /industries, so every dot is a
+   real "this product is relevant" from that page. Columns are the eight
+   everyday products; Skillberry stands in for learning. */
+const FIT_COLS: { key: string; label: string }[] = [
+  { key: "crm", label: "CRM" }, { key: "campaigns", label: "Campaigns" }, { key: "projects", label: "Projects" },
+  { key: "serviceops", label: "ServiceOps" }, { key: "desk", label: "Desk" }, { key: "billing", label: "Billing" },
+  { key: "inventory", label: "Inventory" }, { key: "skillberry", label: "Skillberry" },
+];
+const FIT_ROWS: [string, string[]][] = [
+  ["Professional services", ["crm", "projects", "billing", "desk"]],
+  ["Wholesale and distribution", ["crm", "inventory", "billing", "desk"]],
+  ["Education and training", ["crm", "campaigns", "skillberry", "desk", "billing"]],
+  ["Retail and e-commerce", ["crm", "campaigns", "inventory", "billing", "desk"]],
+  ["Logistics and transportation", ["crm", "projects", "billing", "desk"]],
+  ["Financial services", ["crm", "campaigns", "desk"]],
+  ["Automotive and equipment", ["crm", "serviceops", "inventory", "billing", "desk"]],
+  ["Energy and utilities", ["crm", "serviceops", "projects", "inventory", "billing", "desk"]],
+];
+function AllIndustries({ c }: { c: string }) {
+  const grid = "158px repeat(8, 1fr)";
+  return (
+    <Shell c={c} brand="All industries">
+      <div className="sd-g4">
+        <Stat n="13" l="Industries" c={c} icon={IC.grid} />
+        <Stat n="11" l="Products" c={c} icon={IC.box} />
+        <Stat n="5" l="Dedicated solutions" c="#15803D" icon={IC.check} />
+        <Stat n="1" l="Suite" c="#B45309" icon={IC.gauge} />
+      </div>
+      <Card title="Product fit by industry" right={<span className="sd-k">Start with what you need</span>} style={{ flex: 1 }}>
+        <div className="sd-fit-h" style={{ gridTemplateColumns: grid }}>
+          <span />
+          {FIT_COLS.map((col) => (
+            <span key={col.key} title={col.label}><ProductBadge productKey={col.key} size={20} /></span>
+          ))}
+        </div>
+        {FIT_ROWS.map(([name, apps], i) => (
+          <div key={name} className="sd-fit-r" style={{ gridTemplateColumns: grid, animationDelay: `${i * 1.1}s`, ["--fit" as string]: c } as CSSProperties}>
+            <b>{name}</b>
+            {FIT_COLS.map((col) => (
+              <span key={col.key}>{apps.includes(col.key) && <i style={{ background: c }} />}</span>
+            ))}
+          </div>
+        ))}
+      </Card>
+    </Shell>
+  );
+}
+
 const BOARDS: Record<string, (p: { c: string }) => ReactNode> = {
   healthcare: Healthcare,
   manufacturing: Manufacturing,
   construction: Construction,
   "field-service": FieldService,
   hospitality: Hospitality,
+  finance: Finance,
+  all: AllIndustries,
 };
 
 export function SolutionDash({ k, c }: { k: string; c: string }) {

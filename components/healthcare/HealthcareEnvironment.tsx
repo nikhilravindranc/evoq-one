@@ -131,12 +131,12 @@ export function HealthcareEnvironment() {
               The EVOQ Healthcare environment
             </p>
             <h2 className="mt-4 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A] sm:text-[48px]">
-              One healthcare environment. Different applications.
+              One healthcare environment. Different products.
             </h2>
             <p className="mt-5 text-[15.5px] leading-[1.7] text-[#64748B]">
               A unified environment for patient relationships, practice
               operations, and the entire patient journey, with dedicated
-              applications that work together.
+              products that work together.
             </p>
           </div>
 

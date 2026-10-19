@@ -105,7 +105,7 @@ function Hero() {
           <div>
             <Eyebrow>Manufacturing solutions</Eyebrow>
             <h1 className="mf-h1">From product enquiry to the field</h1>
-            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "50ch" }}>Manufacturing extends beyond production. It involves customer relationships, product configuration, commercial operations, delivery and ongoing service. EVOQ applications support the work that moves manufactured products through this lifecycle.</p>
+            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "50ch" }}>Manufacturing extends beyond production. It involves customer relationships, product configuration, commercial operations, delivery and ongoing service. EVOQ products support the work that moves manufactured products through this lifecycle.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Btn enquiry>Talk to an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn>
               <Btn dark={false} href="#solutions">Explore manufacturing solutions</Btn>
@@ -166,7 +166,7 @@ function Lifecycle() {
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: BL }}>Across the lifecycle</div>
             <div style={{ marginTop: 3, fontSize: 14, color: G, fontWeight: 600 }}>Sync</div>
           </div>
-          <p style={{ margin: 0, flex: "2 1 380px", fontSize: 13.5, lineHeight: 1.6, color: ST }}>Sync supports data synchronization between EVOQ applications and existing systems through supported integrations.</p>
+          <p style={{ margin: 0, flex: "2 1 380px", fontSize: 13.5, lineHeight: 1.6, color: ST }}>Sync supports data synchronization between EVOQ products and existing systems through supported integrations.</p>
         </div>
       </div>
     </Sec>
@@ -218,7 +218,7 @@ function Segments() {
           <Eyebrow>Manufacturing segments</Eyebrow>
           <h2 className="mf-h2">Different products. Different operating needs.</h2>
         </div>
-        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: ST, maxWidth: "56ch" }}>Manufacturers vary in how they configure products, handle orders, coordinate delivery and support customers after the sale. Explore how EVOQ applications may support the work surrounding different product types.</p>
+        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: ST, maxWidth: "56ch" }}>Manufacturers vary in how they configure products, handle orders, coordinate delivery and support customers after the sale. Explore how EVOQ products may support the work surrounding different product types.</p>
       </div>
       <div className="mf-g3" style={{ gap: 22 }}>
         {segs.map(([t, d, img], i) => (
@@ -252,7 +252,7 @@ function Cta() {
             <div style={{ maxWidth: 700 }}>
               <Eyebrow light>Let's look at your manufacturing operation</Eyebrow>
               <h2 className="mf-h2" style={{ color: "#fff", maxWidth: "18ch" }}>Turn complex products into clearer operations.</h2>
-              <p style={{ margin: "18px 0 0", fontSize: 15, lineHeight: 1.7, color: CG, maxWidth: "58ch" }}>Every manufacturer has its own products, processes and customer requirements. Start with the way your operation works today and identify where EVOQ applications may support the journey from enquiry to service.</p>
+              <p style={{ margin: "18px 0 0", fontSize: 15, lineHeight: 1.7, color: CG, maxWidth: "58ch" }}>Every manufacturer has its own products, processes and customer requirements. Start with the way your operation works today and identify where EVOQ products may support the journey from enquiry to service.</p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, minWidth: 220 }}>
               <Btn dark={false} enquiry>Talk to an expert <Ic n="arrow" s={15} c={G} w={2.2} /></Btn>

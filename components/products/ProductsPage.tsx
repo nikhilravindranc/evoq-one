@@ -4,7 +4,7 @@ import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 
-/* EVOQ applications: the landing page for the Products menu. Uses the main EVOQ brand (indigo / soft lavender). */
+/* EVOQ products: the landing page for the Products menu. Uses the main EVOQ brand (indigo / soft lavender). */
 const P = "#4747E0";
 const DEEP = "#1A1190";
 const SOFT = "#F2F2FF";
@@ -53,8 +53,8 @@ const CATEGORIES: Cat[] = [
   },
   {
     title: "Platform",
-    line: "Connect applications and existing systems.",
-    apps: [{ name: "Sync", icon: I("sync-menu-icn.png"), line: "Synchronize data between EVOQ applications and existing systems through supported integrations.", href: "/products/sync" }],
+    line: "Connect products and existing systems.",
+    apps: [{ name: "Sync", icon: I("sync-menu-icn.png"), line: "Synchronize data between EVOQ products and existing systems through supported integrations.", href: "/products/sync" }],
   },
 ];
 
@@ -80,15 +80,15 @@ function Hero() {
       <div className="pd-wrap">
         <div className="pd-hero">
           <div data-rv="0">
-            <Eyebrow>EVOQ applications</Eyebrow>
-            <h1 style={{ margin: 0, fontSize: 58, lineHeight: 1.05, letterSpacing: "-.03em", fontWeight: 700, color: DEEP, fontFamily: "var(--font-display), system-ui, sans-serif" }}>One suite. Every application your work runs on.</h1>
-            <p style={{ margin: "24px 0 0", fontSize: 17.5, lineHeight: 1.75, color: BODY, maxWidth: "50ch" }}>EVOQ brings customer relationships, operations, people, finance and AI together as applications that work on their own or connect as one. Start with the one you need and add the rest as you grow.</p>
+            <Eyebrow>EVOQ products</Eyebrow>
+            <h1 style={{ margin: 0, fontSize: 58, lineHeight: 1.05, letterSpacing: "-.03em", fontWeight: 700, color: DEEP, fontFamily: "var(--font-display), system-ui, sans-serif" }}>One suite. Every product your work runs on.</h1>
+            <p style={{ margin: "24px 0 0", fontSize: 17.5, lineHeight: 1.75, color: BODY, maxWidth: "50ch" }}>EVOQ brings customer relationships, operations, people, finance and AI together as products that work on their own or connect as one. Start with the one you need and add the rest as you grow.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <a href="#apps" className="pd-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 26px", borderRadius: 12, background: P, color: "#fff", textDecoration: "none", fontSize: 15, fontWeight: 700, boxShadow: "0 18px 34px -18px rgba(71,71,224,.8)" }}>Explore the applications <Arrow /></a>
+              <a href="#apps" className="pd-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 26px", borderRadius: 12, background: P, color: "#fff", textDecoration: "none", fontSize: 15, fontWeight: 700, boxShadow: "0 18px 34px -18px rgba(71,71,224,.8)" }}>Explore the products <Arrow /></a>
               <a href="#" data-enquiry="" className="pd-btn" style={{ display: "inline-flex", alignItems: "center", padding: "15px 26px", borderRadius: 12, background: "#fff", color: DEEP, border: `1px solid ${LINE}`, textDecoration: "none", fontSize: 15, fontWeight: 700 }}>Talk to an expert</a>
             </div>
             <div style={{ marginTop: 34, display: "flex", gap: 26, flexWrap: "wrap", fontSize: 13, color: BODY }}>
-              {["12 applications", "Use one or connect them all", "AI across the suite"].map((t) => <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><i style={{ width: 7, height: 7, borderRadius: "50%", background: P, display: "inline-block" }} />{t}</span>)}
+              {["12 products", "Use one or connect them all", "AI across the suite"].map((t) => <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><i style={{ width: 7, height: 7, borderRadius: "50%", background: P, display: "inline-block" }} />{t}</span>)}
             </div>
           </div>
           <div className="pd-orbit" data-rv="1" aria-hidden="true">
@@ -120,15 +120,15 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ 2. Applications by category */
+/* ------------------------------------------------------------------ 2. Products by category */
 function Apps() {
   return (
     <section id="apps" style={{ background: "#fff", padding: "92px 0 96px", borderTop: `1px solid ${LINE}` }}>
       <div className="pd-wrap">
         <div style={{ textAlign: "center", maxWidth: 740, margin: "0 auto 56px" }} data-rv="0">
-          <Eyebrow>The applications</Eyebrow>
-          <h2 style={h2}>Find the application for the work in front of you</h2>
-          <p style={{ margin: "18px auto 0", fontSize: 16.5, lineHeight: 1.75, color: BODY }}>Browse by what you need to get done. Each application works on its own, and they share data when you connect them.</p>
+          <Eyebrow>The products</Eyebrow>
+          <h2 style={h2}>Find the product for the work in front of you</h2>
+          <p style={{ margin: "18px auto 0", fontSize: 16.5, lineHeight: 1.75, color: BODY }}>Browse by what you need to get done. Each product works on its own, and they share data when you connect them.</p>
         </div>
         {CATEGORIES.map((c, ci) => (
           <div key={c.title} className="pd-row" data-rv="0" style={{ borderTop: ci ? `1px solid ${LINE}` : 0 }}>
@@ -162,7 +162,7 @@ function Apps() {
 
 /* ------------------------------------------------------------------ 3. AI */
 function AiSection() {
-  const modes: [string, string][] = [["Ask EVI", "Get answers and next steps across your applications."], ["Assign an agent", "Give defined, multi-step work to an AI agent."], ["Let agents run automatically", "Run tasks from schedules, events or conditions."]];
+  const modes: [string, string][] = [["Ask EVI", "Get answers and next steps across your products."], ["Assign an agent", "Give defined, multi-step work to an AI agent."], ["Let agents run automatically", "Run tasks from schedules, events or conditions."]];
   return (
     <section style={{ position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #1A1190 0%, #3A1FDA 55%, #5A1FEA 100%)", color: "#fff", padding: "96px 0 100px" }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,.2) 1px, transparent 1px)", backgroundSize: "30px 30px", opacity: 0.35, maskImage: "linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent)", WebkitMaskImage: "linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent)" }} />
@@ -170,8 +170,8 @@ function AiSection() {
       <div className="pd-wrap pd-ai" style={{ position: "relative" }}>
         <div data-rv="0">
           <Eyebrow light>EVOQ AI</Eyebrow>
-          <h2 style={{ ...h2, color: "#fff", fontSize: 44 }}>AI that works across your applications</h2>
-          <p style={{ margin: "20px 0 0", fontSize: 17, lineHeight: 1.75, color: "rgba(255,255,255,.86)", maxWidth: "50ch" }}>EVOQ AI brings AI into the applications, systems and processes where your work happens. Ask EVI for help, assign work to AI agents, or let AI work automatically.</p>
+          <h2 style={{ ...h2, color: "#fff", fontSize: 44 }}>AI that works across your products</h2>
+          <p style={{ margin: "20px 0 0", fontSize: 17, lineHeight: 1.75, color: "rgba(255,255,255,.86)", maxWidth: "50ch" }}>EVOQ AI brings AI into the products, systems and processes where your work happens. Ask EVI for help, assign work to AI agents, or let AI work automatically.</p>
           <div style={{ marginTop: 28, display: "grid", gap: 12, maxWidth: 520 }}>
             {modes.map(([t, d], i) => (
               <div key={t} style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", borderRadius: 14, background: "rgba(255,255,255,.1)", border: "1px solid rgba(255,255,255,.18)" }}>
@@ -201,8 +201,8 @@ function AiSection() {
 /* ------------------------------------------------------------------ 4. Start small */
 function Grow() {
   const steps: [string, string, string][] = [
-    ["01", "Start with one application", "Pick the application that solves your most pressing problem, such as CRM for sales or Billing for invoicing."],
-    ["02", "Connect what you already use", "Use Sync to share data between EVOQ applications and your existing systems through supported integrations."],
+    ["01", "Start with one product", "Pick the product that solves your most pressing problem, such as CRM for sales or Billing for invoicing."],
+    ["02", "Connect what you already use", "Use Sync to share data between EVOQ products and your existing systems through supported integrations."],
     ["03", "Add more as you grow", "Bring in operations, people, finance and AI when you need them, with records that stay connected."],
   ];
   return (
@@ -235,8 +235,8 @@ function FinalCta() {
         <div data-rv="0" className="pd-cta" style={{ position: "relative", overflow: "hidden", borderRadius: 26, background: "linear-gradient(115deg, #1A1190, #4747E0)", color: "#fff", padding: "60px 60px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 36, flexWrap: "wrap", boxShadow: "0 50px 90px -50px rgba(71,71,224,.8)" }}>
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,.22) 1px, transparent 1px)", backgroundSize: "28px 28px", opacity: 0.35, maskImage: "linear-gradient(90deg, #000, transparent 80%)", WebkitMaskImage: "linear-gradient(90deg, #000, transparent 80%)" }} />
           <div style={{ position: "relative", maxWidth: 660 }}>
-            <h2 style={{ ...h2, color: "#fff" }}>Not sure which applications fit?</h2>
-            <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.75, color: "#DDDCFF" }}>Tell us how your team works today. We will help you identify the applications, combinations and integrations that match your requirements, or explore how EVOQ fits your industry.</p>
+            <h2 style={{ ...h2, color: "#fff" }}>Not sure which products fit?</h2>
+            <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.75, color: "#DDDCFF" }}>Tell us how your team works today. We will help you identify the products, combinations and integrations that match your requirements, or explore how EVOQ fits your industry.</p>
           </div>
           <div style={{ position: "relative", display: "flex", flexDirection: "column", gap: 12, minWidth: 220 }}>
             <a href="#" data-enquiry="" className="pd-btn" style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", gap: 10, padding: "15px 26px", borderRadius: 12, background: "#fff", color: DEEP, textDecoration: "none", fontSize: 15, fontWeight: 700 }}>Talk to an expert <Arrow /></a>
@@ -252,7 +252,7 @@ export function ProductsPage() {
   return (
     <div className="hs-root" style={{ minHeight: "100vh", background: "#fff", color: INK, fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
       <HsMotion />
-      <EnquiryModal eyebrow="EVOQ Applications" segments={["Growth (CRM, Campaigns, ConfigX)", "Operations (ServiceOps, Projects, Desk)", "People (HRMS, Skillberry)", "Finance (Billing, Inventory)", "Platform (Sync)", "EVOQ AI", "Not sure yet"]} segmentLabel="Area of interest" placeholder="Tell us what you would like to improve or connect..." accent={DEEP} accentSoft={P} />
+      <EnquiryModal eyebrow="EVOQ Products" segments={["Growth (CRM, Campaigns, ConfigX)", "Operations (ServiceOps, Projects, Desk)", "People (HRMS, Skillberry)", "Finance (Billing, Inventory)", "Platform (Sync)", "EVOQ AI", "Not sure yet"]} segmentLabel="Area of interest" placeholder="Tell us what you would like to improve or connect..." accent={DEEP} accentSoft={P} />
       <style>{`
         .pd-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .pd-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:56px 0 84px}

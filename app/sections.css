@@ -2836,7 +2836,7 @@
 /* =================================================================
    Context (home) -- one swap at a time, with a narrator in the middle
    ================================================================= */
-.s-ctx { position: relative; height: 450vh; background: linear-gradient(180deg, #F6F5FF 0%, #fff 16%, #F6F5FF 55%, #fff 100%); }
+.s-ctx { position: relative; height: 450vh; background: linear-gradient(180deg, #fff 0%, #F6F5FF 50%, #fff 100%); }
 .ctx-stage {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -2959,3 +2959,17 @@
 
 /* The hero grid has no room for the photo relay below this width */
 @media (max-width: 900px) { .hero-showcase { display: none !important; } }
+
+/* All industries fit matrix (SolutionDash AllIndustries) */
+.sd-fit-h, .sd-fit-r { display: grid; align-items: center; }
+.sd-fit-h { padding: 2px 6px 6px; }
+.sd-fit-h > span { display: flex; justify-content: center; }
+.sd-fit-r { height: 29px; padding: 0 6px; border-top: 1px solid #F0F1F4; font-size: 10.5px; border-radius: 6px; animation: sdFitRow 8.8s ease-in-out infinite; }
+.sd-fit-r > b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sd-fit-r > span { display: flex; justify-content: center; }
+.sd-fit-r i { display: block; width: 11px; height: 11px; border-radius: 50%; }
+@keyframes sdFitRow {
+  0%, 10% { background: color-mix(in srgb, var(--fit) 10%, #fff); }
+  10%, 100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .sd-fit-r { animation: none; } }

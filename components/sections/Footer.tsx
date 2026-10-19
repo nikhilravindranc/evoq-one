@@ -67,6 +67,7 @@ export function Footer({ background, darkText = false, socialHover }: { backgrou
             <li><a href="/solutions/construction">Construction, Engineering &amp; Real Estate</a></li>
             <li><a href="/solutions/field-service">Field Service, Facilities &amp; Maintenance</a></li>
             <li><a href="/solutions/hospitality">Hospitality, Travel &amp; F&amp;B</a></li>
+            <li><a href="/solutions/finance">Financial Services</a></li>
             <li><a href="/industries">All Industries</a></li>
           </ul>
         </div>

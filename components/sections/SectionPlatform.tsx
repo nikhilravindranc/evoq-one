@@ -278,7 +278,7 @@ const Check = ({ color = "#4ADE80", size = 12 }: { color?: string; size?: number
 function ArtCrm() {
   const p = PALETTE.crm;
   return (
-    <ArtFrame pk="crm" photo={{ src: "/team/card-crm-v3.jpg", position: "center 22%" }}>
+    <ArtFrame pk="crm" photo={{ src: "/team/card-crm-v5.jpg", position: "center" }}>
       <div className="pf-float" style={{ left: 22, bottom: 74 }}>
         <div className="pf-float-hd">
           <span className="pf-float-dot" style={{ background: "#0E9F6E" }} />
@@ -653,41 +653,80 @@ function ArtSkillberry() {
 /* ---- 11. AI -- ask EVI, and an agent picks up the work ---- */
 function ArtAi() {
   const p = PALETTE.ai;
+  const face = (src: string, size: number): React.CSSProperties => ({
+    width: size, height: size, borderRadius: "50%", objectFit: "contain", flexShrink: 0,
+    background: p.tint, boxShadow: "0 0 0 2px #fff",
+  });
   return (
     <ArtFrame pk="ai" variant={1}>
-      <div className="pf-art-panel" style={{ left: 30, right: 30, top: 46, height: 150, padding: 14 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: p.primary, marginBottom: 8 }}>Ask EVI</div>
-        <div style={{ fontSize: 11, color: "#1F2430", background: p.tint, borderRadius: 10, padding: "8px 10px", marginBottom: 8 }}>
+      <div className="pf-art-panel" style={{ left: 30, right: 30, top: 34, height: 176, padding: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 9 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/evoq-ai/evi-avatar.webp" alt="" style={face("", 32)} />
+          <span style={{ fontSize: 10.5, fontWeight: 700, color: p.primary }}>Ask EVI</span>
+        </div>
+        <div style={{ fontSize: 11, color: "#1F2430", background: p.tint, borderRadius: 10, padding: "8px 10px", marginBottom: 9 }}>
           Follow up with every quote waiting on a reply.
         </div>
-        <div style={{ fontSize: 11, color: "#1F2430", display: "flex", alignItems: "center", gap: 6 }}>
-          <Check color={p.primary} /> Agent assigned
+        <div style={{ fontSize: 11, color: "#1F2430", display: "flex", alignItems: "center", gap: 7 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/team/agent-tasks.png" alt="" style={face("", 26)} />
+          Agent assigned <Check color={p.primary} />
         </div>
       </div>
-      <Chip label="AI agents at work" style={{ left: 30, bottom: 28 }} />
+      <span className="pf-art-chip" style={{ left: 30, bottom: 28 }}>
+        <span style={{ display: "inline-flex" }}>
+          {["tasks", "calendar", "report"].map((n, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={n} src={`/team/agent-${n}.png`} alt="" style={{ ...face("", 24), marginLeft: i ? -8 : 0 }} />
+          ))}
+        </span>
+        AI agents at work
+      </span>
     </ArtFrame>
   );
 }
 
 /* ---- 12. ConfigX -- pick options, see the product update ---- */
+const CONFIGX_VIEWS = [
+  { mode: "2D", src: "/site/images/cpq-solution-2d-configurator.png", cap: "Sized to the mm" },
+  { mode: "3D", src: "/site/images/cpq-solution-3d-configurator.png", cap: "Rotate it 360°" },
+  { mode: "AR", src: "/site/images/cpq-solution-ar-configurator.png", cap: "See it in the room" },
+];
 function ArtConfigx() {
   const p = PALETTE.configx;
-  const opts = ["Oak", "Walnut", "Matte black"];
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setI((n) => (n + 1) % CONFIGX_VIEWS.length), 3000);
+    return () => clearInterval(t);
+  }, []);
   return (
     <ArtFrame pk="configx" variant={0}>
-      <div className="pf-art-panel" style={{ left: 30, right: 30, top: 46, height: 150, padding: 14 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: "#1C1A15", marginBottom: 8 }}>Configure your product</div>
-        <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
-          {opts.map((o, i) => (
-            <span key={o} style={{
-              fontSize: 10, padding: "4px 8px", borderRadius: 999,
-              background: i === 1 ? "#FFD400" : p.tint, color: "#1C1A15", fontWeight: i === 1 ? 700 : 500,
-            }}>{o}</span>
-          ))}
-        </div>
-        <div style={{ height: 52, borderRadius: 10, background: `linear-gradient(135deg, ${p.soft}, ${p.tint})` }} />
+      <div className="pf-art-panel" style={{ left: 22, right: 22, top: 22, height: 198, padding: 0, overflow: "hidden" }}>
+        {CONFIGX_VIEWS.map((v, n) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={v.mode}
+            src={v.src}
+            alt=""
+            style={{
+              position: "absolute", inset: 8, width: "calc(100% - 16px)", height: "calc(100% - 16px)", objectFit: "contain",
+              opacity: i === n ? 1 : 0, transform: i === n ? "scale(1)" : "scale(0.97)", transition: "opacity .5s ease, transform .5s ease",
+            }}
+          />
+        ))}
       </div>
-      <Chip label="2D · 3D · AR" style={{ left: 30, bottom: 28 }} />
+      <div style={{ position: "absolute", left: 22, bottom: 24, display: "flex", alignItems: "center", gap: 6 }}>
+        {CONFIGX_VIEWS.map((v, n) => (
+          <span key={v.mode} style={{
+            fontSize: 10.5, fontWeight: 700, padding: "5px 11px", borderRadius: 999, transition: "background .3s, color .3s",
+            background: i === n ? "#FFD400" : "rgba(255,255,255,0.9)", color: "#1C1A15",
+            boxShadow: "0 4px 12px -6px rgba(28,26,21,.35)",
+          }}>{v.mode}</span>
+        ))}
+        <span style={{ fontSize: 10.5, color: p.primary, fontWeight: 600, marginLeft: 4 }}>{CONFIGX_VIEWS[i].cap}</span>
+      </div>
     </ArtFrame>
   );
 }
@@ -702,7 +741,7 @@ function ArtConfigx() {
 function ArtCampaignsPhoto() {
   const p = PALETTE.campaigns;
   return (
-    <ArtFrame pk="campaigns" photo={{ src: "/team/card-campaigns-photo.jpg", position: "center 30%" }}>
+    <ArtFrame pk="campaigns" photo={{ src: "/team/card-campaigns-v5.jpg", position: "center 30%" }}>
       <div className="pf-float" style={{ left: 22, top: 22 }}>
         <div className="pf-float-hd">
           <span className="pf-float-dot" style={{ background: p.primary }} />
@@ -719,7 +758,7 @@ function ArtCampaignsPhoto() {
 function ArtHrmsPhoto() {
   const p = PALETTE.hrms;
   return (
-    <ArtFrame pk="hrms" photo={{ src: "/team/card-hrms-photo.jpg", position: "center 35%" }}>
+    <ArtFrame pk="hrms" photo={{ src: "/team/card-hrms-v5.jpg", position: "center 35%" }}>
       <div className="pf-float" style={{ left: 22, bottom: 74 }}>
         <div className="pf-float-hd">
           <span className="pf-float-dot" style={{ background: p.primary }} />
@@ -735,7 +774,7 @@ function ArtHrmsPhoto() {
 function ArtBillingPhoto() {
   const p = PALETTE.billing;
   return (
-    <ArtFrame pk="billing" photo={{ src: "/team/card-billing-photo.jpg", position: "center" }}>
+    <ArtFrame pk="billing" photo={{ src: "/team/card-billing-v5.jpg", position: "center" }}>
       <div className="pf-float" style={{ left: 22, top: 22 }}>
         <div className="pf-float-hd">
           <span className="pf-float-dot" style={{ background: p.primary }} />

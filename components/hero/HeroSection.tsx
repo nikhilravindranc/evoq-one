@@ -1080,21 +1080,6 @@ export function HeroSection() {
             }}
           />
 
-          {/* Bottom fade into the lavender the next section starts on, so the
-              page flows on instead of cutting from navy to white. */}
-          <div
-            aria-hidden
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: 200,
-              background: "linear-gradient(180deg, rgba(246,245,255,0) 0%, rgba(246,245,255,0.5) 55%, #F6F5FF 100%)",
-              pointerEvents: "none",
-            }}
-          />
-
           {/* Topbar -- shrinks to its natural height */}
           <div style={{ position: "relative", zIndex: 3, flexShrink: 0 }}>
             <Topbar darkCTA />

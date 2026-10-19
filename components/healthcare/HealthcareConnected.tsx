@@ -44,7 +44,7 @@ export function HealthcareConnected() {
                 next visit.
               </p>
               <p className="mt-4">
-                EVOQ brings the applications behind that journey together, helping your teams work with the
+                EVOQ brings the products behind that journey together, helping your teams work with the
                 information they need while keeping the patient relationship connected along the way.
               </p>
             </div>

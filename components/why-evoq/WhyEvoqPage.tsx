@@ -280,7 +280,7 @@ export function WhyEvoqPage() {
           <motion.div {...fadeUp(0)}>
             <h2 className="evoq-h2" style={{ marginBottom: 12 }}>Designed to Evolve with <span className="accent">Your Business</span></h2>
             <p className="evoq-sub" style={{ marginTop: 0 }}>
-              Business priorities change. Teams expand. New responsibilities emerge. Systems that work today often become barriers tomorrow. EVOQ allows organizations to adopt what they need today and expand over time without disrupting existing workflows. Every application becomes part of a connected operational environment that grows alongside the business.
+              Business priorities change. Teams expand. New responsibilities emerge. Systems that work today often become barriers tomorrow. EVOQ allows organizations to adopt what they need today and expand over time without disrupting existing workflows. Every product becomes part of a connected operational environment that grows alongside the business.
             </p>
           </motion.div>
           <StepFlow />

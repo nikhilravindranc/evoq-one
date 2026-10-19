@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { HsMotion } from "@/components/hospitality/HsMotion";
+import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 
 /* Solutions overview: EVOQ blue / sapphire accents, layered backgrounds, matching the All Industries page. */
 const SAPPHIRE = "#2563EB";
@@ -23,6 +24,8 @@ const ICONS: Record<string, ReactNode> = {
   gear: <><circle cx="12" cy="12" r="3" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" /></>,
   wrench: <path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z" />,
   hotel: <path d="M3 20V8M3 14h18v6M21 14v-2a3 3 0 0 0-3-3h-7v5M7 12h.01" />,
+  bank: <path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18" />,
+  grid: <><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></>,
 };
 const Icon = ({ n, c = "currentColor", s = 22 }: { n: string; c?: string; s?: number }) => (
   <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{ICONS[n]}</svg>
@@ -35,6 +38,8 @@ const INDUSTRIES: Industry[] = [
   { name: "Manufacturing", short: "Manufacturing", icon: "gear", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ products.", link: "Explore manufacturing solutions", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
   { name: "Field Service, Facilities & Maintenance", short: "Field service", icon: "wrench", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.", link: "Explore Field Service, Facilities & Maintenance solutions", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
   { name: "Hospitality, Travel & F&B", short: "Hospitality", icon: "hotel", body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.", link: "Explore Hospitality, Travel & F&B solutions", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
+  { name: "Finance", short: "Finance", icon: "bank", body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.", link: "Explore finance solutions", href: "/solutions/finance", img: U("1714974528737-3e6c7e4d11af") },
+  { name: "All industries", short: "All industries", icon: "grid", body: "Don't see your industry? EVOQ products combine to fit how your organization works, so you can start with what you need.", link: "Explore all industries", href: "/industries", img: U("1542744173-8e7e53415bb0") },
 ];
 
 /* Existing routes are /solutions/healthcare/crm and /practice-management (not the /healthcare-crm paths in the brief).
@@ -59,10 +64,10 @@ function Eyebrow({ children, light = false }: { children: string; light?: boolea
 }
 const Arrow = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>;
 
-function Btn({ href, children, ghost = false, onDark = false }: { href: string; children: string; ghost?: boolean; onDark?: boolean }) {
+function Btn({ href, children, ghost = false, onDark = false, enquiry = false }: { href: string; children: string; ghost?: boolean; onDark?: boolean; enquiry?: boolean }) {
   const solid = !ghost;
   return (
-    <a href={href} className="sl-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 24px", borderRadius: 99, fontSize: 14.5, fontWeight: 600, textDecoration: "none", background: solid ? (onDark ? "#fff" : SAPPHIRE) : "transparent", color: solid ? (onDark ? DEEP : "#fff") : DEEP, border: solid ? "1px solid transparent" : `1.5px solid ${DEEP}`, boxShadow: solid && !onDark ? "0 14px 28px -16px rgba(37,99,235,.9)" : "none" }}>
+    <a href={href} {...(enquiry ? { "data-enquiry": "" } : {})} className="sl-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "14px 24px", borderRadius: 99, fontSize: 14.5, fontWeight: 600, textDecoration: "none", background: solid ? (onDark ? "#fff" : SAPPHIRE) : "transparent", color: solid ? (onDark ? DEEP : "#fff") : DEEP, border: solid ? "1px solid transparent" : `1.5px solid ${DEEP}`, boxShadow: solid && !onDark ? "0 14px 28px -16px rgba(37,99,235,.9)" : "none" }}>
       {children}<Arrow />
     </a>
   );
@@ -85,8 +90,7 @@ function Hero() {
             <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: DEEP }}>Software solutions for the way your industry operates</h1>
             <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.75, color: "#4B5563", maxWidth: "52ch" }}>Every industry has its own processes, priorities and operational challenges. EVOQ brings together products that address these needs, helping organizations manage industry-specific activities with greater visibility and coordination.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 14, flexWrap: "wrap" }}>
-              <Btn href="/industries">Explore industries</Btn>
-              <Btn href="/products" ghost>Explore products</Btn>
+              <Btn href="#" enquiry>Talk to an expert</Btn>
             </div>
             <ul aria-label="Industries" style={{ listStyle: "none", margin: "34px 0 0", padding: 0, display: "flex", flexWrap: "wrap", gap: 8 }}>
               {INDUSTRIES.map((x) => (
@@ -97,7 +101,7 @@ function Hero() {
             </ul>
           </div>
           <div data-rv="1" className="sl-mosaic" aria-hidden="true">
-            {INDUSTRIES.map((x, i) => (
+            {INDUSTRIES.slice(0, 5).map((x, i) => (
               <span key={x.name} className={`sl-tile sl-t${i}`} style={photo(x.img)}>
                 <i className="sl-tag"><Icon n={x.icon} c={SAPPHIRE} s={14} />{x.short}</i>
               </span>
@@ -135,7 +139,6 @@ function ByIndustry() {
             </a>
           ))}
         </div>
-        <p style={{ margin: "34px 0 0" }}><a href="/industries" className="sl-link" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 15, fontWeight: 600, color: SAPPHIRE, textDecoration: "none" }}>View all industries <Arrow /></a></p>
       </div>
     </section>
   );
@@ -213,11 +216,11 @@ function Closing() {
         <div data-rv="0" className="sl-close" style={{ position: "relative", overflow: "hidden", borderRadius: 26, background: `linear-gradient(120deg, #EFF6FF, ${PALE})`, border: `1px solid #BFDBFE`, padding: "64px 56px", textAlign: "center" }}>
           <span aria-hidden="true" style={{ position: "absolute", left: -90, top: -90, width: 300, height: 300, borderRadius: "50%", border: "1.5px solid rgba(37,99,235,.2)" }} />
           <span aria-hidden="true" style={{ position: "absolute", right: -70, bottom: -110, width: 340, height: 340, borderRadius: "50%", border: "1.5px solid rgba(37,99,235,.2)" }} />
-          <div style={{ position: "relative", maxWidth: 640, margin: "0 auto" }}>
+          <div style={{ position: "relative", maxWidth: 900, margin: "0 auto" }}>
             <p style={{ margin: "0 0 16px", fontSize: 11.5, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: SAPPHIRE }}>All industries</p>
-            <h2 style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: DEEP }}>Find the right solution for your industry</h2>
-            <p style={{ margin: "16px 0 28px", fontSize: 16, lineHeight: 1.75, color: "#374151" }}>Explore the industries EVOQ serves and discover the solutions relevant to your organization&apos;s needs.</p>
-            <Btn href="/industries">View all industries</Btn>
+            <h2 className="sl-oneline" style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: DEEP }}>Find the right solution for your industry</h2>
+            <p className="sl-oneline" style={{ margin: "16px 0 28px", fontSize: 16, lineHeight: 1.75, color: "#374151" }}>Explore the industries EVOQ serves and discover the solutions relevant to your organization&apos;s needs.</p>
+            <Btn href="#" enquiry>Talk to an expert</Btn>
           </div>
         </div>
       </div>
@@ -229,6 +232,7 @@ export function SolutionsPage() {
   return (
     <div className="hs-root" style={{ minHeight: "100vh", background: "#fff", color: INK, fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
       <HsMotion />
+      <EnquiryModal eyebrow="EVOQ Solutions" segments={["Healthcare", "Manufacturing", "Construction, Engineering & Real Estate", "Field Service, Facilities & Maintenance", "Hospitality, Travel & F&B", "Finance", "Another industry"]} segmentLabel="Your industry" placeholder="Tell us about your processes and what you would like to support..." accent={DEEP} accentSoft={SAPPHIRE} />
       <style>{`
         .sl-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .sl-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:46px 0 84px}
@@ -239,7 +243,8 @@ export function SolutionsPage() {
         .sl-tag{position:absolute;left:8px;bottom:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.94);color:${DEEP};font-style:normal;font-size:11px;font-weight:700;padding:4px 9px 4px 7px;border-radius:99px}
         .sl-t2 .sl-tag,.sl-t3 .sl-tag,.sl-t4 .sl-tag{display:none}
         .sl-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:30px 22px}
-        .sl-c0,.sl-c1,.sl-c2{grid-column:span 2}.sl-c3,.sl-c4{grid-column:span 3}
+        .sl-c0,.sl-c1,.sl-c2{grid-column:span 2}.sl-c3,.sl-c4,.sl-c5,.sl-c6{grid-column:span 3}
+        .sl-oneline{white-space:nowrap}
         .sl-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px 22px}
         .sl-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
         .sl-apps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-bottom:14px!important}
@@ -254,8 +259,8 @@ export function SolutionsPage() {
         .sl-btn:focus-visible,.sl-link:focus-visible,.sl-card:focus-visible{outline:3px solid #93C5FD;outline-offset:3px}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1000px){.sl-hero,.sl-split{grid-template-columns:1fr;gap:36px}.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-c0,.sl-c1,.sl-c2,.sl-c3{grid-column:span 1}.sl-c4{grid-column:span 2}.sl-g3{grid-template-columns:1fr}.sl-jline{display:none}}
-        @media (max-width:640px){.sl-grid{grid-template-columns:1fr}.sl-c4{grid-column:span 1}.sl-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-mosaic{grid-template-rows:repeat(2,110px)}.sl-close{padding:40px 24px!important}}
+        @media (max-width:1000px){.sl-hero,.sl-split{grid-template-columns:1fr;gap:36px}.sl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-oneline{white-space:normal}.sl-c0,.sl-c1,.sl-c2,.sl-c3,.sl-c4,.sl-c5{grid-column:span 1}.sl-c6{grid-column:span 2}.sl-g3{grid-template-columns:1fr}.sl-jline{display:none}}
+        @media (max-width:640px){.sl-grid{grid-template-columns:1fr}.sl-c6{grid-column:span 1}.sl-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.sl-mosaic{grid-template-rows:repeat(2,110px)}.sl-close{padding:40px 24px!important}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.sl-card,.sl-btn{transition:none}}
       `}</style>
       <Topbar darkCTA={false} light ctaColor={DEEP} />

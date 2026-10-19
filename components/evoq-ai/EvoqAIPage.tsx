@@ -248,7 +248,7 @@ const PaperclipGlyph = () => (
 const HERO_INFO_CARDS = [
   {
     icon: DocIcon,
-    title: "Get answers across your applications",
+    title: "Get answers across your products",
     desc: "Find information, summarize activity, and get help with the next step.",
     side: "top" as const,
   },
@@ -283,9 +283,9 @@ const INTERACTION_MODES = [
   },
   {
     tab: "Use AI in context",
-    title: ["Use AI in context", "get help inside an application"],
+    title: ["Use AI in context", "get help inside a product"],
     quote: "Summarize this customer's recent activity.",
-    desc: "Get relevant AI assistance while working inside an application.",
+    desc: "Get relevant AI assistance while working inside a product.",
     icon: MonitorIcon,
     tone: { fg: C.primary, bg: C.aiHighlight },
     outcome: { label: ["Action", "in context"], icon: BoltIcon, tone: { fg: C.interactive, bg: "#E8EEFF" } },
@@ -633,7 +633,7 @@ function CrossSystemDiagram() {
           <div className="rounded-[20px]" style={{ ...SOFT_CARD, padding: PAD }}>
             <p className="flex items-center gap-2 px-1 text-[11px] font-extrabold uppercase tracking-[0.14em]" style={{ color: C.primary, height: HEAD }}>
               <i className="h-[7px] w-[7px] rounded-full" style={{ background: C.primary }} />
-              EVOQ applications
+              EVOQ products
             </p>
             <div className="flex flex-col" style={{ gap: ROWGAP }}>
               {EVOQ_SOURCES.map((x) => (
@@ -820,7 +820,7 @@ export function EvoqAIPage() {
               AI that gets work done
             </motion.h1>
             <motion.p variants={rise} className="mx-auto mt-5 max-w-[640px] text-balance text-[17px] leading-[1.7] text-white/90">
-              EVOQ AI brings AI into the applications, systems, and processes where your work happens.
+              EVOQ AI brings AI into the products, systems, and processes where your work happens.
             </motion.p>
             <motion.div variants={rise} className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <button
@@ -1127,14 +1127,14 @@ export function EvoqAIPage() {
               <div className="xl:pt-20">
                 <p className="text-[12px] font-extrabold uppercase tracking-[0.16em]" style={{ color: C.interactive }}>AI across the systems you use</p>
                 <h2 className="mt-5 font-[var(--font-display)] text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] sm:text-[38px]" style={{ color: "#0B1230" }}>
-                  Your work extends beyond EVOQ applications.
+                  Your work extends beyond EVOQ products.
                 </h2>
                 <p className="mt-6 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
                   EVOQ AI can work with information and actions made available through your connected systems.
                 </p>
                 <p className="mt-4 text-[15.5px] leading-[1.75]" style={{ color: C.body }}>
                   EVI can use that information to answer questions and prepare work. AI agents can use it to perform
-                  defined tasks across the applications and systems available to them.
+                  defined tasks across the products and systems available to them.
                 </p>
 
                 <a
@@ -1412,7 +1412,7 @@ export function EvoqAIPage() {
                   Ready to see AI at work?
                 </motion.h2>
                 <motion.p {...reveal(0.42, 24)} className="mx-auto mt-4 max-w-[640px] text-[16px] leading-[1.7] text-white/90 sm:text-[18px]">
-                  Bring AI into the applications and systems where your work already happens.
+                  Bring AI into the products and systems where your work already happens.
                 </motion.p>
                 <motion.div {...reveal(0.55, 24)} className="mt-9 flex flex-wrap items-center justify-center gap-4">
                   <button

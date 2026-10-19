@@ -251,7 +251,7 @@ export function HealthcareOperations() {
               Healthcare organizations manage far more than appointments. Your
               teams handle enquiries, patient relationships, scheduling,
               providers, services, billing, follow-ups, and ongoing engagement.
-              EVOQ brings the applications behind these activities together so
+              EVOQ brings the products behind these activities together so
               information can move across the patient journey.
             </p>
 

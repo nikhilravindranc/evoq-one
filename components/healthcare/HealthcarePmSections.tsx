@@ -642,11 +642,11 @@ export function HealthcarePmGrow() {
                 <h2 className={H2}>Practice management, with room to grow.</h2>
                 <p className={`mt-6 max-w-[560px] ${LEAD}`}>
                   Practice Management provides the operational foundation for the practice while other EVOQ
-                  applications can support the wider patient journey.
+                  products can support the wider patient journey.
                 </p>
                 <p className={`mt-4 max-w-[560px] ${LEAD}`}>
-                  Information can move between the applications as the patient journey continues, giving each
-                  application a clear role without forcing every function into Practice Management.
+                  Information can move between the products as the patient journey continues, giving each
+                  product a clear role without forcing every function into Practice Management.
                 </p>
                 <Link href="/solutions/healthcare" className={`mt-8 ${BTN_PRIMARY}`}>
                   Explore Healthcare Solutions
@@ -680,7 +680,7 @@ export function HealthcarePmGrow() {
                 </div>
                 <p className="mt-4 flex items-center justify-center gap-2 text-[12.5px] font-medium text-[#64748B]">
                   <Ic n="refresh" size={15} stroke="#26B9CF" />
-                  Information moves between applications
+                  Information moves between products
                 </p>
               </div>
             </div>

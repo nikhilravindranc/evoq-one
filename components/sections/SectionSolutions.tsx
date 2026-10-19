@@ -19,7 +19,7 @@ const fadeUp = (delay = 0) => ({
 type Industry = {
   key: string; tab: string; name: string;
   lead: string; accent: string; body: string;
-  href: string;
+  href: string; cta?: string;
   color: string; deep: string; soft: string;
   cards: [FloatCard, FloatCard];   // [top-right, bottom-left] over the dashboard
 };
@@ -56,6 +56,18 @@ const INDUSTRIES: Industry[] = [
     href: "/solutions/hospitality",
     color: "#14532D", deep: "#064E3B", soft: "#F7F1E3",
     cards: [{ tone: "info", title: "Table for 4 · 8:00 PM", sub: "Confirmed at The Terrace" }, { tone: "ok", title: "Returning guest recognised", sub: "Preferences noted at check-in" }] },
+  { key: "finance", tab: "Finance", name: "Financial services",
+    lead: "Every client. ", accent: "Every follow-up.",
+    body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.",
+    href: "/solutions/finance", cta: "Explore finance",
+    color: "#A16207", deep: "#422006", soft: "#FEF3C7",
+    cards: [{ tone: "warn", title: "Follow-up due", sub: "Annual review call · Thursday" }, { tone: "ok", title: "Client request resolved", sub: "Statement query closed" }] },
+  { key: "all", tab: "All industries", name: "All industries",
+    lead: "One suite. ", accent: "Every industry.",
+    body: "Don't see your industry? EVOQ products combine to fit how your organization works, so you can start with what you need.",
+    href: "/industries", cta: "Explore all industries",
+    color: "#4747E0", deep: "#1F2A60", soft: "#EEEDFF",
+    cards: [{ tone: "info", title: "13 industries · 11 products", sub: "One suite, combined your way" }, { tone: "ok", title: "Your industry not listed?", sub: "We'll map it with you" }] },
 ];
 
 const AUTO_MS = 7000;
@@ -91,7 +103,6 @@ export function SectionSolutions() {
           </motion.div>
           <motion.div className="sol-links" {...fadeUp(0.04)}>
             <a href="/solutions" className="sol-more-btn">Solutions overview <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></a>
-            <a href="/industries" className="sol-more-btn">All industries <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></a>
           </motion.div>
         </div>
 
@@ -132,7 +143,7 @@ export function SectionSolutions() {
               <p className="sol-name">{x.name}</p>
               <p className="sol-desc">{x.body}</p>
               <a href={x.href} className="sol-cta" style={{ background: x.color }}>
-                Explore {x.tab.toLowerCase()}
+                {x.cta ?? `Explore ${x.tab.toLowerCase()}`}
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </a>
             </div>
