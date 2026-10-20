@@ -63,7 +63,7 @@ const FILTERS: { key: CategoryFilter; label: string }[] = [
  * green with a gold accent, which keeps it clear of Sync's brighter
  * emerald on the one axis (hue) where they'd otherwise compete.
  * ------------------------------------------------------------- */
-type Palette = {
+export type Palette = {
   depth: string;
   primary: string;
   soft: string;
@@ -71,7 +71,7 @@ type Palette = {
   surface: string;
 };
 
-const PALETTE: Record<string, Palette> = {
+export const PALETTE: Record<string, Palette> = {
   crm:        { depth: "#0C2472", primary: "#1D4ED8", soft: "#93C5FD", tint: "#E3ECFC", surface: "#EFF6FF" },
   campaigns:  { depth: "#3D1E5C", primary: "#7C3AED", soft: "#DDD6FE", tint: "#F3E8FF", surface: "#FAF5FF" },
   serviceops: { depth: "#7C2D12", primary: "#EA580C", soft: "#FDBA74", tint: "#FFEDD5", surface: "#FFF7ED" },
