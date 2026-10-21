@@ -14,10 +14,10 @@ export function HealthcarePmNav() {
       <div className="px-5 sm:px-6 lg:px-6">
         <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
           <Link href="/solutions/healthcare/practice-management" className="shrink-0 no-underline">
-            <HealthcareLogo label="Healthcare Practice Management" />
+            <HealthcareLogo label="Practice Management" />
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Healthcare Practice Management">
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Practice Management">
             {MENU.map((item) => (
               <a
                 key={item.name}
