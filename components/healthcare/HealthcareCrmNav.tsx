@@ -15,10 +15,10 @@ export function HealthcareCrmNav() {
       <div className="px-5 sm:px-6 lg:px-6">
         <div className="mx-auto flex max-w-[1300px] items-center gap-6 py-3 pl-2 sm:pl-4 md:pl-6 lg:gap-8 lg:pl-[54px]">
           <Link href="/solutions/healthcare/crm" className="shrink-0 no-underline">
-            <HealthcareLogo label="Healthcare CRM" />
+            <HealthcareLogo label="Patient Relationships" />
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Healthcare CRM">
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Patient Relationships">
             {MENU.map((item) => (
               <Link
                 key={item.name}

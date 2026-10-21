@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const DESTINATIONS = [
-  { key: "solutions", name: "Healthcare Solutions", sub: "Overview", href: "/solutions/healthcare" },
-  { key: "crm", name: "Patient Relationships", sub: "EVOQ CRM", href: "/solutions/healthcare/crm" },
-  { key: "pm", name: "Healthcare Practice Management", sub: "Practice operations", href: "/solutions/healthcare/practice-management" },
+  { key: "solutions", name: "Healthcare", desc: "Solutions for patient relationships and practice operations.", href: "/solutions/healthcare" },
+  { key: "crm", name: "Patient Relationships", desc: "Manage enquiries, referrals, conversations and follow-ups.", href: "/solutions/healthcare/crm" },
+  { key: "pm", name: "Practice Management", desc: "Coordinate appointments, providers, services and daily operations.", href: "/solutions/healthcare/practice-management" },
+  { key: "engagement", name: "Patient Engagement", desc: "Support booking, communication, feedback and loyalty.", href: "/solutions/healthcare#patient-engagement" },
 ] as const;
 
 type DestKey = (typeof DESTINATIONS)[number]["key"];
@@ -64,7 +65,7 @@ export function HealthcareSwitcher({ current, accent = "#2064B6" }: { current: D
       </button>
 
       {open && (
-        <div className="absolute right-0 top-[calc(100%+10px)] z-50 w-[300px] rounded-[18px] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/8">
+        <div className="absolute right-0 top-[calc(100%+10px)] z-50 w-[340px] rounded-[18px] bg-white p-2 shadow-[0_24px_60px_-20px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/8">
           <p className="px-3.5 pb-1 pt-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#94A3B0]">
             Healthcare products
           </p>
@@ -81,7 +82,7 @@ export function HealthcareSwitcher({ current, accent = "#2064B6" }: { current: D
               >
                 <span>
                   <span className="block text-[13.5px] font-bold leading-tight text-[#102A43]">{d.name}</span>
-                  <span className="mt-0.5 block text-[12px] leading-tight text-[#64748B]">{d.sub}</span>
+                  <span className="mt-1 block text-[12px] leading-[1.4] text-[#64748B]">{d.desc}</span>
                 </span>
                 {active && (
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white" style={{ background: accent }}>

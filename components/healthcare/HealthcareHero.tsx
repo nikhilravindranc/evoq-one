@@ -100,12 +100,12 @@ const FLOATING_CARDS = [
 
 // x/y are % positions inside the hero (right half), delay staggers the float
 const CARD_POSITIONS = [
-  { x: 46, y: 14, delay: "0s" },
-  { x: 45, y: 38, delay: "0.9s" },
-  { x: 46, y: 62, delay: "1.7s" },
-  { x: 77, y: 10, delay: "0.5s" },
-  { x: 79, y: 34, delay: "1.3s" },
-  { x: 77, y: 58, delay: "2.2s" },
+  { x: 56, y: 14, delay: "0s" },
+  { x: 55, y: 38, delay: "0.9s" },
+  { x: 56, y: 62, delay: "1.7s" },
+  { x: 79, y: 10, delay: "0.5s" },
+  { x: 80, y: 34, delay: "1.3s" },
+  { x: 79, y: 58, delay: "2.2s" },
 ];
 
 const SEGMENTS = [
@@ -162,7 +162,7 @@ export function HealthcareHero() {
       {FLOATING_CARDS.map((card, i) => (
         <div
           key={card.title}
-          className="hc-card absolute z-[5] hidden w-[168px] rounded-2xl border border-[#E2E8EC] bg-white/95 p-3.5 shadow-[0_18px_40px_-18px_rgba(49,70,90,0.35),0_2px_6px_rgba(49,70,90,0.06)] lg:block"
+          className="hc-card absolute z-[5] hidden w-[168px] rounded-2xl border border-[#E2E8EC] bg-white/95 p-3.5 shadow-[0_18px_40px_-18px_rgba(49,70,90,0.35),0_2px_6px_rgba(49,70,90,0.06)] xl:block"
           style={{
             left: `${CARD_POSITIONS[i].x}%`,
             top: `${CARD_POSITIONS[i].y}%`,
@@ -186,14 +186,14 @@ export function HealthcareHero() {
       {/* Content */}
       <div className="relative z-10 px-5 sm:px-6 lg:px-6">
         <div className="mx-auto max-w-[1300px] pb-16 pt-[72px] lg:pt-[96px]">
-        <div className="max-w-[560px]">
+        <div className="max-w-[640px]">
           <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#18B8D1]">
             Healthcare Solutions
           </p>
-          <h1 className="mt-4 font-[var(--font-display)] text-[48px] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#31465A]">
+          <h1 className="mt-4 font-[var(--font-display)] text-[26px] font-extrabold leading-[1.15] min-[420px]:text-[27px] min-[520px]:text-[36px] sm:text-[42px] lg:text-[44px] tracking-[-0.02em] text-[#31465A]">
             Better patient relationships. More efficient healthcare operations.
           </h1>
-          <p className="mt-5 text-[17px] leading-[1.65] text-[#64748B]">
+          <p className="mt-5 max-w-[560px] text-[17px] leading-[1.65] text-[#64748B]">
             EVOQ helps healthcare organizations attract and retain patients,
             coordinate practice operations, and deliver a more consistent
             patient experience across the journey.

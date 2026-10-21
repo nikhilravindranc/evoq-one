@@ -18,10 +18,10 @@ function Ic({ n, size = 22, stroke }: { n: keyof typeof ICONS; size?: number; st
 }
 
 const OUTCOMES = [
-  { icon: "acquire", title: "Patient Acquisition", desc: "Turn more enquiries and referrals into consultations and appointments.", products: ["CRM", "Campaigns", "Booking"], link: "Explore patient acquisition", href: "#healthcare-crm", tile: "bg-[#E8F1FA]", ink: "#2064B6" },
+  { icon: "acquire", title: "Patient Acquisition", desc: "Turn more enquiries and referrals into consultations and appointments.", products: ["CRM", "Campaigns", "Appointment Booking"], link: "Explore patient acquisition", href: "#healthcare-crm", tile: "bg-[#E8F1FA]", ink: "#2064B6" },
   { icon: "retain", title: "Patient Retention", desc: "Encourage return visits with timely follow-ups, relevant communication, and ongoing relationships.", products: ["CRM", "Campaigns", "Loyalty", "Surveys"], link: "Explore patient retention", href: "#patient-engagement", tile: "bg-[#E7F7F5]", ink: "#2F8A7F" },
-  { icon: "efficiency", title: "Practice Efficiency", desc: "Coordinate appointments, providers, services, and daily practice activity.", products: ["Practice Management", "Booking"], link: "Explore practice efficiency", href: "#practice-management", tile: "bg-[#E5F8FB]", ink: "#0E8FA5" },
-  { icon: "revenue", title: "Revenue Optimization", desc: "Identify opportunities across enquiry conversion, appointment utilization, repeat visits, and payment collection.", products: ["CRM", "Booking", "Practice Management", "Billing"], link: "Explore revenue optimization", href: "#patient-journey", tile: "bg-[#EAEFF3]", ink: "#31465A" },
+  { icon: "efficiency", title: "Practice Efficiency", desc: "Coordinate appointments, providers, services, and daily practice activity.", products: ["Practice Management", "Appointment Booking"], link: "Explore practice efficiency", href: "#practice-management", tile: "bg-[#E5F8FB]", ink: "#0E8FA5" },
+  { icon: "revenue", title: "Revenue Optimization", desc: "Identify opportunities across enquiry conversion, appointment utilization, repeat visits, and payment collection.", products: ["CRM", "Appointment Booking", "Practice Management", "Billing"], link: "Explore revenue optimization", href: "#patient-journey", tile: "bg-[#EAEFF3]", ink: "#31465A" },
 ] as const;
 
 export function HealthcareOutcomes() {

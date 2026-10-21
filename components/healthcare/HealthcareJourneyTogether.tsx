@@ -126,7 +126,7 @@ const CARDS = [
     id: "patient-engagement",
     title: "Patient Engagement",
     desc: "Support booking, communications, campaigns, feedback, and loyalty across the patient experience.",
-    powered: ["Booking", "Billing", "Campaigns", "Surveys", "Loyalty"],
+    powered: ["Appointment Booking", "Billing", "Campaigns", "Surveys", "Loyalty"],
     link: "Explore patient engagement",
     href: "#patient-engagement",
     tint: "bg-[#E7F7F5]",
