@@ -1,6 +1,7 @@
 import { Topbar } from "@/components/hero/Topbar";
 import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
+import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HealthcareCrmNav } from "./HealthcareCrmNav";
 import { HealthcareCrmHero } from "./HealthcareCrmHero";
 import { HealthcareCrmEnquiry } from "./HealthcareCrmEnquiry";
@@ -17,6 +18,7 @@ import { HealthcareCrmAI } from "./HealthcareAISections";
 export function HealthcareCrmPage() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--white)" }}>
+      <EnquiryModal eyebrow="EVOQ Healthcare CRM" segments={["Clinics and practices", "Dental", "Aesthetics and wellness", "Hospitals", "Diagnostics", "Multi-location groups", "Other healthcare"]} segmentLabel="Type of organization" placeholder="Tell us how you manage patient enquiries today..." accent="#31465A" accentSoft="#2064B6" />
       <HeroShell
         bg={{ background: "#F4FBFA" }}
         topbar={<Topbar darkCTA={false} light ctaColor="#18B8D1" />}

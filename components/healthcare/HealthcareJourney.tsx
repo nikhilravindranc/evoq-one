@@ -109,7 +109,7 @@ const STEPS = [
 
 export function HealthcareJourney() {
   return (
-    <section className="relative overflow-hidden bg-[#F1F5F7]">
+    <section id="patient-journey" className="relative scroll-mt-24 overflow-hidden bg-[#F1F5F7]">
       <div
         className="pointer-events-none absolute -left-40 top-0 h-[480px] w-[480px] -translate-y-1/4 rounded-full blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(24,184,209,0.16), rgba(109,204,195,0.1) 55%, transparent 75%)" }}
@@ -130,6 +130,10 @@ export function HealthcareJourney() {
               <p className="mt-5 max-w-[560px] text-[16.5px] leading-[1.7] text-[#64748B]">
                 Keep the patient journey organized from the first interaction through appointments, treatment,
                 follow-up, and re-engagement.
+              </p>
+              <p className="mt-4 max-w-[560px] text-[15px] font-semibold leading-[1.65] text-[#31465A]">
+                Each stage draws on the EVOQ products best suited to it, so information moves with the patient from one
+                stage to the next.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3.5">
                 <a

@@ -148,7 +148,7 @@ const SOLUTIONS: {
     sub: "Connected care workflows",
     href: "/solutions/healthcare",
     children: [
-      { name: "Healthcare CRM", href: "/solutions/healthcare/crm" },
+      { name: "Patient Relationships", href: "/solutions/healthcare/crm" },
       { name: "Practice Management", href: "/solutions/healthcare/practice-management" },
     ],
   },

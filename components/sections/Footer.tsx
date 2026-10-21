@@ -61,7 +61,7 @@ export function Footer({ background, darkText = false, socialHover }: { backgrou
           <h6>Solutions</h6>
           <ul>
             <li><a href="/solutions/healthcare">Healthcare</a></li>
-            <li><a href="/solutions/healthcare/crm">Healthcare CRM</a></li>
+            <li><a href="/solutions/healthcare/crm">Patient Relationships</a></li>
             <li><a href="/solutions/healthcare/practice-management">Healthcare Practice Management</a></li>
             <li><a href="/solutions/manufacturing">Manufacturing</a></li>
             <li><a href="/solutions/construction">Construction, Engineering &amp; Real Estate</a></li>

@@ -60,7 +60,7 @@ const ChevronIcon = () => (
 const BREADCRUMB = [
   { label: "Home", href: "/" },
   { label: "Healthcare", href: "/solutions/healthcare" },
-  { label: "Healthcare CRM", href: "/solutions/healthcare/crm" },
+  { label: "Patient Relationships", href: "/solutions/healthcare/crm" },
 ];
 
 const PATIENT_ROWS = [

@@ -56,7 +56,7 @@ const INDUSTRIES: Industry[] = [
 /* Existing routes are /solutions/healthcare/crm and /practice-management (not the /healthcare-crm paths in the brief).
    Patient Engagement has no page yet, so that card is not linked. */
 const HEALTHCARE: { name: string; body: string; link?: string; href?: string }[] = [
-  { name: "Healthcare CRM", body: "Organize patient enquiries, manage follow-ups and maintain visibility into patient relationships.", link: "Explore Healthcare CRM", href: "/solutions/healthcare/crm" },
+  { name: "Patient Relationships", body: "Organize patient enquiries, manage follow-ups and maintain visibility into patient relationships.", link: "Explore Patient Relationships", href: "/solutions/healthcare/crm" },
   { name: "Practice Management", body: "Coordinate appointments, patient visits and day-to-day practice activities.", link: "Explore Practice Management", href: "/solutions/healthcare/practice-management" },
   { name: "Patient Engagement", body: "Support patient communication and engagement through relevant EVOQ products." },
 ];

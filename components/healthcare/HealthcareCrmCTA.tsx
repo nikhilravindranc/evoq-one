@@ -19,39 +19,27 @@ export function HealthcareCrmCTA() {
             <div className="relative grid items-center gap-10 lg:grid-cols-[1.25fr_0.75fr]">
               <div>
                 <h2 className="max-w-[680px] font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-white">
-                  One patient relationship. Every interaction in context.
+                  Make every patient interaction count.
                 </h2>
-                <div className="mt-6 max-w-[620px] text-[16px] leading-[1.6] text-white/80">
-                  <p>
-                    The patient journey does not end with an appointment. Every enquiry, conversation, follow-up,
-                    referral, and return visit contributes to the relationship.
-                  </p>
-                  <p className="mt-4">
-                    EVOQ Healthcare CRM helps your team keep those interactions connected, so every patient
-                    conversation starts with context and every follow-up has a clear next step.
-                  </p>
-                </div>
+                <p className="mt-6 max-w-[620px] text-[16px] leading-[1.6] text-white/80">
+                  Give your team a clearer view of patient enquiries, relationship history and the next steps that keep
+                  conversations moving.
+                </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   <a
-                    href="#features"
+                    href="#"
+                    data-enquiry=""
                     className="inline-flex items-center gap-3 rounded-full bg-white px-5 py-3.5 text-[14.5px] font-semibold text-[#2064B6] no-underline shadow-[0_14px_30px_-14px_rgba(0,0,0,0.4)] transition-all hover:-translate-y-px hover:bg-[#F1F7FD]"
                   >
-                    Explore healthcare CRM features
-                    <ArrowRight />
-                  </a>
-                  <a
-                    href="#pricing"
-                    className="inline-flex items-center gap-3 rounded-full border border-white/50 px-5 py-3.5 text-[14.5px] font-semibold text-white no-underline transition-all hover:-translate-y-px hover:bg-white/10"
-                  >
-                    Explore pricing
-                    <ArrowRight />
-                  </a>
-                  <a
-                    href="#expert"
-                    className="inline-flex items-center gap-3 rounded-full border border-white/50 px-5 py-3.5 text-[14.5px] font-semibold text-white no-underline transition-all hover:-translate-y-px hover:bg-white/10"
-                  >
                     Talk to an expert
+                    <ArrowRight />
+                  </a>
+                  <a
+                    href="/solutions/healthcare"
+                    className="inline-flex items-center gap-3 rounded-full border border-white/50 px-5 py-3.5 text-[14.5px] font-semibold text-white no-underline transition-all hover:-translate-y-px hover:bg-white/10"
+                  >
+                    Explore healthcare solutions
                     <ArrowRight />
                   </a>
                 </div>

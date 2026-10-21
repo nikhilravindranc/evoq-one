@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const DESTINATIONS = [
   { key: "solutions", name: "Healthcare Solutions", sub: "Overview", href: "/solutions/healthcare" },
-  { key: "crm", name: "Healthcare CRM", sub: "Patient relationships", href: "/solutions/healthcare/crm" },
+  { key: "crm", name: "Patient Relationships", sub: "EVOQ CRM", href: "/solutions/healthcare/crm" },
   { key: "pm", name: "Healthcare Practice Management", sub: "Practice operations", href: "/solutions/healthcare/practice-management" },
 ] as const;
 

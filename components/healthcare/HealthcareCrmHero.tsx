@@ -122,18 +122,16 @@ export function HealthcareCrmHero() {
           {/* copy */}
           <div className="mx-auto max-w-[1040px] text-center">
             <p className="text-[12.5px] font-bold uppercase tracking-[0.3em] text-[#0F9488]">
-              Patient relationships that last
+              Patient relationships
             </p>
             <h1 className="mt-4 font-[var(--font-display)] text-[48px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43]">
-              Turn every patient interaction<br className="hidden sm:block" /> into a lasting relationship.
+              Turn patient enquiries<br className="hidden sm:block" /> into lasting relationships.
             </h1>
             <p className="mx-auto mt-6 max-w-[760px] text-[16.5px] leading-[1.65] text-[#102A43]/70">
-              From the first enquiry to the next appointment and every follow-up
-              in between, keep patient conversations, relationships, and
-              activities connected. EVOQ Healthcare CRM gives hospitals, clinics,
-              medical centers, specialty practices, and healthcare groups a
-              clearer way to manage patient relationships throughout the patient
-              journey.
+              Every enquiry is an opportunity to begin a patient relationship. EVOQ CRM
+              helps healthcare organizations manage enquiries, referrals,
+              conversations and follow-ups, giving teams the context they need to
+              move each relationship forward.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
               <a

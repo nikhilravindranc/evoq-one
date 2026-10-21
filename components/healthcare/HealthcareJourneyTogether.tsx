@@ -97,9 +97,11 @@ const CARDS = [
     photo: "/healthcare/stock/hc-card-crm-2.jpg",
     pos: "50% 30%",
     alt: "Doctor speaking with a patient",
-    title: "Healthcare CRM",
-    desc: "Manage enquiries, patient information, interactions, relationships, and follow-ups throughout the patient journey.",
-    link: "Explore Healthcare CRM",
+    id: "healthcare-crm",
+    title: "Patient Relationships",
+    desc: "Manage enquiries, referrals, patient interactions, and follow-ups throughout the relationship.",
+    powered: ["Powered by EVOQ CRM"],
+    link: "Explore Patient Relationships",
     href: "/solutions/healthcare/crm",
     tint: "bg-[#E8F1FA]",
     visual: <CrmVisual />,
@@ -108,9 +110,11 @@ const CARDS = [
     photo: "/healthcare/stock/hc-card-pm-2.jpg",
     pos: "60% 40%",
     alt: "Receptionist welcoming a patient",
-    title: "Healthcare Practice Management",
-    desc: "Manage patients, appointments, providers, schedules, services, visits, and everyday practice operations.",
-    link: "Explore Healthcare Practice Management",
+    id: "practice-management",
+    title: "Practice Management",
+    desc: "Coordinate appointments, providers, services, visits, and everyday practice operations.",
+    powered: ["Powered by Practice Management"],
+    link: "Explore Practice Management",
     href: "/solutions/healthcare/practice-management",
     tint: "bg-[#E5F8FB]",
     visual: <PmVisual />,
@@ -119,8 +123,10 @@ const CARDS = [
     photo: "/healthcare/stock/hc-card-pe.jpg",
     pos: "70% 40%",
     alt: "Patient using her phone",
+    id: "patient-engagement",
     title: "Patient Engagement",
-    desc: "Extend the patient experience with booking, billing, campaigns, feedback, and loyalty.",
+    desc: "Support booking, communications, campaigns, feedback, and loyalty across the patient experience.",
+    powered: ["Booking", "Billing", "Campaigns", "Surveys", "Loyalty"],
     link: "Explore patient engagement",
     href: "#patient-engagement",
     tint: "bg-[#E7F7F5]",
@@ -180,7 +186,8 @@ export function HealthcareJourneyTogether() {
             {CARDS.map((c) => (
               <article
                 key={c.title}
-                className="group flex flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_2px_16px_rgba(49,70,90,0.06)] ring-1 ring-[#31465A]/6 transition-all hover:-translate-y-1 hover:shadow-[0_24px_50px_-20px_rgba(49,70,90,0.28)]"
+                id={c.id}
+                className="group flex scroll-mt-24 flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_2px_16px_rgba(49,70,90,0.06)] ring-1 ring-[#31465A]/6 transition-all hover:-translate-y-1 hover:shadow-[0_24px_50px_-20px_rgba(49,70,90,0.28)]"
               >
                 <div className={`relative h-[300px] overflow-hidden ${c.tint}`}>
                   <Image src={c.photo} alt={c.alt} fill sizes="(min-width: 768px) 420px, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" style={{ objectPosition: c.pos }} />
@@ -190,6 +197,11 @@ export function HealthcareJourneyTogether() {
                 <div className="flex flex-1 flex-col px-6 pb-6 pt-6">
                   <h3 className="font-[var(--font-display)] text-[24px] font-bold leading-snug text-[#31465A]">{c.title}</h3>
                   <p className="mt-3 text-[14px] leading-[1.65] text-[#64748B]">{c.desc}</p>
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {c.powered.map((t) => (
+                      <span key={t} className="rounded-full bg-[#F1F5F7] px-2.5 py-1 text-[11.5px] font-semibold text-[#31465A]">{t}</span>
+                    ))}
+                  </div>
                   <a href={c.href} className="mt-auto inline-flex items-center gap-2 pt-5 text-[14px] font-semibold text-[#2064B6] no-underline transition-colors hover:text-[#185596]">
                     {c.link}
                     <Ic n="arrow" size={15} stroke="currentColor" />

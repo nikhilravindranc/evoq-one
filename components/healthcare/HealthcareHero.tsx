@@ -191,19 +191,20 @@ export function HealthcareHero() {
             Healthcare Solutions
           </p>
           <h1 className="mt-4 font-[var(--font-display)] text-[48px] font-extrabold leading-[1.1] tracking-[-0.02em] text-[#31465A]">
-            Manage healthcare operations. Grow patient relationships.
+            Better patient relationships. More efficient healthcare operations.
           </h1>
           <p className="mt-5 text-[17px] leading-[1.65] text-[#64748B]">
-            Manage patients, appointments, providers, billing, and everyday
-            operations while keeping every patient interaction in context.
+            EVOQ helps healthcare organizations attract and retain patients,
+            coordinate practice operations, and deliver a more consistent
+            patient experience across the journey.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3.5">
             <a
-              href="#demo"
+              href="#healthcare-outcomes"
               className="inline-flex items-center gap-3 rounded-full bg-[#2064B6] py-3.5 pl-6 pr-4 text-[15px] font-semibold text-white no-underline shadow-[0_12px_28px_-10px_rgba(32,100,182,0.45)] transition-all hover:-translate-y-px hover:bg-[#185596]"
             >
-              Get a demo
+              Explore solutions
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M13 6l6 6-6 6" />
@@ -211,7 +212,8 @@ export function HealthcareHero() {
               </span>
             </a>
             <a
-              href="#expert"
+              href="#"
+              data-enquiry=""
               className="inline-flex items-center gap-2.5 rounded-full border border-[#2064B6] bg-white/80 py-3.5 px-6 text-[15px] font-semibold text-[#2064B6] no-underline backdrop-blur transition-all hover:-translate-y-px hover:bg-[#F1F5F7]"
             >
               Talk to an expert
