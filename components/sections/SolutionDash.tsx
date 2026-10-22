@@ -124,29 +124,29 @@ function Healthcare({ c }: { c: string }) {
 
 /* ------------------------------------------------------------- Manufacturing */
 function Manufacturing({ c }: { c: string }) {
-  const stages = ["Cutting", "Assembly", "QC", "Ready"];
+  const stages = ["Quoted", "Confirmed", "Shipped", "Serviced"];
   const rows: [string, string, string, number, string][] = [
-    ["MO-2214", "Modular desk · Oak · 1600", "40", 1, "Oct 9"],
-    ["MO-2215", "Storage cabinet · Grey · 4 door", "24", 2, "Oct 9"],
-    ["MO-2217", "Meeting table · Walnut · 2400", "6", 0, "Oct 11"],
-    ["MO-2218", "Desk frame · Black · Sit-stand", "120", 3, "Oct 8"],
-    ["MO-2220", "Shelving unit · Birch · 5 tier", "60", 1, "Oct 12"],
-    ["MO-2221", "Reception counter · White · L", "2", 0, "Oct 14"],
-    ["MO-2223", "Task chair · Mesh · Black", "80", 2, "Oct 15"],
+    ["Q-2214", "Modular desk · Oak · 1600", "40", 1, "Oct 9"],
+    ["Q-2215", "Storage cabinet · Grey · 4 door", "24", 2, "Oct 9"],
+    ["Q-2217", "Meeting table · Walnut · 2400", "6", 0, "Oct 11"],
+    ["Q-2218", "Desk frame · Black · Sit-stand", "120", 3, "Oct 8"],
+    ["Q-2220", "Shelving unit · Birch · 5 tier", "60", 1, "Oct 12"],
+    ["Q-2221", "Reception counter · White · L", "2", 0, "Oct 14"],
+    ["Q-2223", "Task chair · Mesh · Black", "80", 2, "Oct 15"],
   ];
   return (
     <Shell c={c} brand="Manufacturing">
       <div className="sd-g4">
-        <Stat n="48" l="Open orders" c={c} icon={IC.box} />
-        <Stat n="12" l="Released today" c="#15803D" icon={IC.check} />
-        <Stat n="3" l="Low stock items" c="#B45309" icon={IC.alert} />
+        <Stat n="18" l="Open quotes" c={c} icon={IC.box} />
+        <Stat n="12" l="Orders confirmed" c="#15803D" icon={IC.check} />
+        <Stat n="3" l="Service visits due" c="#B45309" icon={IC.alert} />
         <div className="sd-stat" style={{ display: "block" }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}><span className="sd-k">Line capacity</span><b style={{ fontSize: 13 }}>78%</b></div>
-          <div className="sd-bar"><i style={{ width: "78%", background: c }} /></div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}><span className="sd-k">Commitments confirmed</span><b style={{ fontSize: 13 }}>9 of 12</b></div>
+          <div className="sd-bar"><i style={{ width: "75%", background: c }} /></div>
         </div>
       </div>
-      <Card title="Manufacturing orders" right={<span className="sd-k">Sorted by due date</span>} style={{ flex: 1 }}>
-        <div className="sd-row sd-th" style={{ gridTemplateColumns: "62px 1.6fr 34px 1.5fr 44px" }}><span>Order</span><span>Configured product</span><span>Qty</span><span>Stage</span><span>Due</span></div>
+      <Card title="Quotes and orders" right={<span className="sd-k">Sorted by due date</span>} style={{ flex: 1 }}>
+        <div className="sd-row sd-th" style={{ gridTemplateColumns: "62px 1.6fr 34px 1.5fr 44px" }}><span>Ref</span><span>Configured product</span><span>Qty</span><span>Stage</span><span>Due</span></div>
         {rows.map(([wo, p, q, st, d]) => (
           <div key={wo} className="sd-row" style={{ gridTemplateColumns: "62px 1.6fr 34px 1.5fr 44px" }}>
             <b style={{ color: c }}>{wo}</b>
@@ -372,8 +372,8 @@ function AllIndustries({ c }: { c: string }) {
     <Shell c={c} brand="All industries">
       <div className="sd-g4">
         <Stat n="13" l="Industries" c={c} icon={IC.grid} />
-        <Stat n="11" l="Products" c={c} icon={IC.box} />
-        <Stat n="5" l="Dedicated solutions" c="#15803D" icon={IC.check} />
+        <Stat n="12" l="Products" c={c} icon={IC.box} />
+        <Stat n="6" l="Dedicated solutions" c="#15803D" icon={IC.check} />
         <Stat n="1" l="Suite" c="#B45309" icon={IC.gauge} />
       </div>
       <Card title="Product fit by industry" right={<span className="sd-k">Start with what you need</span>} style={{ flex: 1 }}>

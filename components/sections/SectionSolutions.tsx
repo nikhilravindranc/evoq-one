@@ -27,47 +27,47 @@ type FloatCard = { tone: "ok" | "warn" | "info"; title: string; sub: string };
 
 const INDUSTRIES: Industry[] = [
   { key: "healthcare", tab: "Healthcare", name: "Healthcare",
-    lead: "Every patient. ", accent: "Every follow-up.",
-    body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.",
+    lead: "Referrals followed up. ", accent: "Appointments organized.",
+    body: "Referrals tracked to the first appointment, follow-ups on schedule, one patient view for providers and the front desk.",
     cta: "Explore healthcare", href: "/solutions/healthcare",
     color: "#0F766E", deep: "#123B3A", soft: "#DDF5F0",
-    cards: [{ tone: "warn", title: "2 follow-ups overdue", sub: "Review and complete" }, { tone: "ok", title: "Appointment confirmed", sub: "Follow-up booked for Friday" }] },
+    cards: [{ tone: "info", title: "Referral received", sub: "Cardiology · booked for Friday" }, { tone: "ok", title: "Appointment confirmed", sub: "Follow-up booked for Friday" }] },
   { key: "manufacturing", tab: "Manufacturing", name: "Manufacturing",
-    lead: "From configured order to ", accent: "shipped product.",
-    body: "Address operational needs across product configuration, order management, inventory and production-related processes.",
+    lead: "Consistent quotes. ", accent: "Service that follows the product.",
+    body: "Product requirements captured at enquiry, quotes prepared consistently, delivery commitments confirmed, service history carried with the product.",
     cta: "Explore manufacturing", href: "/solutions/manufacturing",
     color: "#2563EB", deep: "#1F2933", soft: "#DBEAFE",
-    cards: [{ tone: "warn", title: "Low stock · Steel sheet 2 mm", sub: "120 units · reorder flagged" }, { tone: "ok", title: "Stock updated", sub: "Order released to the floor" }] },
+    cards: [{ tone: "info", title: "Quote Q-118 sent", sub: "Modular desk · Oak · 1600" }, { tone: "ok", title: "Service history attached", sub: "Modular desk · installed Oct 9" }] },
   { key: "construction", tab: "Construction, Engineering & Real Estate", name: "Construction, Engineering & Real Estate",
-    lead: "Plans, projects and ", accent: "people, in sync.",
-    body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the industry.",
+    lead: "Site progress, ", accent: "client commitments, billing milestones.",
+    body: "Bids and property enquiries followed through project delivery, client commitments and billing milestones, then into service after handover.",
     cta: "Explore construction", href: "/solutions/construction",
     color: "#B4533C", deep: "#7C2D1F", soft: "#E8D8BF",
-    cards: [{ tone: "info", title: "Client follow-up", sub: "Quote sent to Nova Residences" }, { tone: "ok", title: "Milestone completed", sub: "Phase 2 handed to the client" }] },
+    cards: [{ tone: "info", title: "Client follow-up", sub: "Quote sent to Nova Residences" }, { tone: "ok", title: "Milestone invoiced", sub: "Phase 2 invoice raised" }] },
   { key: "field-service", tab: "Field Service, Facilities & Maintenance", name: "Field Service, Facilities & Maintenance",
-    lead: "Jobs scheduled. ", accent: "Work completed.",
-    body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.",
+    lead: "Every request logged. ", accent: "Every visit tracked.",
+    body: "Service requests logged, technicians dispatched, parts recorded, invoices raised when the job closes, preventive maintenance alongside reactive jobs.",
     cta: "Explore field service", href: "/solutions/field-service",
     color: "#1777F0", deep: "#0F3D75", soft: "#DBEAFE",
     cards: [{ tone: "info", title: "Technician en route", sub: "Arjun · ETA 12 min" }, { tone: "ok", title: "Work order closed", sub: "Parts logged, invoice raised" }] },
   { key: "hospitality", tab: "Hospitality, Travel & F&B", name: "Hospitality, Travel & F&B",
-    lead: "Guests first. ", accent: "Operations in step.",
-    body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.",
+    lead: "Reservations confirmed. ", accent: "Returning guests recognised.",
+    body: "Reservations confirmed, guest requests and preferences recorded, follow-up after every visit.",
     cta: "Explore hospitality", href: "/solutions/hospitality",
     color: "#14532D", deep: "#064E3B", soft: "#F7F1E3",
     cards: [{ tone: "info", title: "Table for 4 · 8:00 PM", sub: "Confirmed at The Terrace" }, { tone: "ok", title: "Returning guest recognised", sub: "Preferences noted at check-in" }] },
   { key: "finance", tab: "Financial Services", name: "Financial Services",
-    lead: "Every client. ", accent: "Every follow-up.",
-    body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.",
+    lead: "Enquiries answered. ", accent: "Relationships kept current.",
+    body: "Client enquiries logged, service requests tracked, reviews and renewals scheduled, history in front of every adviser.",
     href: "/solutions/finance", cta: "Explore financial services",
     color: "#1B7F8C", deep: "#0B2D4F", soft: "#E7F3EE", btn: "#0B2D4F",
     cards: [{ tone: "warn", title: "Follow-up due", sub: "Annual review call · Thursday" }, { tone: "ok", title: "Client request resolved", sub: "Statement query closed" }] },
   { key: "all", tab: "All industries", name: "All industries",
     lead: "One suite. ", accent: "Every industry.",
-    body: "Don't see your industry? EVOQ products combine to fit how your organization works, so you can start with what you need.",
+    body: "Your industry isn't listed? Start with the products you need and combine them as the work grows.",
     href: "/industries", cta: "Explore all industries",
     color: "#4747E0", deep: "#1F2A60", soft: "#EEEDFF",
-    cards: [{ tone: "info", title: "13 industries · 11 products", sub: "One suite, combined your way" }, { tone: "ok", title: "Your industry not listed?", sub: "We'll map it with you" }] },
+    cards: [{ tone: "info", title: "13 industries · 12 products", sub: "One suite, combined your way" }, { tone: "ok", title: "Your industry not listed?", sub: "We'll map it with you" }] },
 ];
 
 const AUTO_MS = 7000;
@@ -124,7 +124,7 @@ export function SectionSolutions() {
           <motion.div className="evoq-section-head sol-head" {...fadeUp(0)}>
             <Eyebrow>Solutions</Eyebrow>
             <h2 className="evoq-h2">
-              Built for how <span className="accent">your industry works.</span>
+              How each industry <span className="accent">runs on EVOQ.</span>
             </h2>
           </motion.div>
           <motion.div className="sol-links" {...fadeUp(0.04)}>
