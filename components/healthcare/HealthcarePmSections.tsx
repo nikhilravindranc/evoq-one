@@ -409,7 +409,7 @@ export function HealthcarePmFeatures() {
           <FeatureBlock
             flip
             eyebrow="Front desk operations"
-            title="Give the front desk a clearer day."
+            title="Give the front desk one view of the day's appointments."
             sub="The front desk manages a constantly changing schedule."
             paras={[
               "Practice Management gives staff a current view of appointments, arrivals, check-ins, queues, cancellations, rescheduling, waitlists, and provider availability.",
@@ -639,7 +639,7 @@ export function HealthcarePmGrow() {
 
             <div className="relative grid items-center gap-14 lg:grid-cols-[1fr_1fr]">
               <div>
-                <h2 className={H2}>Practice management, with room to grow.</h2>
+                <h2 className={H2}>Start with scheduling and add more as the practice grows.</h2>
                 <p className={`mt-6 max-w-[560px] ${LEAD}`}>
                   Practice Management provides the operational foundation for the practice while other EVOQ
                   products can support the wider patient journey.
@@ -802,7 +802,7 @@ export function HealthcarePmCTA() {
             <div className="pointer-events-none absolute bottom-8 right-24 h-5 w-5 rounded-full bg-[#FFDFAE]" />
             <div className="relative mx-auto text-center">
               <h2 className="font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-white">
-                Give your practice a clearer way to work.
+                Find where EVOQ fits your practice operations.
               </h2>
               <p className="mx-auto mt-5 max-w-[680px] text-[17px] leading-[1.6] text-white/90">
                 Bring patient information, appointments, visits, providers, services, and daily practice activity into

@@ -445,7 +445,7 @@ export function HealthcareCrmFeaturesConfiguration() {
         <div className={`${INNER} py-16 lg:py-24`}>
           <div className="max-w-[600px]">
             <p className={EYEBROW}>Configuration</p>
-            <h2 className={`mt-4 ${H2}`}>Shape the CRM around your organization.</h2>
+            <h2 className={`mt-4 ${H2}`}>Adapt patient records, stages and fields to how your organization works.</h2>
             <p className={LEAD}>
               Every healthcare organization has its own services, teams, patient journeys, and ways of working.
               Configure the CRM around the information you capture, the stages you manage, and the activities your

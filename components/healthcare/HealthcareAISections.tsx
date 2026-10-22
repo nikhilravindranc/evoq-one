@@ -271,7 +271,7 @@ export function HealthcareCrmAI() {
       accent={CRM_ACCENT}
       reverse
       eyebrow="AI across patient relationships"
-      title="EVI and AI agents, working across your enquiries and follow-ups."
+      title="AI that supports your team with enquiries and follow-ups."
       lead="Find who needs a reply. Prepare the response. Keep relationships moving."
       body="EVI, the EVOQ AI assistant, helps your team find the enquiries, patient history, and follow-ups that need attention, and prepares the next step. AI agents handle defined tasks such as drafting replies and preparing reminders, then return the result for your review."
     >
@@ -438,7 +438,7 @@ export function HealthcarePmAI() {
     <AISectionShell
       accent={PM_ACCENT}
       eyebrow="AI across daily operations"
-      title="EVI and AI agents, working across your practice operations."
+      title="AI that supports your team with daily practice operations."
       lead="Spot schedule gaps. Prepare the next action. Reduce routine admin."
       body="EVI, the EVOQ AI assistant, helps your team find information across appointments, providers, check-ins, and billing, and prepares the next step. AI agents handle defined tasks such as appointment reminders and waitlist matching, then return the result for your review."
     >

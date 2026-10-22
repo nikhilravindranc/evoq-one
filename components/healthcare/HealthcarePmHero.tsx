@@ -126,7 +126,7 @@ export function HealthcarePmHero() {
           <div className="relative z-10 py-14 xl:absolute xl:left-0 xl:top-0 xl:w-[560px] xl:py-0 xl:pt-[114px]">
             <p className="text-[12.5px] font-medium uppercase tracking-[0.3em] text-[#2867B2]">Practice Management</p>
             <h1 className="mt-6 font-[var(--font-display)] text-[48px] font-extrabold leading-[1.04] tracking-[-0.03em] text-[#26384B]">
-              Keep your practice moving.
+              Where appointments, providers and visits stay organized.
             </h1>
             <p className="mt-6 max-w-[500px] text-[17.5px] leading-[1.6] text-[#64748B]">
               Manage patients, appointments, providers, visits, services, and daily practice activity from a workspace

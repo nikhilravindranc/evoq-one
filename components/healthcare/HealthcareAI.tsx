@@ -123,7 +123,7 @@ export function HealthcareAISpotlight() {
                 AI across the patient journey
               </p>
               <h2 className="mt-5 font-[var(--font-display)] text-[36px] font-extrabold leading-[1.12] tracking-[-0.02em] text-[#102A43]">
-                EVI and AI agents, working across the patient journey.
+                AI that supports your team across the patient journey.
               </h2>
               <p className="mt-6 text-[16px] font-semibold leading-[1.6] text-[#31465A]">
                 Find what needs attention. Prepare the next step. Reduce routine work.
