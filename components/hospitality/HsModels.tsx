@@ -34,17 +34,17 @@ const MODELS: Model[] = [
     tag: "Guests see the stay. Your team manages the details.", show: ["Enquiries", "Requests", "Internal work", "Financial records"],
     blurb: "Guest stays, requests and follow-up",
     collage: [U("1759038085950-1234ca8f5fed"), U("1758448755981-954afbf60ff7")], note: ["Reservation confirmed", "Special requirements noted for arrival"],
-    summary: "Coordinate guest enquiries, appointment-based services, customer relationships and follow-up around the stay. Choose EVOQ products according to the processes your property needs to support.",
-    title: "Support the work behind every guest stay.",
+    summary: "Guest enquiries, appointment-based services and follow-up recorded around each stay.",
+    title: "Reservations, requests and follow-up around every stay.",
     intro: [
-      "Guest service extends beyond arrival and departure. Enquiries need responses, guest requests need attention, staff need clear responsibilities and customer relationships continue after checkout.",
-      "EVOQ products can support the customer-facing and administrative activities surrounding a guest stay, alongside specialist hotel property management and reservation systems.",
+      "Enquiries answered before arrival, requests handled during the stay, follow-up sent after checkout. Each task has an owner.",
+      "Works alongside hotel property management and reservation systems.",
     ],
     points: [
-      ["Guest relationships", "Maintain guest details, organize enquiries and keep follow-up activity accessible to staff."],
-      ["Service coordination", "Record service requests, organize internal responsibilities and track outstanding work."],
-      ["Billing administration", "Support invoicing and payment records through the relevant products."],
-      ["Guest engagement", "Gather feedback and support communications that encourage future stays."],
+      ["Guest relationships", "Guest details and enquiries recorded, with follow-up visible to staff."],
+      ["Service coordination", "Service requests logged, assigned and tracked to completion."],
+      ["Billing administration", "Invoices and payments recorded."],
+      ["Guest engagement", "Feedback collected and return-stay communication sent."],
     ],
     products: ["CRM", "Desk", "ServiceOps", "Billing", "Campaigns", "Surveys", "Loyalty"],
   },
@@ -53,18 +53,18 @@ const MODELS: Model[] = [
     tag: "Customers see the meal. Your team manages everything around it.", show: ["Enquiries", "Internal work", "Financial records", "Stock records"],
     blurb: "Customers, stock and daily operations",
     collage: [U("1555396273-367ea4eb4db5"), U("1566670829023-5badae05aa7d")], note: ["Table request noted", "Dietary requirements recorded for the visit"],
-    summary: "Support customer relationships, scheduled services where applicable, feedback, and relevant billing or inventory processes. Restaurant table management and point-of-sale requirements may need suitable specialist systems.",
-    title: "Keep customer service and daily operations in view.",
+    summary: "Customer records, feedback, billing and stock. Table management and point of sale stay in your restaurant systems.",
+    title: "Customer records, stock and billing for daily service.",
     intro: [
-      "Running a restaurant involves more than serving a meal. Customer relationships, stock records, billing, staff administration and customer feedback all contribute to day-to-day operations.",
-      "EVOQ products can support these administrative and customer-facing activities alongside specialist restaurant and point-of-sale systems.",
+      "Behind every service: regular-customer records, stock counts, invoices, staff records and guest feedback.",
+      "Works alongside restaurant and point-of-sale systems.",
     ],
     points: [
-      ["Customer relationships", "Maintain customer records and organize follow-up activity to support repeat visits."],
-      ["Inventory administration", "Keep product and stock information organized through the relevant inventory capabilities."],
-      ["Billing administration", "Support invoicing and payment records for applicable transactions."],
-      ["Staff administration", "Support employee administration and training."],
-      ["Customer engagement", "Gather feedback and support campaigns and loyalty initiatives."],
+      ["Customer relationships", "Regular-customer records and follow-up to bring guests back."],
+      ["Inventory administration", "Product and stock records kept up to date."],
+      ["Billing administration", "Invoices and payments recorded for applicable transactions."],
+      ["Staff administration", "Employee records and training."],
+      ["Customer engagement", "Feedback collected, campaigns and loyalty offers sent."],
     ],
     products: ["CRM", "Inventory", "Billing", "HRMS", "Skillberry", "Campaigns", "Surveys", "Loyalty"],
   },
@@ -73,18 +73,18 @@ const MODELS: Model[] = [
     tag: "Travellers see the trip. Your team manages the enquiries and follow-up behind it.", show: ["Enquiries", "Requests", "Internal work", "Financial records"],
     blurb: "Enquiries, requirements and follow-up",
     collage: [U("1607068891828-f16297950a66"), U("1578894381163-e72c17f2d45f")], note: ["Enquiry logged", "Trip requirements recorded for follow-up"],
-    summary: "Manage customer enquiries, requirements, follow-ups and service-related communication throughout the trip-planning relationship. Travel itineraries, ticketing and supplier inventory may require specialist travel systems.",
-    title: "Keep travel enquiries moving from first contact to follow-up.",
+    summary: "Enquiries, requirements and follow-up recorded through trip planning. Itineraries, ticketing and supplier inventory stay in your travel systems.",
+    title: "Travel enquiries tracked from first contact to post-trip follow-up.",
     intro: [
-      "Travel enquiries can involve multiple conversations, changing requirements and coordination across several activities. Staff need a clear record of the customer relationship and the tasks that still require attention.",
-      "EVOQ products can support enquiry management, customer follow-up, internal coordination and billing administration alongside specialist travel booking and itinerary systems.",
+      "One trip can mean several conversations and changing requirements. Each conversation and open task is recorded against the traveller.",
+      "Works alongside travel booking and itinerary systems.",
     ],
     points: [
-      ["Enquiry management", "Organize enquiries, maintain customer details and keep follow-up activity visible."],
-      ["Customer coordination", "Maintain communication history and relevant customer information throughout the relationship."],
-      ["Internal task management", "Assign and track internal tasks associated with customer requests and trip preparation."],
-      ["Billing administration", "Support invoicing and payment records within the capabilities of the relevant products."],
-      ["Post-trip engagement", "Gather feedback and maintain customer relationships for future enquiries."],
+      ["Enquiry management", "Enquiries and traveller details recorded, follow-up visible."],
+      ["Customer coordination", "Communication history kept for the whole relationship."],
+      ["Internal task management", "Trip preparation tasks assigned and tracked."],
+      ["Billing administration", "Invoices and payments recorded."],
+      ["Post-trip engagement", "Post-trip feedback collected, relationships kept for future enquiries."],
     ],
     products: ["CRM", "Projects", "Desk", "Billing", "Campaigns", "Surveys", "Loyalty"],
   },
@@ -144,7 +144,7 @@ export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
         <div style={{ textAlign: "center", maxWidth: 740, margin: "0 auto 44px" }} data-rv="0">
           {eyebrow}
           <h2 style={{ margin: 0, fontFamily: SERIF, fontWeight: 400, lineHeight: 1.1, letterSpacing: "-.015em", color: INK }}>Hotels, restaurants and <em style={{ color: BOTANICAL }}>travel companies each run differently.</em></h2>
-          <p style={{ margin: "20px auto 0", fontSize: 16.5, lineHeight: 1.8, color: "#33443A", maxWidth: "58ch" }}>Hotels, restaurants and travel operators serve customers in different ways. Explore the operational needs of your industry and see where EVOQ products can help.</p>
+          <p style={{ margin: "20px auto 0", fontSize: 16.5, lineHeight: 1.8, color: "#33443A", maxWidth: "58ch" }}>Hotels, restaurants and travel operators handle bookings, service and follow-up differently. Choose yours.</p>
         </div>
 
         <p style={{ margin: "0 0 18px", textAlign: "center", fontSize: 12, fontWeight: 700, letterSpacing: ".2em", textTransform: "uppercase", color: OLIVE }}>What kind of operation do you run?</p>

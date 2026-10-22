@@ -24,25 +24,25 @@ const REA: Palette = { on: "#2E5A47", off: "#EEF4EF" };
 const CONSTRUCTION = {
   kicker: "Construction",
   title: "From project plans to site progress",
-  body: "Construction projects involve many moving parts. Project responsibilities, client commitments, materials and commercial activities all need attention as work progresses. When information is scattered across different tools and conversations, keeping track of outstanding tasks can become difficult.",
+  body: "Tasks, client commitments, materials and invoices change daily on a project. Each needs an owner and a status the whole team can see.",
   img: U("1778074762022-c33cc42f79ae", 1200),
   challenges: [
-    ["Project updates are difficult to follow", "Project information and task updates can be spread across conversations, spreadsheets and separate records, making it harder to establish what needs attention."],
-    ["Responsibilities are not always clear", "When several people contribute to a project, outstanding tasks, ownership and next steps can be difficult to track consistently."],
-    ["Client follow-ups compete with delivery work", "New enquiries, opportunities and ongoing client commitments need attention alongside day-to-day project responsibilities."],
-    ["Commercial activities are managed separately", "Inventory and billing processes may sit outside the project coordination process, requiring additional effort to maintain visibility."],
+    ["Project updates are difficult to follow", "Updates split across messages, spreadsheets and separate records."],
+    ["Responsibilities are not always clear", "Tasks without a clear owner or next step."],
+    ["Client follow-ups compete with delivery work", "New enquiries competing with live project work."],
+    ["Commercial activities are managed separately", "Stock and invoices tracked outside the project."],
   ] as Pair[],
   outcomes: [
-    "A clearer view of project tasks, responsibilities and milestones.",
-    "Better visibility into outstanding work and upcoming commitments.",
-    "More consistent follow-up on client enquiries and opportunities.",
-    "Easier access to relevant inventory and billing information through the appropriate products.",
+    "Tasks, owners and milestones visible to the team.",
+    "Outstanding work and upcoming commitments listed by date.",
+    "Client enquiries followed up on schedule.",
+    "Stock and billing information available alongside the project.",
   ],
   help: [
-    ["Project coordination", "Organize project tasks, responsibilities and progress using Projects, subject to its available project management capabilities."],
-    ["Client and opportunity management", "Use CRM to track enquiries, opportunities, communications and follow-ups associated with prospective and existing clients."],
-    ["Inventory and billing", "Use Inventory and Billing for supported stock-management and invoicing processes relevant to the organization."],
-    ["Handover and ongoing service", "Where post-project service is part of the operating model, ServiceOps may support relevant work order and maintenance activities."],
+    ["Project coordination", "Projects: tasks, owners and progress."],
+    ["Client and opportunity management", "CRM: enquiries, opportunities, communications and follow-ups for prospective and existing clients."],
+    ["Inventory and billing", "Inventory and Billing: stock and invoicing."],
+    ["Handover and ongoing service", "ServiceOps: work orders and maintenance after handover."],
   ] as Pair[],
   apps: [
     ["Projects", "Tasks, responsibilities and progress"],
@@ -56,29 +56,29 @@ const CONSTRUCTION = {
 const ENGINEERING = {
   kicker: "Engineering",
   title: "Where technical work meets project delivery",
-  body: "Engineering consultancies and contractors have different operating priorities. Consultancies coordinate client commitments and technical project work, while contractors may also need to manage project execution, site responsibilities and materials. The right operational approach depends on the work being delivered and the responsibilities involved.",
+  body: "Consultancies track client commitments and technical deliverables. Contractors also manage site execution, responsibilities and materials.",
   img: U("1774600166588-1db444bda799", 1200),
   challenges: [
-    ["Project commitments need constant attention", "Deadlines, tasks and responsibilities need to remain visible as technical projects progress."],
-    ["Client work and project delivery overlap", "Client enquiries, opportunities and ongoing commitments compete for attention alongside project responsibilities."],
-    ["Contractor activities require coordination", "Engineering contractors may need to keep project activities, assigned responsibilities and delivery milestones visible across the people involved."],
-    ["Administrative work grows with project activity", "People administration, commercial processes and other supporting tasks can require additional effort as project volumes increase."],
+    ["Project commitments need constant attention", "Deadlines and owners lost as technical projects progress."],
+    ["Client work and project delivery overlap", "Client enquiries competing with project deadlines."],
+    ["Contractor activities require coordination", "Site activities and delivery milestones not visible to everyone involved."],
+    ["Administrative work grows with project activity", "People administration and billing growing with project volume."],
   ] as Pair[],
   outcomes: [
-    "Clearer ownership of project tasks and responsibilities.",
-    "Better visibility into project progress and outstanding commitments.",
-    "More consistent management of client enquiries and follow-ups.",
-    "Better coordination of supported people-management, inventory and billing processes.",
+    "Every task has an owner.",
+    "Progress and open commitments listed by project.",
+    "Client enquiries and follow-ups logged and scheduled.",
+    "People, stock and billing records kept with the project.",
   ],
   audiences: [
-    ["Engineering consultancies", "Coordinate project tasks, deadlines and responsibilities while keeping client relationships and opportunities visible. Use relevant products to support project delivery and associated administrative work."],
-    ["Engineering contractors", "Maintain visibility into project activities, responsibilities and delivery milestones. Where relevant, inventory and service capabilities may support associated operational requirements."],
+    ["Engineering consultancies", "Project tasks, deadlines and owners tracked alongside client relationships and opportunities."],
+    ["Engineering contractors", "Site activities, responsibilities and delivery milestones tracked, with stock and service visits where the work needs them."],
   ] as Pair[],
   help: [
-    ["Project delivery", "Use Projects to coordinate project tasks and responsibilities, subject to the available functionality."],
-    ["Client relationships", "Use CRM to organize client enquiries, opportunities, communications and follow-ups."],
-    ["People administration and learning", "Use HRMS for applicable employee administration and Skillberry for relevant learning and development requirements."],
-    ["Commercial and inventory processes", "Use Billing and Inventory where their supported capabilities match the organization's invoicing and stock-management needs."],
+    ["Project delivery", "Projects: tasks and responsibilities."],
+    ["Client relationships", "CRM: client enquiries, opportunities and follow-ups."],
+    ["People administration and learning", "HRMS and Skillberry: employee administration and learning."],
+    ["Commercial and inventory processes", "Billing and Inventory: invoicing and stock."],
   ] as Pair[],
   apps: [
     ["Projects", "Project tasks and responsibilities"],
@@ -93,62 +93,62 @@ const ENGINEERING = {
 const REAL_ESTATE = [
   {
     key: "agencies", tab: "Agencies and brokers",
-    title: "Turn property enquiries into consistent follow-ups.",
-    body: "Property enquiries can arrive through several channels. Keeping prospect details, communications, viewing appointments and next steps organized helps agents maintain visibility into active opportunities.",
+    title: "Property enquiries followed up from first contact to viewing.",
+    body: "Enquiries arrive through several channels. Prospect details, viewings and next steps are recorded against each one.",
     img: U("1758523671301-cf64a85d0d34", 1000),
     challenges: [
-      "Enquiries and prospect information are spread across different records.",
-      "Follow-ups depend on individual reminders and manual tracking.",
-      "Viewing appointments and next steps need consistent coordination.",
-      "It can be difficult to establish which opportunities need attention.",
+      "Enquiries spread across different records.",
+      "Follow-ups that depend on individual reminders.",
+      "Viewings and next steps without an owner.",
+      "No clear list of opportunities needing attention.",
     ],
     outcomes: [
-      "More organized prospect records and enquiry follow-ups.",
-      "Clearer visibility into conversations and deal progress.",
-      "Better coordination of viewing appointments where scheduling capabilities support the requirement.",
-      "More consistent communication with prospective clients.",
+      "Prospect records with every conversation.",
+      "Follow-ups scheduled, not remembered.",
+      "Viewings assigned and tracked.",
+      "Active opportunities listed by status.",
     ],
-    help: "CRM may support enquiry and opportunity management. Campaigns may support applicable prospect communication, while Desk may be relevant where customer service requests need to be handled.",
+    help: "CRM: enquiries and opportunities. Campaigns: prospect communication. Desk: service requests.",
     apps: ["CRM", "Campaigns", "Desk"],
   },
   {
     key: "developers", tab: "Developers and builders",
-    title: "Keep buyer relationships and sales activity visible.",
-    body: "Property development involves more than generating buyer enquiries. Sales follow-ups, buyer communication and post-sale responsibilities can create additional administrative work as activity grows.",
+    title: "Buyer enquiries, follow-ups and invoices tracked from launch to handover.",
+    body: "Buyers keep communicating after the first enquiry. Sales follow-ups, communication and post-sale tasks are recorded for each buyer.",
     img: U("1597026405082-eda9beae7513", 1000),
     challenges: [
-      "Project-related enquiries and buyer conversations need consistent follow-up.",
-      "Sales activity and outstanding next steps can be difficult to review.",
-      "Buyer communication continues beyond the initial enquiry.",
-      "Applicable billing processes need to be handled alongside sales activity.",
+      "Buyer conversations without consistent follow-up.",
+      "Sales activity hard to review.",
+      "Communication continuing after the sale.",
+      "Invoicing handled separately from sales.",
     ],
     outcomes: [
-      "Better visibility into buyer relationships and communications.",
-      "More consistent follow-up on prospective buyers.",
-      "Clearer tracking of sales-related activity and outstanding tasks.",
-      "Better coordination of supported billing processes.",
+      "Buyer history in one record.",
+      "Prospective buyers followed up on schedule.",
+      "Sales tasks listed by status.",
+      "Invoices tied to the sale.",
     ],
-    help: "CRM may support buyer relationship and opportunity management. Campaigns may support applicable communications, while Billing can support the invoicing processes covered by its available functionality.",
+    help: "CRM: buyer relationships and opportunities. Campaigns: communication. Billing: invoicing.",
     apps: ["CRM", "Campaigns", "Billing"],
   },
   {
     key: "operations", tab: "Property operations",
-    title: "Keep service requests moving.",
-    body: "Property operations involve recurring requests, maintenance responsibilities and follow-up. When requests and updates are handled through disconnected channels, it can be difficult to see what remains outstanding.",
+    title: "Service requests assigned and closed.",
+    body: "Occupier requests arrive through several channels. Each is logged, assigned and tracked to completion.",
     img: U("1732395805034-e0bf859665e5", 1000),
     challenges: [
-      "Service requests arrive through different channels.",
-      "Responsibilities and request status are difficult to track.",
-      "Maintenance work requires coordination and follow-up.",
-      "Related service and billing processes may be handled separately.",
+      "Requests arriving through different channels.",
+      "Unclear owners and status.",
+      "Maintenance without follow-up.",
+      "Service and billing handled separately.",
     ],
     outcomes: [
-      "Clearer ownership of service requests.",
-      "Better visibility into request status and outstanding work.",
-      "More consistent follow-up on maintenance activities.",
-      "Better coordination of supported service and billing processes.",
+      "Every request has an owner.",
+      "Request status visible.",
+      "Maintenance follow-ups scheduled.",
+      "Service and invoicing connected.",
     ],
-    help: "Desk may support applicable service request handling. ServiceOps may support work orders and maintenance coordination where the required capabilities are available. Billing may support associated invoicing processes.",
+    help: "Desk: service requests. ServiceOps: work orders and maintenance. Billing: invoicing.",
     apps: ["Desk", "ServiceOps", "Billing", "CRM"],
   },
 ];
@@ -177,7 +177,7 @@ function Bullets({ items, p, check = false }: { items: string[]; p: Palette; che
 function Challenges({ items, p }: { items: Pair[]; p: Palette }) {
   return (
     <div>
-      <Label c={p.on}>Where coordination gets harder</Label>
+      <Label c={p.on}>Where projects lose track</Label>
       <div className="ci-g2 ci-tight">
         {items.map(([t, d]) => (
           <div key={t} style={{ background: p.off, borderRadius: 10, padding: "18px 20px 20px", borderLeft: `3px solid ${p.on}` }}>
@@ -249,7 +249,7 @@ function Chapter({ id, n, d, p }: { id: string; n: string; d: typeof CONSTRUCTIO
       <Challenges items={d.challenges} p={p} />
       {d.audiences && (
         <div>
-          <Label c={p.on}>Support for different engineering organizations</Label>
+          <Label c={p.on}>By organization type</Label>
           <div className="ci-g2 ci-tight">
             {d.audiences.map(([t, b]) => (
               <div key={t} style={{ border: `1px solid ${LINE}`, borderRadius: 10, padding: "20px 22px", background: "#fff" }}>
@@ -261,7 +261,7 @@ function Chapter({ id, n, d, p }: { id: string; n: string; d: typeof CONSTRUCTIO
         </div>
       )}
       <div className="ci-g2">
-        <div><Label c={p.on}>What better coordination can look like</Label><Bullets items={d.outcomes} p={p} check /></div>
+        <div><Label c={p.on}>What changes</Label><Bullets items={d.outcomes} p={p} check /></div>
         <div><Label c={p.on}>Areas where EVOQ can help</Label><Help items={d.help} p={p} /></div>
       </div>
       <AppRow apps={d.apps} p={p} />
@@ -279,7 +279,7 @@ function RealEstateChapter() {
       </div>
       <div>
         <h3 style={{ margin: 0, fontWeight: 600, letterSpacing: "-.02em", color: INK }}>From property enquiries to ongoing operations</h3>
-        <p style={{ margin: "12px 0 0", fontSize: 15.5, lineHeight: 1.75, color: MUTE, maxWidth: "78ch" }}>Real estate covers several distinct activities, from generating property enquiries and progressing sales to managing service requests and maintenance. Agencies, developers and property operations teams therefore need different kinds of operational support. Choose the area most relevant to your organization.</p>
+        <p style={{ margin: "12px 0 0", fontSize: 15.5, lineHeight: 1.75, color: MUTE, maxWidth: "78ch" }}>Agencies, developers and property operations teams handle enquiries, sales and maintenance differently. Choose yours.</p>
       </div>
       {REAL_ESTATE.map((a, i) => (
         <section key={a.key} id={`re-${a.key}`} className="ci-aud" aria-labelledby={`re-${a.key}-t`}>
@@ -292,8 +292,8 @@ function RealEstateChapter() {
             </div>
           </div>
           <div className="ci-g2">
-            <div><Label c={p.on}>Where coordination gets harder</Label><Bullets items={a.challenges} p={p} /></div>
-            <div><Label c={p.on}>What better coordination can look like</Label><Bullets items={a.outcomes} p={p} check /></div>
+            <div><Label c={p.on}>Where work loses track</Label><Bullets items={a.challenges} p={p} /></div>
+            <div><Label c={p.on}>What changes</Label><Bullets items={a.outcomes} p={p} check /></div>
           </div>
           <div style={{ background: p.off, borderRadius: 10, padding: "18px 22px" }}>
             <Label c={p.on}>Areas where EVOQ can help</Label>
@@ -310,7 +310,7 @@ function RealEstateChapter() {
       ))}
       <div style={{ borderTop: `1px solid ${LINE}`, paddingTop: 24 }}>
         <h4 style={{ margin: 0, fontWeight: 700, color: INK }}>Choosing the right product combination</h4>
-        <p style={{ margin: "8px 0 0", fontSize: 14.5, lineHeight: 1.7, color: MUTE, maxWidth: "80ch" }}>The relevant products depend on whether your organization primarily manages property enquiries, buyer relationships, sales follow-ups or ongoing property service. Start with the activities that need improvement and identify the product capabilities required to support them.</p>
+        <p style={{ margin: "8px 0 0", fontSize: 14.5, lineHeight: 1.7, color: MUTE, maxWidth: "80ch" }}>Start with the activity that needs the most improvement: enquiries, buyer follow-up or property service.</p>
       </div>
     </article>
   );
@@ -359,7 +359,7 @@ export function ConstructionIndustries() {
       <div className="cn-wrap">
         <p style={{ margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "#A2563B" }}>Industries</p>
         <h2 style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: INK }}>Construction, engineering and real estate, each with its own work.</h2>
-        <p style={{ margin: "14px 0 0", fontSize: 16, lineHeight: 1.7, color: MUTE, maxWidth: "62ch" }}>Explore the challenges, priorities and operational requirements specific to your industry.</p>
+        <p style={{ margin: "14px 0 0", fontSize: 16, lineHeight: 1.7, color: MUTE, maxWidth: "62ch" }}>Choose the sector closest to your work.</p>
 
         <div className="ci-tabs-wrap">
           <div className="ci-tabs" role="tablist" aria-label="Industries">

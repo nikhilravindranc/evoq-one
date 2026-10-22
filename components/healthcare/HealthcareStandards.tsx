@@ -129,10 +129,8 @@ export function HealthcareStandards() {
                 Privacy, security and integration questions to settle before you adopt.
               </h2>
               <p className="mt-5 text-[16px] leading-[1.7] text-[#31465A]/75">
-                Healthcare organizations operate within a complex environment of healthcare standards, privacy
-                requirements, and regional digital-health frameworks. EVOQ Healthcare is designed with these
-                requirements in mind, supporting the standards and frameworks relevant to the organization,
-                location, and deployment.
+                Privacy rules, health-data standards and digital-health frameworks vary by country and deployment.
+                Confirm the requirements that apply to your organization with the EVOQ team.
               </p>
             </div>
             <Hub />

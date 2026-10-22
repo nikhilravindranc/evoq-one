@@ -61,14 +61,9 @@ function Hero() {
         <div className="fs-hero">
           <div data-rv="0">
             <Eyebrow>Field Service · Facilities · Maintenance</Eyebrow>
-            <h1 className="fs-h1" style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Where service jobs are completed and <span style={{ color: BLUE }}>sites stay operational.</span></h1>
-            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: SOFT, maxWidth: "52ch" }}>Service teams handle field visits, facility requests and equipment maintenance, often across many sites. EVOQ products help assign work, track every job and keep follow-up connected.</p>
+            <h1 className="fs-h1" style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Every request logged, every visit tracked, <span style={{ color: BLUE }}>every asset&rsquo;s history on record.</span></h1>
+            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: SOFT, maxWidth: "52ch" }}>Log service requests, assign and dispatch technicians, record parts used and raise the invoice when the job closes. Preventive maintenance sits alongside reactive jobs, across sites and assets.</p>
             <div style={{ marginTop: 32 }}><Cta>Talk to an expert</Cta></div>
-            <div style={{ marginTop: 40, display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap", fontSize: 13.5, fontWeight: 700, color: NAVY }}>
-              {[["Field service", BLUE], ["Facilities", NAVY], ["Maintenance", ORANGE]].map(([t, c]) => (
-                <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}><i style={{ width: 10, height: 10, borderRadius: "50%", background: c, display: "inline-block" }} />{t}</span>
-              ))}
-            </div>
           </div>
 
           {/* map, route and mobile work order */}
@@ -117,10 +112,10 @@ function Hero() {
 /* ------------------------------------------------------------------ 3. Ecosystem */
 function Ecosystem() {
   const apps: { name: string; line: string; body: string; main?: boolean }[] = [
-    { name: "ServiceOps", line: "Coordinate the work.", body: "Manage service requests, work orders, jobs, scheduling, technicians, assets and maintenance activity.", main: true },
-    { name: "Desk", line: "Handle incoming requests.", body: "Support request handling where Desk is used as part of the service intake process." },
-    { name: "Inventory", line: "Account for parts and stock.", body: "Manage inventory and stock processes, including the broader purchasing and inventory requirements associated with service operations." },
-    { name: "Billing", line: "Handle the financial side.", body: "Manage invoicing, payments and related financial processes associated with billable service work." },
+    { name: "ServiceOps", line: "Coordinate the work.", body: "Work orders, jobs, scheduling, technicians, assets and maintenance.", main: true },
+    { name: "Desk", line: "Handle incoming requests.", body: "Service requests received and tracked." },
+    { name: "Inventory", line: "Account for parts and stock.", body: "Stock and purchasing for parts." },
+    { name: "Billing", line: "Handle the financial side.", body: "Invoices and payments for billable service work." },
   ];
   return (
     <section style={{ background: PALE, padding: "96px 0 100px" }}>
@@ -128,8 +123,8 @@ function Ecosystem() {
         <div className="fs-split" data-rv="0" style={{ alignItems: "end" }}>
           <div><Eyebrow>The EVOQ ecosystem</Eyebrow><h2 className="fs-h2" style={h2}>One service job involves requests, technicians, parts and invoices.</h2></div>
           <div>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Field service, facilities management and maintenance involve more than the work order itself. Requests need to be handled, technicians need the right job information, parts must be accounted for and billable work may need to be invoiced.</p>
-            <p style={{ margin: "12px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>EVOQ brings together products that address different parts of these operations, with ServiceOps at the center of service delivery.</p>
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Around each work order sit the request, the technician&rsquo;s job details, the parts used and the invoice.</p>
+            <p style={{ margin: "12px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>EVOQ products cover each part: ServiceOps for the job, Desk for the request, Inventory for parts, Billing for the invoice.</p>
           </div>
         </div>
 
@@ -150,7 +145,7 @@ function Ecosystem() {
         </div>
 
         <div data-rv="0" style={{ marginTop: 40, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-          <p style={{ margin: 0, paddingLeft: 18, borderLeft: `3px solid ${ORANGE}`, fontSize: 15.5, lineHeight: 1.75, color: INK, maxWidth: "72ch" }}>Use the products relevant to your operating model. The objective is to give service teams a clearer view of the work while supporting the inventory and financial processes around it.</p>
+          <p style={{ margin: 0, paddingLeft: 18, borderLeft: `3px solid ${ORANGE}`, fontSize: 15.5, lineHeight: 1.75, color: INK, maxWidth: "72ch" }}>Start with the products your operation needs. Capabilities vary by product and plan.</p>
           <a href="/products" className="fs-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: "none", background: BLUE, color: CW, boxShadow: `0 18px 32px -18px ${BLUE}` }}>Explore EVOQ products<Arrow /></a>
         </div>
       </div>
@@ -160,13 +155,13 @@ function Ecosystem() {
 
 /* ------------------------------------------------------------------ 4. FAQ */
 const FAQ: [string, string][] = [
-  ["Who is EVOQ Field Service, Facilities & Maintenance for?", "The solution is relevant to external field service providers, in-house field service teams, facilities management companies, internal facilities departments and maintenance teams responsible for equipment and assets."],
-  ["What is the difference between a work order and a job?", "A work order represents an authorized service requirement or piece of work. A job represents the field work carried out to fulfill it. Depending on the service requirement, one work order may involve multiple jobs or visits."],
-  ["Can EVOQ support both planned and corrective maintenance?", "Yes. ServiceOps supports planned maintenance activities as well as corrective maintenance work. Teams can organize scheduled maintenance, record equipment issues, assign repair work and maintain service history."],
-  ["Can field technicians manage their work from mobile devices?", "ServiceOps supports mobile field workflows that help technicians access job information and record work updates and supporting documentation while carrying out service visits."],
-  ["Can the solution support multiple sites?", "The solution can support service and maintenance operations across locations, helping teams organize work and review outstanding activity. The appropriate setup depends on the organization's operational structure and access requirements."],
-  ["Can EVOQ manage inventory and billing alongside service operations?", "ServiceOps addresses the service-delivery side of the process. EVOQ Inventory supports broader stock and inventory management, while EVOQ Billing handles invoicing and payment processes. The exact data exchange and integration between these products should be confirmed for the proposed deployment."],
-  ["Is the solution suitable for both service providers and internal teams?", "Yes. External providers can use the solution to coordinate service delivery for customers, while internal teams can organize work across company facilities, equipment and operational sites. The configuration and processes can reflect the requirements of each operating model."],
+  ["Who is EVOQ Field Service, Facilities & Maintenance for?", "External field service providers, in-house field teams, facilities management companies, internal facilities departments and maintenance teams."],
+  ["What is the difference between a work order and a job?", "A work order is the authorized work. A job is the field visit that fulfils it, and one work order can involve several jobs."],
+  ["Can EVOQ support both planned and corrective maintenance?", "Yes. Planned maintenance is scheduled and tracked. Corrective repairs are recorded, assigned and kept in the service history."],
+  ["Can field technicians manage their work from mobile devices?", "Yes. Technicians open job details and record updates and supporting documents from a mobile device."],
+  ["Can the solution support multiple sites?", "Yes. Work and open activity can be organized and reviewed across locations. Setup depends on your structure and access needs."],
+  ["Can EVOQ manage inventory and billing alongside service operations?", "ServiceOps handles the service job. Inventory handles stock and Billing handles invoices and payments. Confirm the data exchange between them for your deployment."],
+  ["Is the solution suitable for both service providers and internal teams?", "Yes. Providers coordinate work for customers. Internal teams organize work across their own facilities, equipment and sites."],
 ];
 function Faq() {
   return (
@@ -198,7 +193,7 @@ function FinalCta() {
           <div style={{ position: "relative", maxWidth: 580 }}>
             <Eyebrow>Take the next step</Eyebrow>
             <h2 className="fs-h2" style={h2}>Bring your jobs, sites and assets into one workflow.</h2>
-            <p style={{ margin: "18px 0 28px", fontSize: 15.5, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Explore how EVOQ can support your service requests, technician scheduling, facilities work orders and equipment maintenance processes.</p>
+            <p style={{ margin: "18px 0 28px", fontSize: 15.5, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Tell us how requests, technician scheduling and maintenance run today, and we will show where EVOQ products fit.</p>
             <Cta>Talk to an expert</Cta>
           </div>
           <div className="fs-ctavis" aria-hidden="true" style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "52%", pointerEvents: "none" }}>

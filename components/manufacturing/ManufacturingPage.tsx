@@ -105,9 +105,8 @@ function Hero() {
         <div className="mf-hero">
           <div>
             <Eyebrow>Manufacturing solutions</Eyebrow>
-            <h1 className="mf-h1">Where complex products get quoted right and supported after delivery.</h1>
-            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "54ch" }}>Managing a manufactured product involves more than production. Manufacturers need to attract and qualify enquiries, handle complex product requirements, prepare accurate quotes, coordinate customer commitments and support products after delivery.</p>
-            <p style={{ margin: "16px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "54ch" }}>EVOQ helps manufacturers address these commercial and operational needs with products for lead management, product configuration, project coordination, inventory, billing and service.</p>
+            <h1 className="mf-h1">Consistent quotes, clear delivery commitments, service that follows the product.</h1>
+            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "54ch" }}>Capture product requirements at enquiry, prepare consistent quotes, confirm delivery commitments and carry service history with the product after it ships. For manufacturers of configurable and made-to-order products.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Btn enquiry>Talk to an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn>
               <Btn dark={false} href="#solutions">Explore manufacturing solutions</Btn>
@@ -126,21 +125,21 @@ function Hero() {
 /* ------------------------------------------------------------------ 2. Lifecycle */
 function Lifecycle() {
   const steps: [string, string, string, string, string?][] = [
-    ["chat", "Enquiry", "Capture customer enquiries, accounts and sales opportunities.", "CRM"],
-    ["cog", "Configure", "Define product options and specifications around customer requirements.", "ConfigX"],
-    ["doc", "Quote", "Prepare quotes that reflect the selected configuration and pricing.", "ConfigX"],
-    ["cart", "Order", "Move from an agreed quote into order-related commercial activity.", "CRM · Finance · Billing"],
-    ["factory", "Production", "Coordinate project tasks and activities associated with preparing products for delivery, where applicable.", "Projects"],
-    ["box", "Inventory & fulfillment", "Track stock and supply information relevant to product availability and fulfillment.", "Inventory", "Also informs production"],
-    ["truck", "Delivery", "Coordinate delivery-related projects and activities required to complete customer commitments, where applicable.", "Projects"],
-    ["wrench", "Service", "Manage work orders, technician dispatch, maintenance activities and customer support after delivery.", "ServiceOps · Desk"],
+    ["chat", "Enquiry", "Enquiries, accounts and opportunities recorded as they arrive.", "CRM"],
+    ["cog", "Configure", "Options and specifications defined against the customer’s requirements.", "ConfigX"],
+    ["doc", "Quote", "Quotes that match the selected configuration and price.", "ConfigX"],
+    ["cart", "Order", "Agreed quotes converted into orders.", "CRM · Finance · Billing"],
+    ["factory", "Production", "Preparation tasks assigned and tracked ahead of delivery.", "Projects"],
+    ["box", "Inventory & fulfillment", "Stock levels and supply tracked against open orders.", "Inventory", "Also informs production"],
+    ["truck", "Delivery", "Delivery activities scheduled against customer commitments.", "Projects"],
+    ["wrench", "Service", "Work orders, technician visits and support requests handled after delivery.", "ServiceOps · Desk"],
   ];
   return (
     <Sec bg="#fff" pad="48px 0 80px" id="lifecycle">
       <Eyebrow>From enquiry to service</Eyebrow>
       <div className="mf-split2" style={{ alignItems: "end" }}>
         <h2 className="mf-h2">A product sale involves <span style={{ color: SL, fontWeight: 400 }}>enquiries, quotes, delivery and service.</span></h2>
-        <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "58ch" }}>A manufactured product passes through commercial and operational stages before and after it reaches the customer. Each stage creates information and responsibilities that need to carry forward as the product moves toward delivery and service.</p>
+        <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "58ch" }}>Enquiry, configuration, quote, order, delivery and service each produce records the next stage needs. EVOQ products carry them forward.</p>
       </div>
       <div className="mf-g4" style={{ marginTop: 40, rowGap: 22 }}>
         {steps.map(([ic, t, d, app, note], i) => (
@@ -168,7 +167,7 @@ function Lifecycle() {
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: BL }}>Across the lifecycle</div>
             <div style={{ marginTop: 3, fontSize: 14, color: G, fontWeight: 600 }}>Sync</div>
           </div>
-          <p style={{ margin: 0, flex: "2 1 380px", fontSize: 13.5, lineHeight: 1.6, color: ST }}>Sync supports data synchronization between EVOQ products and existing systems through supported integrations.</p>
+          <p style={{ margin: 0, flex: "2 1 380px", fontSize: 13.5, lineHeight: 1.6, color: ST }}>Data shared between EVOQ products and existing systems through supported integrations.</p>
         </div>
       </div>
     </Sec>
@@ -184,7 +183,7 @@ function ConfigX() {
         <div>
           <Eyebrow>Complex product selling</Eyebrow>
           <h2 className="mf-h2">Configure complex products <span style={{ color: LS, fontWeight: 400 }}>and prepare accurate quotes.</span></h2>
-          <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "48ch" }}>Some products involve multiple options, specifications, dimensions, materials and pricing considerations. ConfigX supports a guided configuration experience that helps sales teams visualize selections, calculate pricing and prepare quotes that reflect customer requirements.</p>
+          <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "48ch" }}>Options, dimensions, materials and pricing rules vary by product. ConfigX guides the sales team through each selection, shows the result and calculates the price for the quote.</p>
           <div style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             {steps.map(([ic, t], i) => (
               <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -193,7 +192,7 @@ function ConfigX() {
               </span>
             ))}
           </div>
-          <p style={{ margin: "20px 0 0", fontSize: 14, lineHeight: 1.65, color: SL, maxWidth: "52ch" }}>From modular furniture to industrial equipment, the product-selling experience can reflect the options and specifications relevant to what you manufacture.</p>
+          <p style={{ margin: "20px 0 0", fontSize: 14, lineHeight: 1.65, color: SL, maxWidth: "52ch" }}>From modular furniture to industrial equipment, configuration follows the options each product offers.</p>
           <div style={{ marginTop: 26 }}><Btn enquiry>Explore ConfigX <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn></div>
         </div>
         <ConfigXWindow />
@@ -205,12 +204,12 @@ function ConfigX() {
 /* ------------------------------------------------------------------ 7. Segments */
 function Segments() {
   const segs: [string, string, string][] = [
-    ["Industrial manufacturing", "Support customer relationships, commercial activity and service operations around industrial products.", IMG.robots],
-    ["Equipment manufacturers", "Coordinate product configuration, customer projects and ongoing equipment service.", IMG.excavator],
-    ["Furniture & modular products", "Support configurable product sales, customer enquiries and order-related activity.", IMG.kitchen],
-    ["Building products", "Manage enquiries, product options, commercial records and relevant fulfillment processes.", IMG.profiles],
-    ["Medical devices", "Support product-related customer relationships, commercial operations and post-sale service where applicable.", IMG.cleanroom],
-    ["Other configurable products", "Explore how product configuration, quoting and related commercial activities can support other manufacturers.", IMG.cnc],
+    ["Industrial manufacturing", "Enquiries, quotes and service history for industrial products.", IMG.robots],
+    ["Equipment manufacturers", "Configured equipment, customer projects and ongoing service visits.", IMG.excavator],
+    ["Furniture & modular products", "Configurable product sales, enquiries and orders.", IMG.kitchen],
+    ["Building products", "Enquiries, product options, commercial records and fulfilment.", IMG.profiles],
+    ["Medical devices", "Customer accounts, orders and post-sale service for devices.", IMG.cleanroom],
+    ["Other configurable products", "Configuration, quoting and order handling for other configurable products.", IMG.cnc],
   ];
   const corner = (pos: CSSProperties): CSSProperties => ({ position: "absolute", width: 14, height: 14, borderColor: "rgba(255,255,255,.85)", borderStyle: "solid", borderWidth: 0, ...pos });
   return (
@@ -220,7 +219,7 @@ function Segments() {
           <Eyebrow>Manufacturing segments</Eyebrow>
           <h2 className="mf-h2">Each type of manufacturer starts with different products.</h2>
         </div>
-        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: ST, maxWidth: "56ch" }}>Manufacturers vary in how they configure products, handle orders, coordinate delivery and support customers after the sale. Explore how EVOQ products may support the work surrounding different product types.</p>
+        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: ST, maxWidth: "56ch" }}>Configuration, order handling, delivery and after-sale support differ by product type. Choose the type closest to yours.</p>
       </div>
       <div className="mf-g3" style={{ gap: 22 }}>
         {segs.map(([t, d, img], i) => (
@@ -274,7 +273,7 @@ export function ManufacturingPage() {
       <style>{`
         .mf-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
         .mf-h1{margin:14px 0 0;font-size:48px;line-height:1.04;letter-spacing:-.03em;font-weight:600;color:${G}}
-        @media (min-width:641px){.mf-root h1.mf-h1,.hs-root h1.mf-h1{font-size:42px!important}}
+        @media (min-width:641px){.mf-root h1.mf-h1,.hs-root h1.mf-h1{font-size:37px!important}}
         .mf-one{white-space:nowrap}
         .mf-h2{margin:0;font-size:44px;line-height:1.08;letter-spacing:-.025em;font-weight:600;color:${G}}
         .mf-hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:24px;align-items:center;padding:44px 0 64px}

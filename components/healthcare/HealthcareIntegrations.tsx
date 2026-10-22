@@ -108,8 +108,8 @@ export function HealthcareIntegrations() {
               Connect the tools your team already uses.
             </h2>
             <p className="mt-5 text-[15.5px] leading-[1.7] text-[#64748B]">
-              EVOQ Healthcare works alongside the apps your organization
-              already relies on, so nothing needs to change overnight.
+              Appointments, video consultations, payments, messaging and retail stores connect to the tools your
+              team already uses.
             </p>
             <p className="mt-4 text-[15.5px] leading-[1.7] text-[#64748B]">
               Sync appointments with Google Calendar, run virtual

@@ -190,13 +190,14 @@ export function HealthcareHero() {
           <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#18B8D1]">
             Healthcare Solutions
           </p>
-          <h1 className="mt-4 font-[var(--font-display)] text-[26px] font-extrabold leading-[1.15] min-[420px]:text-[27px] min-[520px]:text-[36px] sm:text-[42px] lg:text-[44px] tracking-[-0.02em] text-[#31465A]">
-            Where patients stay and practices run smoothly.
+          <h1 className="mt-4 font-[var(--font-display)] text-[24px] font-extrabold leading-[1.15] min-[420px]:text-[26px] min-[520px]:text-[32px] sm:text-[38px] lg:text-[40px] tracking-[-0.02em] text-[#31465A]">
+            Stronger patient relationships. More efficient practice operations.
           </h1>
           <p className="mt-5 max-w-[560px] text-[17px] leading-[1.65] text-[#64748B]">
-            EVOQ helps healthcare organizations attract and retain patients,
-            coordinate practice operations, and deliver a more consistent
-            patient experience across the journey.
+            Track referrals and enquiries through to the first appointment, keep
+            follow-ups on schedule, and give providers and front-desk teams the
+            same view of each patient. For clinics, dental and aesthetics
+            practices, hospitals and diagnostic centres.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3.5">

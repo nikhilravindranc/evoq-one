@@ -135,8 +135,8 @@ const CARDS = [
 ];
 
 const BENEFITS = [
-  { icon: "users", tile: "bg-[#E8F1FA]", stroke: "#2064B6", l1: "Better experiences", l2: "for your patients." },
-  { icon: "bars", tile: "bg-[#E7F7F5]", stroke: "#3FA99B", l1: "More efficient", l2: "operations for your team." },
+  { icon: "users", tile: "bg-[#E8F1FA]", stroke: "#2064B6", l1: "Clear patient history", l2: "for providers." },
+  { icon: "bars", tile: "bg-[#E7F7F5]", stroke: "#3FA99B", l1: "Organized schedules", l2: "for the front desk." },
   { icon: "trend", tile: "bg-[#E5F8FB]", stroke: "#18B8D1", l1: "Stronger relationships", l2: "for long-term care." },
 ] as const;
 
@@ -158,14 +158,13 @@ export function HealthcareJourneyTogether() {
                 Patient relationships, practice operations and engagement in one place.
               </h2>
               <p className="mt-5 text-[16.5px] leading-[1.7] text-[#64748B]">
-                Combine patient relationships, practice operations, booking, billing, and engagement so information can
-                move with the patient journey.
+                Patient records, schedules, bookings, billing and communication share one patient history.
               </p>
             </div>
             <div className="hidden shrink-0 items-center gap-6 lg:flex">
               <div className="border-l-2 border-[#31465A]/10 pl-6 pt-1">
                 <p className="max-w-[200px] text-[14px] font-semibold leading-[1.55] text-[#31465A]">
-                  Patients move forward when everything works together.
+                  One patient history across every team.
                 </p>
                 <span className="mt-4 block h-[3px] w-9 rounded-full bg-[#18B8D1]" />
               </div>
@@ -175,7 +174,7 @@ export function HealthcareJourneyTogether() {
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E7F7F5]">
                     <Ic n="users" size={15} stroke="#2F8A7F" />
                   </span>
-                  <p className="text-[11px] font-semibold leading-[1.4] text-[#31465A]">Stronger relationships lead to healthier outcomes.</p>
+                  <p className="text-[11px] font-semibold leading-[1.4] text-[#31465A]">Follow-ups and appointments visible to every team member.</p>
                 </div>
               </div>
             </div>

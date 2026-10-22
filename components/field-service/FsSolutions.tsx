@@ -37,8 +37,8 @@ const TABS: Tab[] = [
     key: "field", tab: "Field service", sub: "Requests, dispatch and visits", on: BLUE, off: PALE,
     icon: "M4 17h3l2-5h6l2 5h3M7 17a2 2 0 1 0 0 .1M17 17a2 2 0 1 0 0 .1M9 12V8h6v4",
     eyebrow: "Field service management",
-    title: "Send the right technician to the right job, first time.",
-    intro: ["Field service involves more than sending a technician to a location. Requests must be assessed, work scheduled, the right technician assigned and each visit documented. EVOQ ServiceOps helps external service providers and internal field teams coordinate these activities and maintain visibility into ongoing work."],
+    title: "Send the right technician to the right job.",
+    intro: ["A visit starts with a request that is assessed, scheduled, assigned and documented. For external service providers and internal field teams."],
     img: U("1660330589827-da8ab7dd3c02"),
     challenges: [
       "Service requests arrive through different channels, making it harder to maintain a consistent view of incoming work.",
@@ -47,21 +47,21 @@ const TABS: Tab[] = [
       "Parts, service charges and follow-up actions need to be accounted for after the job.",
     ],
     improves: [
-      "A clearer view of open requests, assigned work and job status.",
-      "More organized scheduling and technician dispatch.",
-      "Consistent records of service visits, work performed and completion details.",
-      "Better visibility into parts used, service costs and billing-related follow-up.",
+      "Open requests, assigned work and job status listed together.",
+      "Scheduling and dispatch organized by technician.",
+      "Every visit recorded: work performed and completion details.",
+      "Parts used and service costs recorded against the job.",
     ],
     fits: [
-      ["Service request and work order management", "Record incoming service requirements, assess the work and create the appropriate work orders and jobs."],
-      ["Scheduling and dispatch", "Organize service appointments, assign technicians and coordinate field activity through scheduling and dispatch views."],
-      ["Service visits and job records", "Give technicians access to relevant job information and mobile field workflows for recording work performed, updates and supporting documentation."],
-      ["Parts and service billing", "Keep job-related parts and billable service information available to support inventory and billing processes."],
+      ["Service request and work order management", "Requests logged, assessed and turned into work orders and jobs."],
+      ["Scheduling and dispatch", "Appointments scheduled and technicians assigned from dispatch views."],
+      ["Service visits and job records", "Technicians record work, updates and documents from the job on mobile."],
+      ["Parts and service billing", "Parts and billable service details kept with the job."],
     ],
     apps: ["ServiceOps", "Inventory", "Billing"],
     audiences: [
-      ["For service providers", "Coordinate customer requests, estimates, work orders, technician visits and service completion across the jobs your organization delivers."],
-      ["For internal field teams", "Organize service work across company sites, equipment locations and operational priorities while maintaining records for follow-up."],
+      ["For service providers", "Requests, estimates, work orders and visits tracked through to completion."],
+      ["For internal field teams", "Work organized across sites and equipment locations, with records kept for follow-up."],
     ],
     cta: "Explore ServiceOps",
   },
@@ -71,8 +71,8 @@ const TABS: Tab[] = [
     eyebrow: "Facilities operations",
     title: "Log, assign and close every site request.",
     intro: [
-      "Facilities operations involve a steady flow of requests, repairs, inspections and contractor assignments. Without clear ownership and consistent records, routine issues can remain unresolved and outstanding work becomes harder to oversee.",
-      "EVOQ helps facilities management providers and internal facilities teams organize service requests, assign responsibilities and follow work across buildings and sites.",
+      "Requests, repairs, inspections and contractor assignments arrive daily. Each needs an owner and a record so none stays open unnoticed.",
+      "For facilities management providers and internal facilities teams, across buildings and sites.",
     ],
     img: U("1732395805034-e0bf859665e5"),
     challenges: [
@@ -82,21 +82,21 @@ const TABS: Tab[] = [
       "Service history and completion records are not consistently available when recurring issues arise.",
     ],
     improves: [
-      "A structured process for recording and assigning facilities-related work.",
-      "Clearer responsibility for each request, work order and follow-up action.",
-      "Better visibility into work in progress and unresolved issues.",
-      "More consistent service records across buildings and operating locations.",
+      "Facilities requests recorded and assigned.",
+      "An owner for every request, work order and follow-up.",
+      "Work in progress and open issues listed by site.",
+      "Service records kept per building and location.",
     ],
     fits: [
-      ["Facilities service requests", "Capture building-related service needs and organize them for assessment, assignment and resolution."],
-      ["Work order coordination", "Create and track work orders, assign responsible personnel and monitor progress through completion."],
-      ["Site and service oversight", "Review outstanding work and service activity to help coordinate responsibilities across locations."],
-      ["Internal and external service coordination", "Organize work involving in-house maintenance personnel, contractors and facilities service providers."],
+      ["Facilities service requests", "Building service needs logged for assessment, assignment and resolution."],
+      ["Work order coordination", "Work orders created, assigned and followed to completion."],
+      ["Site and service oversight", "Outstanding work reviewed across locations."],
+      ["Internal and external service coordination", "In-house staff, contractors and service providers working from the same list."],
     ],
     apps: ["ServiceOps", "Desk"],
     audiences: [
-      ["For facilities management providers", "Coordinate work across client sites, manage service commitments and maintain a clearer record of work delivered."],
-      ["For internal facilities teams", "Organize requests from occupants and departments, assign maintenance responsibilities and track outstanding work across your facilities."],
+      ["For facilities management providers", "Client-site work, service commitments and delivered work on record."],
+      ["For internal facilities teams", "Occupant and department requests assigned and tracked across facilities."],
     ],
     cta: "Explore ServiceOps for facilities",
   },
@@ -106,8 +106,8 @@ const TABS: Tab[] = [
     eyebrow: "Asset & maintenance management",
     title: "Schedule servicing before assets fail.",
     intro: [
-      "Equipment downtime, overdue maintenance and incomplete service histories make it harder to protect operational continuity. Maintenance teams need to know which assets require attention, what work is scheduled and what has already been done.",
-      "EVOQ ServiceOps supports planned maintenance and corrective work, helping maintenance teams organize asset-related tasks, manage work orders and maintain service history.",
+      "Maintenance teams need to know which assets need attention, what is scheduled and what was already done.",
+      "Planned maintenance and corrective repairs, with work orders and service history kept per asset.",
     ],
     img: U("1748256086767-8974ee677f77"),
     challenges: [
@@ -117,22 +117,22 @@ const TABS: Tab[] = [
       "Parts used during maintenance are difficult to reconcile with stock records and job requirements.",
     ],
     improves: [
-      "Better oversight of assets and their maintenance requirements.",
-      "More organized preventive maintenance schedules and recurring work.",
-      "Clearer coordination of corrective repairs and technician assignments.",
-      "More consistent maintenance history and records of completed work.",
-      "Improved visibility into parts associated with maintenance jobs.",
+      "Assets and their maintenance requirements listed.",
+      "Preventive schedules and recurring work set up per asset.",
+      "Corrective repairs assigned to technicians.",
+      "Completed work recorded in each asset's history.",
+      "Parts used on maintenance jobs recorded.",
     ],
     fits: [
-      ["Asset records and maintenance history", "Maintain asset information and service records to support maintenance planning and future repair decisions."],
-      ["Preventive maintenance", "Organize planned maintenance activities and recurring work to help teams keep scheduled tasks on track."],
-      ["Corrective maintenance", "Record equipment issues, create work orders, assign technicians and track repairs through completion."],
-      ["Parts and maintenance costs", "Refer to job-related parts and service costs to support inventory management and billing processes where applicable."],
+      ["Asset records and maintenance history", "Asset details and service records kept for planning and repair decisions."],
+      ["Preventive maintenance", "Planned and recurring maintenance scheduled and tracked."],
+      ["Corrective maintenance", "Equipment issues recorded, work orders assigned, repairs tracked to completion."],
+      ["Parts and maintenance costs", "Parts and service costs referenced from the job."],
     ],
     apps: ["ServiceOps", "Inventory", "Billing"],
     audiences: [
-      ["For maintenance teams", "Coordinate planned servicing and corrective repairs while maintaining records of equipment-related work."],
-      ["For asset-intensive organizations", "Improve visibility into maintenance activity across equipment and sites, helping teams make better-informed decisions about outstanding work and service history."],
+      ["For maintenance teams", "Planned servicing and corrective repairs recorded against each equipment item."],
+      ["For asset-intensive organizations", "Maintenance activity visible across equipment and sites."],
     ],
     cta: "Explore ServiceOps for maintenance",
   },
@@ -180,8 +180,8 @@ export function FsSolutions() {
         <div style={{ maxWidth: 900 }} data-rv="0">
           <p style={{ margin: "0 0 14px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: BURNT }}>Solutions</p>
           <h2 className="fs-h2" style={{ margin: 0, color: NAVY }}>Field jobs, site upkeep and planned maintenance, run in one place.</h2>
-          <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "70ch" }}>Whether technicians are responding to customer requests, facilities teams are resolving site issues or maintenance staff are servicing critical equipment, the work depends on clear responsibilities, timely action and reliable records.</p>
-          <p style={{ margin: "10px 0 0", fontSize: 16, lineHeight: 1.8, color: INK, fontWeight: 600 }}>Explore how EVOQ supports each operating area.</p>
+          <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "70ch" }}>Technicians answer customer requests, facilities teams close site issues, maintenance staff service equipment. Each needs a clear owner, a due time and a record.</p>
+          <p style={{ margin: "10px 0 0", fontSize: 16, lineHeight: 1.8, color: INK, fontWeight: 600 }}>Choose the work closest to yours.</p>
         </div>
 
         <div className="fx-tabs-wrap">

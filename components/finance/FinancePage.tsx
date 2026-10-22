@@ -91,8 +91,8 @@ function Hero() {
         <div className="fn-hero">
           <div data-rv="0">
             <p style={{ margin: "0 0 20px", display: "flex", alignItems: "center", gap: 14, fontSize: 12, fontWeight: 600, letterSpacing: ".26em", textTransform: "uppercase", color: "#5B6B80" }}><span aria-hidden="true" style={{ width: 54, height: 1.5, background: GOLD }} />Financial Services</p>
-            <h1 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.02em", fontWeight: 500, color: NAVY }}>Where client enquiries become long-term relationships.</h1>
-            <p style={{ margin: "26px 0 0", fontSize: 17, lineHeight: 1.75, color: "#475569", maxWidth: "50ch" }}>Every financial relationship involves more than a transaction. Customer enquiries, ongoing communication, service requests and internal coordination all shape the experience. EVOQ products support these activities, helping financial-services organizations manage client relationships and the work surrounding them.</p>
+            <h1 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.02em", fontWeight: 500, color: NAVY }}>Client enquiries answered, service requests tracked, relationships kept current.</h1>
+            <p style={{ margin: "26px 0 0", fontSize: 17, lineHeight: 1.75, color: "#475569", maxWidth: "50ch" }}>Log client enquiries, track service requests, schedule reviews and renewals, and keep each client&rsquo;s conversation history in front of every adviser. For banks, insurers and wealth and advisory firms.</p>
             <div style={{ marginTop: 34 }}><Cta pill>Talk to an expert</Cta></div>
           </div>
         </div>
@@ -126,8 +126,8 @@ function Behind() {
           <div data-rv="0">
             <p style={{ margin: "0 0 16px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: TEAL }}>Behind every relationship</p>
             <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Every financial relationship involves more than a transaction.</h2>
-            <p style={{ margin: "22px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#334155", maxWidth: "52ch" }}>A customer enquiry can lead to several conversations, service requests and follow-up activities. Staff need to maintain relevant information, coordinate responsibilities and keep outstanding work visible.</p>
-            <p style={{ margin: "14px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#334155", maxWidth: "52ch" }}>EVOQ products support the customer-facing and internal activities surrounding financial services, helping teams manage relationship-related work and maintain consistent follow-through.</p>
+            <p style={{ margin: "22px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#334155", maxWidth: "52ch" }}>One enquiry can lead to several conversations, service requests and follow-ups. Each needs an owner, a due date and a record.</p>
+            <p style={{ margin: "14px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#334155", maxWidth: "52ch" }}>EVOQ products cover the client-facing and internal work around each relationship: enquiries, communication, service requests and tasks.</p>
             <div className="fn-duo-wrap" style={{ marginTop: 30 }}>
               <div role="img" aria-label="A client meeting" style={{ height: 210, backgroundImage: "url(/finance/team.jpg)", backgroundSize: "cover", backgroundPosition: "50% 45%", filter: "grayscale(1) contrast(1.05)" }} />
             </div>
@@ -160,7 +160,7 @@ function FinalCta() {
             <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Start with how your client enquiries and follow-ups work today.</h2>
           </div>
           <div>
-            <p style={{ margin: "0 0 28px", fontSize: 16.5, lineHeight: 1.8, color: "#334155" }}>Explore how EVOQ products could support client relationships, service activities and internal coordination across your financial-services organization.</p>
+            <p style={{ margin: "0 0 28px", fontSize: 16.5, lineHeight: 1.8, color: "#334155" }}>Tell us how enquiries, service requests and renewals are handled today, and we will show where EVOQ products fit.</p>
             <Cta>Talk to an expert</Cta>
           </div>
         </div>

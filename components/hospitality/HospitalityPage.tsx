@@ -67,8 +67,8 @@ function Hero() {
         <div className="hs-hero">
           <div data-rv="0">
             <Eyebrow light>Hospitality, Travel &amp; F&amp;B</Eyebrow>
-            <h1 style={{ margin: 0, fontFamily: SERIF, fontWeight: 400, fontSize: 62, lineHeight: 1.05, letterSpacing: "-.02em", color: CREAM }}>Where guests are looked after and <em style={{ color: "#CFE3C0" }}>operations keep moving.</em></h1>
-            <p style={{ margin: "26px 0 0", fontSize: 17.5, lineHeight: 1.75, color: "#D7E5DA", maxWidth: "50ch" }}>From the first enquiry to the service that brings customers back, hospitality depends on timely responses, well-coordinated teams and consistent follow-through. EVOQ products support customer relationships, service activities and administrative operations across hospitality, food service and travel.</p>
+            <h1 style={{ margin: 0, fontFamily: SERIF, fontWeight: 400, fontSize: 62, lineHeight: 1.05, letterSpacing: "-.02em", color: CREAM }}>Reservations confirmed, guest requests tracked, <em style={{ color: "#CFE3C0" }}>returning guests recognised.</em></h1>
+            <p style={{ margin: "26px 0 0", fontSize: 17.5, lineHeight: 1.75, color: "#D7E5DA", maxWidth: "50ch" }}>Confirm reservations, record guest requests and preferences, and follow up after every visit. For hotels and resorts, restaurants and cafés, and travel and tour operators.</p>
             <div style={{ marginTop: 34 }}><Cta light>Talk to an expert</Cta></div>
           </div>
           <div className="hs-hero-vis" data-rv="1">
@@ -92,7 +92,7 @@ function FinalCta() {
         <div data-rv="0">
           <Eyebrow>Hospitality, Travel &amp; F&amp;B</Eyebrow>
           <h2 style={h2}>Start with <em style={{ color: BOTANICAL }}>how your guest enquiries and follow-ups work today.</em></h2>
-          <p style={{ margin: "22px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#33443A", maxWidth: "50ch" }}>Explore how EVOQ products could support the customer relationships, service activities and administrative requirements that matter most to your operation.</p>
+          <p style={{ margin: "22px 0 0", fontSize: 16.5, lineHeight: 1.8, color: "#33443A", maxWidth: "50ch" }}>Tell us how reservations, guest requests and follow-up run today, and we will show where EVOQ products fit.</p>
           <div style={{ marginTop: 32 }}><Cta>Talk to an expert</Cta></div>
         </div>
         <div className="hs-cta-vis" data-rv="1">

@@ -139,17 +139,15 @@ export function HealthcareCareSettings() {
                 Built for clinics, dental, aesthetics, hospitals and diagnostics.
               </h2>
               <p className="mt-5 max-w-[720px] text-[15.5px] leading-[1.7] text-[#64748B]">
-                From medical clinics and dental practices to hospitals,
-                diagnostics, aesthetics, wellness, and specialty care, EVOQ
-                supports the different operational and relationship needs of
-                healthcare organizations.
+                Clinics, dental practices, aesthetics and wellness centres, hospitals, diagnostic labs and
+                multi-location groups each work differently. EVOQ products are combined to match.
               </p>
             </div>
             <div className="hidden shrink-0 border-l-2 border-[#E2E8EC] pl-6 pt-2 lg:block">
               <p className="max-w-[220px] text-[14px] leading-[1.6] text-[#64748B]">
                 Different care settings.
                 <br />
-                A more connected experience.
+                The same patient record.
               </p>
               <span className="mt-4 block h-[3px] w-9 rounded-full bg-[#2064B6]" />
             </div>

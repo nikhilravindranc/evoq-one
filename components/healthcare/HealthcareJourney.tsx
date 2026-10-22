@@ -76,32 +76,32 @@ const STEPS = [
   {
     icon: <MessageIcon />,
     label: "Capture",
-    desc: "Turn enquiries from calls, forms, referrals, and other channels into structured patient relationships.",
+    desc: "Calls, forms and referrals logged as patient records.",
   },
   {
     icon: <UsersIcon />,
     label: "Consult",
-    desc: "Keep consultations, requirements, interactions, and follow-ups organized.",
+    desc: "Consultation notes, requirements and follow-ups recorded against the patient.",
   },
   {
     icon: <CalendarIcon />,
     label: "Book",
-    desc: "Make appointments easier to schedule around provider availability.",
+    desc: "Appointments booked around provider availability.",
   },
   {
     icon: <ClipboardIcon />,
     label: "Manage",
-    desc: "Keep patients, appointments, providers, services, visits, and practice activity organized.",
+    desc: "Patients, providers, services and visits managed from one schedule.",
   },
   {
     icon: <HeartIcon />,
     label: "Follow up",
-    desc: "Stay on top of follow-ups after appointments, consultations, and treatments.",
+    desc: "Follow-ups assigned and tracked after every appointment, consultation and treatment.",
   },
   {
     icon: <BarChartIcon />,
     label: "Re-engage",
-    desc: "Use CRM and Campaigns to bring patients back for relevant services and ongoing care.",
+    desc: "Returning patients reached with relevant services and reminders.",
   },
 ];
 
@@ -128,12 +128,10 @@ export function HealthcareJourney() {
                 From first enquiry to ongoing care.
               </h2>
               <p className="mt-5 max-w-[560px] text-[16.5px] leading-[1.7] text-[#64748B]">
-                Keep the patient journey organized from the first interaction through appointments, treatment,
-                follow-up, and re-engagement.
+                From first call to return visit, each stage of the patient journey recorded and passed to the right team.
               </p>
               <p className="mt-4 max-w-[560px] text-[15px] font-semibold leading-[1.65] text-[#31465A]">
-                Each stage draws on the EVOQ products best suited to it, so information moves with the patient from one
-                stage to the next.
+                Each stage uses the product built for it, and the patient record carries across.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3.5">
                 <a

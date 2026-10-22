@@ -28,13 +28,13 @@ export function HealthcareCTA() {
             <div className="relative grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
               <div>
                 <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#B7ECF5]">
-                  Ready to build your healthcare environment?
+                  Talk to the EVOQ team
                 </p>
                 <h2 className="mt-4 max-w-[640px] font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-white">
-                  Bring healthcare operations and patient relationships together.
+                  Start with how your practice handles enquiries, appointments and follow-ups today.
                 </h2>
                 <p className="mt-5 max-w-[540px] text-[16.5px] leading-[1.7] text-white/80">
-                  Manage practice operations, patient relationships, booking, billing, and engagement with EVOQ.
+                  Tell us how referrals, appointments and follow-ups run today, and we will show where EVOQ products fit.
                 </p>
                 <div className="mt-9 flex flex-wrap items-center gap-3.5">
                   <a

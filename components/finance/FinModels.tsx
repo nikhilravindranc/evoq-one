@@ -28,11 +28,11 @@ type Segment = {
 const SEGMENTS: Segment[] = [
   {
     key: "banking", name: "Banking & lending", img: "/finance/bank.jpg", pos: "50% 40%",
-    summary: "Organize customer enquiries, prospect follow-up, relationship management and service communication across banking and lending operations. Choose EVOQ products according to the processes your institution needs to support.",
-    title: "Handle customer enquiries and service requests in one place.",
+    summary: "Customer enquiries, prospect follow-up and service communication across banking and lending.",
+    title: "Customer enquiries logged, service requests assigned, follow-ups tracked.",
     intro: [
-      "Customer relationships extend beyond the initial enquiry. Prospects need timely follow-up, existing clients need responsive service, and staff need access to relevant customer information to manage ongoing interactions.",
-      "EVOQ products can support customer relationship management, service requests and internal coordination alongside specialist banking and lending systems.",
+      "Prospect enquiries followed up, existing customers' service requests answered, and every interaction visible to the staff handling it.",
+      "Works alongside core banking and lending systems.",
     ],
     points: [
       ["Customer relationships", "Maintain customer records, organize enquiries and track follow-up activity."],
@@ -44,11 +44,11 @@ const SEGMENTS: Segment[] = [
   },
   {
     key: "insurance", name: "Insurance & brokerages", img: "/finance/insurance.jpg", pos: "50% 45%",
-    summary: "Support prospect management, client relationships, follow-up communication and customer service throughout the insurance relationship. Specialist policy and claims processes may require dedicated insurance systems.",
-    title: "Keep client relationships moving beyond the policy.",
+    summary: "Prospects, client relationships and service communication across the policy lifecycle. Policy and claims processing stays in your insurance system.",
+    title: "Renewals, service enquiries and client contact tracked beyond the policy.",
     intro: [
-      "Insurance relationships involve ongoing communication, service enquiries, renewal-related follow-up and opportunities to maintain client engagement. Staff need clear customer records and visibility into the interactions that require attention.",
-      "EVOQ products can support client relationship management, service communication and customer engagement alongside specialist insurance administration systems.",
+      "Service enquiries answered, renewal follow-ups scheduled, and client history in front of whoever picks up the call.",
+      "Works alongside policy administration systems.",
     ],
     points: [
       ["Prospect management", "Organize enquiries and maintain visibility into follow-up activity."],
@@ -61,11 +61,11 @@ const SEGMENTS: Segment[] = [
   },
   {
     key: "wealth", name: "Wealth management & financial advisory", img: "/finance/wealth.jpg", pos: "50% 40%",
-    summary: "Organize prospect enquiries, client relationships, appointment coordination and ongoing communication across advisory services. Investment portfolio management and regulated advisory processes may require specialist systems.",
-    title: "Keep every client's goals, conversations and follow-ups in view.",
+    summary: "Prospect enquiries, meetings and ongoing communication across advisory services. Portfolio management and regulated advisory processes stay in specialist systems.",
+    title: "Goals, meetings and follow-ups recorded against each client.",
     intro: [
-      "Financial advisory relationships develop over time. Initial enquiries lead to conversations, scheduled meetings, ongoing communication and follow-up. Maintaining clear records helps staff understand the relationship and identify the next administrative action.",
-      "EVOQ products can support customer records, relationship follow-up, service requests and internal coordination alongside specialist wealth management and investment systems.",
+      "Enquiries become meetings, and meetings become ongoing relationships. Each conversation and next step is recorded against the client.",
+      "Works alongside portfolio management and investment systems.",
     ],
     points: [
       ["Client relationships", "Maintain client details and track relationship-related follow-up."],
@@ -117,7 +117,7 @@ export function FinModels() {
             <p style={{ margin: "0 0 16px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: TEAL }}>Solutions for different financial services</p>
             <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Banking, insurance and wealth teams each manage clients differently.</h2>
           </div>
-          <p style={{ margin: 0, fontSize: 16.5, lineHeight: 1.8, color: MUTE }}>Banks, insurance providers and financial advisors serve clients in different ways. Explore the operational needs of your segment and see where EVOQ products can help.</p>
+          <p style={{ margin: 0, fontSize: 16.5, lineHeight: 1.8, color: MUTE }}>Banks, insurers and advisers handle enquiries, service and renewals differently. Choose your segment.</p>
         </div>
 
         <div className="fm-layout" style={{ marginTop: 48 }}>
