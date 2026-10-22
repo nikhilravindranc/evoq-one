@@ -41,10 +41,10 @@ const TABS: Tab[] = [
     intro: ["A visit starts with a request that is assessed, scheduled, assigned and documented. For external service providers and internal field teams."],
     img: U("1660330589827-da8ab7dd3c02"),
     challenges: [
-      "Service requests arrive through different channels, making it harder to maintain a consistent view of incoming work.",
-      "Scheduling and technician assignments require coordination across locations, priorities and availability.",
-      "Work progress and visit outcomes can be difficult to follow when service records are incomplete or scattered.",
-      "Parts, service charges and follow-up actions need to be accounted for after the job.",
+      "Requests arriving through different channels.",
+      "Technician assignments juggled across locations and priorities.",
+      "Visit outcomes missing or scattered across records.",
+      "Parts and service charges not recorded against the job.",
     ],
     improves: [
       "Open requests, assigned work and job status listed together.",
@@ -76,10 +76,10 @@ const TABS: Tab[] = [
     ],
     img: U("1732395805034-e0bf859665e5"),
     challenges: [
-      "Requests from occupants, departments and site managers are difficult to track consistently.",
-      "Responsibility for repairs and follow-up is unclear across internal staff and external contractors.",
-      "Teams lack a straightforward view of outstanding work across multiple locations.",
-      "Service history and completion records are not consistently available when recurring issues arise.",
+      "Requests from occupants, departments and site managers tracked inconsistently.",
+      "Unclear owners between internal staff and contractors.",
+      "No single list of open work across locations.",
+      "Service history missing when the same issue returns.",
     ],
     improves: [
       "Facilities requests recorded and assigned.",
@@ -111,10 +111,10 @@ const TABS: Tab[] = [
     ],
     img: U("1748256086767-8974ee677f77"),
     challenges: [
-      "Maintenance activity becomes reactive when planned work is difficult to schedule and monitor.",
-      "Equipment records and previous maintenance details are incomplete or difficult to retrieve.",
-      "Corrective repairs compete with scheduled maintenance for technician time.",
-      "Parts used during maintenance are difficult to reconcile with stock records and job requirements.",
+      "Planned work slipping, so maintenance turns reactive.",
+      "Equipment records and past repairs incomplete or hard to find.",
+      "Corrective repairs competing with scheduled maintenance for technician time.",
+      "Parts used on jobs not matched to stock records.",
     ],
     improves: [
       "Assets and their maintenance requirements listed.",
@@ -217,7 +217,7 @@ export function FsSolutions() {
           </div>
 
           <div>
-            <Label c={t.on}>Common challenges</Label>
+            <Label c={t.on}>Where jobs lose track</Label>
             <div className="fx-g2">
               {t.challenges.map((c) => (
                 <div key={c} style={{ background: "#fff", border: `1px solid ${LINE}`, borderLeft: `3px solid ${t.on}`, borderRadius: 12, padding: "16px 18px", fontSize: 14.5, lineHeight: 1.65, color: INK }}>{c}</div>
@@ -227,7 +227,7 @@ export function FsSolutions() {
 
           <div className="fx-cols">
             <div>
-              <Label c={t.on}>What improves</Label>
+              <Label c={t.on}>What changes</Label>
               <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 12 }}>
                 {t.improves.map((o) => <li key={o} style={{ display: "flex", gap: 11, fontSize: 14.5, lineHeight: 1.6, color: INK }}><Tick c={t.on} />{o}</li>)}
               </ul>
