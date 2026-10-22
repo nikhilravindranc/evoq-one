@@ -29,17 +29,17 @@ const INDUSTRIES: { name: string; tag: string; body: string; apps: string[]; img
   { name: "Education and training", tag: "Learning", body: "Manage prospective learner enquiries, course-related communications, training activities and learner support.", apps: ["CRM", "Campaigns", "Skillberry", "Desk", "Billing"], img: U("1758691737182-d42aefd6dee8") },
   { name: "Retail and e-commerce", tag: "Commerce", body: "Support customer relationships, promotional campaigns, inventory records, billing and customer service across retail operations.", apps: ["CRM", "Campaigns", "Inventory", "Billing", "Desk"], img: U("1776000680544-ebf0989a71df") },
   { name: "Logistics and transportation", tag: "Movement", body: "Manage customer relationships, coordinate project-related activities where applicable, handle billing and organize customer service requests.", apps: ["CRM", "Projects", "Billing", "Desk"], img: U("1678182451047-196f22a4143e") },
-  { name: "Financial services", tag: "Finance", body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.", apps: ["CRM", "Campaigns", "Desk"], img: U("1714974528737-3e6c7e4d11af") },
   { name: "Automotive and equipment", tag: "Mobility", body: "Manage sales enquiries, maintain customer relationships, coordinate applicable service operations, track inventory and handle billing.", apps: ["CRM", "ServiceOps", "Inventory", "Billing", "Desk"], img: U("1727893119356-1702fe921cf9") },
   { name: "Energy and utilities", tag: "Utilities", body: "Support customer relationships, coordinate applicable service and project activities, track relevant inventory and manage billing processes.", apps: ["CRM", "ServiceOps", "Projects", "Inventory", "Billing", "Desk"], img: U("1611845061243-459aad2ab56b") },
 ];
 
 const FEATURED: { name: string; tag: string; body: string; href: string; img: string }[] = [
   { name: "Healthcare", tag: "Healthcare", body: "Coordinate patient enquiries, practice operations and patient engagement with solutions tailored to healthcare providers.", href: "/solutions/healthcare", img: "/healthcare/stock/hc-cta-team.jpg" },
-  { name: "Construction, Engineering & Real Estate", tag: "Built environment", body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the needs of the industry.", href: "/solutions/construction", img: U("1778074762022-c33cc42f79ae") },
   { name: "Manufacturing", tag: "Production", body: "Address operational needs across product configuration, order management, inventory and production-related processes with relevant EVOQ products.", href: "/solutions/manufacturing", img: U("1717386255773-1e3037c81788") },
+  { name: "Construction, Engineering & Real Estate", tag: "Built environment", body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the needs of the industry.", href: "/solutions/construction", img: U("1778074762022-c33cc42f79ae") },
   { name: "Field Service, Facilities & Maintenance", tag: "Service", body: "Support service operations, work orders, asset maintenance and facility-related activities with relevant EVOQ products.", href: "/solutions/field-service", img: U("1660330589827-da8ab7dd3c02") },
   { name: "Hospitality, Travel & F&B", tag: "Hospitality", body: "Address operational needs across hospitality and related service activities with relevant EVOQ products.", href: "/solutions/hospitality", img: U("1730367019960-9906d9cbbf05") },
+  { name: "Financial Services", tag: "Finance", body: "Client enquiries logged, service requests tracked, reviews and renewals scheduled, history in front of every adviser.", href: "/solutions/finance", img: U("1714974528737-3e6c7e4d11af") },
 ];
 
 const ALL: { name: string; tag: string; body: string; img: string; href?: string }[] = [...FEATURED, ...INDUSTRIES];
