@@ -150,6 +150,7 @@ const SOLUTIONS: {
     children: [
       { name: "Patient Relationships", href: "/solutions/healthcare/crm" },
       { name: "Practice Management", href: "/solutions/healthcare/practice-management" },
+      { name: "Patient Engagement", href: "/solutions/healthcare/patient-engagement" },
     ],
   },
   {

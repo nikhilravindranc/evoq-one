@@ -11,7 +11,7 @@ const MENU = [
     href: "/solutions/healthcare/practice-management",
     active: false,
   },
-  { name: "Patient Engagement", href: "#patient-engagement", active: false },
+  { name: "Patient Engagement", href: "/solutions/healthcare/patient-engagement", active: false },
 ];
 
 export function HealthcareNav() {

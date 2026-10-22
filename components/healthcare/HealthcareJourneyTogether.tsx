@@ -125,10 +125,10 @@ const CARDS = [
     alt: "Patient using her phone",
     id: "patient-engagement",
     title: "Patient Engagement",
-    desc: "Support booking, communications, campaigns, feedback, and loyalty across the patient experience.",
-    powered: ["Appointment Booking", "Billing", "Campaigns", "Surveys", "Loyalty"],
+    desc: "Keep patients informed, understand their experience, and encourage ongoing relationships.",
+    powered: ["Campaigns", "Surveys", "Loyalty"],
     link: "Explore patient engagement",
-    href: "#patient-engagement",
+    href: "/solutions/healthcare/patient-engagement",
     tint: "bg-[#E7F7F5]",
     visual: <PeVisual />,
   },
@@ -224,6 +224,30 @@ export function HealthcareJourneyTogether() {
             <span className="mt-3 inline-flex items-center gap-3 rounded-full bg-[#F1F5F7] px-5 py-2.5 ring-1 ring-[#31465A]/8">
               <span className="text-[12.5px] font-semibold text-[#31465A]/75">A more connected patient experience.</span>
             </span>
+          </div>
+
+          {/* supporting group: smaller than the three main cards */}
+          <div className="mt-10 flex flex-col gap-5 rounded-[20px] bg-[#F1F5F7] px-6 py-5 ring-1 ring-[#31465A]/8 md:flex-row md:items-center md:justify-between md:gap-8">
+            <div className="flex items-start gap-4">
+              <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-[13px] bg-white ring-1 ring-[#31465A]/8">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2064B6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <path d="M3 10h18M8 3v4M16 3v4M7 15h4" />
+                </svg>
+              </span>
+              <div>
+                <h3 className="font-[var(--font-display)] text-[19px] font-bold leading-snug text-[#31465A]">Patient Access &amp; Payments</h3>
+                <p className="mt-1 text-[14px] font-semibold text-[#31465A]">Make appointments and payments easier to manage.</p>
+                <p className="mt-1.5 max-w-[680px] text-[13.5px] leading-[1.65] text-[#64748B]">
+                  Support key steps in the patient journey with EVOQ Booking and Billing. Help patients book appointments while giving practices tools to manage billing and payment processes associated with their services.
+                </p>
+              </div>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-2">
+              {["Booking Engine", "Billing"].map((t) => (
+                <span key={t} className="rounded-full bg-white px-3.5 py-1.5 text-[12.5px] font-semibold text-[#31465A] ring-1 ring-[#31465A]/10">{t}</span>
+              ))}
+            </div>
           </div>
 
           {/* benefits */}
