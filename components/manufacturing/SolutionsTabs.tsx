@@ -223,10 +223,10 @@ export function SolutionsTabs() {
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)", backgroundSize: "44px 44px", maskImage: "radial-gradient(70% 80% at 50% 40%, #000, transparent)", WebkitMaskImage: "radial-gradient(70% 80% at 50% 40%, #000, transparent)" }} />
       <div aria-hidden="true" style={{ position: "absolute", left: "55%", top: "28%", width: 640, height: 480, borderRadius: "50%", background: "radial-gradient(closest-side, rgba(37,99,235,.16), rgba(37,99,235,0))", filter: "blur(30px)" }} />
       <div className="mf-wrap" style={{ position: "relative" }}>
-        <div style={{ textAlign: "center", maxWidth: 780, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", margin: "0 auto" }}>
           <p style={{ margin: "0 0 14px", fontSize: 11, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: LB }}>EVOQ solutions for manufacturing</p>
-          <h2 className="mf-h2" style={{ color: "#fff" }}>Products that support the manufacturing lifecycle</h2>
-          <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: "rgba(255,255,255,.72)", maxWidth: "62ch" }}>From customer acquisition and product configuration to service delivery and financial operations, explore the EVOQ products relevant to your manufacturing requirements.</p>
+          <h2 className="mf-h2 mf-one" style={{ color: "#fff" }}>Products that support the manufacturing lifecycle</h2>
+          <p style={{ margin: "18px auto 0", fontSize: 15.5, lineHeight: 1.7, color: "rgba(255,255,255,.72)" }}>From customer acquisition and product configuration to service delivery and financial operations, explore the EVOQ products relevant to your manufacturing requirements.</p>
         </div>
 
         <div className="st-tabs" role="tablist" aria-label="Manufacturing solutions" style={{ display: "flex", gap: 4, width: "fit-content", maxWidth: "100%", margin: "36px auto 0", padding: 6, background: "#fff", borderRadius: 99, boxShadow: "0 18px 40px -20px rgba(0,0,0,.6)", overflowX: "auto", scrollbarWidth: "none" }}>

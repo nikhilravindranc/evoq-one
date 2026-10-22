@@ -105,8 +105,9 @@ function Hero() {
         <div className="mf-hero">
           <div>
             <Eyebrow>Manufacturing solutions</Eyebrow>
-            <h1 className="mf-h1">From product enquiry to the field</h1>
-            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "50ch" }}>Manufacturing extends beyond production. It involves customer relationships, product configuration, commercial operations, delivery and ongoing service. EVOQ products support the work that moves manufactured products through this lifecycle.</p>
+            <h1 className="mf-h1">Where complex products get quoted right and supported after delivery.</h1>
+            <p style={{ margin: "22px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "54ch" }}>Managing a manufactured product involves more than production. Manufacturers need to attract and qualify enquiries, handle complex product requirements, prepare accurate quotes, coordinate customer commitments and support products after delivery.</p>
+            <p style={{ margin: "16px 0 0", fontSize: 17, lineHeight: 1.7, color: ST, maxWidth: "54ch" }}>EVOQ helps manufacturers address these commercial and operational needs with products for lead management, product configuration, project coordination, inventory, billing and service.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Btn enquiry>Talk to an expert <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn>
               <Btn dark={false} href="#solutions">Explore manufacturing solutions</Btn>
@@ -138,7 +139,7 @@ function Lifecycle() {
     <Sec bg="#fff" pad="48px 0 80px" id="lifecycle">
       <Eyebrow>From enquiry to service</Eyebrow>
       <div className="mf-split2" style={{ alignItems: "end" }}>
-        <h2 className="mf-h2">One product. <span style={{ color: SL, fontWeight: 400 }}>A longer journey.</span></h2>
+        <h2 className="mf-h2">A product sale involves <span style={{ color: SL, fontWeight: 400 }}>enquiries, quotes, delivery and service.</span></h2>
         <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "58ch" }}>A manufactured product passes through commercial and operational stages before and after it reaches the customer. Each stage creates information and responsibilities that need to carry forward as the product moves toward delivery and service.</p>
       </div>
       <div className="mf-g4" style={{ marginTop: 40, rowGap: 22 }}>
@@ -182,7 +183,7 @@ function ConfigX() {
       <div className="mf-split2" style={{ alignItems: "center", gap: 48 }}>
         <div>
           <Eyebrow>Complex product selling</Eyebrow>
-          <h2 className="mf-h2">Make complexity <span style={{ color: LS, fontWeight: 400 }}>easier to sell</span></h2>
+          <h2 className="mf-h2">Configure complex products <span style={{ color: LS, fontWeight: 400 }}>and prepare accurate quotes.</span></h2>
           <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "48ch" }}>Some products involve multiple options, specifications, dimensions, materials and pricing considerations. ConfigX supports a guided configuration experience that helps sales teams visualize selections, calculate pricing and prepare quotes that reflect customer requirements.</p>
           <div style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             {steps.map(([ic, t], i) => (
@@ -217,7 +218,7 @@ function Segments() {
       <div className="mf-split2" style={{ alignItems: "end", marginBottom: 38 }}>
         <div>
           <Eyebrow>Manufacturing segments</Eyebrow>
-          <h2 className="mf-h2">Different products. Different operating needs.</h2>
+          <h2 className="mf-h2">Each type of manufacturer starts with different products.</h2>
         </div>
         <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: ST, maxWidth: "56ch" }}>Manufacturers vary in how they configure products, handle orders, coordinate delivery and support customers after the sale. Explore how EVOQ products may support the work surrounding different product types.</p>
       </div>
@@ -251,13 +252,12 @@ function Cta() {
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px)", backgroundSize: "36px 36px", maskImage: "linear-gradient(90deg, #000, rgba(0,0,0,.25))", WebkitMaskImage: "linear-gradient(90deg, #000, rgba(0,0,0,.25))" }} />
           <div className="mf-cta-box mf-cta-row" style={{ position: "relative", padding: "60px 60px 64px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 40, flexWrap: "wrap" }}>
             <div style={{ maxWidth: 700 }}>
-              <Eyebrow light>Let's look at your manufacturing operation</Eyebrow>
-              <h2 className="mf-h2" style={{ color: "#fff", maxWidth: "18ch" }}>Turn complex products into clearer operations.</h2>
-              <p style={{ margin: "18px 0 0", fontSize: 15, lineHeight: 1.7, color: CG, maxWidth: "58ch" }}>Every manufacturer has its own products, processes and customer requirements. Start with the way your operation works today and identify where EVOQ products may support the journey from enquiry to service.</p>
+              <h2 className="mf-h2" style={{ color: "#fff", maxWidth: "24ch" }}>Find the right starting point for your manufacturing operation.</h2>
+              <p style={{ margin: "18px 0 0", fontSize: 15, lineHeight: 1.7, color: CG, maxWidth: "62ch" }}>Whether you need better visibility into sales enquiries, a more consistent way to configure products and prepare quotes, or clearer coordination across customer commitments and service, the right starting point depends on your current process.</p>
+              <p style={{ margin: "14px 0 0", fontSize: 15, lineHeight: 1.7, color: CG, maxWidth: "62ch" }}>Discuss your requirements with the EVOQ team to identify which products fit your needs and where supported integrations may help.</p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, minWidth: 220 }}>
               <Btn dark={false} enquiry>Talk to an expert <Ic n="arrow" s={15} c={G} w={2.2} /></Btn>
-              <a href="/" className="mf-btn" style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", padding: "13px 22px", borderRadius: 8, fontSize: 13.5, fontWeight: 600, textDecoration: "none", color: "#fff", border: "1px solid rgba(255,255,255,.4)" }}>Explore EVOQ</a>
             </div>
           </div>
         </div>
@@ -273,7 +273,9 @@ export function ManufacturingPage() {
       <EnquiryModal />
       <style>{`
         .mf-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
-        .mf-h1{margin:14px 0 0;font-size:60px;line-height:1.04;letter-spacing:-.03em;font-weight:600;color:${G}}
+        .mf-h1{margin:14px 0 0;font-size:48px;line-height:1.04;letter-spacing:-.03em;font-weight:600;color:${G}}
+        @media (min-width:641px){.mf-root h1.mf-h1,.hs-root h1.mf-h1{font-size:42px!important}}
+        .mf-one{white-space:nowrap}
         .mf-h2{margin:0;font-size:44px;line-height:1.08;letter-spacing:-.025em;font-weight:600;color:${G}}
         .mf-hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:24px;align-items:center;padding:44px 0 64px}
         .mf-hero-visual{position:relative;height:460px}
@@ -292,7 +294,7 @@ export function ManufacturingPage() {
         .mf-pop{animation:mfPop .3s ease both}
         .mf-seg-img{transition:transform .5s ease}
         .mf-seg:hover .mf-seg-img{transform:scale(1.06)}
-        @media (max-width:1100px){.mf-g6{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-g5{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-steps{grid-template-columns:repeat(4,minmax(0,1fr))}.mf-h1{font-size:50px}.mf-h2{font-size:38px}}
+        @media (max-width:1100px){.mf-one{white-space:normal}.mf-g6{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-g5{grid-template-columns:repeat(3,minmax(0,1fr))}.mf-steps{grid-template-columns:repeat(4,minmax(0,1fr))}.mf-h1{font-size:50px}.mf-h2{font-size:38px}}
         @media (max-width:900px){.mf-hero,.mf-split2{grid-template-columns:1fr}.mf-g4{grid-template-columns:repeat(2,minmax(0,1fr))!important}.mf-g3{grid-template-columns:1fr}.mf-flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.mf-opszone{height:auto!important;display:grid;gap:14px;margin-bottom:14px}.mf-opszone>.mf-bill,.mf-opszone>.mf-n0{position:static!important;width:auto!important;height:auto!important}.mf-cfg{grid-template-columns:1fr!important}.mf-arrow{display:none}}
         @media (max-width:700px){.mf-cta-box{padding:44px 26px 48px!important}}
         @media (max-width:600px){.mf-g6,.mf-g5{grid-template-columns:repeat(2,minmax(0,1fr))}.mf-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.mf-g4{grid-template-columns:1fr!important}.mf-h1{font-size:38px}.mf-h2{font-size:30px}.mf-hero-visual{height:380px}}

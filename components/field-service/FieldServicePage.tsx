@@ -61,8 +61,8 @@ function Hero() {
         <div className="fs-hero">
           <div data-rv="0">
             <Eyebrow>Field Service · Facilities · Maintenance</Eyebrow>
-            <h1 className="fs-h1" style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Where service <span style={{ color: BLUE }}>keeps things running.</span></h1>
-            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: SOFT, maxWidth: "52ch" }}>From field service visits and facility operations to equipment maintenance, explore solutions that help teams coordinate work, resolve issues and keep essential operations moving.</p>
+            <h1 className="fs-h1" style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Where service jobs get done and <span style={{ color: BLUE }}>sites stay in service.</span></h1>
+            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: SOFT, maxWidth: "52ch" }}>Service teams handle field visits, facility requests and equipment maintenance, often across many sites. EVOQ products help assign work, track every job and keep follow-up connected.</p>
             <div style={{ marginTop: 32 }}><Cta>Talk to an expert</Cta></div>
             <div style={{ marginTop: 40, display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap", fontSize: 13.5, fontWeight: 700, color: NAVY }}>
               {[["Field service", BLUE], ["Facilities", NAVY], ["Maintenance", ORANGE]].map(([t, c]) => (
@@ -126,7 +126,7 @@ function Ecosystem() {
     <section style={{ background: PALE, padding: "96px 0 100px" }}>
       <div className="fs-wrap">
         <div className="fs-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow>The EVOQ ecosystem</Eyebrow><h2 className="fs-h2" style={h2}>Service operations, supported by the right products.</h2></div>
+          <div><Eyebrow>The EVOQ ecosystem</Eyebrow><h2 className="fs-h2" style={h2}>ServiceOps at the centre, with Desk, Inventory and Billing around it.</h2></div>
           <div>
             <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Field service, facilities management and maintenance involve more than the work order itself. Requests need to be handled, technicians need the right job information, parts must be accounted for and billable work may need to be invoiced.</p>
             <p style={{ margin: "12px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>EVOQ brings together products that address different parts of these operations, with ServiceOps at the center of service delivery.</p>
@@ -197,7 +197,7 @@ function FinalCta() {
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(15,61,117,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(15,61,117,.07) 1px, transparent 1px)", backgroundSize: "44px 44px", maskImage: "linear-gradient(90deg, #000, transparent 90%)", WebkitMaskImage: "linear-gradient(90deg, #000, transparent 90%)" }} />
           <div style={{ position: "relative", maxWidth: 580 }}>
             <Eyebrow>Take the next step</Eyebrow>
-            <h2 className="fs-h2" style={h2}>Give every service job a clearer path to completion.</h2>
+            <h2 className="fs-h2" style={h2}>Bring your jobs, sites and assets into one workflow.</h2>
             <p style={{ margin: "18px 0 28px", fontSize: 15.5, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Explore how EVOQ can support your service requests, technician scheduling, facilities work orders and equipment maintenance processes.</p>
             <Cta>Talk to an expert</Cta>
           </div>

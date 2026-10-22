@@ -358,7 +358,7 @@ export function ConstructionIndustries() {
       `}</style>
       <div className="cn-wrap">
         <p style={{ margin: "0 0 14px", fontSize: 12, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase", color: "#A2563B" }}>Industries</p>
-        <h2 style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: INK }}>Solutions by industry</h2>
+        <h2 style={{ margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: INK }}>Construction, engineering and real estate, each with its own work.</h2>
         <p style={{ margin: "14px 0 0", fontSize: 16, lineHeight: 1.7, color: MUTE, maxWidth: "62ch" }}>Explore the challenges, priorities and operational requirements specific to your industry.</p>
 
         <div className="ci-tabs-wrap">

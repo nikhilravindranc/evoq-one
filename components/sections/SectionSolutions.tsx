@@ -38,12 +38,6 @@ const INDUSTRIES: Industry[] = [
     cta: "Explore manufacturing", href: "/solutions/manufacturing",
     color: "#2563EB", deep: "#1F2933", soft: "#DBEAFE",
     cards: [{ tone: "warn", title: "Low stock · Steel sheet 2 mm", sub: "120 units · reorder flagged" }, { tone: "ok", title: "Stock updated", sub: "Order released to the floor" }] },
-  { key: "finance", tab: "Financial Services", name: "Financial Services",
-    lead: "Every client. ", accent: "Every follow-up.",
-    body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.",
-    href: "/solutions/finance", cta: "Explore financial services",
-    color: "#1B7F8C", deep: "#0B2D4F", soft: "#E7F3EE", btn: "#0B2D4F",
-    cards: [{ tone: "warn", title: "Follow-up due", sub: "Annual review call · Thursday" }, { tone: "ok", title: "Client request resolved", sub: "Statement query closed" }] },
   { key: "construction", tab: "Construction, Engineering & Real Estate", name: "Construction, Engineering & Real Estate",
     lead: "Plans, projects and ", accent: "people, in sync.",
     body: "Support project delivery, engineering coordination, property enquiries and related operations with products suited to the industry.",
@@ -62,6 +56,12 @@ const INDUSTRIES: Industry[] = [
     cta: "Explore hospitality", href: "/solutions/hospitality",
     color: "#14532D", deep: "#064E3B", soft: "#F7F1E3",
     cards: [{ tone: "info", title: "Table for 4 · 8:00 PM", sub: "Confirmed at The Terrace" }, { tone: "ok", title: "Returning guest recognised", sub: "Preferences noted at check-in" }] },
+  { key: "finance", tab: "Financial Services", name: "Financial Services",
+    lead: "Every client. ", accent: "Every follow-up.",
+    body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.",
+    href: "/solutions/finance", cta: "Explore financial services",
+    color: "#1B7F8C", deep: "#0B2D4F", soft: "#E7F3EE", btn: "#0B2D4F",
+    cards: [{ tone: "warn", title: "Follow-up due", sub: "Annual review call · Thursday" }, { tone: "ok", title: "Client request resolved", sub: "Statement query closed" }] },
   { key: "all", tab: "All industries", name: "All industries",
     lead: "One suite. ", accent: "Every industry.",
     body: "Don't see your industry? EVOQ products combine to fit how your organization works, so you can start with what you need.",
@@ -80,6 +80,32 @@ export function SectionSolutions() {
   const [active, setActive] = useState(0);
   const [stopped, setStopped] = useState(false);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const scroller = useRef<HTMLDivElement>(null);
+  const [edge, setEdge] = useState({ left: false, right: false, overflow: false });
+
+  // One row of tabs that scrolls sideways: track whether there is more to see on either side.
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const read = () => setEdge({ overflow: el.scrollWidth > el.clientWidth + 2, left: el.scrollLeft > 2, right: el.scrollLeft + el.clientWidth < el.scrollWidth - 2 });
+    read();
+    el.addEventListener("scroll", read, { passive: true });
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => { el.removeEventListener("scroll", read); ro.disconnect(); };
+  }, []);
+
+  // Keep the active tab in view (it changes on its own while auto-advancing).
+  useEffect(() => {
+    const el = scroller.current;
+    const tab = el?.querySelectorAll<HTMLElement>(".sol-tab")[active];
+    if (!el || !tab) return;
+    const pad = 12;
+    if (tab.offsetLeft - pad < el.scrollLeft) el.scrollTo({ left: tab.offsetLeft - pad, behavior: "smooth" });
+    else if (tab.offsetLeft + tab.offsetWidth + pad > el.scrollLeft + el.clientWidth) el.scrollTo({ left: tab.offsetLeft + tab.offsetWidth + pad - el.clientWidth, behavior: "smooth" });
+  }, [active]);
+
+  const nudge = (dir: -1 | 1) => scroller.current?.scrollBy({ left: dir * Math.max(220, scroller.current.clientWidth * 0.6), behavior: "smooth" });
 
   // Gentle auto-advance so the hidden industries get seen; stops for good
   // once the visitor picks one themselves.
@@ -107,6 +133,12 @@ export function SectionSolutions() {
         </div>
 
         <motion.div className="sol-tabs-wrap" {...fadeUp(0.08)}>
+          {edge.overflow && (
+            <button type="button" className="sol-arrow" aria-label="Show previous industries" disabled={!edge.left} onClick={() => nudge(-1)}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3 5 8l5 5" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+          )}
+          <div className="sol-scroll" ref={scroller}>
           <div className="sol-tabs" role="tablist" aria-label="Industries">
             {INDUSTRIES.map((s, i) => {
               const on = i === active;
@@ -124,6 +156,12 @@ export function SectionSolutions() {
               );
             })}
           </div>
+          </div>
+          {edge.overflow && (
+            <button type="button" className="sol-arrow" aria-label="Show more industries" disabled={!edge.right} onClick={() => nudge(1)}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="m6 3 5 5-5 5" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+          )}
         </motion.div>
 
         <AnimatePresence mode="wait">

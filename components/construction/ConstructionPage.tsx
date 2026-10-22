@@ -71,8 +71,8 @@ function Hero() {
         <div className="cn-hero">
           <div data-rv="0">
             <Eyebrow>Construction · Engineering · Real Estate</Eyebrow>
-            <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: CLAY }}>Where plans become places.</h1>
-            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: "#44403C", maxWidth: "50ch" }}>From engineering ideas and construction projects to the properties people buy, use and maintain, explore solutions relevant to the work behind the built environment.</p>
+            <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: CLAY }}>Where projects, clients and sites stay on track.</h1>
+            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: "#44403C", maxWidth: "50ch" }}>Construction, engineering and real estate teams manage projects, client relationships and sites over long timelines. EVOQ products help keep enquiries, project coordination, billing and follow-up connected.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Cta>Talk to an expert</Cta>
               <a href="/industries" className="cn-btn" style={{ display: "inline-flex", alignItems: "center", padding: "15px 26px", borderRadius: 4, border: `1.5px solid ${TERRA}`, color: TERRA, textDecoration: "none", fontSize: 14.5, fontWeight: 600 }}>Explore industries</a>
@@ -100,7 +100,7 @@ function Together() {
     <section id="approach" style={{ background: LSAND + "55", padding: "96px 0", borderTop: `1px solid ${LSAND}` }}>
       <div className="cn-wrap">
         <div className="cn-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow>How EVOQ products work together</Eyebrow><h2 style={h2}>Choose products around the work that matters.</h2></div>
+          <div><Eyebrow>How EVOQ products work together</Eyebrow><h2 style={h2}>How project, sales and service teams work together in EVOQ.</h2></div>
           <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: "#57534E", maxWidth: "54ch" }}>Different organizations need different combinations of products. Start with the activities that need better coordination, then identify the EVOQ products that fit those requirements.</p>
         </div>
 
@@ -152,7 +152,7 @@ function Faq() {
   return (
     <section style={{ background: "#FFFDFB", padding: "96px 0" }}>
       <div className="cn-wrap" style={{ maxWidth: 940 }}>
-        <div data-rv="0"><Eyebrow>FAQ</Eyebrow><h2 style={h2}>Questions about choosing the right solution</h2></div>
+        <div data-rv="0"><Eyebrow>FAQ</Eyebrow><h2 style={h2}>Questions about EVOQ for construction, engineering and real estate</h2></div>
         <div data-rv="1" style={{ marginTop: 40, borderTop: `1px solid ${LSAND}` }}>
           {FAQ.map(([q, a]) => (
             <details key={q} className="cn-faq" style={{ borderBottom: `1px solid ${LSAND}` }}>
@@ -176,7 +176,7 @@ function FinalCta() {
         <div className="cn-cta" data-rv="0" style={{ position: "relative", overflow: "hidden", background: LSAND, borderRadius: 6, borderLeft: `8px solid ${TERRA}`, display: "block" }}>
           <div style={{ position: "relative", padding: "56px 56px 60px", maxWidth: 700 }}>
             
-            <h2 style={h2}>Start with the work that needs attention.</h2>
+            <h2 style={h2}>Start with the project, client or site process you want to improve first.</h2>
             <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#44403C", maxWidth: "56ch" }}>Whether the priority is project coordination, client follow-ups or property service operations, identify the processes that need improvement and explore the EVOQ products that fit.</p>
             <div style={{ marginTop: 30 }}><Cta>Talk to an expert</Cta></div>
           </div>

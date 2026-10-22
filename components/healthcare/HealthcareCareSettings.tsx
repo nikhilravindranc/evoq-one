@@ -136,7 +136,7 @@ export function HealthcareCareSettings() {
                 Built for every care setting
               </p>
               <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A]">
-                Designed around the way healthcare works.
+                Built for clinics, dental, aesthetics, hospitals and diagnostics.
               </h2>
               <p className="mt-5 max-w-[720px] text-[15.5px] leading-[1.7] text-[#64748B]">
                 From medical clinics and dental practices to hospitals,

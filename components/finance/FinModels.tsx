@@ -29,7 +29,7 @@ const SEGMENTS: Segment[] = [
   {
     key: "banking", name: "Banking & lending", img: "/finance/bank.jpg", pos: "50% 40%",
     summary: "Organize customer enquiries, prospect follow-up, relationship management and service communication across banking and lending operations. Choose EVOQ products according to the processes your institution needs to support.",
-    title: "Support the relationships behind every financial service.",
+    title: "Handle customer enquiries and service requests in one place.",
     intro: [
       "Customer relationships extend beyond the initial enquiry. Prospects need timely follow-up, existing clients need responsive service, and staff need access to relevant customer information to manage ongoing interactions.",
       "EVOQ products can support customer relationship management, service requests and internal coordination alongside specialist banking and lending systems.",
@@ -62,7 +62,7 @@ const SEGMENTS: Segment[] = [
   {
     key: "wealth", name: "Wealth management & financial advisory", img: "/finance/wealth.jpg", pos: "50% 40%",
     summary: "Organize prospect enquiries, client relationships, appointment coordination and ongoing communication across advisory services. Investment portfolio management and regulated advisory processes may require specialist systems.",
-    title: "Give every client relationship the attention it requires.",
+    title: "Keep every client's goals, conversations and follow-ups in view.",
     intro: [
       "Financial advisory relationships develop over time. Initial enquiries lead to conversations, scheduled meetings, ongoing communication and follow-up. Maintaining clear records helps staff understand the relationship and identify the next administrative action.",
       "EVOQ products can support customer records, relationship follow-up, service requests and internal coordination alongside specialist wealth management and investment systems.",
@@ -115,7 +115,7 @@ export function FinModels() {
         <div className="fm-head" data-rv="0" style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,.9fr)", gap: 56, alignItems: "end", paddingBottom: 12, marginBottom: 0 }}>
           <div>
             <p style={{ margin: "0 0 16px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: TEAL }}>Solutions for different financial services</p>
-            <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Different relationships. Different operational needs.</h2>
+            <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Banking, insurance and wealth teams each manage clients differently.</h2>
           </div>
           <p style={{ margin: 0, fontSize: 16.5, lineHeight: 1.8, color: MUTE }}>Banks, insurance providers and financial advisors serve clients in different ways. Explore the operational needs of your segment and see where EVOQ products can help.</p>
         </div>

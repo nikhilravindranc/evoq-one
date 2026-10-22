@@ -91,7 +91,7 @@ function Hero() {
         <div className="fn-hero">
           <div data-rv="0">
             <p style={{ margin: "0 0 20px", display: "flex", alignItems: "center", gap: 14, fontSize: 12, fontWeight: 600, letterSpacing: ".26em", textTransform: "uppercase", color: "#5B6B80" }}><span aria-hidden="true" style={{ width: 54, height: 1.5, background: GOLD }} />Financial Services</p>
-            <h1 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.02em", fontWeight: 500, color: NAVY }}>Build stronger financial relationships.</h1>
+            <h1 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.02em", fontWeight: 500, color: NAVY }}>Where client enquiries become long-term relationships.</h1>
             <p style={{ margin: "26px 0 0", fontSize: 17, lineHeight: 1.75, color: "#475569", maxWidth: "50ch" }}>Every financial relationship involves more than a transaction. Customer enquiries, ongoing communication, service requests and internal coordination all shape the experience. EVOQ products support these activities, helping financial-services organizations manage client relationships and the work surrounding them.</p>
             <div style={{ marginTop: 34 }}><Cta pill>Talk to an expert</Cta></div>
           </div>
@@ -157,7 +157,7 @@ function FinalCta() {
         <div data-rv="0" className="fn-cta" style={{ paddingTop: 8, display: "grid", gridTemplateColumns: "minmax(0,1.1fr) minmax(0,.9fr)", gap: 64, alignItems: "end" }}>
           <div>
             <p style={{ margin: "0 0 16px", display: "flex", alignItems: "center", gap: 12, fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: TEAL }}><span aria-hidden="true" style={{ width: 28, height: 1.5, background: GOLD }} />Financial Services</p>
-            <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Let&apos;s look at how your financial services operation works.</h2>
+            <h2 style={{ margin: 0, fontFamily: SERIF, letterSpacing: "-.015em", fontWeight: 500, color: NAVY }}>Start with how your client enquiries and follow-ups work today.</h2>
           </div>
           <div>
             <p style={{ margin: "0 0 28px", fontSize: 16.5, lineHeight: 1.8, color: "#334155" }}>Explore how EVOQ products could support client relationships, service activities and internal coordination across your financial-services organization.</p>

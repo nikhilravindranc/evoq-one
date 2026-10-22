@@ -2696,16 +2696,25 @@
 .s-solutions-inner { width: 100%; max-width: 1168px; margin: 0 auto; padding: 0 80px; }
 .sol-head { text-align: left; margin-left: 0; margin-right: 0; }
 .sol-head .evoq-eyebrow { margin: 0 0 20px; }
-.sol-tabs-wrap { display: flex; justify-content: flex-start; margin-top: 0; }
-.sol-tabs {
-  display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; border-radius: 30px; background: #fff; max-width: 100%;
+.sol-tabs-wrap { display: flex; align-items: center; gap: 10px; margin-top: 0; }
+.sol-scroll {
+  flex: 1 1 auto; min-width: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; border-radius: 34px; background: #fff;
   box-shadow: 0 10px 34px -14px rgba(20,24,60,0.28), 0 0 0 1px rgba(31,36,48,0.05);
 }
-.sol-tabs::-webkit-scrollbar { display: none; }
+.sol-scroll::-webkit-scrollbar { display: none; }
+.sol-tabs { display: flex; flex-wrap: nowrap; gap: 4px; padding: 6px; width: max-content; }
+.sol-arrow {
+  flex: none; width: 42px; height: 42px; border-radius: 50%; border: 0; background: #fff; color: #1F2430; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 22px -10px rgba(20,24,60,0.35), 0 0 0 1px rgba(31,36,48,0.06); transition: opacity .18s ease, transform .18s ease;
+}
+.sol-arrow:hover:not(:disabled) { transform: scale(1.06); }
+.sol-arrow:disabled { opacity: 0.35; cursor: default; }
 .sol-tab {
-  flex-shrink: 0; padding: 11px 20px; border-radius: 999px; border: 0; background: transparent; cursor: pointer;
-  font-family: var(--font-sans); font-size: 14px; font-weight: 500; color: rgba(31,36,48,0.6);
-  text-decoration: none; white-space: nowrap; transition: background .18s ease, color .18s ease;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+  min-width: 118px; max-width: 224px; min-height: 52px; padding: 8px 22px; border-radius: 999px; border: 0; background: transparent; cursor: pointer;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 500; line-height: 1.25; color: rgba(31,36,48,0.6);
+  text-decoration: none; white-space: normal; text-wrap: balance; transition: background .18s ease, color .18s ease;
 }
 .sol-tab:hover { color: #1F2430; }
 .sol-tab.on { background: var(--sol-soft); color: var(--sol-c); font-weight: 600; }
@@ -2824,7 +2833,9 @@
 @media (max-width: 640px) {
   .s-solutions-inner { padding: 0 20px; }
   .sol-title { font-size: 25px; }
-  .sol-tab { padding: 10px 15px; font-size: 13.5px; }
+  .sol-tab { min-width: 104px; max-width: 214px; padding: 8px 14px; font-size: 13.5px; }
+  .sol-arrow { width: 36px; height: 36px; }
+  .sol-tabs-wrap { gap: 6px; }
   .sol-float.tr { display: none; }
   .sol-float.bl { left: 12px; bottom: -18px; padding: 8px 12px 8px 8px; gap: 9px; }
   .sol-float-ic { width: 24px; height: 24px; }

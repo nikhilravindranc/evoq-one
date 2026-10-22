@@ -191,7 +191,7 @@ export function HealthcareHero() {
             Healthcare Solutions
           </p>
           <h1 className="mt-4 font-[var(--font-display)] text-[26px] font-extrabold leading-[1.15] min-[420px]:text-[27px] min-[520px]:text-[36px] sm:text-[42px] lg:text-[44px] tracking-[-0.02em] text-[#31465A]">
-            Better patient relationships. More efficient healthcare operations.
+            Where patients stay and practices run smoothly.
           </h1>
           <p className="mt-5 max-w-[560px] text-[17px] leading-[1.65] text-[#64748B]">
             EVOQ helps healthcare organizations attract and retain patients,

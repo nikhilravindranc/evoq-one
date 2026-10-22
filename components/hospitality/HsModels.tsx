@@ -143,7 +143,7 @@ export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
       <div className="hs-wrap">
         <div style={{ textAlign: "center", maxWidth: 740, margin: "0 auto 44px" }} data-rv="0">
           {eyebrow}
-          <h2 style={{ margin: 0, fontFamily: SERIF, fontWeight: 400, lineHeight: 1.1, letterSpacing: "-.015em", color: INK }}>Different experiences. <em style={{ color: BOTANICAL }}>Different operational needs.</em></h2>
+          <h2 style={{ margin: 0, fontFamily: SERIF, fontWeight: 400, lineHeight: 1.1, letterSpacing: "-.015em", color: INK }}>Hotels, restaurants and <em style={{ color: BOTANICAL }}>travel companies each run differently.</em></h2>
           <p style={{ margin: "20px auto 0", fontSize: 16.5, lineHeight: 1.8, color: "#33443A", maxWidth: "58ch" }}>Hotels, restaurants and travel operators serve customers in different ways. Explore the operational needs of your industry and see where EVOQ products can help.</p>
         </div>
 

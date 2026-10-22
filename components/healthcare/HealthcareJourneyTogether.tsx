@@ -155,7 +155,7 @@ export function HealthcareJourneyTogether() {
             <div className="max-w-[720px]">
               <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#18B8D1]">A complete care journey</p>
               <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#31465A]">
-                Bring every part of the healthcare journey together.
+                Patient relationships, practice operations and engagement in one place.
               </h2>
               <p className="mt-5 text-[16.5px] leading-[1.7] text-[#64748B]">
                 Combine patient relationships, practice operations, booking, billing, and engagement so information can

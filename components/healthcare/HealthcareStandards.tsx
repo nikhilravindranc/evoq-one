@@ -126,7 +126,7 @@ export function HealthcareStandards() {
                 Interoperability, privacy &amp; healthcare standards
               </p>
               <h2 className="mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[#102A43]">
-                Designed for the realities of healthcare technology.
+                Privacy, security and integration questions to settle before you adopt.
               </h2>
               <p className="mt-5 text-[16px] leading-[1.7] text-[#31465A]/75">
                 Healthcare organizations operate within a complex environment of healthcare standards, privacy

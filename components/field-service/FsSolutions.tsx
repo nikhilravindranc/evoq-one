@@ -37,7 +37,7 @@ const TABS: Tab[] = [
     key: "field", tab: "Field service", sub: "Requests, dispatch and visits", on: BLUE, off: PALE,
     icon: "M4 17h3l2-5h6l2 5h3M7 17a2 2 0 1 0 0 .1M17 17a2 2 0 1 0 0 .1M9 12V8h6v4",
     eyebrow: "Field service management",
-    title: "Coordinate every service job, from assignment to completion.",
+    title: "Send the right technician to the right job, first time.",
     intro: ["Field service involves more than sending a technician to a location. Requests must be assessed, work scheduled, the right technician assigned and each visit documented. EVOQ ServiceOps helps external service providers and internal field teams coordinate these activities and maintain visibility into ongoing work."],
     img: U("1660330589827-da8ab7dd3c02"),
     challenges: [
@@ -69,7 +69,7 @@ const TABS: Tab[] = [
     key: "facilities", tab: "Facilities management", sub: "Requests, work orders and sites", on: NAVY, off: PALE,
     icon: "M5 21V5h9v16M14 9h5v12M8 9h3M8 13h3M8 17h3M3 21h18",
     eyebrow: "Facilities operations",
-    title: "Keep buildings and sites running as expected.",
+    title: "Log, assign and close every site request.",
     intro: [
       "Facilities operations involve a steady flow of requests, repairs, inspections and contractor assignments. Without clear ownership and consistent records, routine issues can remain unresolved and outstanding work becomes harder to oversee.",
       "EVOQ helps facilities management providers and internal facilities teams organize service requests, assign responsibilities and follow work across buildings and sites.",
@@ -104,7 +104,7 @@ const TABS: Tab[] = [
     key: "maintenance", tab: "Equipment and asset maintenance", sub: "Planned and corrective work", on: BURNT, off: POR,
     icon: "M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z",
     eyebrow: "Asset & maintenance management",
-    title: "Plan maintenance before it becomes an urgent repair.",
+    title: "Schedule servicing before assets fail.",
     intro: [
       "Equipment downtime, overdue maintenance and incomplete service histories make it harder to protect operational continuity. Maintenance teams need to know which assets require attention, what work is scheduled and what has already been done.",
       "EVOQ ServiceOps supports planned maintenance and corrective work, helping maintenance teams organize asset-related tasks, manage work orders and maintain service history.",
@@ -179,7 +179,7 @@ export function FsSolutions() {
       <div className="fs-wrap">
         <div style={{ maxWidth: 900 }} data-rv="0">
           <p style={{ margin: "0 0 14px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".22em", textTransform: "uppercase", color: BURNT }}>Solutions</p>
-          <h2 className="fs-h2" style={{ margin: 0, color: NAVY }}>Three kinds of service work. One clear way to run each.</h2>
+          <h2 className="fs-h2" style={{ margin: 0, color: NAVY }}>Field jobs, site upkeep and planned maintenance, run in one place.</h2>
           <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "70ch" }}>Whether technicians are responding to customer requests, facilities teams are resolving site issues or maintenance staff are servicing critical equipment, the work depends on clear responsibilities, timely action and reliable records.</p>
           <p style={{ margin: "10px 0 0", fontSize: 16, lineHeight: 1.8, color: INK, fontWeight: 600 }}>Explore how EVOQ supports each operating area.</p>
         </div>
