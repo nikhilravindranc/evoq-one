@@ -53,12 +53,11 @@ const INDUSTRIES: Industry[] = [
   { name: "Financial Services", short: "Financial services", icon: "bank", body: "Organize client relationships, manage follow-ups, coordinate communications and handle ongoing client service requests.", link: "Explore financial services", href: "/solutions/finance", img: U("1714974528737-3e6c7e4d11af") },
 ];
 
-/* Existing routes are /solutions/healthcare/crm and /practice-management (not the /healthcare-crm paths in the brief).
-   Patient Engagement has no page yet, so that card is not linked. */
+/* Routes: /solutions/healthcare/crm, /practice-management and /patient-engagement. */
 const HEALTHCARE: { name: string; body: string; link?: string; href?: string }[] = [
   { name: "Patient Relationships", body: "Organize patient enquiries, manage follow-ups and maintain visibility into patient relationships.", link: "Explore Patient Relationships", href: "/solutions/healthcare/crm" },
   { name: "Practice Management", body: "Coordinate appointments, patient visits and day-to-day practice activities.", link: "Explore Practice Management", href: "/solutions/healthcare/practice-management" },
-  { name: "Patient Engagement", body: "Support patient communication and engagement through relevant EVOQ products." },
+  { name: "Patient Engagement", body: "Support patient communication and engagement through relevant EVOQ products.", link: "Explore Patient Engagement", href: "/solutions/healthcare/patient-engagement" },
 ];
 
 const APPS: [string, string][] = [
@@ -157,7 +156,7 @@ function ByIndustry() {
           })}
         </div>
         <div data-rv="0" className="sl-allrow">
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "#374151" }}>Don&apos;t see your industry? EVOQ products combine to fit how your organization works. <a href="/industries" className="sl-link" style={{ fontWeight: 700, color: DEEP, textDecoration: "underline", textUnderlineOffset: 4 }}>See all industries</a></p>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "#374151" }}>Don&apos;t see your industry? EVOQ products combine to fit how your organization works.</p>
           <Btn href="/industries">Explore all industries</Btn>
         </div>
       </div>
