@@ -9,7 +9,7 @@
 Rules:
 
 1. The route folder lives under `app/products/<product>/` or `app/solutions/<industry>/`. Sub-pages nest inside it
-   (`app/products/billing/pricing/page.tsx`, `app/solutions/healthcare/crm/page.tsx`).
+   (`app/products/billing/pricing/page.tsx`, `app/solutions/healthcare/patient-relationships/page.tsx`).
 2. Folder names are lowercase kebab-case, no `evoq-` prefix: `crm`, `serviceops`, `desk`, `projects`, `inventory`, `sync`,
    `hrms`, `billing`, `ai`.
 3. **Static assets stay where they are.** Images in `public/<name>/...` keep their URLs (`/billing/images/logo.png`).

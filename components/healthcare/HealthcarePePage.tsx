@@ -362,7 +362,7 @@ function Chapters() {
 
 /* ------------------------------------------------------------------ ecosystem */
 const ECO: { title: string; body: string; href?: string; current?: boolean; tile: string; ink: string; d: string }[] = [
-  { title: "Patient Relationships", body: "Manage patient enquiries, relationship history, and follow-ups.", href: "/solutions/healthcare/crm", tile: "bg-[#E8F1FA]", ink: BLUE, d: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" },
+  { title: "Patient Relationships", body: "Manage patient enquiries, relationship history, and follow-ups.", href: "/solutions/healthcare/patient-relationships", tile: "bg-[#E8F1FA]", ink: BLUE, d: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" },
   { title: "Practice Management", body: "Coordinate appointments, visits, providers, and daily practice activity.", href: "/solutions/healthcare/practice-management", tile: "bg-[#E5F8FB]", ink: "#0E8FA5", d: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9 16l2 2 4-4" },
   { title: "Patient Access & Payments", body: "Support appointment booking and billing-related processes.", tile: "bg-[#EAEFF3]", ink: NAVY, d: "M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zM2 10h20M6 15h4" },
   { title: "Patient Engagement", body: "Use Campaigns, Surveys, and Loyalty to support communication, feedback, and retention.", current: true, tile: "bg-[#F3E8FF]", ink: P.campaigns.c, d: "M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 22l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" },

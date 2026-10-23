@@ -102,7 +102,7 @@ const CARDS = [
     desc: "Manage enquiries, referrals, patient interactions, and follow-ups throughout the relationship.",
     powered: ["Powered by EVOQ CRM"],
     link: "Explore Patient Relationships",
-    href: "/solutions/healthcare/crm",
+    href: "/solutions/healthcare/patient-relationships",
     tint: "bg-[#E8F1FA]",
     visual: <CrmVisual />,
   },

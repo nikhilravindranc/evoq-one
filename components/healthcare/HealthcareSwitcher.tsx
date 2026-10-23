@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const DESTINATIONS = [
   { key: "solutions", name: "Healthcare", desc: "Solutions for patient relationships and practice operations.", href: "/solutions/healthcare" },
-  { key: "crm", name: "Patient Relationships", desc: "Manage enquiries, referrals, conversations and follow-ups.", href: "/solutions/healthcare/crm" },
+  { key: "crm", name: "Patient Relationships", desc: "Manage enquiries, referrals, conversations and follow-ups.", href: "/solutions/healthcare/patient-relationships" },
   { key: "pm", name: "Practice Management", desc: "Coordinate appointments, providers, services and daily operations.", href: "/solutions/healthcare/practice-management" },
   { key: "engagement", name: "Patient Engagement", desc: "Campaigns, surveys and loyalty for patient communication.", href: "/solutions/healthcare/patient-engagement" },
 ] as const;

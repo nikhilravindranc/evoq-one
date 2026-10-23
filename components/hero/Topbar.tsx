@@ -148,7 +148,7 @@ const SOLUTIONS: {
     sub: "Connected care workflows",
     href: "/solutions/healthcare",
     children: [
-      { name: "Patient Relationships", href: "/solutions/healthcare/crm" },
+      { name: "Patient Relationships", href: "/solutions/healthcare/patient-relationships" },
       { name: "Practice Management", href: "/solutions/healthcare/practice-management" },
       { name: "Patient Engagement", href: "/solutions/healthcare/patient-engagement" },
     ],
@@ -158,10 +158,10 @@ const SOLUTIONS: {
     sub: "From enquiry to the field",
     href: "/solutions/manufacturing",
   },
-  { name: "Construction, Engineering & Real Estate", sub: "Projects, technical work and property", href: "/solutions/construction", icon: "building" },
-  { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "/solutions/field-service", icon: "wrench" },
-  { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "/solutions/hospitality", icon: "hotel" },
-  { name: "Financial Services", sub: "Clients, follow-ups and service", href: "/solutions/finance", icon: "bank" },
+  { name: "Construction, Engineering & Real Estate", sub: "Projects, technical work and property", href: "/solutions/construction-engineering-real-estate", icon: "building" },
+  { name: "Field Service, Facilities & Maintenance", sub: "Dispatch, assets and upkeep", href: "/solutions/field-service-facilities-maintenance", icon: "wrench" },
+  { name: "Hospitality, Travel & F&B", sub: "Guests, bookings and service", href: "/solutions/hospitality-travel-food-and-beverage", icon: "hotel" },
+  { name: "Financial Services", sub: "Clients, follow-ups and service", href: "/solutions/financial-services", icon: "bank" },
   { name: "All industries", sub: "One suite, every industry", href: "/industries", icon: "grid" },
 ];
 
