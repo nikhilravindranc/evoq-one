@@ -2,13 +2,13 @@
    with its sample data. Sizes are the cropped pixel size of each file. */
 
 const SIZE: Record<string, [number, number]> = {
-  leads: [800, 530],
-  "lead-record": [800, 530],
-  pipeline: [800, 530],
-  "deal-record": [800, 530],
-  "deal-products": [800, 592],
-  tasks: [800, 530],
-  dashboard: [800, 592],
+  leads: [745, 478],
+  "lead-record": [800, 500],
+  pipeline: [765, 478],
+  "deal-record": [765, 478],
+  "deal-products": [612, 478],
+  tasks: [765, 478],
+  dashboard: [765, 478],
 };
 
 const css = `
