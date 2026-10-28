@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Easing } from "framer-motion";
-import { EviVisual } from "./EviVisual";
+import { AiFrames } from "./AiFrames";
 import { ArrowRt } from "./shared";
 
 const fadeUp = (delay = 0) => ({
@@ -38,9 +38,9 @@ export function SectionAI() {
               </a>
             </motion.div>
 
-            {/* EVOQ AI home screen with the app orbit, EVI mascot and follow-up agent card */}
+            {/* EVOQ AI home, then the same agent inside CRM, ServiceOps and Billing */}
             <motion.div className="ai-right" {...fadeUp(0.08)}>
-              <EviVisual />
+              <AiFrames />
             </motion.div>
           </div>
         </div>

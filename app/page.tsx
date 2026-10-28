@@ -2,8 +2,9 @@ import { HeroSection } from "@/components/hero/HeroSection";
 import { SectionPlatform } from "@/components/sections/SectionPlatform";
 import { SectionSolutions } from "@/components/sections/SectionSolutions";
 import { SectionAI } from "@/components/sections/SectionAI";
-import { SectionContext } from "@/components/sections/SectionContext";
-import { SectionImpact } from "@/components/sections/SectionImpact";
+import { SectionWorkContext } from "@/components/sections/SectionWorkContext";
+import { SectionIntegrations } from "@/components/sections/SectionIntegrations";
+import { SectionProof } from "@/components/sections/SectionProof";
 import { SectionCTA } from "@/components/sections/SectionCTA";
 import { Footer } from "@/components/sections/Footer";
 import { pageMeta, PageJsonLd } from "@/lib/seo";
@@ -16,11 +17,12 @@ export default function Home() {
       <PageJsonLd path="/" />
     <main className="min-h-screen bg-white">
       <HeroSection />
-      <SectionContext />
       <SectionPlatform />
       <SectionSolutions />
+      <SectionWorkContext />
       <SectionAI />
-      <SectionImpact />
+      <SectionIntegrations />
+      <SectionProof />
       <SectionCTA />
       <Footer />
     </main>

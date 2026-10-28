@@ -121,7 +121,7 @@ export function ProductsPage() {
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ Products" segments={["Growth (CRM, Campaigns, ConfigX)", "Operations (ServiceOps, Projects, Desk)", "People (HRMS, Skillberry)", "Finance (Billing, Inventory)", "Platform (Sync)", "EVOQ AI", "Not sure yet"]} segmentLabel="Area of interest" placeholder="Tell us what you would like to improve or connect..." accent={DEEP} accentSoft={P} />
       <style>{`
-        .pd-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .pd-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .pd-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:56px 0 84px}
         .pd-vis{min-width:0}
         .pd-row{display:grid;grid-template-columns:260px minmax(0,1fr);gap:40px;padding:38px 0}

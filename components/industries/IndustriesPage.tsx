@@ -155,7 +155,7 @@ export function IndustriesPage() {
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ Solutions" segments={["Professional services", "Wholesale and distribution", "Education and training", "Retail and e-commerce", "Logistics and transportation", "Financial services", "Automotive and equipment", "Energy and utilities", "Another industry"]} segmentLabel="Your industry" placeholder="Tell us about your processes and what you would like to support..." accent={DEEP} accentSoft={SAPPHIRE} />
       <style>{`
-        .in-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .in-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .in-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:48px 0 84px}
         .in-mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:230px 230px;gap:14px}
         .in-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:44px}

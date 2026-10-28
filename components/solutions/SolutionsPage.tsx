@@ -254,7 +254,7 @@ export function SolutionsPage() {
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ Solutions" segments={["Healthcare", "Manufacturing", "Construction, Engineering & Real Estate", "Field Service, Facilities & Maintenance", "Hospitality, Travel & F&B", "Financial Services", "Another industry"]} segmentLabel="Your industry" placeholder="Tell us about your processes and what you would like to support..." accent={DEEP} accentSoft={SAPPHIRE} />
       <style>{`
-        .sl-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .sl-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .sl-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:46px 0 84px}
         .sl-mosaic{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(2,160px);gap:12px}
         .sl-tile{position:relative;border-radius:16px;box-shadow:0 22px 44px -26px rgba(30,58,138,.55);border:3px solid #fff}

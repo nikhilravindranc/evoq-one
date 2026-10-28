@@ -70,7 +70,7 @@ function IconTile({ name, bg = TINT, color = P, size = 44 }: { name: string; bg?
 function Styles() {
   return (
     <style>{`
-      .fx-wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+      .fx-wrap{max-width:1320px;margin:0 auto;padding:0 20px}
       .fx-h2{font-size:38px;font-weight:600;line-height:1.12;letter-spacing:-.02em;margin:0}
       .fx-bento{display:grid;gap:18px;grid-template-columns:repeat(4,minmax(0,1fr))}
       .fx-g2{display:grid;gap:18px;grid-template-columns:repeat(2,minmax(0,1fr))}

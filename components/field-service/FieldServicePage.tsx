@@ -218,7 +218,7 @@ export function FieldServicePage() {
         .hs-root .fs-h2{font-size:40px!important;font-weight:600!important;letter-spacing:-.02em!important;line-height:1.18!important;text-wrap:balance}
         .hs-root .fs-h3{font-size:30px!important;font-weight:600!important;letter-spacing:-.015em!important;line-height:1.22!important;text-wrap:balance}
         .hs-root .fs-h3s{font-size:22px!important;font-weight:700!important;letter-spacing:-.01em!important;line-height:1.25!important}
-        .fs-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .fs-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .fs-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:52px 0 88px}
         .fs-hero-vis{position:relative;height:500px}
         .fs-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}

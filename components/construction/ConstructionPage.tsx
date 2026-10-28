@@ -198,7 +198,7 @@ export function ConstructionPage() {
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ Construction, Engineering & Real Estate" segments={["Construction companies and contractors", "Engineering firms", "Real estate agencies and developers", "Property and facilities management", "Other"]} segmentLabel="Your business" placeholder="Projects, enquiries, service requests, billing..." accent={CLAY} accentSoft={TERRA} />
       <style>{`
-        .cn-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .cn-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .cn-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:46px 0 72px}
         .cn-hero-vis{position:relative;height:460px}
         .cn-root{display:flex;justify-content:center}

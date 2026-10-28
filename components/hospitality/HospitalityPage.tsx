@@ -110,7 +110,7 @@ export function HospitalityPage() {
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ Hospitality" segments={["Hotels & resorts", "Restaurants & cafés", "Travel & tour operators", "Other hospitality business"]} segmentLabel="What type of business do you run?" placeholder="Bookings, guest enquiries, requests, follow-up..." accent={FOREST} accentSoft={BOTANICAL} />
       <style>{`
-        .hs-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .hs-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .hs-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:40px;align-items:center;padding:52px 0 84px}
         .hs-hero-vis{position:relative;height:540px}
         .hs-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:end}

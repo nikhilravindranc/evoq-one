@@ -271,7 +271,7 @@ export function ManufacturingPage() {
       <MfMotion />
       <EnquiryModal />
       <style>{`
-        .mf-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .mf-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .mf-h1{margin:14px 0 0;font-size:48px;line-height:1.04;letter-spacing:-.03em;font-weight:600;color:${G}}
         @media (min-width:641px){.mf-root h1.mf-h1,.hs-root h1.mf-h1{font-size:37px!important}}
         .mf-one{white-space:nowrap}

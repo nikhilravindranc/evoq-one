@@ -24,7 +24,7 @@ const INK = "#1F2430";
 const APPS: { key: string; name: string; x: number; y: number }[] = [
   { key: "crm", name: "CRM", x: 880, y: 17 },
   { key: "serviceops", name: "ServiceOps", x: 1075, y: 30 },
-  { key: "projects", name: "Projects", x: 1252, y: 75 },
+  { key: "billing", name: "Billing", x: 1252, y: 75 },
   { key: "desk", name: "Desk", x: 1400, y: 162 },
   { key: "sync", name: "Sync", x: 1492, y: 305 },
 ];
@@ -39,7 +39,7 @@ const ROWS: { kind: "ok" | "warn"; text: string; at: number }[] = [
   { kind: "warn", text: "1 requires approval", at: 5.9 },
 ];
 
-const I = {
+export const I = {
   home: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
   layers: "M12 3 2 8l10 5 10-5-10-5zM2 12.5l10 5 10-5M2 16.5l10 5 10-5",
   grid: "M4 4h6.5v6.5H4zM13.5 4H20v6.5h-6.5zM4 13.5h6.5V20H4zM13.5 13.5H20V20h-6.5z",
@@ -55,14 +55,14 @@ const I = {
   rocket: "M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M14 4c3-1 6-1 6-1s0 3-1 6l-7 7-5-5zM9 10H5l3-3h4M14 15v4l3-3v-4",
   arrow: "M5 12h14M13 6l6 6-6 6",
 };
-function Ic({ d, size, color = INDIGO, w = 1.9, style }: { d: string; size: number; color?: string; w?: number; style?: CSSProperties }) {
+export function Ic({ d, size, color = INDIGO, w = 1.9, style }: { d: string; size: number; color?: string; w?: number; style?: CSSProperties }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round" aria-hidden style={style}>
       <path d={d} />
     </svg>
   );
 }
-function Star({ x, y, s, color }: { x: number; y: number; s: number; color: string }) {
+export function Star({ x, y, s, color }: { x: number; y: number; s: number; color: string }) {
   return (
     <svg className="evi-star" width={s} height={s} viewBox="0 0 24 24" aria-hidden style={{ position: "absolute", left: x - s / 2, top: y - s / 2 }}>
       <path d="M12 0c.9 6.6 5.4 11.1 12 12-6.6.9-11.1 5.4-12 12-.9-6.6-5.4-11.1-12-12 6.6-.9 11.1-5.4 12-12z" fill={color} />

@@ -175,7 +175,7 @@ export function FinancePage() {
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ Financial Services" segments={["Banking & lending", "Insurance & brokerages", "Wealth management & financial advisory", "Other financial services"]} segmentLabel="Your organization" placeholder="Client enquiries, service requests, follow-up, communications..." accent={NAVY} accentSoft={TEAL} />
       <style>{`
-        .fn-wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+        .fn-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .fn-hero{max-width:560px;padding:84px 0 56px}
         .fn-heroimg{position:absolute;top:0;right:0;bottom:0;width:64%;background-size:cover;background-position:40% 45%}
         .fn-heroshade{position:absolute;inset:0;background:linear-gradient(90deg,#F7F9FB 0%,rgba(247,249,251,.88) 8%,rgba(247,249,251,.4) 20%,rgba(247,249,251,0) 38%),linear-gradient(0deg,rgba(247,249,251,.9) 0%,rgba(247,249,251,0) 28%)}
