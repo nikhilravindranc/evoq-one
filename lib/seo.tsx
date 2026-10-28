@@ -72,6 +72,9 @@ export const PAGES: Record<string, Page> = {
   "/solutions/manufacturing": P("EVOQ for Manufacturing — Consistent quotes, service that follows the product", "Manage the commercial and operational work around your products, from complex configuration and quoting to delivery and service.", "Manufacturing", "solution"),
 
   "/privacy-policy": P("Privacy Policy — EVOQ", "Read how EVOQ collects, uses, discloses and protects your information, how long we keep it, and the rights you have over your data.", "Privacy Policy", "legal"),
+  "/walkthroughs/crm": P("EVOQ CRM walkthrough — How it works", "Explore how EVOQ CRM works, the capabilities it offers and the tasks it supports, from capturing leads to forecasting revenue.", "CRM walkthrough", "web"),
+  "/scenarios/enquiry-to-invoice": P("Example scenario: from enquiry to invoice — EVOQ", "Follow one example process from a new enquiry to a paid invoice and see how EVOQ CRM and Billing share the same record. Illustrative example.", "Enquiry to invoice scenario", "web"),
+  "/previews/crm": P("EVOQ CRM application preview — Key screens", "Get a closer look at the EVOQ CRM interface: the pipeline, contact records and analytics screens, and what each one shows.", "CRM preview", "web"),
   "/cookie-policy": P("Cookie Policy — EVOQ", "Learn what cookies are, which types EVOQ uses, how third-party cookies work and how to manage your cookie choices.", "Cookie Policy", "legal"),
   "/cookie-preferences": P("Cookie Preferences — EVOQ", "Manage your cookie choices for EVOQ. See the types of cookies we use, how we use them and how to change your consent.", "Cookie Preferences", "legal"),
 };

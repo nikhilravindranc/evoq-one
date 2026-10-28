@@ -10,20 +10,20 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as Easing },
 });
 
-/* Tools EVOQ connects to, from the /integrations directory. Logos are the real
-   third-party marks already in /public. */
-const TOOLS: { name: string; logo: string }[] = [
-  { name: "Gmail", logo: "/site/images/logos-gmail.svg" },
-  { name: "Slack", logo: "/site/images/logos-slack.svg" },
-  { name: "Microsoft 365", logo: "/site/images/logos-microsoft365.svg" },
-  { name: "QuickBooks", logo: "/site/images/logos-quickbooks.svg" },
-  { name: "Stripe", logo: "/site/images/logos-stripe.svg" },
-  { name: "Shopify", logo: "/site/images/logos-shopify.svg" },
-  { name: "WooCommerce", logo: "/site/images/logos-woocommerce.svg" },
-  { name: "Zendesk", logo: "/site/images/logos-zendesk.svg" },
-  { name: "NetSuite", logo: "/site/images/logos-netsuite.png" },
-  { name: "Google Analytics", logo: "/logos/integrations/googleanalytics.svg" },
-  { name: "Make", logo: "/site/images/logos-make.svg" },
+/* Third-party tools listed in the /integrations directory; logos are the real marks in /public. */
+
+const TOOLS: { slug: string; name: string; logo: string }[] = [
+  { slug: "gmail", name: "Gmail", logo: "/site/images/logos-gmail.svg" },
+  { slug: "slack", name: "Slack", logo: "/site/images/logos-slack.svg" },
+  { slug: "microsoft-365", name: "Microsoft 365", logo: "/site/images/logos-microsoft365.svg" },
+  { slug: "quickbooks", name: "QuickBooks", logo: "/site/images/logos-quickbooks.svg" },
+  { slug: "stripe", name: "Stripe", logo: "/site/images/logos-stripe.svg" },
+  { slug: "shopify", name: "Shopify", logo: "/site/images/logos-shopify.svg" },
+  { slug: "woocommerce", name: "WooCommerce", logo: "/site/images/logos-woocommerce.svg" },
+  { slug: "zendesk", name: "Zendesk", logo: "/site/images/logos-zendesk.svg" },
+  { slug: "netsuite", name: "NetSuite", logo: "/site/images/logos-netsuite.png" },
+  { slug: "google-analytics", name: "Google Analytics", logo: "/logos/integrations/googleanalytics.svg" },
+  { slug: "make", name: "Make", logo: "/site/images/logos-make.svg" },
 ];
 
 export function SectionIntegrations() {
@@ -36,20 +36,24 @@ export function SectionIntegrations() {
             Works with the tools you <span className="accent">already use.</span>
           </h2>
           <p className="evoq-sub">
-            Connect EVOQ to your accounting, commerce, messaging and productivity tools, so data
-            flows both ways without re-entry.
+            EVOQ applications share records with each other, connect to supported third-party tools, and
+            exchange data with your existing systems through Sync.
           </p>
         </motion.div>
 
-        <motion.ul className="int-grid" {...fadeUp(0.08)}>
+        <motion.ul className="int-grid" {...fadeUp(0.06)}>
           {TOOLS.map((t) => (
-            <li key={t.name} className="int-tile">
+            <li key={t.slug} className="int-tile">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={t.logo} alt="" width={40} height={40} loading="lazy" />
               <span>{t.name}</span>
             </li>
           ))}
         </motion.ul>
+
+        <motion.p className="int-note" {...fadeUp(0.12)}>
+          Connecting a tool does not give AI agents access to it. Agents only use the data and actions you permit.
+        </motion.p>
 
         <motion.a href="/integrations" className="int-link" {...fadeUp(0.14)}>
           <span>See all integrations</span>

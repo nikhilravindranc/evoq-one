@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Easing } from "framer-motion";
-import { AiFrames } from "./AiFrames";
+import { AiSequence } from "./AiSequence";
 import { ArrowRt } from "./shared";
 
 const fadeUp = (delay = 0) => ({
@@ -23,24 +23,25 @@ export function SectionAI() {
                 whole left side reads as one block next to the visual,
                 matching the reference layout. */}
             <motion.div className="ai-copy" {...fadeUp(0.04)}>
-              <h2 className="evoq-h2">AI built into the work you already do</h2>
-              <p className="lead">
-                EVOQ brings AI into the products your teams already use.
-              </p>
+              <h2 className="evoq-h2">AI that works with your applications.</h2>
               <p className="body">
-                EVI answers questions and takes action across your apps. AI agents
-                handle multi-step tasks, like preparing a customer follow-up or
-                flagging invoices that need attention.
+                EVI helps you find information, understand activity and prepare next steps using the
+                EVOQ applications and supported integrations available to it. AI agents can prepare
+                defined tasks and carry out supported actions with the required approval.
               </p>
+              <dl className="ai-defs">
+                <div><dt>EVI</dt><dd>The assistant you ask in plain language, inside your applications.</dd></div>
+                <div><dt>AI agents</dt><dd>Carry out defined tasks, such as preparing follow-ups, with approval where required.</dd></div>
+              </dl>
               <a href="/products/ai" className="ai-cta">
                 <span>Explore EVOQ AI</span>
                 <span className="ic"><ArrowRt size={11} color="#fff" /></span>
               </a>
             </motion.div>
 
-            {/* EVOQ AI home, then the same agent inside CRM, ServiceOps and Billing */}
+            {/* One illustrative request: request, context, prepared action, result */}
             <motion.div className="ai-right" {...fadeUp(0.08)}>
-              <AiFrames />
+              <AiSequence />
             </motion.div>
           </div>
         </div>

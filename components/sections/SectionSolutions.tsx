@@ -21,6 +21,7 @@ type FloatCard = { tone: Tone; title: string; sub: string };
 type FeedRow = { tag: string; text: string; sub: string; tone: Tone; who: number };
 type Industry = {
   key: string; tab: string; name: string;
+  problem: string;
   lead: string; accent: string; body: string;
   uses: [string, string[]][];
   feedTitle: string; feed: FeedRow[];
@@ -41,6 +42,7 @@ const PRODUCT_ICON: Record<string, string> = {
 
 const INDUSTRIES: Industry[] = [
   { key: "healthcare", tab: "Healthcare", name: "Healthcare",
+    problem: "Referrals, bookings, reminders and patient feedback sit in separate tools, so follow-ups get missed.",
     lead: "From referral to return visit, ", accent: "every step has an owner.",
     body: "Referrals reach the first appointment, follow-ups go out on schedule, and patients are asked how their visit went. Providers and the front desk work from the same patient history.",
     uses: [
@@ -63,6 +65,7 @@ const INDUSTRIES: Industry[] = [
     cta: "Explore healthcare", href: "/solutions/healthcare",
     color: "#0F766E", deep: "#123B3A", soft: "#DDF5F0" },
   { key: "manufacturing", tab: "Manufacturing", name: "Manufacturing",
+    problem: "Quotes, orders, stock and service records live in different systems, so each team re-checks the same product details.",
     lead: "From configured quote to service call, ", accent: "the record travels with the product.",
     body: "Requirements are captured at enquiry, quotes follow the selected configuration, delivery commitments are confirmed, and service visits start from the product's history.",
     uses: [
@@ -84,51 +87,8 @@ const INDUSTRIES: Industry[] = [
     hl: { tone: "ok", title: "Service history attached", sub: "Modular desk · installed Oct 9" },
     cta: "Explore manufacturing", href: "/solutions/manufacturing",
     color: "#2563EB", deep: "#1F2933", soft: "#DBEAFE" },
-  { key: "construction", tab: "Construction, Engineering & Real Estate", name: "Construction, Engineering & Real Estate",
-    lead: "From bid to handover, ", accent: "site progress, client commitments and billing line up.",
-    body: "Bids and property enquiries are followed through project delivery. Milestones, client commitments and invoices are tracked together, and service continues after handover.",
-    uses: [
-      ["Bids and property enquiries followed up", ["CRM", "Campaigns"]],
-      ["Tasks, owners and milestones tracked", ["Projects"]],
-      ["Stock and invoices tied to the project", ["Inventory", "Billing"]],
-      ["Service after handover", ["ServiceOps"]],
-    ],
-    feedTitle: "Riverside Block B",
-    feed: [
-      { tag: "Projects", text: "64% complete", sub: "Next: MEP sign-off · Oct 21", tone: "info", who: 0 },
-      { tag: "Billing", text: "Phase 2 invoice raised", sub: "Milestone completed", tone: "ok", who: 2 },
-      { tag: "CRM", text: "Client follow-up", sub: "Quote sent to Nova Residences", tone: "info", who: 3 },
-      { tag: "Inventory", text: "Cable tray delivery", sub: "Arrives Oct 18", tone: "info", who: 1 },
-      { tag: "Projects", text: "Snag list", sub: "4 items assigned", tone: "warn", who: 1 },
-    ],
-    roles: [{ role: "Project manager", img: FACE("1646227655685-a530813759b3") }, { role: "Site engineer", img: FACE("1672748341520-6a839e6c05bb") }, { role: "Estimator", img: FACE("1564564295391-7f24f26f568b") }, { role: "Client", img: FACE("1519085360753-af0119f7cbe7") }],
-    agent: { name: "Milestone agent", task: "Flagged MEP sign-off due Oct 21 and drafted the client update", status: "Ready for review", line: "Milestone agent flags upcoming sign-offs and drafts the client update, then waits for your review." },
-    hl: { tone: "ok", title: "Phase 2 handed to the client", sub: "Handover recorded" },
-    cta: "Explore construction", href: "/solutions/construction-engineering-real-estate",
-    color: "#B4533C", deep: "#7C2D1F", soft: "#E8D8BF" },
-  { key: "field-service", tab: "Field Service, Facilities & Maintenance", name: "Field Service, Facilities & Maintenance",
-    lead: "Requests, technicians, parts and invoices, ", accent: "on the same job.",
-    body: "Service requests are logged and assigned, technicians see the job on mobile, parts are recorded, and the invoice is raised when the job closes. Planned maintenance runs alongside reactive work.",
-    uses: [
-      ["Requests logged from every channel", ["Desk"]],
-      ["Technicians dispatched and jobs tracked", ["ServiceOps"]],
-      ["Parts recorded against the job", ["Inventory"]],
-      ["Invoices raised on completion", ["Billing"]],
-    ],
-    feedTitle: "Today's jobs",
-    feed: [
-      { tag: "ServiceOps", text: "Technician en route", sub: "Arjun · ETA 12 min", tone: "info", who: 1 },
-      { tag: "Desk", text: "Request logged", sub: "Level 3 · water leak", tone: "warn", who: 3 },
-      { tag: "Inventory", text: "Parts used on WO-1042", sub: "2 filters recorded", tone: "ok", who: 1 },
-      { tag: "Billing", text: "Work order closed", sub: "Invoice raised", tone: "ok", who: 0 },
-      { tag: "ServiceOps", text: "Pump 2 servicing", sub: "Planned · due Friday", tone: "info", who: 2 },
-    ],
-    roles: [{ role: "Dispatcher", img: FACE("1744301062835-b5b8fd23251b") }, { role: "Technician", img: FACE("1787672357797-f5fa35bb0d18") }, { role: "Facilities manager", img: FACE("1688841747582-41097036109d") }, { role: "Customer", img: FACE("1651684215020-f7a5b6610f23") }],
-    agent: { name: "Dispatch agent", task: "Prepared a dispatch plan for 6 open jobs", status: "Waiting for approval", line: "Dispatch agent prepares a dispatch plan for open jobs, then waits for your approval." },
-    hl: { tone: "info", title: "6 technicians on the road", sub: "34 jobs today" },
-    cta: "Explore field service", href: "/solutions/field-service-facilities-maintenance",
-    color: "#1777F0", deep: "#0F3D75", soft: "#DBEAFE" },
   { key: "hospitality", tab: "Hospitality, Travel & F&B", name: "Hospitality, Travel & F&B",
+    problem: "Reservations, guest preferences and feedback are split across systems, so each team meets the guest without their history.",
     lead: "From reservation to repeat visit, ", accent: "the guest is known to every team.",
     body: "Reservations are confirmed, guest requests and preferences are recorded, and follow-up goes out after every visit. Hotels, restaurants and travel operators each start from what they need.",
     uses: [
@@ -150,7 +110,31 @@ const INDUSTRIES: Industry[] = [
     hl: { tone: "info", title: "24 arrivals today", sub: "38 covers booked tonight" },
     cta: "Explore hospitality", href: "/solutions/hospitality-travel-food-and-beverage",
     color: "#14532D", deep: "#064E3B", soft: "#F7F1E3" },
+  { key: "field-service", tab: "Field Service, Facilities & Maintenance", name: "Field Service, Facilities & Maintenance",
+    problem: "Requests, schedules, parts and invoices are tracked separately, so jobs stall between dispatch and billing.",
+    lead: "Requests, technicians, parts and invoices, ", accent: "on the same job.",
+    body: "Service requests are logged and assigned, technicians see the job on mobile, parts are recorded, and the invoice is raised when the job closes. Planned maintenance runs alongside reactive work.",
+    uses: [
+      ["Requests logged from every channel", ["Desk"]],
+      ["Technicians dispatched and jobs tracked", ["ServiceOps"]],
+      ["Parts recorded against the job", ["Inventory"]],
+      ["Invoices raised on completion", ["Billing"]],
+    ],
+    feedTitle: "Today's jobs",
+    feed: [
+      { tag: "ServiceOps", text: "Technician en route", sub: "Arjun · ETA 12 min", tone: "info", who: 1 },
+      { tag: "Desk", text: "Request logged", sub: "Level 3 · water leak", tone: "warn", who: 3 },
+      { tag: "Inventory", text: "Parts used on WO-1042", sub: "2 filters recorded", tone: "ok", who: 1 },
+      { tag: "Billing", text: "Work order closed", sub: "Invoice raised", tone: "ok", who: 0 },
+      { tag: "ServiceOps", text: "Pump 2 servicing", sub: "Planned · due Friday", tone: "info", who: 2 },
+    ],
+    roles: [{ role: "Dispatcher", img: FACE("1744301062835-b5b8fd23251b") }, { role: "Technician", img: FACE("1787672357797-f5fa35bb0d18") }, { role: "Facilities manager", img: FACE("1688841747582-41097036109d") }, { role: "Customer", img: FACE("1651684215020-f7a5b6610f23") }],
+    agent: { name: "Dispatch agent", task: "Prepared a dispatch plan for 6 open jobs", status: "Waiting for approval", line: "Dispatch agent prepares a dispatch plan for open jobs, then waits for your approval." },
+    hl: { tone: "info", title: "6 technicians on the road", sub: "34 jobs today" },
+    cta: "Explore field service", href: "/solutions/field-service-facilities-maintenance",
+    color: "#1777F0", deep: "#0F3D75", soft: "#DBEAFE" },
   { key: "finance", tab: "Financial Services", name: "Financial Services",
+    problem: "Enquiries, service requests and renewals arrive through different channels, so clients have to repeat themselves.",
     lead: "Enquiries, service requests and renewals, ", accent: "answered in turn.",
     body: "Client enquiries are logged, service requests are assigned and closed, and reviews and renewals are scheduled. Every adviser sees the same conversation history.",
     uses: [
@@ -173,6 +157,7 @@ const INDUSTRIES: Industry[] = [
     href: "/solutions/financial-services", cta: "Explore financial services",
     color: "#1B7F8C", deep: "#0B2D4F", soft: "#E7F3EE", btn: "#0B2D4F" },
   { key: "all", tab: "All industries", name: "All industries",
+    problem: "Most businesses run on a mix of tools that do not share records.",
     lead: "Start with the products your industry needs, ", accent: "add the rest as it grows.",
     body: "EVOQ has dedicated solutions for six industries, and its products combine to fit the rest. Choose what your operation needs first.",
     uses: [
@@ -225,7 +210,7 @@ function FitStage({ children }: { children: React.ReactNode }) {
 }
 
 /* Smallest width at which each tab label wraps to two lines at most (measured at 14px, weight 600, plus padding). */
-const TAB_W: Record<string, number> = { healthcare: 103, manufacturing: 127, construction: 200, "field-service": 181, hospitality: 113, finance: 88, all: 96 };
+const TAB_W: Record<string, number> = { healthcare: 103, manufacturing: 127, "field-service": 181, hospitality: 113, finance: 88, all: 96 };
 
 export function SectionSolutions() {
   const [active, setActive] = useState(0);
@@ -327,6 +312,7 @@ export function SectionSolutions() {
           >
             <div className="sol-copy">
               <p className="sol-name">{x.name}</p>
+              <p className="sol-problem">{x.problem}</p>
               <h3 className="sol-title">
                 {keep(x.lead)}<span style={{ color: x.color }}>{keep(x.accent)}</span>
               </h3>
@@ -382,7 +368,7 @@ export function SectionSolutions() {
                 <div className="sx-feed">
                   <div className="sx-feed-h">
                     <b>{x.feedTitle}</b>
-                    <span className="sx-live"><i />Live</span>
+                    <span className="sx-example">Example scenario</span>
                   </div>
                   {x.feed.map((r) => (
                     <div key={r.text} className="sx-row">
@@ -405,7 +391,7 @@ export function SectionSolutions() {
                 </svg>
 
                 <motion.div className="sx-hl" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}>
-                  <span className="sx-hl-k">Result</span>
+                  <span className="sx-hl-k">In this example</span>
                   <span className={`sol-float-ic ${x.hl.tone}`}>
                       {x.hl.tone === "ok" && <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.4l3 3 6-6.4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       {x.hl.tone === "warn" && <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 4.5v4.2M8 11.2v.3" stroke="#fff" strokeWidth="2" strokeLinecap="round" /></svg>}

@@ -4,7 +4,7 @@ import { SectionSolutions } from "@/components/sections/SectionSolutions";
 import { SectionAI } from "@/components/sections/SectionAI";
 import { SectionWorkContext } from "@/components/sections/SectionWorkContext";
 import { SectionIntegrations } from "@/components/sections/SectionIntegrations";
-import { SectionProof } from "@/components/sections/SectionProof";
+import { SectionWalkthroughs } from "@/components/sections/SectionWalkthroughs";
 import { SectionCTA } from "@/components/sections/SectionCTA";
 import { Footer } from "@/components/sections/Footer";
 import { pageMeta, PageJsonLd } from "@/lib/seo";
@@ -18,11 +18,11 @@ export default function Home() {
     <main className="min-h-screen bg-white">
       <HeroSection />
       <SectionPlatform />
+      <SectionAI />
       <SectionSolutions />
       <SectionWorkContext />
-      <SectionAI />
       <SectionIntegrations />
-      <SectionProof />
+      <SectionWalkthroughs />
       <SectionCTA />
       <Footer />
     </main>

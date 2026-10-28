@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { track } from "@/lib/track";
 
 const PRODUCTS = [
   "CRM",
@@ -42,9 +43,15 @@ const labelStyle: React.CSSProperties = {
 export function GetStartedModal({
   isOpen,
   onClose,
+  title = "Get Started",
+  source = "site",
 }: {
   isOpen: boolean;
   onClose: () => void;
+  /** Heading shown at the top of the form. */
+  title?: string;
+  /** Where the form was opened from, sent with the submission event. */
+  source?: string;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
@@ -213,7 +220,7 @@ export function GetStartedModal({
                 letterSpacing: "-0.01em",
               }}
             >
-              Get Started
+              {title}
             </h2>
             <p
               style={{
@@ -232,6 +239,7 @@ export function GetStartedModal({
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                track("lead_submitted", { form: "get_started", title, source });
                 setSubmitted(true);
               }}
             >

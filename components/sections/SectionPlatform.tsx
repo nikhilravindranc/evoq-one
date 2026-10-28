@@ -855,29 +855,29 @@ type Product = {
 
 const PRODUCTS: Product[] = ([
   { key: "crm", name: "CRM", category: "growth",
-    desc: "Manage leads, contacts and deals from first touch to closed-won." },
-  { key: "configx", name: "ConfigX", category: "growth", href: "/products/configx",
-    desc: "Visual product configuration with 2D, 3D and AR, CPQ and commerce." },
+    desc: "Track leads, contacts, deals and follow-ups through each stage of the sales process." },
+  { key: "configx", name: "ConfigX", category: "growth",
+    desc: "Configure products in 2D, 3D or AR, calculate pricing and prepare customer quotes." },
   { key: "campaigns", name: "Campaigns", category: "growth",
-    desc: "Turn customer data into campaigns that actually convert." },
+    desc: "Plan and launch marketing campaigns to reach and re-engage the right customer segments." },
   { key: "serviceops", name: "ServiceOps", category: "operations",
-    desc: "Plan, schedule and dispatch field service work with less back-and-forth." },
+    desc: "Create work orders, schedule technicians and track maintenance and service visits." },
   { key: "projects", name: "Projects", category: "operations",
-    desc: "Plan the work, track progress, and ship with confidence." },
+    desc: "Plan project tasks, assign owners and track delivery against milestones." },
   { key: "desk", name: "Desk", category: "operations",
-    desc: "The support essentials your team already reaches for, every day." },
+    desc: "Log customer enquiries and service issues as tickets and track each one to resolution." },
   { key: "hrms", name: "HRMS", category: "people",
-    desc: "Employee records, time and leave, handled without the spreadsheets." },
+    desc: "Keep employee records and manage attendance, leave and workforce administration." },
   { key: "skillberry", name: "Skillberry", category: "people",
-    desc: "Help your people learn, grow and build the skills your business needs next." },
+    desc: "Run employee training, track course progress and build the skills each role needs." },
   { key: "billing", name: "Billing", category: "finance",
-    desc: "Raise invoices, collect payments and reconcile accounts automatically." },
+    desc: "Raise invoices, record payments and follow up on what is still outstanding." },
   { key: "inventory", name: "Inventory", category: "finance",
-    desc: "Track stock, movements and reorder points across every location." },
+    desc: "Track stock levels and movements, and see which items are due for reorder." },
   { key: "sync", name: "Sync", category: "platform",
-    desc: "Move data seamlessly across your CRM, ERP, eCommerce and other systems." },
-  { key: "ai", name: "AI", category: "ai", href: "/products/ai",
-    desc: "Ask EVI for help, assign work to AI agents, or let AI work automatically." },
+    desc: "Exchange data between EVOQ applications and your existing systems through supported integrations." },
+  { key: "ai", name: "EVOQ AI", category: "ai",
+    desc: "EVI, the AI assistant, and AI agents that prepare defined tasks for your approval." },
 ] as Omit<Product, "video">[]).map((p) => ({ ...p, video: `/videos/products/${p.key}.mp4` }));
 
 /* -- card + carousel ------------------------------------------------ */
@@ -904,7 +904,7 @@ function ProductCard({
     // same node. Splitting static positioning (this <a>) from animation
     // (the motion.div, opacity/y only) avoids that fight.
     <a
-      href={product.href ?? "#"}
+      href={product.href ?? `/products/${product.key}`}
       className="pf-card"
       aria-label={`Explore ${product.name}`}
     >
@@ -1129,7 +1129,7 @@ export function SectionPlatform() {
   }, [products]);
 
   return (
-    <section className="s-platform">
+    <section className="s-platform" id="products">
       <div className="pf-blob pf-blob-a" aria-hidden />
       <div className="pf-blob pf-blob-b" aria-hidden />
 
@@ -1190,6 +1190,13 @@ export function SectionPlatform() {
             {f.label}
           </button>
         ))}
+      </div>
+
+      <div className="pf-all">
+        <a href="/products">
+          See all products
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </a>
       </div>
     </section>
   );

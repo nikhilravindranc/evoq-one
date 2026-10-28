@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Topbar } from "./Topbar";
 import { ArrowRight } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
+import { trackCta } from "@/lib/track";
 import { ProductBadge } from "@/components/shared/ProductBadge";
 
 type HeroTab = "growth" | "operations" | "people" | "finance" | "platform" | "ai";
@@ -1147,8 +1148,9 @@ export function HeroSection() {
                     color: "rgba(255,255,255,0.75)",
                   }}
                 >
-                  Turning intelligence into coordinated action across the
-                  organization.
+                  EVOQ is a suite of connected applications for sales, service,
+                  operations, people and finance, with an AI layer that helps
+                  your teams find information and prepare next steps.
                 </p>
               </div>
 
@@ -1214,7 +1216,10 @@ export function HeroSection() {
                   }}
                 >
                   <button
-                    onClick={() => setShowGetStarted(true)}
+                    onClick={() => {
+                      trackCta("book_demo", "hero");
+                      setShowGetStarted(true);
+                    }}
                     className="hero-cta-btn"
                     style={{
                       display: "inline-flex",
@@ -1232,9 +1237,28 @@ export function HeroSection() {
                       boxShadow: "0 12px 30px -12px rgba(10,10,80,0.55)",
                     }}
                   >
-                    Get Started
+                    Book a demo
                     <ArrowRight color="#3A3AC9" />
                   </button>
+                  <a
+                    href="#products"
+                    onClick={() => trackCta("explore_apps", "hero")}
+                    className="hero-cta-ghost"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      padding: "13px 22px",
+                      borderRadius: 999,
+                      border: "1.5px solid rgba(255,255,255,0.45)",
+                      color: "#fff",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: 15,
+                      fontWeight: 600,
+                      textDecoration: "none",
+                    }}
+                  >
+                    Explore the apps
+                  </a>
                 </div>
 
               </div>
@@ -1371,7 +1395,7 @@ export function HeroSection() {
           </div>
         </div>
       </div>
-      <GetStartedModal isOpen={showGetStarted} onClose={() => setShowGetStarted(false)} />
+      <GetStartedModal isOpen={showGetStarted} onClose={() => setShowGetStarted(false)} title="Book a demo" source="home_hero" />
     </div>
   );
 }

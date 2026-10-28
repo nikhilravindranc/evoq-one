@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRt } from "./shared";
+import { trackCta } from "@/lib/track";
 
 export function SectionCTA() {
   return (
@@ -22,11 +23,10 @@ export function SectionCTA() {
         </p>
 
         <div className="cta3-actions">
-          <a className="cta3-primary" href="/contact">
+          <a className="cta3-primary" href="/contact" onClick={() => trackCta("book_demo", "final_cta")}>
             <span>Book a demo</span>
             <span className="ic"><ArrowRt color="#4747E0" /></span>
           </a>
-          <a className="cta3-ghost" href="/contact">Talk to us</a>
         </div>
       </motion.div>
     </section>

@@ -4,6 +4,7 @@
 |---|---|---|
 | Product pages | `/products/<product>` | `/products/billing`, `/products/billing/features`, `/products/ai` |
 | Industry solution pages | `/solutions/<industry>` | `/solutions/healthcare`, `/solutions/manufacturing` |
+| "See EVOQ in action" samples | `/walkthroughs/<app>`, `/scenarios/<process>`, `/previews/<app>` | `/walkthroughs/crm`, `/scenarios/enquiry-to-invoice`, `/previews/crm` |
 | Company / general pages | `/<page>` (unchanged) | `/about`, `/contact`, `/why-evoq`, `/implementation`, `/integrations` |
 
 Rules:

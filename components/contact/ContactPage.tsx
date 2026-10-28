@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { track } from "@/lib/track";
 
 /* ── shared animation helpers ── */
 const fadeUp = (delay = 0) => ({
@@ -32,6 +33,7 @@ export function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    track("lead_submitted", { form: "contact", product: formData.product || undefined });
     setIsSubmitted(true);
     setTimeout(() => {
       setIsSubmitted(false);
