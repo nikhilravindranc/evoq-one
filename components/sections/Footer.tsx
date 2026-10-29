@@ -45,6 +45,7 @@ export function Footer({ background, darkText = false, socialHover }: { backgrou
             <li><a href="/products/serviceops"><img className="footer-pic" src="/footer-icons/serviceops.svg" alt="" width={18} height={18} />ServiceOps</a></li>
             <li><a href="/products/projects"><img className="footer-pic" src="/footer-icons/projects.png" alt="" width={18} height={18} />Projects</a></li>
             <li><a href="/products/desk"><img className="footer-pic" src="/footer-icons/desk.png" alt="" width={18} height={18} />Desk</a></li>
+            <li><a href="/products/bookings"><img className="footer-pic" src="/footer-icons/bookings.svg" alt="" width={18} height={18} />Bookings</a></li>
           </ul>
           <h6 className="footer-subhead">Finance</h6>
           <ul>
