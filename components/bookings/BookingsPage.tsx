@@ -21,6 +21,7 @@ const HERO_GRADIENT = GRADIENT;
 
 const IMG = {
   room: U("1431540015161-0bf868a2d407"),
+  prayer: U("1792060052578-9dbe661cadbd"),
   clinic: "/healthcare/stock/org-clinic-doctor.jpg",
   stay: U("1596178067639-5c6e68aea6dc"),
   court: U("1499510318569-1a3d67dc3976"),
@@ -71,20 +72,21 @@ function HeroShowcase() {
     <div className="bk-show-wrap">
       <div ref={show} className={`bk-show${active ? " has-active" : ""}`}>
         <div {...tile(0, "space")}>
-          <div className="bk-float tl" aria-hidden>
-            <div className="bk-fhead"><i>{I.space}</i><div><b>Prayer Room</b><small>Level 2 · Up to 20 people</small></div></div>
-            <div className="bk-fslots"><span className="ok">12:30</span><span className="off">1:15</span><span className="ok sel">3:45</span><span className="ok">5:30</span></div>
-          </div>
-          <figure className="bk-tile-media">
-            <img src={IMG.room} alt="Meeting room with a long table" loading="eager" />
-            <figcaption className="bk-tcard">
-              <div className="bk-tcard-top"><span className="bk-ttype">{I.space}Space reservation</span><span className="bk-badge ok">Confirmed</span></div>
-              <b>Meeting Room 3</b>
-              <div className="bk-trows">
-                <span><i>{I.clock}</i>Thu, 19 Nov · 10:30 – 11:30 AM</span>
-                <span><i>{I.people}</i>Seats 8 · Level 2</span>
-              </div>
-            </figcaption>
+          <figure className="bk-tile-media collage">
+            <div className="bk-cell">
+              <img src={IMG.room} alt="Meeting room with a long table" loading="eager" />
+              <figcaption className="bk-tcard mini">
+                <div className="bk-tcard-top"><b>Meeting Room 3</b><span className="bk-badge ok">Confirmed</span></div>
+                <small className="bk-tmeta">Thu, 19 Nov · 10:30 – 11:30 AM</small>
+              </figcaption>
+            </div>
+            <div className="bk-cell">
+              <img src={IMG.prayer} alt="Quiet prayer and meditation room with floor mats and soft light" loading="eager" />
+              <figcaption className="bk-tcard mini">
+                <div className="bk-tcard-top"><b>Prayer Room</b><span className="bk-badge ok">Available</span></div>
+                <div className="bk-tslots"><span>12:30</span><span className="sel">3:45 PM</span><span>5:30</span></div>
+              </figcaption>
+            </div>
           </figure>
         </div>
 
@@ -352,11 +354,18 @@ const css = `
   .bk-show-wrap{width:100%;margin-top:64px;padding-bottom:56px;display:flex;flex-direction:column;align-items:center}
   .bk-show{width:100%;max-width:1160px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;align-items:start;text-align:left}
   .bk-tile{position:relative;animation:bkRise .8s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(var(--i) * 110ms + 150ms);transition:transform .35s ease,opacity .3s ease,filter .3s ease}
-  .bk-tile:nth-child(1){margin-top:44px}.bk-tile:nth-child(3){margin-top:22px}.bk-tile:nth-child(4){margin-top:60px}
+  .bk-tile:nth-child(1){margin-top:0}.bk-tile:nth-child(3){margin-top:22px}.bk-tile:nth-child(4){margin-top:60px}
   .bk-tile:hover,.bk-tile.on{transform:translateY(-8px)}
   .bk-show.has-active .bk-tile:not(.on){opacity:.5;filter:saturate(.55)}
   .bk-tile-media{position:relative;margin:0;height:400px;border-radius:16px;overflow:hidden;background:${SAND};box-shadow:0 30px 50px -36px rgba(38,51,43,.55)}
   .bk-tile-media img{display:block;width:100%;height:100%;object-fit:cover}
+  .bk-tile-media.collage{height:470px;display:grid;grid-template-rows:1fr 1fr;gap:8px;background:transparent;box-shadow:none;overflow:visible}
+  .bk-tile-media.collage::after{display:none}
+  .bk-cell{position:relative;border-radius:16px;overflow:hidden;background:${SAND};box-shadow:0 30px 50px -36px rgba(38,51,43,.55)}
+  .bk-cell::after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,rgba(38,51,43,.35));pointer-events:none}
+  .bk-tcard.mini{left:10px;right:10px;bottom:10px;gap:6px;padding:9px 11px}
+  .bk-tcard.mini b{font-size:14px}
+  .bk-tcard.mini .bk-tslots span{padding:4px 0;font-size:11.5px}
   .bk-tile-media::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,rgba(38,51,43,.35));pointer-events:none}
   .bk-float{position:absolute;z-index:2;padding:12px 14px;border-radius:12px;background:#fff;box-shadow:0 18px 36px -20px rgba(38,51,43,.5);animation:bkRise .8s cubic-bezier(.2,.7,.2,1) backwards,bkBob 6s ease-in-out infinite alternate;animation-delay:calc(var(--i) * 110ms + 650ms),calc(var(--i) * 700ms + 1.6s)}
   .bk-float small{display:block;font-size:11.5px;font-weight:600;color:${MUTED}}
@@ -555,7 +564,7 @@ const css = `
     .bk-hero-band{padding-top:72px}
     .bk-show{grid-template-columns:repeat(2,minmax(0,1fr));max-width:720px}
     .bk-show{row-gap:56px}
-    .bk-tile-media{height:360px}
+    .bk-tile-media,.bk-tile-media.collage{height:360px}
     .bk-tile:nth-child(n){margin-top:0}
     .bk-float.tl{left:-12px}.bk-float.tr,.bk-float.br{right:-10px}
     .bk-org-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:36px}
@@ -565,7 +574,8 @@ const css = `
     .bk-show{display:flex;max-width:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -14px;padding:4px 14px 12px;width:calc(100% + 28px)}
     .bk-show::-webkit-scrollbar{display:none}
     .bk-tile{flex:0 0 min(78%,300px);scroll-snap-align:center}
-    .bk-tile-media{height:380px}
+    .bk-tile-media,.bk-tile-media.collage{height:400px}
+    .bk-tcard.mini{padding:8px 10px}
     .bk-float.tl,.bk-float.tr,.bk-float.br{top:12px;right:12px;left:auto}
     .bk-float.tl{left:12px;right:auto}
     .bk-show.has-active .bk-tile:not(.on){opacity:1;filter:none}
