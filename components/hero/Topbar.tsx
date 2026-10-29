@@ -70,6 +70,12 @@ const CardGlyph = (p: ProductIconProps) => (
     <path d="M2.5 10h19" />
   </ProductSvg>
 );
+const CalendarGlyph = (p: ProductIconProps) => (
+  <ProductSvg {...p}>
+    <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+    <path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4" />
+  </ProductSvg>
+);
 const BoxGlyph = (p: ProductIconProps) => (
   <ProductSvg {...p}>
     <path d="m3.5 8 8.5-5 8.5 5-8.5 5-8.5-5z" />
@@ -108,6 +114,7 @@ const PRODUCT_GROUPS: {
       { name: "ServiceOps", sub: "Field service & operations", icon: WrenchGlyph, tile: "bg-[#E8792C]", href: "/products/serviceops", logo: "serviceops-logos-serviceops-icon.svg" },
       { name: "Projects", sub: "Plan and run work end-to-end", icon: RocketGlyph, tile: "bg-[#7C3AED]", href: "/products/projects", logo: "evoq-projects-menu-icn.png" },
       { name: "Desk", sub: "Support tickets & helpdesk", icon: ChatGlyph, tile: "bg-[#0FA3BC]", href: "/products/desk", logo: "desk-menu-icn.png" },
+      { name: "Bookings", sub: "Reservations & scheduling", icon: CalendarGlyph, tile: "bg-[#64856D]", href: "/products/bookings" },
     ],
   },
   {

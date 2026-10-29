@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
       ["/ai", "/products/ai"],
       ["/evoq-ai", "/products/ai"],
       ["/billing", "/products/billing"],
+      ["/bookings", "/products/bookings"],
       ["/billing/features", "/products/billing/features"],
       ["/billing/pricing", "/products/billing/pricing"],
       ["/healthcare", "/solutions/healthcare"],

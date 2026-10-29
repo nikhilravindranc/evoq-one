@@ -8,7 +8,7 @@ import { EVI_AGENT_IMAGE } from "./eviAgent";
 /* "AI agent context" -- the kinds of context EVI can bring together for an agent.
    A tall wrapper holds a sticky stage; one scroll value (0 -> 1) plays the story:
    three main context types arrive, smaller ones gather around EVI, EVI considers
-   them together while the connections draw in, and a proposed next step comes out
+   them together while , and a proposed next step comes out
    with its approval state. Below 861px the stage is not pinned and the cards stack.
 
    The cards are TYPES of context, not a claim that every agent reads every type:
@@ -112,36 +112,6 @@ const tOf = (v: number, c: Card) => easeOut(seg(v, c.at, c.at + (c.size === "min
 // EVI considers the gathered context together, before the proposal appears
 const THINK = [0.5, 0.64] as const;
 
-/* Context connects into the character; the proposal connects out of it. */
-function linePath(c: Card, i: number): string {
-  const cx = c.x + c.w / 2;
-  if (c.size === "mini") {
-    // compact cards sit close to EVI: a short drop or rise into it
-    const above = c.y + c.h / 2 < CY;
-    const sx = cx;
-    const sy = above ? c.y + c.h : c.y;
-    const ex = cx < CX ? CX - 50 : CX + 50;
-    const ey = above ? CY - 90 : CY + 70;
-    return `M${sx} ${sy} C${sx} ${(sy + ey) / 2}, ${ex} ${(sy + ey) / 2}, ${ex} ${ey}`;
-  }
-  const left = cx < CX;
-  const sx = left ? c.x + c.w : c.x;
-  const sy = c.y + c.h / 2;
-  const ex = left ? CX - 82 : CX + 82;
-  const ey = CY - 20 + (i % 2) * 40;
-  const dx = left ? 110 : -110;
-  return c.dir === "out"
-    ? `M${ex} ${ey} C${ex - dx * 0.6} ${ey}, ${sx + dx} ${sy}, ${sx} ${sy}`
-    : `M${sx} ${sy} C${sx + dx} ${sy}, ${ex - dx * 0.6} ${ey}, ${ex} ${ey}`;
-}
-
-function Line({ c, i, p }: { c: Card; i: number; p: MotionValue<number> }) {
-  const [a, b] = c.dir === "out" ? [THINK[1] - 0.04, c.at + 0.06] : [c.at + 0.1, c.at + 0.26];
-  const pathLength = useTransform(p, (v) => seg(v, a, b));
-  const opacity = useTransform(p, (v) => (v < a ? 0 : 1));
-  return <motion.path d={linePath(c, i)} className={`wc-line${c.dir === "out" ? " out" : ""}`} style={{ pathLength, opacity }} />;
-}
-
 function BurstCard({ c, p }: { c: Card; p: MotionValue<number> }) {
   const dx = CX - (c.x + c.w / 2);
   const dy = CY - (c.y + c.h / 2);
@@ -239,10 +209,6 @@ export function SectionWorkContext() {
           {head}
           <div className="wc-canvas-wrap" style={{ width: W * scale, height: H * scale }}>
             <div className="wc-canvas" style={{ width: W, height: H, transform: `scale(${scale})` }}>
-              <svg className="wc-lines" width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden>
-                {CARDS.map((c, i) => <Line key={c.key} c={c} i={i} p={p} />)}
-              </svg>
-
               <motion.div className="wc-char" style={{ left: CX - 110, top: CY - 120, scale: charScale }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={EVI_AGENT_IMAGE} alt="" width={220} height={220} />

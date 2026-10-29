@@ -2792,9 +2792,6 @@
 
 .wc-canvas-wrap { margin: 0 auto; position: relative; }
 .wc-canvas { position: relative; transform-origin: 0 0; }
-.wc-lines { position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; overflow: visible; }
-.wc-line { fill: none; stroke: rgba(111,92,255,.55); stroke-width: 1.6; stroke-linecap: round; }
-.wc-line.out { stroke: #4747E0; stroke-width: 2; }
 .wc-char { position: absolute; z-index: 2; width: 220px; height: 240px; display: flex; flex-direction: column; align-items: center; }
 .wc-char img { width: 220px; height: 220px; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(40,30,120,.28)); }
 .wc-state { display: inline-flex; align-items: center; gap: 7px; margin-top: -6px; padding: 5px 12px; border-radius: 999px; background: #fff; font-size: 12px; font-weight: 600; color: #3A3AC9; white-space: nowrap; box-shadow: 0 0 0 1px rgba(71,71,224,.18), 0 10px 22px -14px rgba(20,24,60,.45); }

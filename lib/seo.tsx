@@ -14,7 +14,7 @@ export const SITE = {
 };
 
 type Kind = "home" | "web" | "product" | "productPage" | "solution" | "collection" | "legal";
-type Page = { title: string; description: string; crumb: string; kind: Kind; app?: string; category?: string };
+type Page = { title: string; description: string; crumb: string; kind: Kind; app?: string; category?: string; keywords?: string[] };
 
 const P = (title: string, description: string, crumb: string, kind: Kind, extra: Partial<Page> = {}): Page => ({ title, description, crumb, kind, ...extra });
 
@@ -50,6 +50,7 @@ export const PAGES: Record<string, Page> = {
   "/products/serviceops": P("EVOQ ServiceOps — Close field jobs on time, every time", "ServiceOps is the field service app that keeps technicians assigned, dispatched and on the move, with a clear history for every job.", "ServiceOps", "product", { app: "EVOQ ServiceOps", category: "BusinessApplication" }),
   "/products/skillberry": P("EVOQ Skillberry — Turn what you know into a programme", "Build and sell learning programmes with EVOQ Skillberry: courses, coaching, workshops and training in one place.", "Skillberry", "product", { app: "EVOQ Skillberry", category: "EducationalApplication" }),
 
+  "/products/bookings": P("EVOQ Bookings | Online Booking and Reservations", "Explore EVOQ Bookings for room reservations, appointment scheduling, hospitality bookings and facility reservations. Discuss your organization's booking requirements.", "Bookings", "product", { app: "EVOQ Bookings", category: "BusinessApplication", keywords: ["Online booking system", "Room booking system", "Meeting room booking software", "Facility booking system", "Appointment scheduling software", "Hotel booking engine", "Resort booking system", "Online reservation system"] }),
   "/products/sync": P("EVOQ Sync — Connect, integrate, automate", "EVOQ Sync turns scattered, manual data movement into a single, reliable flow between your CRM, ERP, ecommerce and other systems.", "Sync", "product", { app: "EVOQ Sync", category: "BusinessApplication" }),
   "/products/sync/features": P("EVOQ Sync features — Sync data the smart way", "Explore EVOQ Sync features for connecting CRM, ERP, ecommerce and business apps with reliable, automated data flows.", "Features", "productPage"),
   "/products/sync/pricing": P("EVOQ Sync pricing — Build your integration", "Select any two apps, choose your sync direction and see instant EVOQ Sync pricing.", "Pricing", "productPage"),
@@ -88,6 +89,7 @@ export function pageMeta(path: string): Metadata {
   return {
     title: { absolute: pg.title },
     description: pg.description,
+    ...(pg.keywords ? { keywords: pg.keywords } : {}),
     alternates: { canonical: path },
     openGraph: {
       type: "website",
