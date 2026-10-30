@@ -25,7 +25,7 @@ const IMG = {
   clinic: "/healthcare/stock/org-clinic-doctor.jpg",
   stay: U("1596178067639-5c6e68aea6dc"),
   court: U("1499510318569-1a3d67dc3976"),
-  lobby: U("1758448500688-3ababa93fd67", 1200),
+  panel: "/bookings/meeting-room-panel.webp",
 };
 
 /* ---------- content ---------- */
@@ -464,12 +464,12 @@ const css = `
 
   /* who is it for */
   .bk-who{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
-  .bk-who-vis{position:relative;padding:0 56px 64px 0}
-  .bk-who-plan{position:absolute;right:0;top:56px;width:72%;padding:16px;border-radius:18px;background:#fff;border:1px solid ${LINE}}
+  .bk-who-vis{position:relative;padding:0 0 64px 56px}
+  .bk-who-plan{position:absolute;left:0;top:56px;width:72%;padding:16px;border-radius:18px;background:#fff;border:1px solid ${LINE}}
   .bk-who-plan svg{display:block;width:100%;height:auto}
-  .bk-who-img{position:relative;z-index:1;width:78%;aspect-ratio:4/5;border-radius:18px;overflow:hidden;box-shadow:0 34px 60px -40px rgba(38,51,43,.6)}
-  .bk-who-img img{display:block;width:100%;height:100%;object-fit:cover}
-  .bk-who-card{position:absolute;z-index:2;right:0;bottom:0;width:270px;display:grid;gap:8px;padding:14px;border-radius:14px;background:#fff;box-shadow:0 26px 50px -26px rgba(38,51,43,.55)}
+  .bk-who-img{position:relative;z-index:1;width:78%;margin-left:auto;aspect-ratio:1/1;border-radius:18px;overflow:hidden;box-shadow:0 34px 60px -40px rgba(38,51,43,.6)}
+  .bk-who-img img{display:block;width:100%;height:100%;object-fit:cover;object-position:82% center}
+  .bk-who-card{position:absolute;z-index:2;left:0;bottom:0;width:270px;display:grid;gap:8px;padding:14px;border-radius:14px;background:#fff;box-shadow:0 26px 50px -26px rgba(38,51,43,.55)}
   .bk-who-card>b{font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;color:${DEEP}}
   .bk-who-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:9px}
   .bk-who-row i{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;background:rgba(100,133,109,.12);color:${DEEP}}
@@ -730,7 +730,7 @@ export function BookingsPage() {
           <div className="bk-who">
             <div className="bk-who-vis" data-rv="0">
               <div className="bk-who-plan"><FloorPlan states={{ d: "sel", a: "free", e: "busy" }} /></div>
-              <div className="bk-who-img"><img src={IMG.lobby} alt="Reception desk in a modern lobby" loading="lazy" /></div>
+              <div className="bk-who-img"><img src={IMG.panel} alt="Glass-walled meeting room with a wall display at the door showing the room is available and today's bookings" loading="lazy" /></div>
               <div className="bk-who-card">
                 <b>Today</b>
                 {[[I.space, "Prayer Room", "1:00 PM", "ok", "Confirmed"], [I.appt, "Consultation", "2:30 PM", "ok", "Confirmed"], [I.stay, "Garden Suite", "Check-in 3:00 PM", "warn", "Pending"], [I.activity, "Court 2", "6:00 PM", "ok", "Confirmed"]].map(([ic, a, b, c, d], i) => (
