@@ -25,7 +25,7 @@ const IMG = {
   clinic: "/healthcare/stock/org-clinic-doctor.jpg",
   stay: U("1596178067639-5c6e68aea6dc"),
   court: U("1499510318569-1a3d67dc3976"),
-  panel: "/bookings/meeting-room-panel.webp",
+  panel: U("1698653223247-09aaf01166fc", 1200),
 };
 
 /* ---------- content ---------- */
@@ -468,7 +468,7 @@ const css = `
   .bk-who-plan{position:absolute;left:0;top:56px;width:72%;padding:16px;border-radius:18px;background:#fff;border:1px solid ${LINE}}
   .bk-who-plan svg{display:block;width:100%;height:auto}
   .bk-who-img{position:relative;z-index:1;width:78%;margin-left:auto;aspect-ratio:1/1;border-radius:18px;overflow:hidden;box-shadow:0 34px 60px -40px rgba(38,51,43,.6)}
-  .bk-who-img img{display:block;width:100%;height:100%;object-fit:cover;object-position:82% center}
+  .bk-who-img img{display:block;width:100%;height:100%;object-fit:cover;object-position:62% center}
   .bk-who-card{position:absolute;z-index:2;left:0;bottom:0;width:270px;display:grid;gap:8px;padding:14px;border-radius:14px;background:#fff;box-shadow:0 26px 50px -26px rgba(38,51,43,.55)}
   .bk-who-card>b{font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;color:${DEEP}}
   .bk-who-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:9px}
@@ -730,7 +730,7 @@ export function BookingsPage() {
           <div className="bk-who">
             <div className="bk-who-vis" data-rv="0">
               <div className="bk-who-plan"><FloorPlan states={{ d: "sel", a: "free", e: "busy" }} /></div>
-              <div className="bk-who-img"><img src={IMG.panel} alt="Glass-walled meeting room with a wall display at the door showing the room is available and today's bookings" loading="lazy" /></div>
+              <div className="bk-who-img"><img src={IMG.panel} alt="Glass-walled meeting room with a whiteboard full of notes and a view of the city" loading="lazy" /></div>
               <div className="bk-who-card">
                 <b>Today</b>
                 {[[I.space, "Prayer Room", "1:00 PM", "ok", "Confirmed"], [I.appt, "Consultation", "2:30 PM", "ok", "Confirmed"], [I.stay, "Garden Suite", "Check-in 3:00 PM", "warn", "Pending"], [I.activity, "Court 2", "6:00 PM", "ok", "Confirmed"]].map(([ic, a, b, c, d], i) => (
