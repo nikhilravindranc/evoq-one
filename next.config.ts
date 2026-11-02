@@ -4,6 +4,8 @@ import type { NextConfig } from "next";
    Old top-level URLs are redirected permanently. Sources are exact paths on purpose: /healthcare/*, /billing/*
    and /ai/* also hold static assets in /public, and a wildcard redirect would break those images. */
 const nextConfig: NextConfig = {
+  // Pin the workspace root: with a parent-folder lockfile Next infers the wrong root and watches too much.
+  turbopack: { root: __dirname },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },

@@ -29,9 +29,84 @@ const nextBin = path.join(
   "next"
 );
 
+// Safety net: a stale Turbopack cache once made `next dev` balloon to the whole
+// RAM + pagefile and freeze the machine. (1) Wipe .next whenever the checked-out
+// commit changes, (2) kill the server if its memory runs away.
+const fs = require("node:fs");
+const { execFileSync } = require("node:child_process");
+const root = path.join(__dirname, "..");
+const nextDir = path.join(root, ".next");
+const stamp = path.join(nextDir, ".dev-head");
+
+function gitHead() {
+  try {
+    return execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim();
+  } catch {
+    return "";
+  }
+}
+
+const head = gitHead();
+let previous = "";
+try { previous = fs.readFileSync(stamp, "utf8"); } catch {}
+if (head && previous !== head) {
+  console.log("[dev] commit changed since last run, clearing .next cache");
+  fs.rmSync(nextDir, { recursive: true, force: true });
+}
+fs.mkdirSync(nextDir, { recursive: true });
+if (head) fs.writeFileSync(stamp, head);
+
 const child = spawn(process.execPath, [nextBin, "dev", "--port", port], {
   stdio: "inherit",
   env: { ...process.env, PORT: port, HOSTNAME: host },
 });
 
+const LIMIT_MB = Number(process.env.DEV_MEM_LIMIT_MB || 4096);
+const FLOOR_MB = Number(process.env.DEV_MIN_FREE_MB || 2048);
+const os = require("node:os");
+
+function killTree() {
+  try {
+    if (process.platform === "win32") {
+      execFileSync("taskkill", ["/PID", String(child.pid), "/T", "/F"], { stdio: "ignore" });
+    } else {
+      child.kill("SIGKILL");
+    }
+  } catch {}
+}
+
+function treeMemoryMB() {
+  try {
+    if (process.platform === "win32") {
+      const out = execFileSync(
+        "powershell",
+        ["-NoProfile", "-Command",
+          `(Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Where-Object { $_.ParentProcessId -eq ${child.pid} -or $_.ProcessId -eq ${child.pid} } | Measure-Object WorkingSetSize -Sum).Sum / 1MB`],
+        { encoding: "utf8", timeout: 4000 }
+      );
+      return Number(out.trim()) || 0;
+    }
+    const out = execFileSync("ps", ["-o", "rss=", "-p", String(child.pid)], { encoding: "utf8" });
+    return Number(out.trim()) / 1024 || 0;
+  } catch {
+    return 0;
+  }
+}
+
+const watchdog = setInterval(() => {
+  const used = treeMemoryMB();
+  const free = os.freemem() / 1048576;
+  if (used > LIMIT_MB || free < FLOOR_MB) {
+    console.error(
+      `[dev] memory runaway (server ${Math.round(used)} MB, system free ${Math.round(free)} MB), stopping. ` +
+        "Delete .next and retry; raise DEV_MEM_LIMIT_MB if this is expected."
+    );
+    killTree();
+    process.exit(1);
+  }
+}, 2000);
+watchdog.unref();
+
 child.on("exit", (code) => process.exit(code ?? 0));
+process.on("SIGINT", () => { killTree(); process.exit(0); });
+process.on("SIGTERM", () => { killTree(); process.exit(0); });
