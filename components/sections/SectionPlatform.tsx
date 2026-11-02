@@ -95,6 +95,8 @@ export const PALETTE: Record<string, Palette> = {
   /* AI: the product page's own indigo (#1A1190 footer) as depth. */
   ai:         { depth: "#1A1190", primary: "#4F46E5", soft: "#C7D2FE", tint: "#E0E7FF", surface: "#F5F7FF" },
   /* ConfigX: its page's yellow (#FFD400) on warm ink, footer #FCF3D6. */
+  /* Bookings: the product page's own sage / cream / terracotta ramp. */
+  bookings:   { depth: "#34483B", primary: "#64856D", soft: "#DCE8DF", tint: "#F3E8D8", surface: "#F7F5EF" },
   configx:    { depth: "#1C1A15", primary: "#B8860B", soft: "#FFE680", tint: "#FCF3D6", surface: "#FFFDF2" },
   skillberry: { depth: "#E94E77", primary: "#E94E77", soft: "#FCDDE5", tint: "#FDA4AF", surface: "#FAFBFC" },
 };
@@ -755,22 +757,6 @@ function ArtCampaignsPhoto() {
   );
 }
 
-function ArtHrmsPhoto() {
-  const p = PALETTE.hrms;
-  return (
-    <ArtFrame pk="hrms" photo={{ src: "/team/card-hrms-v5.jpg", position: "center 35%" }}>
-      <div className="pf-float" style={{ left: 22, bottom: 74 }}>
-        <div className="pf-float-hd">
-          <span className="pf-float-dot" style={{ background: p.primary }} />
-          Leave approved
-        </div>
-        <div className="pf-float-nm">Priya S. · 2 days</div>
-      </div>
-      <span className="pf-art-caption" style={{ left: 22, bottom: 24 }}>People, without the paperwork</span>
-    </ArtFrame>
-  );
-}
-
 function ArtBillingPhoto() {
   const p = PALETTE.billing;
   return (
@@ -822,16 +808,35 @@ function ArtServiceOpsGraphic() {
   );
 }
 
+/* Bookings: photo-led (a glass-walled meeting room), with a reservation floating on it.
+   The row alternates photo and graphic cards, and Desk before it is graphic. */
+function ArtBookings() {
+  const p = PALETTE.bookings;
+  return (
+    <ArtFrame pk="bookings" photo={{ src: "https://images.unsplash.com/photo-1431540015161-0bf868a2d407?auto=format&fit=crop&w=900&q=75", position: "center 40%" }}>
+      <div className="pf-float" style={{ left: 22, bottom: 74 }}>
+        <div className="pf-float-hd">
+          <span className="pf-float-dot" style={{ background: "#168A4A" }} />
+          Booking confirmed
+        </div>
+        <div className="pf-float-nm">Boardroom 2 · 09:00</div>
+      </div>
+      <span className="pf-art-caption" style={{ left: 22, bottom: 24 }}>Every space, always available</span>
+    </ArtFrame>
+  );
+}
+
 const ART: Record<string, () => React.ReactElement> = {
   crm: ArtCrm,
   campaigns: ArtCampaignsPhoto,
   serviceops: ArtServiceOpsGraphic,
   desk: ArtDesk,
+  bookings: ArtBookings,
   projects: ArtProjects,
   sync: ArtSyncPhoto,
   inventory: ArtInventory,
   billing: ArtBillingPhoto,
-  hrms: ArtHrmsPhoto,
+  hrms: ArtHrms,
   skillberry: ArtSkillberry,
   ai: ArtAi,
   configx: ArtConfigx,
@@ -866,6 +871,8 @@ const PRODUCTS: Product[] = ([
     desc: "Plan project tasks, assign owners and track delivery against milestones." },
   { key: "desk", name: "Desk", category: "operations",
     desc: "Log customer enquiries and service issues as tickets and track each one to resolution." },
+  { key: "bookings", name: "Bookings", category: "operations",
+    desc: "Reserve rooms, services and stays, set availability rules and track every booking's status." },
   { key: "hrms", name: "HRMS", category: "people",
     desc: "Keep employee records and manage attendance, leave and workforce administration." },
   { key: "skillberry", name: "Skillberry", category: "people",

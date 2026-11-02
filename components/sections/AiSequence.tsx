@@ -16,8 +16,8 @@ const STEPS = [
   { key: "prepare", label: "Prepared", caption: "An agent prepares the task and waits for your approval." },
   { key: "result", label: "Result", caption: "Approved actions are carried out. Anything that fails is flagged." },
 ] as const;
-const STEP_MS = [2600, 3000, 3800, 4600];
-const PREPARING_MS = 1300;
+const STEP_MS = [900, 2200, 3000, 4200];
+const PREPARING_MS = 1000;
 
 const SOURCES = [
   { product: "crm", app: "CRM", text: "3 opportunities closing this week" },
@@ -46,11 +46,13 @@ function StateIcon({ s }: { s: RowState }) {
 
 export function AiSequence() {
   const box = useRef<HTMLDivElement>(null);
-  const inView = useInView(box, { amount: 0.4 });
+  // Start a little before the visual is fully on screen so a reader scrolling down finds it already moving.
+  const inView = useInView(box, { amount: 0.1, margin: "0px 0px 160px 0px" });
   const reduce = useReducedMotion();
   const [step, setStep] = useState(0);
   const [preparing, setPreparing] = useState(false);
-  const [hover, setHover] = useState(false);
+  // Set when someone clicks a step: then the sequence stays where they put it until they scroll away.
+  const [held, setHeld] = useState(false);
 
   // Entering "Prepared" starts the agent in its working state.
   const goTo = (n: number) => {
@@ -58,11 +60,21 @@ export function AiSequence() {
     setPreparing(n === 2);
   };
 
+  // Out of view: rewind, so every visit replays from the request.
   useEffect(() => {
-    if (reduce || !inView || hover) return;
+    if (inView) return;
+    setStep(0);
+    setPreparing(false);
+    setHeld(false);
+  }, [inView]);
+
+  // Hovering does not pause: when someone scrolls down with the pointer resting on the page,
+  // the visual slides under it and would freeze on the first step.
+  useEffect(() => {
+    if (reduce || !inView || held) return;
     const t = setTimeout(() => goTo((step + 1) % STEPS.length), STEP_MS[step]);
     return () => clearTimeout(t);
-  }, [step, inView, hover, reduce]);
+  }, [step, inView, held, reduce]);
 
   // Within "Prepared", the agent first works, then waits for approval.
   useEffect(() => {
@@ -83,12 +95,12 @@ export function AiSequence() {
     : { cls: "done", text: "Completed with 1 issue" };
 
   return (
-    <div className="aq" ref={box} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+    <div className="aq" ref={box}>
       <div className="aq-top">
         <ol className="aq-rail" aria-label="How a request is handled">
           {STEPS.map((s, i) => (
             <li key={s.key}>
-              <button type="button" className={i === at ? "on" : i < at ? "past" : undefined} aria-current={i === at ? "step" : undefined} onClick={() => goTo(i)}>
+              <button type="button" className={i === at ? "on" : i < at ? "past" : undefined} aria-current={i === at ? "step" : undefined} onClick={() => { setHeld(true); goTo(i); }}>
                 <span className="n">{i + 1}</span>{s.label}
               </button>
             </li>

@@ -168,7 +168,7 @@ const INDUSTRIES: Industry[] = [
     ],
     feedTitle: "", feed: [], roles: [],
     agent: { name: "EVI", task: "Which products does a wholesale business need? Start with CRM, Inventory and Billing.", status: "Answered", line: "Ask EVI which products fit your industry, and it points you to where to start." },
-    hl: { tone: "info", title: "13 industries · 12 products", sub: "One suite, combined your way" },
+    hl: { tone: "info", title: "13 industries · 13 products", sub: "One suite, combined your way" },
     href: "/industries", cta: "Explore all industries",
     color: "#4747E0", deep: "#1F2A60", soft: "#EEEDFF" },
 ];
@@ -262,9 +262,6 @@ export function SectionSolutions() {
             <h2 className="evoq-h2">
               How each industry <span className="accent">runs on EVOQ.</span>
             </h2>
-          </motion.div>
-          <motion.div className="sol-links" {...fadeUp(0.04)}>
-            <a href="/solutions" className="sol-more-btn">Solutions overview <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></a>
           </motion.div>
         </div>
 

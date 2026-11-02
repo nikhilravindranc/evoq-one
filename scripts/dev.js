@@ -62,7 +62,7 @@ const child = spawn(process.execPath, [nextBin, "dev", "--port", port], {
 });
 
 const LIMIT_MB = Number(process.env.DEV_MEM_LIMIT_MB || 4096);
-const FLOOR_MB = Number(process.env.DEV_MIN_FREE_MB || 2048);
+const FLOOR_MB = Number(process.env.DEV_MIN_FREE_MB || 1536);
 const os = require("node:os");
 
 function killTree() {
@@ -96,7 +96,9 @@ function treeMemoryMB() {
 const watchdog = setInterval(() => {
   const used = treeMemoryMB();
   const free = os.freemem() / 1048576;
-  if (used > LIMIT_MB || free < FLOOR_MB) {
+  // Low system RAM only counts against the server when the server is a big part of it;
+  // other apps (browser, editor, tsc) dipping under the floor must not kill a healthy server.
+  if (used > LIMIT_MB || (free < FLOOR_MB && used > LIMIT_MB / 2)) {
     console.error(
       `[dev] memory runaway (server ${Math.round(used)} MB, system free ${Math.round(free)} MB), stopping. ` +
         "Delete .next and retry; raise DEV_MEM_LIMIT_MB if this is expected."

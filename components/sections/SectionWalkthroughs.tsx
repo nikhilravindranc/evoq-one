@@ -60,9 +60,9 @@ function ScreenPreview() {
 }
 
 const ENTRIES = [
-  { key: "walkthroughs", title: "Product walkthroughs", text: "Explore how individual EVOQ applications work, the capabilities they offer, and the tasks they support.", cta: "Explore walkthroughs", href: "/walkthroughs/crm", preview: <WalkthroughPreview /> },
-  { key: "scenarios", title: "Example scenarios", text: "Follow representative industry processes to understand how applications and available capabilities work together.", cta: "Explore scenarios", href: "/scenarios/enquiry-to-invoice", preview: <ScenarioPreview /> },
-  { key: "previews", title: "Application previews", text: "Get a closer look at application interfaces, key screens, and the experience of working with EVOQ.", cta: "Preview applications", href: "/previews/crm", preview: <ScreenPreview /> },
+  { key: "walkthroughs", title: "Tour each application", text: "Step through how an EVOQ application works, what it offers and the tasks it supports.", cta: "Start a walkthrough", href: "/walkthroughs/crm", preview: <WalkthroughPreview /> },
+  { key: "scenarios", title: "Follow a process end to end", text: "Trace a representative business process, from first enquiry to final invoice, across the applications involved.", cta: "View a scenario", href: "/scenarios/enquiry-to-invoice", preview: <ScenarioPreview /> },
+  { key: "previews", title: "See the screens up close", text: "Look closely at application interfaces and key screens to see what working in EVOQ is like.", cta: "Browse previews", href: "/previews/crm", preview: <ScreenPreview /> },
 ];
 
 export function SectionWalkthroughs() {

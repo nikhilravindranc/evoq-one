@@ -30,6 +30,7 @@ export const PRODUCT_BRAND: Record<string, { bg: string; solid: boolean }> = {
   projects: { bg: "#6D4FEB", solid: true },
   inventory: { bg: "#0E8C9E", solid: true },
   billing: { bg: "#7C6EF0", solid: true },
+  bookings: { bg: "#64856D", solid: true },
 };
 
 export const PRODUCT_LOGO_SRC: Record<string, string> = {
@@ -38,6 +39,7 @@ export const PRODUCT_LOGO_SRC: Record<string, string> = {
   hrms: "/logos/hrms-icon.png",
   skillberry: "/logos/skillberry-icon.png",
   serviceops: "/logos/serviceops-icon.png",
+  bookings: "/logos/bookings-icon.svg",
   // Square menu icons (same as the Products dropdown) instead of cropping
   // the wide lockups, which came out blurry or showed the wrong mark.
   campaigns: "/site/images/campaigns-menu-icn.png",

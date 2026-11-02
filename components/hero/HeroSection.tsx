@@ -425,7 +425,7 @@ type ConnectorGeom = {
  * Visual style: a soft white-to-violet gradient with a glow, drawn as
  * one continuous cable rather than a right-angled trace, so it reads as
  * a live connection instead of a flowchart diagram. */
-function Connector({ geom, T }: { geom: ConnectorGeom; T: Timeline }) {
+function Connector({ geom, T, above }: { geom: ConnectorGeom; T: Timeline; above?: boolean }) {
   if (!geom) return null;
   return (
     <svg
@@ -433,7 +433,7 @@ function Connector({ geom, T }: { geom: ConnectorGeom; T: Timeline }) {
       width={geom.w}
       height={geom.h}
       viewBox={`0 0 ${geom.w} ${geom.h}`}
-      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 1, overflow: "visible", pointerEvents: "none" }}
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: above ? 4 : 1, overflow: "visible", pointerEvents: "none" }}
     >
       <defs>
         <linearGradient id="connector-grad" x1="0" y1="0" x2="0" y2="1">
@@ -469,6 +469,23 @@ function Connector({ geom, T }: { geom: ConnectorGeom; T: Timeline }) {
           transition={{ duration: 0.65, delay: T.bLine, ease: [0.22, 1, 0.36, 1] }}
         />
       </g>
+      {/* Tabs that draw the cable above the photos also run a stream of dashes
+          along it, so the direction of the hand-off reads clearly on top of the
+          images. Other tabs keep the plain cable behind the photos. */}
+      {above && [geom.a, geom.b].map((d, k) => (
+        <motion.path
+          key={k}
+          d={d}
+          fill="none"
+          stroke="#fff"
+          strokeWidth={2.4}
+          strokeLinecap="round"
+          strokeDasharray="1 11"
+          initial={{ opacity: 0, strokeDashoffset: 0 }}
+          animate={{ opacity: 1, strokeDashoffset: -48 }}
+          transition={{ opacity: { duration: 0.4, delay: (k ? T.bLine : T.aLine) + 0.3 }, strokeDashoffset: { duration: 2.4, repeat: Infinity, ease: "linear" } }}
+        />
+      ))}
       {/* Matching dots at both ends of each cable -- "node to node"
           rather than a line that just stops. */}
       <motion.circle cx={geom.aDot.x} cy={geom.aDot.y} r={3} fill="#fff" stroke="#9C8CFF" strokeWidth={1.5}
@@ -503,11 +520,13 @@ type CalloutSpec = {
  * above) applies to every tab automatically instead of drifting between
  * copies. */
 function TabComposite({
-  figures, calloutA, calloutB, relay, wide,
+  figures, calloutA, calloutB, relay, wide, lineAbove,
 }: {
   figures: FigureSpec[];
   // One full-width photo card instead of the three-portrait trio.
   wide?: boolean;
+  // Draw the flow line above the photos instead of behind them.
+  lineAbove?: boolean;
   calloutA: CalloutSpec;
   calloutB: CalloutSpec;
   relay: Relay;
@@ -569,7 +588,7 @@ function TabComposite({
   // not just the inner box.
   return (
     <div ref={wrapRef} style={{ width: "100%", position: "relative", containerType: "inline-size" }}>
-    <Connector geom={geom} T={T} />
+    <Connector geom={geom} T={T} above={lineAbove} />
     <RelayRiders geom={geom} relay={relay} T={T} />
     <div
       style={{
@@ -591,19 +610,24 @@ function TabComposite({
           tilt (rot) held constant throughout -- an expo-out ease gives
           the strong initial drift and firm, no-bounce landing that
           "settling" calls for, versus tumble's springy overshoot. */}
+      {/* Each figure gets its own entrance (left slides in, centre rises with a
+          soft spring, right drops in from above and straightens) and its own slow
+          idle drift (left bobs vertically, centre breathes, right sways sideways),
+          so the trio does not move in unison. The outer wrapper carries the idle
+          drift and the inner card the entrance, so the two never fight over one
+          transform. */}
       {(wide
-        ? [{ i: 0, left: "4%", w: "92%", bottom: "0%", z: 1, rot: 0, fromX: 0, fromY: 40 }]
+        ? [{ i: 0, left: "4%", w: "92%", bottom: "0%", z: 1, rot: 0, fromX: 0, fromY: 40, fromRot: 0, ease: [0.16, 1, 0.3, 1] as const, idle: { y: [0, -4, 0] }, idleDur: 7 }]
         : [
-            { i: 0, left: "1%",  w: "30%", bottom: "-20%", z: 1, rot: -2.5, fromX: -64, fromY: 16 },
-            { i: 1, left: "32%", w: "36%", bottom: "-30%", z: 2, rot: 0, fromX: 0, fromY: 56 },
-            { i: 2, left: "69%", w: "30%", bottom: "-20%", z: 1, rot: 2.5, fromX: 64, fromY: 16 },
+            { i: 0, left: "1%",  w: "30%", bottom: "-20%", z: 1, rot: -2.5, fromX: -64, fromY: 16, fromRot: -2.5, ease: [0.16, 1, 0.3, 1] as const, idle: { y: [0, -7, 0] }, idleDur: 6.5 },
+            { i: 1, left: "32%", w: "36%", bottom: "-30%", z: 2, rot: 0, fromX: 0, fromY: 56, fromRot: 0, ease: [0.34, 1.3, 0.64, 1] as const, idle: { scale: [1, 1.018, 1] }, idleDur: 8 },
+            { i: 2, left: "69%", w: "30%", bottom: "-20%", z: 1, rot: 2.5, fromX: 0, fromY: -52, fromRot: 9, ease: [0.22, 1, 0.36, 1] as const, idle: { x: [0, 6, 0], rotate: [0, 0.8, 0] }, idleDur: 7.5 },
           ]
-      ).map(({ i, left, w, bottom, z, rot, fromX, fromY }) => (
+      ).map(({ i, left, w, bottom, z, rot, fromX, fromY, fromRot, ease, idle, idleDur }) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0, x: fromX, y: fromY, rotate: rot, scale: 0.92 }}
-          animate={{ opacity: 1, x: 0, y: 0, rotate: rot, scale: 1 }}
-          transition={{ duration: 0.85, delay: 0.09 * i, ease: [0.16, 1, 0.3, 1] }}
+          animate={rm ? undefined : idle}
+          transition={{ duration: idleDur, repeat: Infinity, ease: "easeInOut", delay: T.aIn * 0.4 + i * 0.6 }}
           style={{
             position: "absolute",
             left,
@@ -611,10 +635,23 @@ function TabComposite({
             width: w,
             aspectRatio: wide ? "16 / 9" : "1 / 1.85",
             zIndex: z,
+          }}
+        >
+        <motion.div
+          initial={{ opacity: 0, x: fromX, y: fromY, rotate: fromRot, scale: 0.92 }}
+          animate={{ opacity: 1, x: 0, y: 0, rotate: rot, scale: 1 }}
+          transition={{ duration: 0.85, delay: 0.09 * i, ease }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            boxSizing: "border-box",
             borderRadius: "18px",
             overflow: "hidden",
             background: "linear-gradient(180deg, #F4F5FB 0%, #E8ECF7 100%)",
-            boxShadow: "0 24px 48px -20px rgba(10,10,60,0.5)",
+            /* White frame plus a faint outer halo: the same "photo in a bright
+               border" treatment monday.com uses on its hero imagery. */
+            border: "3px solid rgba(255,255,255,0.95)",
+            boxShadow: "0 24px 48px -20px rgba(10,10,60,0.5), 0 0 0 6px rgba(255,255,255,0.16)",
           }}
         >
           <img
@@ -629,6 +666,7 @@ function TabComposite({
               filter: figures[i].filter,
             }}
           />
+        </motion.div>
         </motion.div>
       ))}
 
@@ -734,6 +772,7 @@ function GrowthComposite() {
 function OperationsComposite() {
   return (
     <TabComposite
+      lineAbove
       figures={OPERATIONS_FIGURES}
       calloutA={{
         figureIndex: 2,
@@ -809,6 +848,7 @@ function PeopleComposite() {
 function FinanceComposite() {
   return (
     <TabComposite
+      lineAbove
       figures={FINANCE_FIGURES}
       calloutA={{
         figureIndex: 2,
@@ -880,6 +920,7 @@ function AiComposite() {
   return (
     <TabComposite
       wide
+      lineAbove
       figures={AI_FIGURES}
       calloutA={{
         figureIndex: 0,
