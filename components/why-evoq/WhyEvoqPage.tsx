@@ -181,14 +181,6 @@ export function WhyEvoqPage() {
           </div>
         </motion.div>
 
-        {/* TOP-RIGHT inner: 3× metric */}
-        <motion.div className="s-why-float" style={{ right: "17%", top: "20%" }} {...floatIn(0.35, 18, 0)}>
-          <div style={{ ...cardShell, padding: "16px 22px", textAlign: "center", minWidth: 130 }}>
-            <div style={{ fontFamily: "var(--font-display)", fontSize: 38, fontWeight: 800, color: "#1F2430", lineHeight: 1, letterSpacing: "-0.04em" }}>3×</div>
-            <div style={{ fontFamily: "var(--font-sans)", fontSize: 12, color: "#5F6B7A", marginTop: 6, lineHeight: 1.45 }}>Faster cross-team<br />handoffs</div>
-          </div>
-        </motion.div>
-
         {/* MID-LEFT inner: Deal Won */}
         <motion.div className="s-why-float" style={{ left: "15%", top: "58%" }} {...floatIn(0.4, -18, 0)}>
           <div style={{ ...cardShell, padding: "12px 14px", width: 185 }}>
@@ -374,24 +366,6 @@ export function WhyEvoqPage() {
                 </div>
               </motion.div>
             ))}
-
-            {/* Stat card — bottom-left */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.45 }}
-              style={{ position: "absolute", bottom: -16, left: -16, zIndex: 3, background: "#fff", borderRadius: 16, padding: "16px 20px", boxShadow: "0 12px 36px -8px rgba(31,36,48,0.2), 0 0 0 1px rgba(31,36,48,0.05)", minWidth: 170 }}>
-              <div style={{ fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 600, color: "#9BA8B7", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8 }}>Team Efficiency</div>
-              {/* Mini bar chart */}
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 36, marginBottom: 8 }}>
-                {[40, 55, 48, 62, 58, 72, 68, 84].map((h, i) => (
-                  <div key={i} style={{ flex: 1, height: `${h}%`, borderRadius: 3, background: i >= 6 ? "var(--interactive)" : "var(--soft)" }} />
-                ))}
-              </div>
-              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: 24, fontWeight: 800, color: "#1F2430", lineHeight: 1 }}>3×</span>
-                <span style={{ fontFamily: "var(--font-sans)", fontSize: 11, color: "#059669", fontWeight: 600 }}>↑ this quarter</span>
-              </div>
-            </motion.div>
 
           </motion.div>
         </div>

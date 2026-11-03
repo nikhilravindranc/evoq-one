@@ -131,7 +131,7 @@ export function AiSequence() {
           </div>
 
           <div className={`aq-msg evi aq-step${at >= 2 ? " in" : ""}`}>
-            <p>I&apos;ve passed this to <b>Ava</b>, the Follow-up agent. Nothing is sent without your approval.</p>
+            <p>I&apos;ve passed this to <b>Ava</b>, the Follow-up agent. Ava is set to ask for your approval before sending.</p>
           </div>
         </div>
 

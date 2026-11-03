@@ -1142,15 +1142,13 @@ export function SectionPlatform() {
 
       <div className="s-platform-inner">
         <motion.div className="evoq-section-head pf-head" {...fadeUp(0)}>
-          <Eyebrow>One Unified Platform</Eyebrow>
+          <Eyebrow>EVOQ apps</Eyebrow>
           <h2 className="evoq-h2">
-            {/* nbsp keeps "one suite." together so it never orphans onto
-                its own line with just "suite." trailing below it */}
-            Every product, <span className="accent">one&nbsp;suite.</span>
+            Begin with the app your team needs most. <span className="accent">Add others as you grow.</span>
           </h2>
           <p className="evoq-sub">
-            Explore products for growth, operations, and people. Start with what you need
-            and add more as your business grows.
+            Each EVOQ app works on its own and can be customized to fit how your team works. EVOQ CTRL
+            gives everyone access to the apps you add, from the same login.
           </p>
         </motion.div>
       </div>
