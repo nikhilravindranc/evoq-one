@@ -72,11 +72,11 @@ export function SectionWalkthroughs() {
         <motion.div className="evoq-section-head" {...fadeUp(0)}>
           <Eyebrow>Walkthroughs</Eyebrow>
           <h2 className="evoq-h2">
-            See EVOQ <span className="accent">in action.</span>
+            See how a request <span className="accent">moves through EVOQ.</span>
           </h2>
           <p className="evoq-sub">
-            Explore the applications, follow a representative process and see how available AI
-            capabilities support the work.
+            Tour each app, follow a lead from first enquiry to final invoice across the apps involved, or
+            look closely at the screens your team would use.
           </p>
         </motion.div>
 

@@ -13,8 +13,9 @@ import { PeopleStory } from "./PeopleStory";
 import { FinanceStory } from "./FinanceStory";
 import { PlatformStory } from "./PlatformStory";
 import { AiStory } from "./AiStory";
-
-type HeroTab = "growth" | "operations" | "people" | "finance" | "platform" | "ai";
+import { OverviewStory } from "./OverviewStory";
+import { HERO_COPY, TOUR, DWELL_MS, type HeroTab, type HeroView } from "./heroCopy";
+import { track } from "@/lib/track";
 
 const HERO_TABS: { key: HeroTab; label: string }[] = [
   { key: "growth", label: "Growth" },
@@ -980,40 +981,61 @@ const GRAIN_SVG = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/20
 
 export function HeroSection() {
   const [showGetStarted, setShowGetStarted] = useState(false);
-  const [activeTab, setActiveTab] = useState<HeroTab>("growth");
+  const [view, setView] = useState<HeroView>("overview");
+  const reduceMotion = useReducedMotion();
+  // Which chip the overview spotlight is on right now (null when none).
+  const [overviewLit, setOverviewLit] = useState<number | null>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const [logoPos, setLogoPos] = useState<{ x: string; y: string }>({ x: "69%", y: "51%" });
   const [topbarLogoPos, setTopbarLogoPos] = useState<{ x: string; y: string }>({ x: "6%", y: "8%" });
 
-  // Auto-advance growth -> operations -> people -> growth, looping.
-  // Restarted (not just cleared) on every manual tab click below so a
-  // click doesn't get overridden a moment later by a timer that was
-  // already mid-flight -- the visitor's own choice gets a full fresh
-  // interval before the loop resumes.
-  const tabTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Each tab plays a story of about 9 seconds; hold a little past the last beat before the loop moves on.
-  const AUTO_TAB_MS = 12500;
-  const dwell = (_tab: HeroTab) => AUTO_TAB_MS;
-
-  const startTabTimer = (from: HeroTab = activeTab) => {
-    if (tabTimerRef.current) clearTimeout(tabTimerRef.current);
-    const schedule = (tab: HeroTab) => {
-      tabTimerRef.current = setTimeout(() => {
-        const i = HERO_TABS.findIndex((t) => t.key === tab);
-        const next = HERO_TABS[(i + 1) % HERO_TABS.length].key;
-        setActiveTab(next);
-        schedule(next);
-      }, dwell(tab));
+  // The tour: the EVOQ overview first, then each category, then back to the overview, looping.
+  // Choosing a category hands control to the visitor and stops the tour, so the copy never moves
+  // under them. Going back to the overview starts the tour again from the overview, which plays
+  // its spotlight and then moves on to the first category. People who prefer reduced motion stay
+  // on whatever they pick; nothing advances on its own.
+  const tourTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stopTour = () => {
+    if (tourTimer.current) clearTimeout(tourTimer.current);
+    tourTimer.current = null;
+  };
+  const startTour = (from: HeroView) => {
+    stopTour();
+    const step = (current: HeroView) => {
+      tourTimer.current = setTimeout(() => {
+        const next = TOUR[(TOUR.indexOf(current) + 1) % TOUR.length];
+        setView(next);
+        track("hero_view", { view: next, source: "tour" });
+        step(next);
+      }, DWELL_MS[current]);
     };
-    schedule(from);
+    step(from);
   };
 
   useEffect(() => {
-    startTabTimer();
-    return () => {
-      if (tabTimerRef.current) clearTimeout(tabTimerRef.current);
-    };
-  }, []);
+    if (reduceMotion) return;
+    startTour("overview");
+    return stopTour;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reduceMotion]);
+
+  const backToOverview = () => {
+    setView("overview");
+    track("hero_view", { view: "overview", source: "link" });
+    if (reduceMotion) stopTour();
+    else startTour("overview");
+  };
+
+  // Choosing the selected chip again goes back to the overview, which restarts the tour.
+  const choose = (tab: HeroTab) => {
+    if (view === tab) {
+      backToOverview();
+      return;
+    }
+    stopTour();
+    setView(tab);
+    track("hero_view", { view: tab, source: "click" });
+  };
 
   useEffect(() => {
     const frame = frameRef.current;
@@ -1174,36 +1196,113 @@ export function HeroSection() {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
               <div>
-                <h1
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 700,
-                    fontSize: 48,
-                    lineHeight: 1.08,
-                    letterSpacing: "-0.03em",
-                    color: "#fff",
-                    margin: 0,
-                  }}
-                >
-                  Human intelligence. Agentic action.
-                  <br />
-                  <span style={{ color: "#BDBDFF" }}>Connected platforms.</span>
-                </h1>
-
-                <p
-                  style={{
-                    marginTop: 20,
-                    maxWidth: "52ch",
-                    fontFamily: "var(--font-sans)",
-                    fontSize: 15.5,
-                    lineHeight: 1.55,
-                    color: "rgba(255,255,255,0.75)",
-                  }}
-                >
-                  EVOQ is a suite of connected applications for sales, service,
-                  operations, people and finance, with an AI layer that helps
-                  your teams find information and prepare next steps.
-                </p>
+                {/* All seven messages share one grid cell, so the hero keeps a steady height as the
+                    message changes. The overview is the page heading; category messages swap in. */}
+                <div style={{ display: "grid", gridTemplateRows: "auto auto auto auto" }}>
+                  {(Object.keys(HERO_COPY) as HeroView[]).map((k) => {
+                    const c = HERO_COPY[k];
+                    const on = view === k;
+                    const isOverview = k === "overview";
+                    const Heading = isOverview ? "h1" : "h2";
+                    return (
+                      <div
+                        key={k}
+                        aria-hidden={!on}
+                        style={{
+                          // Each message spans the same four rows (link, label, headline, text) through a
+                          // subgrid, so the rows are as tall as the tallest message and nothing shifts.
+                          gridArea: "1 / 1 / span 4 / auto",
+                          display: "grid",
+                          gridTemplateRows: "subgrid",
+                          opacity: on ? 1 : 0,
+                          visibility: on ? "visible" : "hidden",
+                          transform: on ? "none" : "translateY(6px)",
+                          transition: on
+                            ? "opacity .4s ease .12s, transform .4s ease .12s"
+                            : "opacity .22s ease, transform .22s ease, visibility 0s linear .22s",
+                        }}
+                      >
+                        <div style={{ height: 30, marginBottom: 6 }}>
+                          {!isOverview && (
+                            <button
+                              type="button"
+                              onClick={backToOverview}
+                              tabIndex={on ? 0 : -1}
+                              aria-label="Back to the EVOQ overview"
+                              className="hero-back"
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 6,
+                                padding: "5px 12px 5px 9px",
+                                borderRadius: 999,
+                                border: "1px solid rgba(255,255,255,0.28)",
+                                background: "rgba(255,255,255,0.1)",
+                                color: "rgba(255,255,255,0.92)",
+                                fontFamily: "var(--font-sans)",
+                                fontSize: 12.5,
+                                fontWeight: 600,
+                                cursor: "pointer",
+                              }}
+                            >
+                              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7 4 3 8l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                              EVOQ overview
+                            </button>
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: "var(--font-sans)",
+                            fontSize: 12.5,
+                            fontWeight: 600,
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            color: "rgba(255,255,255,0.72)",
+                            marginBottom: 14,
+                          }}
+                        >
+                          {c.label.split(" · ")[0]}
+                          {c.label.includes(" · ") && <span className="hero-label-apps">{" · " + c.label.split(" · ").slice(1).join(" · ")}</span>}
+                        </div>
+                        <Heading
+                          style={{
+                            fontFamily: "var(--font-display)",
+                            fontWeight: 700,
+                            fontSize: isOverview ? "clamp(34px, 9.4vw, 48px)" : "clamp(28px, 7.4vw, 38px)",
+                            lineHeight: isOverview ? 1.08 : 1.12,
+                            letterSpacing: "-0.03em",
+                            color: "#fff",
+                            margin: 0,
+                            textWrap: "balance",
+                          }}
+                        >
+                          {c.lead ? (
+                            <>
+                              {c.lead}
+                              <br />
+                              <span style={{ color: "#BDBDFF" }}>{c.headline}</span>
+                            </>
+                          ) : (
+                            c.headline
+                          )}
+                        </Heading>
+                        <p
+                          style={{
+                            marginTop: 20,
+                            maxWidth: "52ch",
+                            fontFamily: "var(--font-sans)",
+                            fontSize: 15.5,
+                            lineHeight: 1.55,
+                            color: "rgba(255,255,255,0.75)",
+                            textWrap: "pretty",
+                          }}
+                        >
+                          {c.text}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               <div>
@@ -1219,17 +1318,17 @@ export function HeroSection() {
                     flexWrap: "wrap",
                   }}
                 >
-                  {HERO_TABS.map((tab) => {
-                    const isActive = tab.key === activeTab;
+                  {HERO_TABS.map((tab, i) => {
+                    const isActive = tab.key === view;
+                    const isLit = view === "overview" && overviewLit === i;
                     return (
                       <button
                         key={tab.key}
                         role="tab"
                         aria-selected={isActive}
-                        onClick={() => {
-                          setActiveTab(tab.key);
-                          startTabTimer(tab.key);
-                        }}
+                        aria-label={isActive ? `${tab.label}, selected. Select again to return to the overview.` : undefined}
+                        title={isActive ? "Select again to return to the overview" : undefined}
+                        onClick={() => choose(tab.key)}
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
@@ -1241,9 +1340,10 @@ export function HeroSection() {
                           fontWeight: 500,
                           lineHeight: 1.4,
                           cursor: "pointer",
-                          transition: "background .18s ease, color .18s ease",
+                          transition: "background .25s ease, color .18s ease, box-shadow .25s ease",
+                          boxShadow: isLit ? "0 0 0 1.5px rgba(255,255,255,0.85), 0 0 16px rgba(190,170,255,0.7)" : "none",
                           border: 0,
-                          background: isActive ? "#fff" : "rgba(255,255,255,0.14)",
+                          background: isActive ? "#fff" : isLit ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.14)",
                           color: isActive ? "#4747E0" : "rgba(255,255,255,0.9)",
                         }}
                       >
@@ -1408,18 +1508,19 @@ export function HeroSection() {
                     cards, connected traces and outcome card, no <video>
                     involved anywhere in the hero. */}
                 <motion.div
-                  key={`${activeTab}-composite`}
+                  key={`${view}-composite`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   style={{ width: "100%" }}
                 >
-                  {activeTab === "growth" ? <GrowthStory />
-                    : activeTab === "operations" ? <OpsStory />
-                    : activeTab === "people" ? <PeopleStory />
-                    : activeTab === "finance" ? <FinanceStory />
-                    : activeTab === "platform" ? <PlatformStory />
+                  {view === "overview" ? <OverviewStory onLit={setOverviewLit} />
+                    : view === "growth" ? <GrowthStory />
+                    : view === "operations" ? <OpsStory />
+                    : view === "people" ? <PeopleStory />
+                    : view === "finance" ? <FinanceStory />
+                    : view === "platform" ? <PlatformStory />
                     : <AiStory />}
                 </motion.div>
               </AnimatePresence>

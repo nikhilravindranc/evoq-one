@@ -25,10 +25,9 @@ export function SectionAI() {
             <motion.div className="ai-copy" {...fadeUp(0.04)}>
               <h2 className="evoq-h2">You decide how much the AI does <span className="accent">on its own.</span></h2>
               <p className="body">
-                EVI answers questions using the records in your EVOQ apps and supported integrations.
-                AI agents carry out defined tasks, such as drafting emails to customers with open deals.
-                You choose the approval mode for each agent, from asking before every action to running
-                automatically.
+                EVI answers from the records in your EVOQ apps and supported integrations. When work needs
+                doing, an agent prepares it, such as drafting emails to customers with open deals. For each
+                agent you choose the approval mode, from asking before every action to running automatically.
               </p>
               <dl className="ai-defs">
                 <div><dt>EVI</dt><dd>The assistant you ask in plain language, inside your applications.</dd></div>

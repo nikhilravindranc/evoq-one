@@ -3144,3 +3144,9 @@
 .wt-flow li { gap: 7px; }
 .wt-screen { position: absolute; inset: 14px 22px 0; overflow: hidden; border-radius: 12px 12px 0 0; box-shadow: 0 0 0 1px rgba(31,36,48,.08), 0 18px 30px -18px rgba(20,24,60,.45); }
 .wt-screen img { display: block; width: 100%; height: auto; }
+
+/* Hero: on phones the label above the headline shows only the category name; the description names the apps. */
+@media (max-width: 640px) { .hero-label-apps { display: none; } }
+
+/* Section headings and descriptions below the hero keep their lines balanced. */
+.s-int .evoq-h2, .s-int .evoq-sub, .s-walk .evoq-h2, .s-walk .evoq-sub, .wc-h2, .wc-lead p, .cta3-title, .cta3-sub, .evoq-footer .subline { text-wrap: balance; }

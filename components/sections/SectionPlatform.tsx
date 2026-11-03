@@ -1144,11 +1144,11 @@ export function SectionPlatform() {
         <motion.div className="evoq-section-head pf-head" {...fadeUp(0)}>
           <Eyebrow>EVOQ apps</Eyebrow>
           <h2 className="evoq-h2">
-            Begin with the app your team needs most. <span className="accent">Add others as you grow.</span>
+            Choose the apps each team needs. <span className="accent">They are built to work together.</span>
           </h2>
           <p className="evoq-sub">
-            Each EVOQ app works on its own and can be customized to fit how your team works. EVOQ CTRL
-            gives everyone access to the apps you add, from the same login.
+            Growth, Operations, People, Finance, Platform and AI each have their own apps. Use any app on
+            its own or several together, and customize them to fit how your teams work.
           </p>
         </motion.div>
       </div>

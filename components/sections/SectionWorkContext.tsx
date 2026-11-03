@@ -166,10 +166,10 @@ export function SectionWorkContext() {
     <div className="wc-head">
       <div>
         <Eyebrow>AI agent context</Eyebrow>
-        <h2 className="evoq-h2 wc-h2">AI agents need context to <span className="accent">act with confidence.</span></h2>
+        <h2 className="evoq-h2 wc-h2">EVI gathers the context. <span className="accent">The agent prepares the work.</span></h2>
       </div>
       <div className="wc-lead">
-        <p>Relevant records, documents, activity and instructions help AI agents understand the task at hand. EVI brings the available context together so agents can prepare informed actions within their configured permissions.</p>
+        <p>Before an agent prepares anything, EVI brings together the records, documents, recent activity and instructions that apply to the task, within what that agent is permitted to access. You decide how much the agent does without asking.</p>
         <a href="/products/ai" className="wc-btn">Explore EVI and agents <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg></a>
       </div>
     </div>

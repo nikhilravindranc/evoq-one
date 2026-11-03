@@ -16,9 +16,9 @@ export function Footer({ background, darkText = false, socialHover }: { backgrou
               style={{ height: 30, width: "auto", filter: darkText ? "brightness(0)" : "brightness(0) invert(1)" }}
             />
           </div>
-          <div className="tagline">One Suite. Endless Potential.</div>
+          <div className="tagline">Apps built to work together.</div>
           <div className="subline">
-            A unified business operating system for modern organizations.
+            Sales, service, operations, people and finance on connected apps, with AI that works from your records.
           </div>
         </div>
 
