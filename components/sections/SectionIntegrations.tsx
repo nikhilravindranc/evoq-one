@@ -33,7 +33,7 @@ export function SectionIntegrations() {
         <motion.div className="evoq-section-head" {...fadeUp(0)}>
           <Eyebrow>Integrations</Eyebrow>
           <h2 className="evoq-h2">
-            Keep the tools you already use. <span className="accent">EVOQ connects to them.</span>
+            Keep the tools you already use.<br /><span className="accent">EVOQ connects to them.</span>
           </h2>
           <p className="evoq-sub">
             EVOQ apps share records with each other and connect to supported tools such as Gmail, Slack and

@@ -8,8 +8,7 @@ import { AgentTile, CHAR, Stage, Tick, card, ease, label, useStoryClock } from "
 /* The hero's opening visual: the whole EVOQ cast. EVI in front, the five agents behind her, each
    under its category and with that category's apps. Once everyone has arrived, a spotlight moves
    through the six in turn (the five agents, then EVI). The one in the spotlight steps forward, the
-   others dim, and a short outcome says what that part of EVOQ does. The matching chip under the
-   headline lights in step, reported through `onLit`. The order here must match the order of the chips. */
+   others dim, and a short outcome says what that part of EVOQ does. */
 
 const AGENTS = [
   { key: "ava", name: "Ava", cat: "Growth", apps: ["crm", "campaigns", "configx"], outcome: "3 follow ups drafted" },
@@ -46,7 +45,7 @@ function Bubble({ name, text, on, pointer }: { name: string; text: string; on: b
   );
 }
 
-export function OverviewStory({ onLit }: { onLit?: (index: number | null) => void }) {
+export function OverviewStory() {
   const reduce = !!useReducedMotion();
   const { at: atT } = useStoryClock(AT.end);
   const at = (s: number) => atT(s);
@@ -64,11 +63,6 @@ export function OverviewStory({ onLit }: { onLit?: (index: number | null) => voi
     }, OVERVIEW_FIRST_LIGHT_MS);
     return () => { clearTimeout(start); clearInterval(id); };
   }, [reduce]);
-
-  useEffect(() => {
-    onLit?.(lit);
-    return () => onLit?.(null);
-  }, [lit, onLit]);
 
   const spot = lit !== null;
   const eviLit = lit === SPOTLIGHT;

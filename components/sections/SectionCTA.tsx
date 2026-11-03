@@ -15,11 +15,11 @@ export function SectionCTA() {
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <h2 className="cta3-title">
-          See EVOQ <span>set up for your teams.</span>
+          Bring a workflow.<br /><span>See how EVOQ handles it.</span>
         </h2>
         <p className="cta3-sub">
-          Tell us which teams you run and which tools you use today. We will show how EVOQ fits, and how
-          much of the work you can let EVI and the agents prepare.
+          Pick a workflow that matters to your teams. We will show it step by step in EVOQ, with the apps
+          involved and the tools you want to keep.
         </p>
 
         <div className="cta3-actions">

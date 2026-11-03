@@ -9,8 +9,8 @@ export type HeroView = "overview" | HeroTab;
 export const HERO_COPY: Record<HeroView, { label: string; lead?: string; headline: string; text: string }> = {
   overview: {
     label: "EVOQ",
-    lead: "Run every team on",
-    headline: "apps built to work together.",
+    lead: "Run every team on apps",
+    headline: "built to work together.",
     text: "EVOQ brings sales, service, operations, people and finance into connected apps. EVI and AI agents prepare work from your records, and you choose how much they do on their own.",
   },
   growth: {

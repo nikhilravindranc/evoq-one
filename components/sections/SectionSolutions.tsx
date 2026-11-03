@@ -260,10 +260,10 @@ export function SectionSolutions() {
           <motion.div className="evoq-section-head sol-head" {...fadeUp(0)}>
             <Eyebrow>Solutions</Eyebrow>
             <h2 className="evoq-h2">
-              Start from your industry. <span className="accent">See the apps that fit.</span>
+              EVOQ for <span className="accent">healthcare, manufacturing, hospitality and more.</span>
             </h2>
             <p className="evoq-sub sol-sub">
-              Each industry page opens with the problems teams in that field deal with, then shows the
+              Each industry solution starts with the problems teams in that field deal with, then shows the
               EVOQ apps that address them and how work moves between them.
             </p>
           </motion.div>

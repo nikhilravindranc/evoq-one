@@ -983,8 +983,6 @@ export function HeroSection() {
   const [showGetStarted, setShowGetStarted] = useState(false);
   const [view, setView] = useState<HeroView>("overview");
   const reduceMotion = useReducedMotion();
-  // Which chip the overview spotlight is on right now (null when none).
-  const [overviewLit, setOverviewLit] = useState<number | null>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const [logoPos, setLogoPos] = useState<{ x: string; y: string }>({ x: "69%", y: "51%" });
   const [topbarLogoPos, setTopbarLogoPos] = useState<{ x: string; y: string }>({ x: "6%", y: "8%" });
@@ -1162,6 +1160,7 @@ export function HeroSection() {
 
           {/* Stage -- grows to fill all remaining height exactly */}
           <div
+            className="hero-stage"
             style={{
               position: "relative",
               zIndex: 2,
@@ -1174,6 +1173,7 @@ export function HeroSection() {
           >
           {/* Inner container -- capped to match the width used by sections below the hero */}
           <div
+            className="hero-grid"
             style={{
               width: "100%",
               maxWidth: 1168,
@@ -1185,6 +1185,7 @@ export function HeroSection() {
           >
             {/* Left column */}
             <motion.section
+              className="hero-left"
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -1198,7 +1199,7 @@ export function HeroSection() {
               <div>
                 {/* All seven messages share one grid cell, so the hero keeps a steady height as the
                     message changes. The overview is the page heading; category messages swap in. */}
-                <div style={{ display: "grid", gridTemplateRows: "auto auto auto auto" }}>
+                <div style={{ display: "grid", containerType: "inline-size" }}>
                   {(Object.keys(HERO_COPY) as HeroView[]).map((k) => {
                     const c = HERO_COPY[k];
                     const on = view === k;
@@ -1209,11 +1210,11 @@ export function HeroSection() {
                         key={k}
                         aria-hidden={!on}
                         style={{
-                          // Each message spans the same four rows (link, label, headline, text) through a
-                          // subgrid, so the rows are as tall as the tallest message and nothing shifts.
-                          gridArea: "1 / 1 / span 4 / auto",
-                          display: "grid",
-                          gridTemplateRows: "subgrid",
+                          // All messages sit in the same cell, so the block is as tall as the tallest one and the
+                          // chips never move. Each message is top aligned: the headline and its description stay
+                          // together, and any spare height falls below the description.
+                          gridArea: "1 / 1",
+                          alignSelf: "start",
                           opacity: on ? 1 : 0,
                           visibility: on ? "visible" : "hidden",
                           transform: on ? "none" : "translateY(6px)",
@@ -1222,7 +1223,7 @@ export function HeroSection() {
                             : "opacity .22s ease, transform .22s ease, visibility 0s linear .22s",
                         }}
                       >
-                        <div style={{ height: 30, marginBottom: 6 }}>
+                        <div style={{ height: 30, marginBottom: 16 }}>
                           {!isOverview && (
                             <button
                               type="button"
@@ -1253,9 +1254,9 @@ export function HeroSection() {
                         <div
                           style={{
                             fontFamily: "var(--font-sans)",
-                            fontSize: 12.5,
+                            fontSize: 12,
                             fontWeight: 600,
-                            letterSpacing: "0.08em",
+                            letterSpacing: "0.05em",
                             textTransform: "uppercase",
                             color: "rgba(255,255,255,0.72)",
                             marginBottom: 14,
@@ -1268,7 +1269,10 @@ export function HeroSection() {
                           style={{
                             fontFamily: "var(--font-display)",
                             fontWeight: 700,
-                            fontSize: isOverview ? "clamp(34px, 9.4vw, 48px)" : "clamp(28px, 7.4vw, 38px)",
+                            // Titles are sized from the text column, not the window: the overview title always fits on
+                            // two lines (also on tablets, where the column is narrow), and category headlines shrink in
+                            // step instead of stacking up to five lines. Phones use their own sizes (see sections.css).
+                            fontSize: isOverview ? "clamp(26px, 8.3cqw, 48px)" : "clamp(26px, 8cqw, 38px)",
                             lineHeight: isOverview ? 1.08 : 1.12,
                             letterSpacing: "-0.03em",
                             color: "#fff",
@@ -1289,7 +1293,7 @@ export function HeroSection() {
                         <p
                           style={{
                             marginTop: 20,
-                            maxWidth: "52ch",
+                            maxWidth: "58ch",
                             fontFamily: "var(--font-sans)",
                             fontSize: 15.5,
                             lineHeight: 1.55,
@@ -1318,9 +1322,8 @@ export function HeroSection() {
                     flexWrap: "wrap",
                   }}
                 >
-                  {HERO_TABS.map((tab, i) => {
+                  {HERO_TABS.map((tab) => {
                     const isActive = tab.key === view;
-                    const isLit = view === "overview" && overviewLit === i;
                     return (
                       <button
                         key={tab.key}
@@ -1340,10 +1343,9 @@ export function HeroSection() {
                           fontWeight: 500,
                           lineHeight: 1.4,
                           cursor: "pointer",
-                          transition: "background .25s ease, color .18s ease, box-shadow .25s ease",
-                          boxShadow: isLit ? "0 0 0 1.5px rgba(255,255,255,0.85), 0 0 16px rgba(190,170,255,0.7)" : "none",
+                          transition: "background .18s ease, color .18s ease",
                           border: 0,
-                          background: isActive ? "#fff" : isLit ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.14)",
+                          background: isActive ? "#fff" : "rgba(255,255,255,0.14)",
                           color: isActive ? "#4747E0" : "rgba(255,255,255,0.9)",
                         }}
                       >
@@ -1515,7 +1517,7 @@ export function HeroSection() {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   style={{ width: "100%" }}
                 >
-                  {view === "overview" ? <OverviewStory onLit={setOverviewLit} />
+                  {view === "overview" ? <OverviewStory />
                     : view === "growth" ? <GrowthStory />
                     : view === "operations" ? <OpsStory />
                     : view === "people" ? <PeopleStory />

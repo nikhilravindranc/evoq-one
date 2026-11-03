@@ -119,9 +119,11 @@
 .s-platform-inner { width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 80px; }
 .pf-head { text-align: center; margin-left: auto; margin-right: auto; }
 .pf-head .evoq-eyebrow { margin: 0 auto 20px; }
-.pf-head .evoq-sub { margin: 16px auto 0; }
+.pf-head .evoq-sub { margin: 16px auto 0; max-width: none; }
 /* New section headings and descriptions: keep lines balanced so no word is left alone on the last line. */
-.pf-head .evoq-h2, .pf-head .evoq-sub, .sol-head .evoq-h2, .sol-sub, .ai-copy .evoq-h2, .ai-copy .body { text-wrap: balance; }
+.pf-head .evoq-h2, .sol-head .evoq-h2, .sol-sub, .ai-copy .evoq-h2, .ai-copy .body { text-wrap: balance; }
+/* The Products description uses the full width of the section and only avoids a lone word on its last line. */
+.pf-head .evoq-sub { text-wrap: pretty; }
 
 /* Two large soft-edged washes peeking from opposite corners, in the
    site's own lavender/mint tones rather than the reference's flat
@@ -3150,3 +3152,11 @@
 
 /* Section headings and descriptions below the hero keep their lines balanced. */
 .s-int .evoq-h2, .s-int .evoq-sub, .s-walk .evoq-h2, .s-walk .evoq-sub, .wc-h2, .wc-lead p, .cta3-title, .cta3-sub, .evoq-footer .subline { text-wrap: balance; }
+
+/* Hero below 900px: the showcase is hidden (see .hero-showcase), so the text takes the full width instead of
+   staying in a narrow column with 80px of side padding. */
+@media (max-width: 900px) {
+  .hero-stage { padding: 0 24px 40px !important; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 0 !important; }
+  .hero-left { padding: 0 !important; }
+}
