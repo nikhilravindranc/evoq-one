@@ -131,17 +131,16 @@ export function AiSequence() {
           </div>
 
           <div className={`aq-msg evi aq-step${at >= 2 ? " in" : ""}`}>
-            <p>I&apos;ve passed this to the <b>Follow-up agent</b>. Nothing is sent without your approval.</p>
+            <p>I&apos;ve passed this to <b>Ava</b>, the Follow-up agent. Nothing is sent without your approval.</p>
           </div>
         </div>
 
         {/* The agent: a defined task with visible states */}
         <div className={`aq-panel aq-agent aq-step${at >= 2 ? " in" : ""}`}>
           <div className="aq-panel-h">
-            <span className="aq-agent-ic" aria-hidden>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M14 4c3-1 6-1 6-1s0 3-1 6l-7 7-5-5zM9 10H5l3-3h4M14 15v4l3-3v-4" /></svg>
-            </span>
-            <b>Follow-up agent</b>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="aq-agent-av" src="/characters/ava.webp" alt="" width={30} height={30} />
+            <b>Ava</b><span>Follow-up agent</span>
             {agentStatus && <span className={`aq-status ${agentStatus.cls}`}>{agentStatus.text}</span>}
           </div>
           <p className="aq-task">Task: draft a follow-up email for each opportunity, using the context EVI retrieved.</p>

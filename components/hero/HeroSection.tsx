@@ -1292,25 +1292,6 @@ export function HeroSection() {
                     Book a demo
                     <ArrowRight color="#3A3AC9" />
                   </button>
-                  <a
-                    href="#products"
-                    onClick={() => trackCta("explore_apps", "hero")}
-                    className="hero-cta-ghost"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      padding: "13px 22px",
-                      borderRadius: 999,
-                      border: "1.5px solid rgba(255,255,255,0.45)",
-                      color: "#fff",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: 15,
-                      fontWeight: 600,
-                      textDecoration: "none",
-                    }}
-                  >
-                    Explore the apps
-                  </a>
                 </div>
 
               </div>

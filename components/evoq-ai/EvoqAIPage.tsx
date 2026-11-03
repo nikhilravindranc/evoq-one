@@ -678,8 +678,8 @@ function CrossSystemDiagram() {
 
       <div className="flex w-full flex-col items-center lg:w-[270px] lg:shrink-0">
         <div className="relative w-full rounded-[22px] px-5 pb-5 pt-14 text-center" style={{ ...SOFT_CARD, minHeight: 2 * (hub - 36), marginTop: 36 }}>
-          <span className="absolute -top-9 left-1/2 h-[84px] w-[84px] -translate-x-1/2 overflow-hidden rounded-full border-4 border-white" style={{ boxShadow: "0 0 0 8px #E8E3FF, 0 16px 30px -10px rgba(92,92,255,0.5)" }}>
-            <Image src="/healthcare/avatars/priya.jpg" alt="EVI" fill sizes="84px" className="object-cover" />
+          <span className="absolute -top-10 left-1/2 h-[88px] w-[88px] -translate-x-1/2 overflow-hidden rounded-[26%]" style={{ background: "#E9E4FF", boxShadow: "0 0 0 2.5px #8F7BFF, 0 0 0 6px rgba(143,123,255,0.25), 0 16px 30px -10px rgba(92,92,255,0.5)" }}>
+            <Image src="/characters/evi.webp" alt="EVI" fill sizes="88px" className="object-cover" />
           </span>
           <h4 className="mt-3 text-[20px] font-extrabold" style={{ color: "#0B1230" }}>EVI</h4>
           <p className="mx-auto mt-1 max-w-[210px] text-[13px] leading-[1.5]" style={{ color: C.muted }}>Finds information across your systems and prepares the next step.</p>
@@ -694,8 +694,8 @@ function CrossSystemDiagram() {
         <svg width="14" height="30" viewBox="0 0 14 30" fill="none" stroke={C.primary} strokeWidth="1.4" aria-hidden="true" className="my-1"><path d="M7 0v26" strokeDasharray="3 3" /><path d="m3 22 4 5 4-5" /></svg>
         <div className="w-full rounded-[22px] p-5" style={SOFT_CARD}>
           <div className="flex items-start gap-3">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full" style={{ background: C.aiHighlight }}>
-              <BotIcon size={22} stroke={C.interactive} />
+            <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[26%]" style={{ background: "#E9E4FF", boxShadow: "0 0 0 2px #8F7BFF" }}>
+              <Image src="/characters/rohan.webp" alt="" fill sizes="48px" className="object-cover" />
             </span>
             <div>
               <p className="text-[15px] font-extrabold" style={{ color: "#0B1230" }}>Finance agent</p>
