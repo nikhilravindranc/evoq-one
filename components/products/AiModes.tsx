@@ -1,5 +1,6 @@
 "use client";
 
+import { EviTile } from "@/components/shared/EviTile";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -156,7 +157,7 @@ export function AiModes() {
 
         <div data-rv="1" style={{ position: "relative" }} aria-live="polite">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="ai-evi" src="/evoq-ai/evi-hold.webp" alt="" width={1010} height={784} style={{ position: "absolute", right: -18, top: -92, width: 150, height: "auto", zIndex: 2, filter: "drop-shadow(0 20px 30px rgba(0,0,0,.5))", pointerEvents: "none" }} />
+          <EviTile pose="working" className="ai-evi" style={{ position: "absolute", right: -14, top: -70, width: 116, zIndex: 2, pointerEvents: "none" }} />
           <div className="ai-stage">
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22, paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,.08)" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}

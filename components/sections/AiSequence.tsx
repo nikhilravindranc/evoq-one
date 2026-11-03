@@ -106,7 +106,6 @@ export function AiSequence() {
             </li>
           ))}
         </ol>
-        <span className="aq-label">Illustrative example</span>
       </div>
 
       <div className="aq-body">

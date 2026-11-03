@@ -1,5 +1,6 @@
 "use client";
 
+import { EviTile } from "@/components/shared/EviTile";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ScaleFit } from "./ScaleFit";
@@ -226,14 +227,14 @@ export function CrossSystemVisual() {
             <FinanceCard className="absolute" style={{ left: 552, top: 430, width: 480 }} />
             <motion.div
               className="pointer-events-none absolute"
-              style={{ left: 842, top: 232, width: 248 }}
+              style={{ left: 862, top: 250, width: 206 }}
               initial={{ opacity: 0, y: 100, scale: 0.8 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={VP}
               transition={{ type: "spring", stiffness: 90, damping: 13, delay: 1.1 }}
             >
               <motion.div animate={{ y: [0, -9, 0], rotate: [0, 2.5, 0] }} transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }} style={{ transformOrigin: "50% 100%" }}>
-                <Image src="/evoq-ai/evi-robot.webp" alt="EVI" width={1350} height={1160} sizes="520px" className="h-auto w-full" style={{ filter: "drop-shadow(0 18px 24px rgba(60,50,200,0.25))" }} />
+                <EviTile pose="done" className="w-full" />
               </motion.div>
             </motion.div>
             <motion.span className="absolute" style={{ left: 1082, top: 322 }} animate={{ scale: [1, 1.2, 1], rotate: [0, 18, 0] }} transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}><Star size={46} /></motion.span>
@@ -249,7 +250,7 @@ export function CrossSystemVisual() {
         </div>
         <EviCard />
         <div className="relative mt-14">
-          <Image src="/evoq-ai/evi-robot.webp" alt="EVI" width={1350} height={1160} className="pointer-events-none absolute -top-[82px] right-4 z-10 w-[132px]" />
+          <EviTile pose="done" className="pointer-events-none absolute -top-[60px] right-4 z-10 w-[104px]" />
           <FinanceCard />
         </div>
       </div>

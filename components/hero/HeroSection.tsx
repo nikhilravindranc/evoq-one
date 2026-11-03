@@ -7,6 +7,12 @@ import { ArrowRight } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 import { trackCta } from "@/lib/track";
 import { ProductBadge } from "@/components/shared/ProductBadge";
+import { OpsStory } from "./OpsStory";
+import { GrowthStory } from "./GrowthStory";
+import { PeopleStory } from "./PeopleStory";
+import { FinanceStory } from "./FinanceStory";
+import { PlatformStory } from "./PlatformStory";
+import { AiStory } from "./AiStory";
 
 type HeroTab = "growth" | "operations" | "people" | "finance" | "platform" | "ai";
 
@@ -984,23 +990,28 @@ export function HeroSection() {
   // click doesn't get overridden a moment later by a timer that was
   // already mid-flight -- the visitor's own choice gets a full fresh
   // interval before the loop resumes.
-  const tabTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const AUTO_TAB_MS = 8000;
+  const tabTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Each tab plays a story of about 9 seconds; hold a little past the last beat before the loop moves on.
+  const AUTO_TAB_MS = 12500;
+  const dwell = (_tab: HeroTab) => AUTO_TAB_MS;
 
-  const startTabTimer = () => {
-    if (tabTimerRef.current) clearInterval(tabTimerRef.current);
-    tabTimerRef.current = setInterval(() => {
-      setActiveTab((prev) => {
-        const i = HERO_TABS.findIndex((t) => t.key === prev);
-        return HERO_TABS[(i + 1) % HERO_TABS.length].key;
-      });
-    }, AUTO_TAB_MS);
+  const startTabTimer = (from: HeroTab = activeTab) => {
+    if (tabTimerRef.current) clearTimeout(tabTimerRef.current);
+    const schedule = (tab: HeroTab) => {
+      tabTimerRef.current = setTimeout(() => {
+        const i = HERO_TABS.findIndex((t) => t.key === tab);
+        const next = HERO_TABS[(i + 1) % HERO_TABS.length].key;
+        setActiveTab(next);
+        schedule(next);
+      }, dwell(tab));
+    };
+    schedule(from);
   };
 
   useEffect(() => {
     startTabTimer();
     return () => {
-      if (tabTimerRef.current) clearInterval(tabTimerRef.current);
+      if (tabTimerRef.current) clearTimeout(tabTimerRef.current);
     };
   }, []);
 
@@ -1217,7 +1228,7 @@ export function HeroSection() {
                         aria-selected={isActive}
                         onClick={() => {
                           setActiveTab(tab.key);
-                          startTabTimer();
+                          startTabTimer(tab.key);
                         }}
                         style={{
                           display: "inline-flex",
@@ -1423,12 +1434,12 @@ export function HeroSection() {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   style={{ width: "100%" }}
                 >
-                  {activeTab === "growth" ? <GrowthComposite />
-                    : activeTab === "operations" ? <OperationsComposite />
-                    : activeTab === "people" ? <PeopleComposite />
-                    : activeTab === "finance" ? <FinanceComposite />
-                    : activeTab === "platform" ? <PlatformComposite />
-                    : <AiComposite />}
+                  {activeTab === "growth" ? <GrowthStory />
+                    : activeTab === "operations" ? <OpsStory />
+                    : activeTab === "people" ? <PeopleStory />
+                    : activeTab === "finance" ? <FinanceStory />
+                    : activeTab === "platform" ? <PlatformStory />
+                    : <AiStory />}
                 </motion.div>
               </AnimatePresence>
             </motion.section>

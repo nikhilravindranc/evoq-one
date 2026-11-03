@@ -1,6 +1,6 @@
-/* The EVI character used as the AI agent avatar in the home Solutions section.
-   When the final EVI artwork is supplied, replace the file at EVI_AGENT_IMAGE (or change this one path);
-   nothing else in the section depends on the image itself. */
+/* The EVI character as a round avatar (home Solutions, AI sequence, hero chips, EVOQ AI page).
+   It is the face crop of the current mascot; replace the file at EVI_AGENT_IMAGE to change it everywhere.
+   Larger placements use components/shared/EviTile.tsx. */
 export const EVI_AGENT_IMAGE = "/evoq-ai/evi-avatar.webp";
 
 export function EviAgent({ size = 56, ring = "#fff" }: { size?: number; ring?: string }) {

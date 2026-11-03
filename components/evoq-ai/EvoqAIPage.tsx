@@ -1,5 +1,6 @@
 "use client";
 
+import { EviTile } from "@/components/shared/EviTile";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, motion, useInView, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
@@ -865,7 +866,7 @@ export function EvoqAIPage() {
               <motion.div {...reveal(0.1, 34, -30)} className="relative z-10">
                 <div className="grid items-end gap-5 sm:grid-cols-[210px_1fr]">
                   <div className="pointer-events-none hidden sm:block">
-                    <Image src="/evoq-ai/evi-hold.webp" alt="EVI" width={1010} height={784} sizes="420px" className="h-auto w-full" style={{ filter: "drop-shadow(0 14px 22px rgba(60,50,200,0.22))" }} />
+                    <EviTile pose="working" className="w-full" />
                   </div>
                   <div className="flex flex-col gap-4">
                     <motion.div className="flex justify-end" initial={{ opacity: 0, y: 14, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.5, delay: 0.7, ease: EASE }}>

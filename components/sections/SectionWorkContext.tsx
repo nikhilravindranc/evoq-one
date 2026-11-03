@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useMotionValue, useReducedMotion, type MotionValue } from "framer-motion";
 import { Eyebrow } from "./shared";
-import { EVI_AGENT_IMAGE } from "./eviAgent";
+import { EviTile } from "@/components/shared/EviTile";
 
 /* "AI agent context" -- the kinds of context EVI can bring together for an agent.
    A tall wrapper holds a sticky stage; one scroll value (0 -> 1) plays the story:
@@ -193,7 +193,7 @@ export function SectionWorkContext() {
           </div>
           <div className="wc-flat-char">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={EVI_AGENT_IMAGE} alt="" width={96} height={96} />
+            <EviTile pose="idle" style={{ width: 96 }} />
           </div>
           <motion.div className="wc-card out" {...reveal}>{out.body}</motion.div>
           {note}
@@ -211,7 +211,7 @@ export function SectionWorkContext() {
             <div className="wc-canvas" style={{ width: W, height: H, transform: `scale(${scale})` }}>
               <motion.div className="wc-char" style={{ left: CX - 110, top: CY - 120, scale: charScale }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={EVI_AGENT_IMAGE} alt="" width={220} height={220} />
+                <EviTile pose="idle" className="evi-tile" style={{ width: 200, marginTop: 10 }} />
                 <span className={`wc-state b${beat}`} aria-live="polite">
                   {beat < 3 && <i className="wc-state-dot" />}
                   {STATUS[beat]}
