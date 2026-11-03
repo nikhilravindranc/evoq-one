@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
       ["/healthcare/practice-management", "/solutions/healthcare/practice-management"],
       ["/manufacturing", "/solutions/manufacturing"],
       ["/solutions/industries", "/industries"],
+      // the microsite plan's proposed paths
+      ["/products/bookings/space-booking", "/products/bookings/space-and-room-reservations"],
+      ["/products/bookings/space-booking/features", "/products/bookings/space-and-room-reservations/features"],
+      ["/products/bookings/space-booking/pricing", "/products/bookings/space-and-room-reservations/pricing"],
     ];
     return moved.map(([source, destination]) => ({ source, destination, permanent: true }));
   },

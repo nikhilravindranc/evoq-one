@@ -162,6 +162,7 @@ export function BookingCategories({ onDiscuss }: { onDiscuss: (option: string, k
                         <p>{c.text}</p>
                         <p className="bc-fit"><b>Relevant for:</b> {c.fit}</p>
                         <button type="button" className="bc-go" tabIndex={on ? 0 : -1} onClick={(e) => { e.stopPropagation(); onDiscuss(c.option, c.key); }}>Discuss this booking type {I.arrow}</button>
+                        {c.key === "space" && <a className="bc-go" style={{ display: "flex", width: "fit-content", textDecoration: "none" }} tabIndex={on ? 0 : -1} href="/products/bookings/space-and-room-reservations" onClick={(e) => e.stopPropagation()}>Explore Space &amp; Room Reservations {I.arrow}</a>}
                       </div>
                     </div>
                   </div>
