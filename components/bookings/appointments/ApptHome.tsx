@@ -1,7 +1,8 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Caveat } from "next/font/google";
 import { I } from "../theme";
 import { ApptShell, StartButton } from "./ApptShell";
 import { BAND, DEEP, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, PRIMARY, VIS } from "./palette";
@@ -10,6 +11,8 @@ import { BAND, DEEP, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, PRIMARY, VIS } 
    availability rules, the appointment lifecycle, industries, EVI, integrations, why EVOQ Appointments and
    how to get started. White and pale grey sections, real photography, and plain lists instead of card
    grids; the moss green stays on buttons, labels and small marks. Sample data in every product view. */
+
+const hand = Caveat({ subsets: ["latin"], weight: ["600"] });
 
 const PH = (f: string) => `/healthcare/pm/${f}`;
 const ST = (f: string) => `/healthcare/stock/${f}`;
@@ -68,61 +71,81 @@ const BOOK = [
   { t: "Online booking page", d: "Share your booking page directly or add it to your website." },
 ];
 
-function BookingPage({ hl }: { hl: number | null }) {
-  const g = (n: number) => `ah-g${hl === n ? " on" : ""}`;
-  return (
-    <Win url="book.riverside-clinic.example" className={`ah-bkwin${hl ? " hl" : ""}`}>
-      <div className="ah-bk-top"><span className="ah-logo">R</span><b>Riverside Clinic</b><small>Book an appointment</small></div>
-      <div className="ah-bk">
-        <div className="ah-bk-col">
-          <div className={g(1)}>
-            <div className="ah-bk-h"><b>1</b>Service</div>
-            {[["Initial consultation", "30 min"], ["Follow up visit", "20 min"], ["Physiotherapy session", "45 min"]].map(([n, d], i) => (
-              <div key={n} className={`ah-row${i === 0 ? " sel" : ""}`}><span className="ah-radio" /><span><b>{n}</b><small>{d} · In person</small></span></div>
-            ))}
-          </div>
-          <div className={g(2)}>
-            <div className="ah-bk-h"><b>2</b>Provider</div>
-            <div className="ah-pros">
-              {[["Dr. Priya", PH("doctor.jpg")], ["Ana", PH("nurse.jpg")], ["Joy", PH("stock-provider-smile.jpg")]].map(([n, im], i) => (
-                <span key={n} className={i === 0 ? "sel" : ""}><img src={im} alt="" />{n}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="ah-bk-col">
-          <div className={g(3)}>
-            <div className="ah-bk-h"><b>3</b>Location</div>
-            {[["Riverside Clinic", "Ground floor · 6 rooms"], ["City Centre", "Level 2 · 4 rooms"], ["Video appointment", "Online"]].map(([n, d], i) => (
-              <div key={n} className={`ah-row${i === 0 ? " sel" : ""}`}><span className="ah-radio" /><span><b>{n}</b><small>{d}</small></span></div>
-            ))}
-          </div>
-          <div className={g(4)}>
-            <div className="ah-bk-h"><b>4</b>Time</div>
-            <div className="ah-seg">{["Wed 18", "Thu 19", "Fri 20"].map((d, n) => <span key={d} className={n === 1 ? "on" : ""}>{d}</span>)}</div>
-            <div className="ah-slots">{["09:00", "09:30", "10:00", "11:00", "14:30", "15:00"].map((t, n) => <span key={t} className={n === 4 ? "on" : n === 2 ? "off" : ""}>{t}</span>)}</div>
-          </div>
-        </div>
-        <div className="ah-bk-col">
-          <div className={g(5)}>
-            <div className="ah-bk-h"><b>5</b>Your details</div>
-            <div className="ah-form">
-              {[["Full name", "Sam Lee"], ["Email", "sam@example.com"], ["Reason for the visit", "Back pain for two weeks"]].map(([k, v]) => <label key={k}>{k}<span>{v}</span></label>)}
-            </div>
-            <span className="ah-btn-mock">Confirm booking</span>
-          </div>
-          <div className={g(6)}>
-            <div className="ah-bk-h"><b>6</b>Booking page</div>
-            <div className="ah-link"><span>book.riverside-clinic.example</span><em>Copy link</em></div>
-          </div>
-        </div>
-      </div>
-    </Win>
-  );
+const SVC = [["Initial consultation", "30 min"], ["Follow up visit", "20 min"], ["Physiotherapy session", "45 min"]];
+const LOC = [["Riverside Clinic", "Ground floor · 6 rooms"], ["City Centre", "Level 2 · 4 rooms"], ["Video appointment", "Online"]];
+const PROV = [["Dr. Priya", PH("doctor.jpg")], ["Ana", PH("nurse.jpg")], ["Joy", PH("stock-provider-smile.jpg")]];
+const SLOTS = ["09:00", "09:30", "10:00", "11:00", "14:30", "15:00"];
+const PICKS = ["svc", "pro", "loc", "slot"] as const;
+const DEFAULTS = { svc: 0, pro: 0, loc: 0, slot: 4 };
+
+/* The arrow is drawn to fit the measured gap between a tip and the area it points at. */
+function arrowShape(w: number) {
+  const y0 = 22, y1 = 31, x1 = w - 8;
+  const c1x = w * 0.3, c1y = -4, c2x = w * 0.62, c2y = 58;
+  const ang = Math.atan2(y1 - c2y, x1 - c2x);
+  const head = (t: number) => `M${x1} ${y1}L${(x1 - 13 * Math.cos(ang + t)).toFixed(1)} ${(y1 - 13 * Math.sin(ang + t)).toFixed(1)}`;
+  return { line: `M3 ${y0}C${c1x.toFixed(1)} ${c1y} ${c2x.toFixed(1)} ${c2y} ${x1} ${y1}`, head: head(0.5) + head(-0.5) };
 }
 
+type Geo = { w: number; sx0: number; sx1: number; top: number; gl: number; gr: number };
+
+/* A walkthrough on the booking page: one tip at a time, pointing at the area to complete next. Completing
+   the area (or pressing Next) moves the tip on. Large screens put the tip beside the window; smaller ones
+   show it in a bar above the window. */
 function BookingSection() {
-  const [hl, setHl] = useState<number | null>(null);
+  const [step, setStep] = useState(0);
+  const [pick, setPick] = useState<Partial<Record<(typeof PICKS)[number], number>>>({});
+  const [geo, setGeo] = useState<Geo | null>(null);
+  const annot = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const done = step >= 6;
+
+  const advance = (from: number) => setStep((s) => (s === from ? from + 1 : s));
+  const choose = (key: (typeof PICKS)[number], i: number, from: number) => { setPick((p) => ({ ...p, [key]: i })); advance(from); };
+  const next = () => {
+    if (step < 4) { const k = PICKS[step]; setPick((p) => (p[k] === undefined ? { ...p, [k]: DEFAULTS[k] } : p)); }
+    setStep((s) => Math.min(6, s + 1));
+  };
+  const restart = () => { setPick({}); setStep(0); };
+
+  useEffect(() => {
+    const measure = () => {
+      const a = annot.current, st = stage.current, g = a?.querySelector<HTMLElement>(`[data-g="${Math.min(step, 5)}"]`);
+      if (!a || !st || !g) return;
+      const ar = a.getBoundingClientRect(), sr = st.getBoundingClientRect(), gr = g.getBoundingClientRect();
+      setGeo({ w: ar.width, sx0: sr.left - ar.left, sx1: sr.right - ar.left, top: gr.top - ar.top, gl: gr.left - ar.left, gr: gr.right - ar.left });
+    };
+    const raf = requestAnimationFrame(measure);
+    const ro = new ResizeObserver(() => requestAnimationFrame(measure));
+    if (annot.current) ro.observe(annot.current);
+    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
+  }, [step]);
+
+  const gc = (n: number) => `ah-g${step === n ? " on" : step < n ? " fut" : ""}`;
+  const cur = BOOK[Math.min(step, 5)];
+  const body = done ? (
+    <button type="button" className={`ah-replay ${hand.className}`} onClick={restart}>Replay walkthrough</button>
+  ) : (
+    <>
+      <span className="ah-tip-t"><em className="ah-cap-n">{step + 1}</em><b className={hand.className}>{cur.t}</b></span>
+      <small>{cur.d}</small>
+      <span className="ah-tip-f"><span className="ah-count">{step + 1} of 6</span><button type="button" className="ah-next" onClick={next}>Next {I.arrow}</button></span>
+    </>
+  );
+
+  const left = step <= 2;
+  let tipStyle: React.CSSProperties | undefined;
+  let arrow: { style: React.CSSProperties; w: number } | null = null;
+  if (geo) {
+    tipStyle = left
+      ? { top: geo.top - 8, left: 0, width: Math.max(180, geo.sx0 - 60) }
+      : { top: geo.top - 8, left: geo.sx1 + 60, width: Math.max(180, geo.w - geo.sx1 - 60) };
+    const x0 = left ? geo.sx0 - 54 : geo.gr + 4;
+    const w = left ? geo.gl - 4 - x0 : geo.sx1 + 54 - x0;
+    if (!done && w > 40) arrow = { w, style: { left: x0, width: w, top: geo.top - 10, transform: left ? undefined : "scaleX(-1)" } };
+  }
+  const shape = arrow ? arrowShape(arrow.w) : null;
+
   return (
     <section className="ap-out ap-sec ap-band" id="booking">
       <div className="ap-in">
@@ -131,16 +154,73 @@ function BookingSection() {
           <h2 className="ap-h2">Make it easier for clients to book the services they need.</h2>
           <p className="ap-lead">Give clients a clear path from choosing a service to confirming an appointment. They can select a provider, find an available time and submit their details through your online booking page.</p>
         </div>
-        <div data-rv="1"><BookingPage hl={hl} /></div>
-        <p className="ah-caps-hint">Each step below matches the numbered area of the booking page above.</p>
-        <ol className="ah-caps">
-          {BOOK.map((b, n) => (
-            <li key={b.t} tabIndex={0} className={hl === n + 1 ? "on" : ""} onMouseEnter={() => setHl(n + 1)} onMouseLeave={() => setHl(null)} onFocus={() => setHl(n + 1)} onBlur={() => setHl(null)}>
-              <em className="ah-cap-n">{n + 1}</em>
-              <span><b>{b.t}</b><small>{b.d}</small></span>
-            </li>
-          ))}
-        </ol>
+
+        <div className="ah-annot" ref={annot} data-rv="1">
+          <div className="ah-strip" key={`s${step}`} aria-live="polite">{body}</div>
+
+          <div className="ah-stage" ref={stage}>
+            <Win url="book.riverside-clinic.example" className="ah-bkwin">
+              <div className="ah-bk-top"><span className="ah-logo">R</span><b>Riverside Clinic</b><small>Book an appointment</small></div>
+              <div className="ah-bk">
+                <div className="ah-bk-col">
+                  <div className={gc(0)} data-g="0">
+                    <div className="ah-bk-h"><b>1</b>Service</div>
+                    {SVC.map(([n, d], i) => (
+                      <button key={n} type="button" className={`ah-row${pick.svc === i ? " sel" : ""}`} onClick={() => choose("svc", i, 0)}>
+                        <span className="ah-radio" /><span><b>{n}</b><small>{d} · In person</small></span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className={gc(1)} data-g="1">
+                    <div className="ah-bk-h"><b>2</b>Provider</div>
+                    <div className="ah-pros">
+                      {PROV.map(([n, im], i) => (
+                        <button key={n} type="button" className={pick.pro === i ? "sel" : ""} onClick={() => choose("pro", i, 1)}><img src={im} alt="" />{n}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={gc(2)} data-g="2">
+                    <div className="ah-bk-h"><b>3</b>Location</div>
+                    {LOC.map(([n, d], i) => (
+                      <button key={n} type="button" className={`ah-row${pick.loc === i ? " sel" : ""}`} onClick={() => choose("loc", i, 2)}>
+                        <span className="ah-radio" /><span><b>{n}</b><small>{d}</small></span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="ah-bk-col">
+                  <div className={gc(3)} data-g="3">
+                    <div className="ah-bk-h"><b>4</b>Time</div>
+                    <div className="ah-seg">{["Wed 18", "Thu 19", "Fri 20"].map((d, n) => <span key={d} className={n === 1 ? "on" : ""}>{d}</span>)}</div>
+                    <div className="ah-slots">
+                      {SLOTS.map((t, n) => (
+                        <button key={t} type="button" disabled={n === 2} className={pick.slot === n ? "on" : n === 2 ? "off" : ""} onClick={() => choose("slot", n, 3)}>{t}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className={gc(4)} data-g="4">
+                    <div className="ah-bk-h"><b>5</b>Your details</div>
+                    <div className="ah-form">
+                      {[["Full name", "Sam Lee"], ["Email", "sam@example.com"], ["Reason for the visit", "Back pain for two weeks"]].map(([k, v]) => <label key={k}>{k}<span>{v}</span></label>)}
+                    </div>
+                    <button type="button" className={`ah-btn-mock${step > 4 ? " ok" : ""}`} onClick={() => advance(4)}>{step > 4 ? <>{I.check}Booking confirmed</> : "Confirm booking"}</button>
+                  </div>
+                  <div className={gc(5)} data-g="5">
+                    <div className="ah-bk-h"><b>6</b>Booking page</div>
+                    <div className="ah-link"><span>book.riverside-clinic.example</span><button type="button" className="ah-copy" onClick={() => advance(5)}>{done ? "Copied" : "Copy link"}</button></div>
+                  </div>
+                </div>
+              </div>
+            </Win>
+          </div>
+
+          {geo && tipStyle && <div className={`ah-wtip ${left ? "l" : "r"}`} key={`t${step}`} style={tipStyle}>{body}</div>}
+          {arrow && shape && (
+            <svg key={`a${step}`} className="ah-warr" style={arrow.style} width={arrow.w} height={64} viewBox={`0 0 ${arrow.w} 64`} fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path className="ln" d={shape.line} /><path className="hd" d={shape.head} />
+            </svg>
+          )}
+        </div>
         <p className="ap-note">{I.check}Clients can book at a time that suits them, without having to coordinate every appointment through calls and messages.</p>
       </div>
     </section>
@@ -601,36 +681,70 @@ const css = `
   .ah-form label{display:grid;gap:3px;font-size:11.5px;font-weight:600;color:${NEUTRAL}}
   .ah-form label span{padding:9px 11px;border-radius:9px;background:#fff;box-shadow:0 0 0 1.5px ${LINE};font-size:13px;font-weight:500;color:${INK}}
   .ah-link{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:${BAND};font-size:12.5px;font-weight:600;color:${DEEP}}
-  .ah-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ah-link em{font-style:normal;font-size:12px;color:${PRIMARY};white-space:nowrap}
+  .ah-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   /* booking page window */
-  .ah-bkwin{max-width:1120px;margin:0 auto}
-  .ah-bk-top{display:flex;align-items:center;gap:9px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid ${LINE}}
+
+  /* booking walkthrough */
+  .ah-annot{position:relative;display:flex;flex-direction:column}
+  .ah-stage{width:min(700px,calc(100% - 560px));margin:0 auto}
+  .ah-bk-top{display:flex;align-items:center;gap:9px;padding-bottom:14px;margin-bottom:18px;border-bottom:1px solid ${LINE}}
   .ah-bk-top b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${DEEP}}.ah-bk-top small{margin-left:auto;font-size:12.5px;color:${NEUTRAL}}
-  .ah-bk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
-  .ah-bk-col{display:grid;gap:22px;align-content:start}
-  .ah-g{display:grid;gap:9px;padding:10px;margin:-10px;border-radius:14px;transition:opacity .2s ease,background .2s ease,box-shadow .2s ease}
-  .ah-bkwin.hl .ah-g:not(.on){opacity:.38}
+  .ah-bk{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}
+  .ah-bk-col{display:grid;gap:24px;align-content:start}
+  .ah-g{display:grid;gap:9px;padding:10px;margin:-10px;border-radius:14px;transition:opacity .3s ease,background .3s ease,box-shadow .3s ease}
+  .ah-g.fut{opacity:.38;pointer-events:none}
   .ah-g.on{background:${MIST_SOFT};box-shadow:0 0 0 2px ${PRIMARY}}
   .ah-bk-h{display:flex;align-items:center;gap:9px;font-family:var(--font-display),system-ui,sans-serif;font-size:13.5px;font-weight:600;color:${DEEP}}
   .ah-bk-h b{width:22px;height:22px;border-radius:50%;background:${DEEP};color:#fff;display:grid;place-items:center;font-size:11.5px}
-  .ah-row{display:grid;grid-template-columns:18px minmax(0,1fr);gap:11px;align-items:center;padding:10px 12px;border-radius:11px;box-shadow:0 0 0 1px ${LINE};background:#fff}
+  .ah-bkwin button{font:inherit;cursor:pointer}
+  .ah-row{display:grid;grid-template-columns:18px minmax(0,1fr);gap:11px;align-items:center;width:100%;padding:10px 12px;border:0;border-radius:11px;box-shadow:0 0 0 1px ${LINE};background:#fff;text-align:left;color:inherit}
+  .ah-row:hover{box-shadow:0 0 0 1.5px rgba(78,111,88,.55)}
   .ah-row.sel{box-shadow:0 0 0 2px ${PRIMARY}}
   .ah-row span:last-child{display:grid}.ah-row b{font-size:13.5px;color:${DEEP}}.ah-row small{font-size:12px;color:${NEUTRAL}}
   .ah-radio{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #B9C2BA}
   .ah-row.sel .ah-radio{box-shadow:inset 0 0 0 5px ${PRIMARY}}
   .ah-pros{display:flex;flex-wrap:wrap;gap:8px}
-  .ah-pros span{display:inline-flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:999px;box-shadow:0 0 0 1px ${LINE};font-size:13px;font-weight:600;color:${INK}}
-  .ah-pros span.sel{box-shadow:0 0 0 2px ${PRIMARY};color:${DEEP}}
+  .ah-pros button{display:inline-flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border:0;border-radius:999px;background:#fff;box-shadow:0 0 0 1px ${LINE};font-size:13px;font-weight:600;color:${INK}}
+  .ah-pros button:hover{box-shadow:0 0 0 1.5px rgba(78,111,88,.55)}
+  .ah-pros button.sel{box-shadow:0 0 0 2px ${PRIMARY};color:${DEEP}}
   .ah-pros img{width:26px;height:26px;border-radius:50%;object-fit:cover}
-  .ah-btn-mock{margin-top:2px;padding:11px 0;text-align:center;border-radius:9px;background:${PRIMARY};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:13.5px;font-weight:600}
-  .ah-caps-hint{margin:34px 0 0;text-align:center;font-size:14px;color:${NEUTRAL}}
-  .ah-caps{list-style:none;margin:16px auto 0;padding:0;max-width:1120px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 24px}
-  .ah-caps li{display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border-radius:14px;cursor:default;transition:background .2s ease}
-  .ah-caps li:hover,.ah-caps li.on{background:#fff}
-  .ah-caps li:focus-visible{outline:2px solid ${PRIMARY}}
-  .ah-cap-n{width:30px;height:30px;border-radius:50%;background:${DEEP};color:#fff;font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:13.5px;display:grid;place-items:center}
-  .ah-caps li span:last-child{display:grid;gap:3px}.ah-caps b{font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;color:${DEEP}}.ah-caps small{font-size:14.5px;line-height:1.5;color:${MUTED}}
+  .ah-slots button{padding:9px 0;border:0;border-radius:9px;background:#fff;box-shadow:0 0 0 1.5px ${LINE};font-size:12.5px;font-weight:600;color:${INK};font-family:var(--font-display),system-ui,sans-serif}
+  .ah-slots button:hover:not(:disabled){box-shadow:0 0 0 1.5px rgba(78,111,88,.55)}
+  .ah-slots button.on{background:${PRIMARY};color:#fff;box-shadow:none}
+  .ah-slots button.off{background:repeating-linear-gradient(135deg,#F1F3EF 0 6px,#E8ECE6 6px 12px);color:#A4ADA5;box-shadow:none;cursor:default}
+  .ah-btn-mock{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:2px;padding:11px 0;border:0;border-radius:9px;background:${PRIMARY};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:13.5px;font-weight:600}
+  .ah-btn-mock svg{width:15px;height:15px}
+  .ah-btn-mock.ok{background:#168A4A}
+  .ah-copy{border:0;background:none;padding:0;font-size:12px;font-weight:600;color:${PRIMARY};white-space:nowrap}
+  .ah-cap-n{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:${DEEP};color:#fff;font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:13.5px;display:grid;place-items:center}
+  .ah-wtip,.ah-strip{display:grid;gap:6px;align-content:start;color:#2E5A3F}
+  .ah-wtip{position:absolute;z-index:4;animation:apIn .45s ease both}
+  .ah-wtip.l{text-align:right;justify-items:end}
+  .ah-tip-t{display:flex;align-items:center;gap:10px}
+  .ah-tip-t b{font-size:28px;line-height:1.1;font-weight:600;color:${DEEP}}
+  .ah-wtip small,.ah-strip small{max-width:32ch;font-size:15px;line-height:1.5;color:${MUTED}}
+  .ah-tip-f{display:flex;align-items:center;gap:14px;margin-top:6px}
+  .ah-count{font-size:12.5px;font-weight:600;color:${NEUTRAL}}
+  .ah-next{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:0;border-radius:999px;background:${DEEP};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:600;cursor:pointer}
+  .ah-next svg{width:14px;height:14px}
+  .ah-next:hover{background:${PRIMARY}}
+  .ah-replay{border:0;background:none;padding:0;font-size:28px;font-weight:600;color:${DEEP};cursor:pointer;text-decoration:underline;text-decoration-color:rgba(78,111,88,.5);text-underline-offset:6px}
+  .ah-warr{position:absolute;z-index:4;color:#2E5A3F;pointer-events:none;overflow:visible}
+  .ah-warr .ln{stroke-dasharray:420;stroke-dashoffset:420;animation:ahDraw .7s .1s ease forwards}
+  .ah-warr .hd{opacity:0;animation:ahFade .2s .72s ease forwards}
+  .ah-strip{display:none}
+  @keyframes ahDraw{to{stroke-dashoffset:0}}
+  @keyframes ahFade{to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.ah-warr .ln{animation:none;stroke-dashoffset:0}.ah-warr .hd{animation:none;opacity:1}.ah-wtip{animation:none}}
+  @media (max-width:1179px){
+    .ah-stage{width:100%;max-width:820px}
+    .ah-wtip,.ah-warr{display:none}
+    .ah-strip{display:grid;order:-1;position:sticky;top:64px;z-index:5;width:100%;max-width:820px;margin:0 auto 18px;padding:14px 18px;border-radius:16px;background:#fff;box-shadow:0 18px 36px -22px rgba(30,45,34,.5),0 0 0 1px ${LINE}}
+    .ah-strip .ah-tip-t b{font-size:26px}
+    .ah-strip small{max-width:none}
+  }
+  @media (max-width:700px){.ah-bk{grid-template-columns:minmax(0,1fr);gap:24px}}
 
   /* two column sections */
   .ah-two{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:64px;align-items:center}
@@ -773,8 +887,6 @@ const css = `
     .ah-h1{font-size:40px}
     .ah-mos{height:480px;max-width:640px;margin:0 auto;width:100%}
     .ah-phone{width:206px}.ah-phone.one{left:30%}
-    .ah-bk{grid-template-columns:minmax(0,1fr);gap:20px}
-    .ah-caps{grid-template-columns:repeat(2,minmax(0,1fr))}
     .ah-life{grid-template-columns:repeat(2,minmax(0,1fr))}.ah-life-i,.ah-life-i:nth-child(n+4){grid-column:span 1}
     .ah-hub{grid-template-columns:minmax(0,1fr);gap:28px}.ah-core{order:-1;max-width:440px;width:100%;margin:0 auto}
     .ah-hub-col,.ah-hub-col.l{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
@@ -793,8 +905,6 @@ const css = `
     .ah-today{left:10px;top:10px;font-size:11.5px}
     .ah-ph-in{gap:6px}
     .ah-toast{display:none}
-    .ah-caps li{padding:12px 8px}
-    .ah-caps,.ah-ind,.ah-start,.ah-hub-col,.ah-hub-col.l,.ah-list.cols{grid-template-columns:minmax(0,1fr)}
     .ah-list.cols li:nth-last-child(2){border-bottom:0}
     .ah-life{grid-template-columns:minmax(0,1fr)}
     .ah-vis{padding:16px 12px}
