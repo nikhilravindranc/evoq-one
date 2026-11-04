@@ -55,7 +55,7 @@ export function SpaceHow() {
       <div className="sr-in">
         <div className="sr-head c" data-rv="0">
           <span className="sr-label">How it works</span>
-          <h2 className="sr-h2">From a new space to a utilization report.</h2>
+          <h2 className="sr-h2">Set up a space, take bookings, see the results.</h2>
         </div>
         <div className="hw-tabs" role="tablist" aria-label="How it works" data-rv="1">
           {STEPS.map((x, n) => (

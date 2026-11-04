@@ -109,12 +109,12 @@ const GROUPS: Group[] = [
 ];
 
 type Who = { img: string; name: string };
-const EVI = (img: string): Who => ({ img: `/characters/${img}.webp`, name: "EVI" });
-const KAI: Who = { img: "/characters/kai.webp", name: "Kai, Operations agent" };
+const EVI = (img: string): Who => ({ img: `/characters/evi-face-${img}.png`, name: "EVI" });
+const KAI: Who = { img: "/characters/kai-face.png", name: "Kai, Operations agent" };
 type Ai = { who: Who; t: string; helps: string; uses: string; approval: string; demo: ReactNode; status?: Status };
 const AI: Ai[] = [
   {
-    who: EVI("evi"),
+    who: EVI("idle"),
     t: "Visitor booking assistant",
     helps: "Visitors describe the space they need in their own words and see suitable options.",
     uses: "Date, time, capacity and requirements taken from the request, matched against spaces and availability.",
@@ -122,7 +122,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-q">A quiet room for 4 on Monday at 9</p><p className="sf-a">Focus Room 4, Level 2, is free from 09:00. Board Room also fits and has a screen.</p></>,
   },
   {
-    who: EVI("evi-working"),
+    who: EVI("tablet"),
     t: "Administrative assistant",
     helps: "Operators find booking information and handle routine reservation questions.",
     uses: "Today's bookings, available spaces, pending approvals and booking conflicts.",
@@ -146,7 +146,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-k">Hall A is blocked on Friday morning</p><p className="sf-a">Training Room 2 at 10:00 fits 24 people and has a projector. Hall A is free again at 14:00.</p></>,
   },
   {
-    who: EVI("evi-mirror"),
+    who: EVI("mirror"),
     t: "Analytics assistant",
     helps: "Interprets reservation and utilization data and summarizes patterns.",
     uses: "The same reports and metrics your team sees, for the period and locations you choose.",
@@ -154,7 +154,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-q">Which rooms were underused last month?</p><p className="sf-a">Hall A was booked for 22% of its bookable hours. Peak demand was Tuesday to Thursday, 10:00 to 12:00.</p></>,
   },
   {
-    who: EVI("evi-done"),
+    who: EVI("done"),
     t: "Conversational product help",
     helps: "A conversation that helps people move through booking information and related actions.",
     uses: "The screens and records the person already has access to.",
@@ -237,8 +237,8 @@ export function SpaceFeatures() {
               <h2 className="sr-h2" style={{ marginTop: 14 }}>What each assistant helps with, what it uses and where a person decides.</h2>
               <p className="sr-lead">Assistants help visitors and operators find information and prepare work. Any change to a reservation that an agent prepares waits for explicit human approval.</p>
               <div className="sf-cast">
-                <div><span className="sf-tile big"><img src="/characters/evi.webp" alt="" width={72} height={72} loading="lazy" /></span><span><b>EVI</b><small>The assistant. Answers from your bookings and helps visitors and your team.</small></span></div>
-                <div><span className="sf-tile big"><img src="/characters/kai.webp" alt="" width={72} height={72} loading="lazy" /></span><span><b>Kai</b><small>The Operations agent. Prepares changes, and a person approves them.</small></span></div>
+                <div><span className="sf-tile big"><img src="/characters/evi-face-idle.png" alt="" width={72} height={72} loading="lazy" /></span><span><b>EVI</b><small>The assistant. Answers from your bookings and helps visitors and your team.</small></span></div>
+                <div><span className="sf-tile big"><img src="/characters/kai-face.png" alt="" width={72} height={72} loading="lazy" /></span><span><b>Kai</b><small>The Operations agent. Prepares changes, and a person approves them.</small></span></div>
               </div>
               <div className="sf-states">
                 {STATES.map((s) => <div key={s.k} className={`sf-state ${s.c}`}><b>{s.k}</b><span>{s.d}</span></div>)}
@@ -309,7 +309,7 @@ const css = `
   .sf-ai-h div{display:grid;gap:2px;min-width:0}
   .sf-ai-card h3{font-size:19px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0!important}
   .sf-who{font-size:12.5px;font-weight:600;color:${PRIMARY}}
-  .sf-tile{display:block;width:56px;height:56px;border-radius:26%;overflow:hidden;background:#E9E4FF;flex-shrink:0;box-shadow:0 0 0 2px #8F7BFF,0 0 0 4.5px rgba(255,255,255,.8)}
+  .sf-tile{display:block;width:56px;height:56px;border-radius:50%;overflow:hidden;background:#E9DCC8;flex-shrink:0;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(180,88,58,.5)}
   .sf-tile img{width:100%;height:100%;object-fit:cover;display:block}
   .sf-tile.big{width:72px;height:72px}
   .sf-cast{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:26px 0 0}

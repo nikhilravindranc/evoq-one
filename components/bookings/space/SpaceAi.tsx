@@ -46,7 +46,6 @@ export function SpaceAi() {
         </div>
 
         <div className="ai-right" data-rv="1">
-          <img className="ai-evi" src="/characters/evi-cut-mirror.png" alt="EVI, the AI assistant" width={200} height={160} />
         <div className="ai-card" ref={ref}>
           <div className="ai-seg" role="tablist" aria-label="AI scenes">
             {VIEWS.map((x, i) => (
@@ -63,7 +62,7 @@ export function SpaceAi() {
                 <div className="ai-me">I need a room for 10 people with a screen, Thursday afternoon.</div>
                 <div className="ai-bot">
                   <div>
-                    <span className="ai-who"><img src="/characters/evi.webp" alt="" width={24} height={24} />EVI</span>
+                    <span className="ai-who"><img src="/characters/evi-face-idle.png" alt="" width={24} height={24} />EVI</span>
                     <span className="ai-crit"><em>Thu 19 Nov</em><em>13:00 to 17:00</em><em>10+ seats</em><em>Screen</em></span>
                     <div className="ai-opt"><img src={SPACE_IMG.board} alt="" /><span><b>Board Room</b><small>12 seats · Display</small></span><em className="sr-badge ok">Free 14:00</em></div>
                     <div className="ai-opt"><img src={SPACE_IMG.training} alt="" /><span><b>Training Room 2</b><small>24 seats · Projector</small></span><em className="sr-badge warn">Needs approval</em></div>
@@ -76,7 +75,7 @@ export function SpaceAi() {
                 <div className="ai-me">What needs my attention today?</div>
                 <div className="ai-bot">
                   <div>
-                    <span className="ai-who"><img src="/characters/evi.webp" alt="" width={24} height={24} />EVI</span>
+                    <span className="ai-who"><img src="/characters/evi-face-idle.png" alt="" width={24} height={24} />EVI</span>
                     {[
                       ["2 requests waiting for approval", "Town hall and Client review", "warn", "Review"],
                       ["1 conflict", "Hall A is blocked on Friday morning and a workshop is booked there", "off", "Open"],
@@ -91,10 +90,10 @@ export function SpaceAi() {
             {v === 2 && (
               <>
                 <div className="ai-bot">
-                  <div><span className="ai-who"><img src="/characters/evi.webp" alt="" width={24} height={24} />EVI</span><p className="ai-say">Hall A is blocked on Friday morning, so I asked Kai to prepare a move for the vendor workshop.</p></div>
+                  <div><span className="ai-who"><img src="/characters/evi-face-idle.png" alt="" width={24} height={24} />EVI</span><p className="ai-say">Hall A is blocked on Friday morning, so I asked Kai to prepare a move for the vendor workshop.</p></div>
                 </div>
                 <div className="ai-prep">
-                  <div className="ai-prep-h"><img src="/characters/kai.webp" alt="Kai" width={26} height={26} /><span>Kai · prepared for review</span><em className={`sr-badge ${decision === "approved" ? "ok" : decision === "rejected" ? "off" : "warn"}`}>{decision === "approved" ? "Approved" : decision === "rejected" ? "Rejected" : "Waiting"}</em></div>
+                  <div className="ai-prep-h"><img src="/characters/kai-face.png" alt="Kai" width={26} height={26} /><span>Kai · prepared for review</span><em className={`sr-badge ${decision === "approved" ? "ok" : decision === "rejected" ? "off" : "warn"}`}>{decision === "approved" ? "Approved" : decision === "rejected" ? "Rejected" : "Waiting"}</em></div>
                   <b>Move the vendor workshop to Training Room 2</b>
                   <dl>
                     <div><dt>When</dt><dd>Friday, 09:00 to 11:00</dd></div>
@@ -125,8 +124,7 @@ const css = `
   .ai-panel{text-align:left;position:relative;overflow:hidden;background:#F3E8D8;border-radius:34px;padding:44px;box-shadow:0 0 0 1px rgba(43,33,28,.05)}
   .ai-panel::before{content:"";position:absolute;right:-90px;top:-150px;width:520px;height:520px;border-radius:50%;background:radial-gradient(closest-side,rgba(217,185,140,.7),rgba(217,185,140,0));pointer-events:none}
   .ai-copy{position:relative;display:flex;flex-direction:column}
-  .ai-right{position:relative;padding-top:112px;min-width:0}
-  .ai-evi{position:absolute;top:0;right:36px;width:200px;height:auto;z-index:1;filter:drop-shadow(0 14px 20px rgba(43,33,28,.18))}
+  .ai-right{position:relative;min-width:0}
   .ai-card{position:relative;z-index:2}
   .ai-steps{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
   .ai-steps li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;align-items:start;font-size:15px;line-height:1.5;color:${MUTED}}
@@ -153,7 +151,7 @@ const css = `
   .ai-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 11px;border-radius:11px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
   .ai-prep{background:${BG};border-radius:16px;padding:14px 16px;display:grid;gap:10px;box-shadow:0 0 0 1px ${LINE}}
   .ai-prep-h{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:${PRIMARY};font-family:var(--font-display),system-ui,sans-serif}
-  .ai-who img,.ai-prep-h img{width:24px;height:24px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px #fff,0 0 0 3px #8F7BFF;flex-shrink:0}
+  .ai-who img,.ai-prep-h img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:#E9DCC8;box-shadow:0 0 0 1.5px #fff,0 0 0 3px rgba(180,88,58,.5);flex-shrink:0}
   .ai-prep-h .sr-badge{margin-left:auto;letter-spacing:0;text-transform:none}
   .ai-prep>b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}
   .ai-prep dl{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -164,12 +162,10 @@ const css = `
   @media (max-width:980px){
     .ai-in{grid-template-columns:minmax(0,1fr);gap:28px}.ai-stage{min-height:0}
     .ai-panel{padding:30px 24px;border-radius:28px}
-    .ai-right{padding-top:92px}.ai-evi{width:160px;right:20px}
-  }
+      }
   @media (max-width:560px){
     .ai-panel{padding:24px 16px}
-    .ai-right{padding-top:78px}.ai-evi{width:130px}
-    .ai-card{padding:12px}
+        .ai-card{padding:12px}
     .ai-seg button{font-size:12px;padding:8px 4px}
     .ai-opt{grid-template-columns:42px minmax(0,1fr)}.ai-opt img{width:42px;height:36px}.ai-opt .sr-badge{grid-column:2;justify-self:start}
     .ai-row{flex-direction:column;align-items:flex-start;gap:6px}

@@ -119,7 +119,7 @@ function DemoModal({ location, onClose }: { location: string | null; onClose: ()
 }
 
 /* ---------- header: one gradient behind the EVOQ top bar, the microsite bar and the hero ---------- */
-export const SR_NAME = "Spaces & Rooms";
+export const SR_NAME = "Spaces";
 
 const TOP_THEME = { navBg: "rgba(58,28,18,0.5)", navFg: "#FFFFFF", ctaBg: "#FFFFFF", ctaFg: "#3B2A22", loginFg: "#FFFFFF" };
 
@@ -139,11 +139,11 @@ function SubNav({ page }: { page: SrPage }) {
   return (
     <div className="sr-sub">
       <div className="sr-sub-in">
-        <a href={SR_BASE} className="sr-sub-brand" aria-label="Spaces and Rooms home">
+        <a href={SR_BASE} className="sr-sub-brand" aria-label="Spaces home">
           <SrMark />
           <b>{SR_NAME}</b>
         </a>
-        <nav className="sr-sub-nav" aria-label="Spaces and Rooms">
+        <nav className="sr-sub-nav" aria-label="Spaces">
           {NAV.map((n) => <a key={n.k} href={n.href} aria-current={n.k === page ? "page" : undefined}>{n.label}</a>)}
         </nav>
       </div>
@@ -164,7 +164,7 @@ function StickyBar({ page }: { page: SrPage }) {
     <div className={`sr-stick${on ? " on" : ""}`} aria-hidden={!on}>
       <div className="sr-stick-in">
         <span className="sr-sub-brand"><SrMark /><b>{SR_NAME}</b></span>
-        <nav className="sr-sub-nav" aria-label="Spaces and Rooms sections">
+        <nav className="sr-sub-nav" aria-label="Spaces sections">
           {NAV.map((n) => <a key={n.k} href={n.href} tabIndex={on ? 0 : -1} aria-current={n.k === page ? "page" : undefined}>{n.label}</a>)}
         </nav>
         <DemoButton location={`sticky_${page}`} className="sr-btn primary sm" />
