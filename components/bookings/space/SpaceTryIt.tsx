@@ -277,9 +277,9 @@ export function SpaceTryIt() {
 
 const css = `
   .st-scene{position:relative;width:100%;max-width:700px;margin-left:auto;text-align:left;font-size:14px;line-height:1.4}
-  .st-win{position:relative;z-index:2;background:#FBFAF6;color:${INK};border-radius:16px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.14)}
-  .st-chrome{display:flex;align-items:center;gap:12px;padding:7px 14px;background:#E9ECE6;border-bottom:1px solid ${LINE}}
-  .st-dots{display:inline-flex;gap:6px}.st-dots i{width:10px;height:10px;border-radius:50%;background:#C9CFC7}
+  .st-win{position:relative;z-index:2;background:#FBF7F1;color:${INK};border-radius:16px;overflow:hidden;box-shadow:0 40px 70px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.14)}
+  .st-chrome{display:flex;align-items:center;gap:12px;padding:7px 14px;background:#EDE7DD;border-bottom:1px solid ${LINE}}
+  .st-dots{display:inline-flex;gap:6px}.st-dots i{width:10px;height:10px;border-radius:50%;background:#D6CCBF}
   .st-url{display:inline-flex;align-items:center;gap:7px;flex:1;max-width:300px;margin:0 auto 0 8px;height:24px;padding:0 12px;border-radius:12px;background:#fff;font-size:11.5px;color:${MUTED};box-shadow:0 0 0 1px ${LINE}}
   .st-reset{margin-left:auto;background:none;border:0;font-size:12px;color:${NEUTRAL};cursor:pointer;padding:4px 2px}
   .st-reset:hover{color:${DEEP}}
@@ -300,21 +300,21 @@ const css = `
   .st-lvl{display:inline-flex;align-items:center;height:28px;padding:0 10px;border:1px solid ${LINE};border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:${DEEP};font-family:var(--font-display),system-ui,sans-serif}
   .st-seg{display:inline-flex;background:${BG};border-radius:9px;padding:2px;box-shadow:0 0 0 1px ${LINE}}
   .st-seg button{border:0;background:none;padding:5px 9px;border-radius:7px;font-size:12px;font-weight:600;color:${MUTED};cursor:pointer;font-family:var(--font-display),system-ui,sans-serif;white-space:nowrap}
-  .st-seg button.on{background:#fff;color:${DEEP};box-shadow:0 1px 3px rgba(22,36,28,.18)}
+  .st-seg button.on{background:#fff;color:${DEEP};box-shadow:0 1px 3px rgba(43,33,28,.18)}
   .st-split{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:12px;align-items:start}
   .st-plan{min-width:0}
   .st-plan .pm{--pm-ls:1.3;border-radius:8px;box-shadow:0 0 0 1px ${LINE}}
   .st-legend{display:flex;flex-wrap:wrap;gap:10px;padding:7px 2px 0;font-size:11px;color:${MUTED}}
   .st-legend span{display:inline-flex;align-items:center;gap:5px}
-  .st-legend i{width:13px;height:9px;border-radius:3px;display:inline-block;border:1px solid rgba(47,74,56,.35)}
+  .st-legend i{width:13px;height:9px;border-radius:3px;display:inline-block;border:1px solid rgba(110,51,32,.35)}
   .st-legend .f{background:rgba(120,190,150,.3)}.st-legend .b{background:rgba(217,185,140,.7)}
-  .st-legend .a{background:repeating-linear-gradient(45deg,rgba(120,190,150,.3) 0 3px,rgba(78,111,88,.55) 3px 4px)}.st-legend .m{background:rgba(78,111,88,.55)}
+  .st-legend .a{background:repeating-linear-gradient(45deg,rgba(120,190,150,.3) 0 3px,rgba(180,88,58,.55) 3px 4px)}.st-legend .m{background:rgba(180,88,58,.55)}
   .st-side{min-width:0;background:#fff;border-radius:14px;box-shadow:0 0 0 1px ${LINE};padding:12px;animation:stIn .3s ease both;min-height:0;display:grid;align-content:start}
   .st-ask{display:grid;gap:8px}
   .st-ask p{margin:0;font-size:12.5px;color:${MUTED}}
   .st-hint{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:${DEEP}}
   .st-hint i{width:9px;height:9px;border-radius:50%;background:${PRIMARY};animation:stDot 1.4s ease-in-out infinite}
-  @keyframes stDot{0%,100%{box-shadow:0 0 0 0 rgba(78,111,88,.5)}50%{box-shadow:0 0 0 7px rgba(78,111,88,0)}}
+  @keyframes stDot{0%,100%{box-shadow:0 0 0 0 rgba(180,88,58,.5)}50%{box-shadow:0 0 0 7px rgba(180,88,58,0)}}
   .st-room{display:grid;gap:8px;align-content:start}
   .st-hero{width:100%;height:78px;object-fit:cover;border-radius:10px;display:block}
   .st-room h4{font-size:16px}
@@ -324,7 +324,7 @@ const css = `
   .st-wide{width:100%}
   .st-done{justify-items:center;text-align:center;gap:6px}
   .st-big{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:26px;line-height:1;background:rgba(232,170,80,.22);color:#92400E}
-  .st-big.confirmed{background:#E3F3E8;color:#116B38}.st-big.cancelled{background:#ECEFEB;color:${MUTED}}.st-big svg{width:24px;height:24px}
+  .st-big.confirmed{background:#E3F3E8;color:#116B38}.st-big.cancelled{background:#F0EAE2;color:${MUTED}}.st-big svg{width:24px;height:24px}
   .st-ref{font-family:var(--font-display),system-ui,sans-serif;letter-spacing:.06em;font-weight:600;font-size:12.5px;color:${DEEP};padding:3px 11px;border-radius:999px;background:${BG};box-shadow:0 0 0 1px ${LINE}}
   .st-note{margin:0;font-size:11.5px;color:${MUTED}}
   .st-pa{display:flex;gap:8px;margin-top:2px}
@@ -344,15 +344,15 @@ const css = `
   .st-gap-t{font-weight:600;white-space:nowrap}
   .st-gap-l{flex:1;min-width:16px;border-top:1.5px dashed rgba(255,255,255,.3)}
   .st-team{position:relative;z-index:1;display:flex;align-items:center;gap:10px;margin:0;padding:10px 14px;background:#fff;color:${INK};border-radius:14px;box-shadow:0 24px 44px -26px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.12);min-height:62px;animation:stIn .3s ease both}
-  .st-face{border-radius:50%;object-fit:cover;display:block;flex-shrink:0;box-shadow:0 0 0 2px #fff,0 2px 6px rgba(22,36,28,.25)}
+  .st-face{border-radius:50%;object-fit:cover;display:block;flex-shrink:0;box-shadow:0 0 0 2px #fff,0 2px 6px rgba(43,33,28,.25)}
   .st-team-k{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display),system-ui,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${PRIMARY};white-space:nowrap}
   .st-team-t{display:grid;min-width:0;flex:1}.st-team-t b{font-size:13px;color:${DEEP}}.st-team-t small{font-size:11.5px;color:${NEUTRAL};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .st-team-a{display:flex;gap:8px;flex-shrink:0}
   .st-av{width:28px;height:28px;border-radius:50%;background:${SAND};color:${DEEP};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-size:10.5px;font-weight:700;flex-shrink:0}
-  .st-dot{width:9px;height:9px;border-radius:50%;background:${PRIMARY};flex-shrink:0}.st-dot.cancelled{background:#B7BDB8}
+  .st-dot{width:9px;height:9px;border-radius:50%;background:${PRIMARY};flex-shrink:0}.st-dot.cancelled{background:#C4B8AC}
 
   .st-story{display:flex;align-items:center;gap:12px;margin-top:14px;padding:0 4px}
-  .st-cast{display:inline-flex}.st-cast .st-face+.st-face{margin-left:-8px}.st-cast .st-face{box-shadow:0 0 0 2px #1B2D22}
+  .st-cast{display:inline-flex}.st-cast .st-face+.st-face{margin-left:-8px}.st-cast .st-face{box-shadow:0 0 0 2px #2E1B13}
   .st-story p{margin:0;flex:1;font-size:13.5px;line-height:1.35;color:rgba(255,255,255,.92);animation:stIn .35s ease both}
   .st-steps{list-style:none;margin:0;padding:0;display:flex;gap:6px;flex-shrink:0}
   .st-steps li{display:flex}
@@ -363,7 +363,7 @@ const css = `
   .st-pulse{animation:stPulse 1.4s ease-in-out infinite}
   @keyframes stPulse{0%,100%{box-shadow:0 0 0 0 rgba(143,208,164,.7)}50%{box-shadow:0 0 0 7px rgba(143,208,164,0)}}
   .st-locs button.st-pulse{animation:stPulseR 1.4s ease-in-out infinite}
-  @keyframes stPulseR{0%,100%{box-shadow:0 0 0 2px ${PRIMARY},0 0 0 0 rgba(78,111,88,.45)}50%{box-shadow:0 0 0 2px ${PRIMARY},0 0 0 8px rgba(78,111,88,0)}}
+  @keyframes stPulseR{0%,100%{box-shadow:0 0 0 2px ${PRIMARY},0 0 0 0 rgba(180,88,58,.45)}50%{box-shadow:0 0 0 2px ${PRIMARY},0 0 0 8px rgba(180,88,58,0)}}
   @keyframes stIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   .st-scene button:focus-visible{outline:2px solid ${PRIMARY_HOVER};outline-offset:2px}
   .st-scene button:disabled{opacity:.55;cursor:not-allowed}

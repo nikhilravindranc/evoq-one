@@ -81,12 +81,12 @@ export function Skyline() {
           const cx = b.x + b.w / 2;
           return (
             <g key={bi}>
-              <rect x={b.x} y={top} width={b.w} height={b.h} fill="#122019" />
+              <rect x={b.x} y={top} width={b.w} height={b.h} fill="#1F120C" />
               <rect x={b.x} y={top} width={b.w} height="2" fill="rgba(217,185,140,.3)" />
-              {b.roof === "step" && <rect x={b.x + b.w * 0.2} y={top - 22} width={b.w * 0.6} height="22" fill="#122019" />}
-              {b.roof === "spire" && <><rect x={cx - 14} y={top - 26} width="28" height="26" fill="#122019" /><rect x={cx - 1.5} y={top - 58} width="3" height="32" fill="#122019" /><circle cx={cx} cy={top - 60} r="3" fill="#F4D9A3" className="fx-beacon" /></>}
-              {b.roof === "pitch" && <polygon points={`${b.x},${top} ${cx},${top - 26} ${b.x + b.w},${top}`} fill="#122019" />}
-              {b.roof === "tank" && <><rect x={cx - 16} y={top - 20} width="32" height="20" rx="3" fill="#122019" /><rect x={cx - 22} y={top - 4} width="44" height="4" fill="#122019" /></>}
+              {b.roof === "step" && <rect x={b.x + b.w * 0.2} y={top - 22} width={b.w * 0.6} height="22" fill="#1F120C" />}
+              {b.roof === "spire" && <><rect x={cx - 14} y={top - 26} width="28" height="26" fill="#1F120C" /><rect x={cx - 1.5} y={top - 58} width="3" height="32" fill="#1F120C" /><circle cx={cx} cy={top - 60} r="3" fill="#F4D9A3" className="fx-beacon" /></>}
+              {b.roof === "pitch" && <polygon points={`${b.x},${top} ${cx},${top - 26} ${b.x + b.w},${top}`} fill="#1F120C" />}
+              {b.roof === "tank" && <><rect x={cx - 16} y={top - 20} width="32" height="20" rx="3" fill="#1F120C" /><rect x={cx - 22} y={top - 4} width="44" height="4" fill="#1F120C" /></>}
               {Array.from({ length: rows * cols }, (_, i) => {
                 const r = Math.floor(i / cols);
                 const c = i % cols;
@@ -120,7 +120,7 @@ export const FX_CSS = `
   @keyframes fxTw{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.95;transform:scale(1.2)}}
   @keyframes fxPing{0%{opacity:0;transform:translate3d(0,0,0) rotate(20deg)}3%{opacity:1}14%{opacity:0;transform:translate3d(440px,160px,0) rotate(20deg)}100%{opacity:0;transform:translate3d(440px,160px,0) rotate(20deg)}}
   .fx-horizon{position:absolute;left:50%;width:150%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;pointer-events:none;
-    background:radial-gradient(closest-side,#1A2C21 78%,#233B2D 100%);
+    background:radial-gradient(closest-side,#2E1B13 78%,#3A2318 100%);
     box-shadow:0 -1.5px 0 rgba(217,185,140,.55),0 -36px 110px rgba(217,185,140,.16),inset 0 28px 90px rgba(217,185,140,.1)}
   .fx-sky{position:absolute;left:0;right:0;bottom:0;height:var(--sky,clamp(120px,11vw,210px));pointer-events:none;z-index:1}
   .fx-sky svg{width:100%;height:100%;display:block}

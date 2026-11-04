@@ -131,8 +131,8 @@ const css = `
   .sp-top-in .sr-lead{margin-left:auto;margin-right:auto}
   .sp-top-in .sr-ctas{justify-content:center}
   .sp-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .sp-steps li{background:#fff;border-radius:16px;padding:26px;box-shadow:0 0 0 1px rgba(22,36,28,.07)}
-  .sp-steps li>span{width:34px;height:34px;border-radius:10px;background:rgba(78,111,88,.14);color:${PRIMARY};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;margin-bottom:14px}
+  .sp-steps li{background:#fff;border-radius:16px;padding:26px;box-shadow:0 0 0 1px rgba(43,33,28,.07)}
+  .sp-steps li>span{width:34px;height:34px;border-radius:10px;background:rgba(180,88,58,.14);color:${PRIMARY};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;margin-bottom:14px}
   .sp-steps h3{font-size:18px;margin-bottom:6px!important}
   .sp-steps p{margin:0;color:${MUTED};font-size:15px}
   .sp-ask{background:#fff}
@@ -145,7 +145,7 @@ const css = `
   .sp-ask-list small{display:block;font-size:14.5px;color:${MUTED};line-height:1.45;margin-top:2px}
   .sp-faq-in{max-width:880px}
   .sp-faq{display:grid;gap:10px}
-  .sp-faq details{background:#fff;border-radius:14px;box-shadow:0 0 0 1px rgba(22,36,28,.07)}
+  .sp-faq details{background:#fff;border-radius:14px;box-shadow:0 0 0 1px rgba(43,33,28,.07)}
   .sp-faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;font-weight:600;color:${DEEP}}
   .sp-faq summary::-webkit-details-marker{display:none}
   .sp-faq summary span{color:${ACCENT};transition:transform .2s ease;flex-shrink:0}

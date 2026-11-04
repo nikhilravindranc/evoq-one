@@ -30,8 +30,8 @@ export function stateAt(r: PlanRoom, t: number): PlanState {
   return r.approval ? "approval" : "free";
 }
 
-const INK = "#2F4A38";
-const LINE = "#8A9C8F";
+const INK = "#4A3228";
+const LINE = "#A89B8E";
 const WOOD = "#F3EFE4";
 
 const FILL: Record<PlanState, string> = {
@@ -39,7 +39,7 @@ const FILL: Record<PlanState, string> = {
   busy: "rgba(217,185,140,.55)",
   approval: "rgba(120,190,150,.2)",
   pending: "rgba(232,170,80,.4)",
-  mine: "rgba(78,111,88,.42)",
+  mine: "rgba(180,88,58,.42)",
 };
 
 const Chair = ({ x, y }: { x: number; y: number }) => <rect x={x - 4} y={y - 4} width="8" height="8" rx="2.6" fill="#fff" stroke={LINE} strokeWidth=".9" />;
@@ -56,7 +56,7 @@ function Door({ x, y, down = true }: { x: number; y: number; down?: boolean }) {
   const dy = down ? 1 : -1;
   return (
     <g>
-      <rect x={x} y={y - 2.5} width="28" height="5" fill="#FBFAF6" />
+      <rect x={x} y={y - 2.5} width="28" height="5" fill="#FBF7F1" />
       <line x1={x} y1={y} x2={x} y2={y + dy * 28} stroke={INK} strokeWidth="1.2" />
       <path d={`M${x} ${y + dy * 28} A28 28 0 0 ${down ? 0 : 1} ${x + 28} ${y}`} fill="none" stroke={LINE} strokeWidth=".9" strokeDasharray="2.5 2.5" />
     </g>
@@ -66,7 +66,7 @@ function Door({ x, y, down = true }: { x: number; y: number; down?: boolean }) {
 function WinH({ x, y, w }: { x: number; y: number; w: number }) {
   return (
     <g>
-      <rect x={x} y={y - 3.2} width={w} height="6.4" fill="#FBFAF6" />
+      <rect x={x} y={y - 3.2} width={w} height="6.4" fill="#FBF7F1" />
       <line x1={x} y1={y - 1.6} x2={x + w} y2={y - 1.6} stroke={INK} strokeWidth=".9" />
       <line x1={x} y1={y + 1.6} x2={x + w} y2={y + 1.6} stroke={INK} strokeWidth=".9" />
     </g>
@@ -75,7 +75,7 @@ function WinH({ x, y, w }: { x: number; y: number; w: number }) {
 function WinV({ x, y, h }: { x: number; y: number; h: number }) {
   return (
     <g>
-      <rect x={x - 3.2} y={y} width="6.4" height={h} fill="#FBFAF6" />
+      <rect x={x - 3.2} y={y} width="6.4" height={h} fill="#FBF7F1" />
       <line x1={x - 1.6} y1={y} x2={x - 1.6} y2={y + h} stroke={INK} strokeWidth=".9" />
       <line x1={x + 1.6} y1={y} x2={x + 1.6} y2={y + h} stroke={INK} strokeWidth=".9" />
     </g>
@@ -93,14 +93,14 @@ export function PlanMap({ status, selected, onSelect, label = true }: {
     <svg className="pm" viewBox="0 0 760 482" role="group" aria-label="Floor plan, Level 1">
       <defs>
         <pattern id="pmHatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(78,111,88,.5)" strokeWidth="1.3" />
+          <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(180,88,58,.5)" strokeWidth="1.3" />
         </pattern>
         <pattern id="pmCore" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(47,74,56,.14)" strokeWidth="1" />
+          <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(110,51,32,.14)" strokeWidth="1" />
         </pattern>
       </defs>
 
-      <rect x="0" y="0" width="760" height="482" fill="#FBFAF6" />
+      <rect x="0" y="0" width="760" height="482" fill="#FBF7F1" />
 
       {/* room tints */}
       {PLAN_ROOMS.map((r) => {
@@ -146,7 +146,7 @@ export function PlanMap({ status, selected, onSelect, label = true }: {
       {[[250, 238], [390, 238], [530, 238], [640, 238]].map(([x, y]) => <rect key={`${x}`} x={x - 4} y={y - 4} width="8" height="8" fill={INK} />)}
 
       {/* Board Room */}
-      <rect x="40" y="24" width="60" height="5" fill="#223A2D" opacity=".75" />
+      <rect x="40" y="24" width="60" height="5" fill="#3F281D" opacity=".75" />
       <Table x={72} y={86} w={128} h={44} r={8} />
       {[0, 1, 2, 3, 4].map((i) => <g key={i}><Chair x={86 + i * 26} y={78} /><Chair x={86 + i * 26} y={138} /></g>)}
       <Chair x={64} y={108} /><Chair x={208} y={108} />
@@ -155,22 +155,22 @@ export function PlanMap({ status, selected, onSelect, label = true }: {
       {/* Meeting Room 3: round table */}
       <circle cx="320" cy="112" r="26" fill={WOOD} stroke={LINE} strokeWidth="1" />
       {[0, 1, 2, 3, 4, 5].map((i) => { const a = (i / 6) * Math.PI * 2 - Math.PI / 2; return <Chair key={i} x={320 + Math.cos(a) * 38} y={112 + Math.sin(a) * 38} />; })}
-      <rect x="270" y="24" width="3" height="40" fill="#223A2D" opacity=".6" />
+      <rect x="270" y="24" width="3" height="40" fill="#3F281D" opacity=".6" />
 
       {/* Meeting Room 4 */}
       <Table x={430} y={92} w={80} h={36} />
       {[0, 1, 2].map((i) => <g key={i}><Chair x={444 + i * 26} y={84} /><Chair x={444 + i * 26} y={136} /></g>)}
-      <rect x="440" y="24" width="60" height="5" fill="#223A2D" opacity=".75" />
+      <rect x="440" y="24" width="60" height="5" fill="#3F281D" opacity=".75" />
 
       {/* Focus Rooms */}
       <Table x={544} y={44} w={72} h={24} /><Chair x={580} y={80} />
-      <rect x="560" y="46" width="22" height="3" fill="#223A2D" opacity=".6" />
+      <rect x="560" y="46" width="22" height="3" fill="#3F281D" opacity=".6" />
       <Table x={644} y={44} w={72} h={24} /><Chair x={680} y={80} />
       <rect x="652" y="150" width="54" height="22" rx="9" fill="#fff" stroke={LINE} strokeWidth="1" /><rect x="652" y="144" width="54" height="8" rx="4" fill="#EFEADB" stroke={LINE} strokeWidth="1" />
       <Plant x={722} y={192} r={6} />
 
       {/* Training Room 2: classroom */}
-      <rect x="60" y="268" width="200" height="4" fill="#223A2D" opacity=".75" />
+      <rect x="60" y="268" width="200" height="4" fill="#3F281D" opacity=".75" />
       <rect x="132" y="276" width="14" height="8" rx="2" fill="#fff" stroke={LINE} strokeWidth=".9" />
       {[0, 1, 2].map((row) => [0, 1, 2].map((col) => (
         <g key={`${row}${col}`}>
@@ -215,15 +215,15 @@ export function PlanMap({ status, selected, onSelect, label = true }: {
             return (
               <g key={r.id}>
                 <text x={r.x + 10} y={ly} style={{ fontSize: "calc(11.5px * var(--pm-ls, 1))" }} fontWeight="700">{r.short}</text>
-                <text className="pm-seats" x={r.x + 10} y={ly + 12.5} fontSize="9" fill="#5B6B60">{r.seats} seats</text>
+                <text className="pm-seats" x={r.x + 10} y={ly + 12.5} fontSize="9" fill="#7A6A60">{r.seats} seats</text>
               </g>
             );
           })}
-          <text x="430" y="445" fontSize="9" fill="#5B6B60" fontWeight="600">Open desks</text>
-          <text x="124" y="241" fontSize="9" fill="#5B6B60" fontWeight="600" textAnchor="start">Reception</text>
-          <text x="652" y="452" fontSize="8.5" fill="#5B6B60" fontWeight="600">WC</text>
+          <text x="430" y="445" fontSize="9" fill="#7A6A60" fontWeight="600">Open desks</text>
+          <text x="124" y="241" fontSize="9" fill="#7A6A60" fontWeight="600" textAnchor="start">Reception</text>
+          <text x="652" y="452" fontSize="8.5" fill="#7A6A60" fontWeight="600">WC</text>
           <g stroke={INK} strokeWidth="1" fill="none"><path d="M644 473H740M644 470V476M740 470V476M692 471V475" /></g>
-          <text x="602" y="476" fontSize="8" fill="#5B6B60">0 to 5 m</text>
+          <text x="602" y="476" fontSize="8" fill="#7A6A60">0 to 5 m</text>
         </g>
       )}
 
@@ -248,7 +248,7 @@ export const PM_CSS = `
   @media (max-width:560px){.pm{--pm-ls:1.55;--pm-seats:none}}
   .pm-seats{display:var(--pm-seats,block)}
   .pm-hit{fill:transparent;cursor:pointer;stroke:transparent;stroke-width:3;transition:fill .15s ease}
-  .pm-hit:hover{fill:rgba(78,111,88,.1)}
-  .pm-hit.on{stroke:#2F4A38;fill:rgba(78,111,88,.06)}
+  .pm-hit:hover{fill:rgba(180,88,58,.1)}
+  .pm-hit.on{stroke:#6E3320;fill:rgba(180,88,58,.06)}
   .pm-hit:focus-visible{outline:none;stroke:#D9B98C;stroke-width:4}
 `;

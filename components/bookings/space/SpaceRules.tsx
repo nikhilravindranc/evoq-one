@@ -6,16 +6,18 @@ import { I } from "../theme";
 import { PLAN_ROOMS, PlanMap, PM_CSS, stateAt, type PlanState, type RoomId } from "./PlanMap";
 import { SPACE_IMG } from "./ui";
 import { Horizon, NightField, useInView } from "./fx";
+import { LocationsView } from "./SpaceLocations";
 import { BG, DEEP, INK, LINE, MUTED, NEUTRAL, PRIMARY, PRIMARY_HOVER, SAND } from "./palette";
 
 /* "Ensure fair use": a dark section that rests on a lit horizon. Three views, each a small working
    example: booking rules with a day dial, a floor plan of rooms, and check in with release. */
 
-type Tab = "rules" | "plan" | "checkin";
+type Tab = "rules" | "plan" | "checkin" | "locations";
 const TABS: { k: Tab; label: string }[] = [
   { k: "rules", label: "Booking rules" },
   { k: "plan", label: "Floor plan" },
   { k: "checkin", label: "Check in and release" },
+  { k: "locations", label: "Several locations" },
 ];
 const COPY: Record<Tab, { t: string; d: string; pts: string[] }> = {
   rules: {
@@ -27,6 +29,11 @@ const COPY: Record<Tab, { t: string; d: string; pts: string[] }> = {
     t: "See the building, not a list of names.",
     d: "Spaces are organized by location and floor. Booked rooms are shaded, so you see at a glance what is taken and what is free.",
     pts: ["Locations, floors and spaces in a single structure", "Capacity and equipment on every space", "Status that matches the booking page"],
+  },
+  locations: {
+    t: "Every location keeps its own rules. You still see them all.",
+    d: "Each site has its own hours, floors and administrators, and one screen compares them all.",
+    pts: ["Locations and floors, each with its own spaces", "Roles that apply to a single location", "Reports by location, side by side"],
   },
   checkin: {
     t: "Rooms nobody uses go back to the pool.",
@@ -60,7 +67,7 @@ function Dial({ dur }: { dur: number }) {
       <defs>
         <radialGradient id="rlMoon" cx="35%" cy="30%" r="80%">
           <stop offset="0%" stopColor="#35553F" />
-          <stop offset="100%" stopColor="#16241C" />
+          <stop offset="100%" stopColor="#2B1912" />
         </radialGradient>
       </defs>
       <circle cx="100" cy="100" r="99" fill="url(#rlMoon)" stroke="rgba(217,185,140,.45)" strokeWidth="1" />
@@ -216,7 +223,7 @@ export function SpaceRules() {
         <div className="rl-tabs" role="tablist" aria-label="Fair use features" data-rv="1">
           {TABS.map((t) => (
             <button key={t.k} type="button" role="tab" aria-selected={tab === t.k} className={tab === t.k ? "on" : ""} onClick={() => pick(t.k)}>
-              {tab === t.k && auto && seen && t.k !== "checkin" && <i className="rl-bar" aria-hidden />}
+              {tab === t.k && auto && seen && t.k !== TABS[TABS.length - 1].k && <i className="rl-bar" aria-hidden />}
               {t.label}
             </button>
           ))}
@@ -231,6 +238,7 @@ export function SpaceRules() {
             {tab === "rules" && <RulesCard />}
             {tab === "plan" && <PlanCard />}
             {tab === "checkin" && <CheckinCard />}
+            {tab === "locations" && <LocationsView />}
           </div>
         </div>
       </div>
@@ -239,7 +247,7 @@ export function SpaceRules() {
 }
 
 const css = `
-  .rl{position:relative;isolation:isolate;overflow:hidden;background:#16241C;color:#fff;padding-top:104px;padding-bottom:120px}
+  .rl{position:relative;isolation:isolate;overflow:hidden;background:#2B1912;color:#fff;padding-top:104px;padding-bottom:120px}
   .rl-in{position:relative;z-index:2}
   .rl .sr-h2{color:#fff}
   .rl .sr-label{color:${SAND}}
@@ -273,12 +281,12 @@ const css = `
   .rl-try-k{font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:${PRIMARY}}
   .rl-chips{display:flex;gap:8px;flex-wrap:wrap}
   .rl-chips button{border:1.5px solid ${LINE};background:#fff;border-radius:999px;padding:7px 15px;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:13.5px;color:${MUTED};cursor:pointer}
-  .rl-chips button.on{border-color:${PRIMARY};color:${PRIMARY_HOVER};background:rgba(78,111,88,.1)}
+  .rl-chips button.on{border-color:${PRIMARY};color:${PRIMARY_HOVER};background:rgba(180,88,58,.1)}
   .rl-res{display:flex;align-items:flex-start;gap:8px;font-size:14px;min-height:44px}
   .rl-res svg{width:16px;height:16px;margin-top:3px;flex-shrink:0}
   .rl-res.yes{color:#116B38}.rl-res.no{color:#B42318}
 
-  .rl-plan{background:#FBFAF6;color:#1F2A23;border-radius:22px;overflow:hidden;box-shadow:0 40px 80px -34px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.1);max-width:640px;margin-left:auto}
+  .rl-plan{background:#FBF7F1;color:#2B211C;border-radius:22px;overflow:hidden;box-shadow:0 40px 80px -34px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.1);max-width:640px;margin-left:auto}
   .rl-plan-top{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid ${LINE}}
   .rl-lvl{display:inline-flex;align-items:center;height:32px;padding:0 12px;border:1px solid ${LINE};border-radius:8px;font-size:13px;font-weight:600;color:${DEEP};font-family:var(--font-display),system-ui,sans-serif}
   .rl-time{display:flex;align-items:center;gap:10px;flex:1;font-size:13px;font-weight:600;color:${DEEP};font-family:var(--font-display),system-ui,sans-serif}
@@ -289,25 +297,26 @@ const css = `
   .rl-plan-d span{display:grid;min-width:0}.rl-plan-d b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${DEEP}}.rl-plan-d small{font-size:12px;color:${NEUTRAL}}
   .rl-plan-k{display:flex;flex-wrap:wrap;gap:14px;padding:10px 16px 14px;font-size:11.5px;color:${MUTED}}
   .rl-plan-k span{display:inline-flex;align-items:center;gap:6px}
-  .rl-plan-k i{width:14px;height:10px;border-radius:3px;display:inline-block;border:1px solid rgba(47,74,56,.35)}
+  .rl-plan-k i{width:14px;height:10px;border-radius:3px;display:inline-block;border:1px solid rgba(110,51,32,.35)}
   .rl-plan-k .f{background:rgba(120,190,150,.3)}.rl-plan-k .b{background:rgba(217,185,140,.7)}
-  .rl-plan-k .a{background:repeating-linear-gradient(45deg,rgba(120,190,150,.3) 0 3px,rgba(78,111,88,.55) 3px 4px)}
+  .rl-plan-k .a{background:repeating-linear-gradient(45deg,rgba(120,190,150,.3) 0 3px,rgba(180,88,58,.55) 3px 4px)}
 
+  .rl-viz .lc-wrap{max-width:660px;margin-left:auto}
   .rl-ci{position:relative;display:flex;justify-content:center;padding:6px 0}
-  .rl-phone{width:292px;border-radius:42px;background:#0C140F;padding:11px;box-shadow:0 50px 90px -30px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,255,255,.06)}
-  .rl-screen{border-radius:32px;background:#FBFAF6;color:${INK};padding:12px 14px 16px;display:grid;gap:12px;overflow:hidden}
+  .rl-phone{width:292px;border-radius:42px;background:#170E0A;padding:11px;box-shadow:0 50px 90px -30px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,255,255,.06)}
+  .rl-screen{border-radius:32px;background:#FBF7F1;color:${INK};padding:12px 14px 16px;display:grid;gap:12px;overflow:hidden}
   .rl-status{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600;color:${DEEP}}
-  .rl-status i{width:56px;height:16px;border-radius:10px;background:#0C140F}
+  .rl-status i{width:56px;height:16px;border-radius:10px;background:#170E0A}
   .rl-pass-h{display:grid;grid-template-columns:54px minmax(0,1fr);gap:10px;align-items:center}
   .rl-pass-h img{width:54px;height:46px;object-fit:cover;border-radius:10px;display:block}
   .rl-pass-h span{display:grid}.rl-pass-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${DEEP}}.rl-pass-h small{font-size:11.5px;color:${NEUTRAL}}
   .rl-qr{display:grid;justify-items:center;gap:4px;padding:14px 12px 12px;border-radius:18px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
-  .rl-qr svg{width:150px;height:150px;fill:#16241C;display:block}
+  .rl-qr svg{width:150px;height:150px;fill:#2B1912;display:block}
   .rl-qr b{font-family:var(--font-display),system-ui,sans-serif;letter-spacing:.06em;font-size:14px;color:${DEEP};margin-top:4px}
   .rl-qr small{font-size:11.5px;color:${NEUTRAL};text-align:center}
   .rl-banner{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;font-size:12.5px;line-height:1.35}
   .rl-banner svg{width:15px;height:15px;flex-shrink:0}
-  .rl-banner.warn{background:#FBF1DC;color:#7A4A06}.rl-banner.ok{background:#E3F3E8;color:#116B38}.rl-banner.off{background:#ECEFEB;color:${MUTED}}
+  .rl-banner.warn{background:#FBF1DC;color:#7A4A06}.rl-banner.ok{background:#E3F3E8;color:#116B38}.rl-banner.off{background:#F0EAE2;color:${MUTED}}
   .rl-ci-btn{width:100%}
   .rl-team{position:absolute;right:-6px;bottom:96px;min-width:176px;padding:12px 14px;border-radius:14px;background:rgba(251,250,246,.96);color:${INK};display:grid;gap:1px;box-shadow:0 24px 50px -18px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.1);animation:rlIn .35s ease both}
   .rl-team small{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:${PRIMARY};font-weight:600;font-family:var(--font-display),system-ui,sans-serif}
@@ -317,7 +326,7 @@ const css = `
 
   @media (max-width:980px){
     .rl-stage{grid-template-columns:minmax(0,1fr);gap:40px}
-    .rl-rules,.rl-plan{margin-left:0;max-width:none}
+    .rl-rules,.rl-plan,.rl-viz .lc-wrap{margin-left:0;max-width:none}
     .rl-copy h3{font-size:27px}
     .rl{padding-top:72px;padding-bottom:88px}
   }
