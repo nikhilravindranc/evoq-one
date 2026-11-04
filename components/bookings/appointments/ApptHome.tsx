@@ -96,6 +96,8 @@ function BookingSection() {
   const [step, setStep] = useState(0);
   const [pick, setPick] = useState<Partial<Record<(typeof PICKS)[number], number>>>({});
   const [geo, setGeo] = useState<Geo | null>(null);
+  const [seen, setSeen] = useState(false);
+  const [auto, setAuto] = useState(true);
   const annot = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const done = step >= 6;
@@ -120,6 +122,24 @@ function BookingSection() {
     if (annot.current) ro.observe(annot.current);
     return () => { cancelAnimationFrame(raf); ro.disconnect(); };
   }, [step]);
+
+  /* plays once by itself the first time the section is on screen; any click or key press takes over */
+  useEffect(() => {
+    const el = annot.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) setSeen(true); }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!auto || !seen || step >= 6) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setTimeout(() => {
+      if (step < 4) { const k = PICKS[step]; setPick((p) => ({ ...p, [k]: DEFAULTS[k] })); }
+      setStep((s) => (s === step ? s + 1 : s));
+    }, step === 0 ? 2200 : 2600);
+    return () => clearTimeout(t);
+  }, [auto, seen, step]);
 
   const gc = (n: number) => `ah-g${step === n ? " on" : step < n ? " fut" : ""}`;
   const cur = BOOK[Math.min(step, 5)];
@@ -155,7 +175,7 @@ function BookingSection() {
           <p className="ap-lead">Give clients a clear path from choosing a service to confirming an appointment. They can select a provider, find an available time and submit their details through your online booking page.</p>
         </div>
 
-        <div className="ah-annot" ref={annot} data-rv="1">
+        <div className="ah-annot" ref={annot} data-rv="1" onPointerDownCapture={() => setAuto(false)} onKeyDownCapture={() => setAuto(false)}>
           <div className="ah-strip" key={`s${step}`} aria-live="polite">{body}</div>
 
           <div className="ah-stage" ref={stage}>
