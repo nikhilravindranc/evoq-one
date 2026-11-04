@@ -26,8 +26,10 @@ function chairsAround(x: number, y: number, w: number, h: number, n: number) {
   return out;
 }
 
-export function FloorPlan({ states = {}, labels = true, stroke = "#34483B", paper = "#FFFFFF", className, style }: {
+export function FloorPlan({ states = {}, fills, labels = true, stroke = "#34483B", paper = "#FFFFFF", className, style }: {
   states?: Partial<Record<(typeof ROOMS)[number]["id"], RoomState>>;
+  /** override the room tints, for microsites with their own palette */
+  fills?: Partial<Record<RoomState, string>>;
   labels?: boolean;
   stroke?: string;
   /** background colour, used to cut door openings in the walls */
@@ -45,7 +47,7 @@ export function FloorPlan({ states = {}, labels = true, stroke = "#34483B", pape
         const sweep = r.y < 200 ? 1 : 0;
         return (
           <g key={r.id}>
-            <rect x={r.x} y={r.y} width={r.w} height={r.h} fill={st ? FILL[st] : "none"} strokeWidth={st === "sel" ? 2.4 : 1.4} />
+            <rect x={r.x} y={r.y} width={r.w} height={r.h} fill={st ? (fills?.[st] ?? FILL[st]) : "none"} strokeWidth={st === "sel" ? 2.4 : 1.4} />
             {/* door opening and swing */}
             <line x1={doorX} y1={doorY} x2={doorX + 28} y2={doorY} stroke={paper} strokeWidth="3" />
             <path d={`M${doorX} ${doorY} A28 28 0 0 ${sweep} ${doorX + 28} ${doorY + (r.y < 200 ? 28 : -28)}`} strokeDasharray="3 3" opacity=".6" />

@@ -1,7 +1,9 @@
 "use client";
 
 import { track } from "@/lib/track";
-import { BG, DEEP, I, MUTED, SAGE, TERRA } from "../theme";
+import { I } from "../theme";
+import { BG, DEEP, MUTED, PRIMARY, ACCENT } from "./palette";
+import { NightField, Horizon, Skyline } from "./fx";
 import { DemoButton, SR_BASE, SpaceShell } from "./SpaceShell";
 
 /* Space & Room Reservations, Pricing. Plans, prices and entitlements are not approved yet, so
@@ -47,20 +49,21 @@ const FAQ: { q: string; a: React.ReactNode }[] = [
 
 export function SpacePricing() {
   return (
-    <SpaceShell page="pricing">
-      <style>{css}</style>
-
-      <section className="sr-out sp-top">
-        <div className="sr-in sp-top-in">
+    <SpaceShell
+      page="pricing"
+      hero={
+        <div className="sr-hd-in sp-top-in">
           <span className="sr-label">Pricing</span>
           <h1 className="sr-h1">Pricing for Space &amp; Room Reservations, prepared for your setup.</h1>
           <p className="sr-lead">Pricing depends on how many locations and spaces you manage and which capabilities you use. Tell us about your setup and we will prepare pricing for your organization.</p>
           <div className="sr-ctas">
-            <DemoButton location="space_pricing_top">Request pricing</DemoButton>
-            <a href={F} className="sr-btn secondary">Explore features</a>
+            <DemoButton location="space_pricing_top" className="sr-btn light">Request pricing</DemoButton>
+            <a href={F} className="sr-btn outline-light">Explore features</a>
           </div>
         </div>
-      </section>
+      }
+    >
+      <style>{css}</style>
 
       <section className="sr-out sr-sec tight">
         <div className="sr-in">
@@ -107,12 +110,15 @@ export function SpacePricing() {
       </section>
 
       <section className="sr-close">
+        <NightField stars={64} pings={3} seed={9} />
+        <Horizon top="58%" />
+        <Skyline />
         <div className="sr-close-band" data-rv="0">
           <h2 className="sr-h2">Get pricing for your locations and spaces.</h2>
           <p className="sr-lead">Share your setup and we will come back with pricing, or see the product first in a demo.</p>
           <div className="sr-ctas">
-            <DemoButton location="space_pricing_close">Request pricing</DemoButton>
-            <DemoButton location="space_pricing_close_demo" className="sr-btn secondary">Request a demo</DemoButton>
+            <DemoButton location="space_pricing_close" className="sr-btn light">Request pricing</DemoButton>
+            <DemoButton location="space_pricing_close_demo" className="sr-btn outline-light">Request a demo</DemoButton>
           </div>
         </div>
       </section>
@@ -121,33 +127,32 @@ export function SpacePricing() {
 }
 
 const css = `
-  .sp-top{padding-top:80px;padding-bottom:40px}
-  .sp-top-in{max-width:860px;margin:0 auto;text-align:center}
+    .sp-top-in{max-width:860px!important;text-align:center;padding:56px 0 64px}
   .sp-top-in .sr-lead{margin-left:auto;margin-right:auto}
   .sp-top-in .sr-ctas{justify-content:center}
   .sp-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .sp-steps li{background:#fff;border-radius:16px;padding:26px;box-shadow:0 0 0 1px rgba(38,51,43,.07)}
-  .sp-steps li>span{width:34px;height:34px;border-radius:10px;background:rgba(100,133,109,.14);color:${SAGE};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;margin-bottom:14px}
+  .sp-steps li{background:#fff;border-radius:16px;padding:26px;box-shadow:0 0 0 1px rgba(22,36,28,.07)}
+  .sp-steps li>span{width:34px;height:34px;border-radius:10px;background:rgba(78,111,88,.14);color:${PRIMARY};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;margin-bottom:14px}
   .sp-steps h3{font-size:18px;margin-bottom:6px!important}
   .sp-steps p{margin:0;color:${MUTED};font-size:15px}
   .sp-ask{background:#fff}
   .sp-ask-in{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
   .sp-ask-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
   .sp-ask-list li{display:flex;gap:14px;align-items:flex-start;background:${BG};border-radius:14px;padding:16px 18px}
-  .sp-ask-list i{width:28px;height:28px;border-radius:8px;background:${SAGE};color:#fff;display:grid;place-items:center;flex-shrink:0}
+  .sp-ask-list i{width:28px;height:28px;border-radius:8px;background:${PRIMARY};color:#fff;display:grid;place-items:center;flex-shrink:0}
   .sp-ask-list i svg{width:15px;height:15px}
   .sp-ask-list b{display:block;font-family:var(--font-display),system-ui,sans-serif;color:${DEEP};font-size:16px}
   .sp-ask-list small{display:block;font-size:14.5px;color:${MUTED};line-height:1.45;margin-top:2px}
   .sp-faq-in{max-width:880px}
   .sp-faq{display:grid;gap:10px}
-  .sp-faq details{background:#fff;border-radius:14px;box-shadow:0 0 0 1px rgba(38,51,43,.07)}
+  .sp-faq details{background:#fff;border-radius:14px;box-shadow:0 0 0 1px rgba(22,36,28,.07)}
   .sp-faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;font-weight:600;color:${DEEP}}
   .sp-faq summary::-webkit-details-marker{display:none}
-  .sp-faq summary span{color:${TERRA};transition:transform .2s ease;flex-shrink:0}
+  .sp-faq summary span{color:${ACCENT};transition:transform .2s ease;flex-shrink:0}
   .sp-faq summary span svg{width:16px;height:16px;transform:rotate(90deg)}
   .sp-faq details[open] summary span{transform:rotate(180deg)}
   .sp-faq details p{margin:0;padding:0 20px 18px;color:${MUTED};font-size:15.5px}
-  .sp-faq details p a{color:${TERRA};font-weight:600}
-  @media (max-width:860px){.sp-steps,.sp-ask-in{grid-template-columns:minmax(0,1fr)}.sp-top{padding-top:56px}}
+  .sp-faq details p a{color:${ACCENT};font-weight:600}
+  @media (max-width:860px){.sp-steps,.sp-ask-in{grid-template-columns:minmax(0,1fr)}}
 `;
 

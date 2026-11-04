@@ -12,6 +12,7 @@ export const SPACE_IMG = {
   glass: U("1698653223247-09aaf01166fc", 900),
   prayer: U("1792060052578-9dbe661cadbd", 900),
   training: U("1573164574572-cb89e39749b4", 900),
+  lounge: U("1758448755981-954afbf60ff7", 900),
 };
 
 export function Window({ title, right, children, className = "" }: { title: ReactNode; right?: ReactNode; children: ReactNode; className?: string }) {

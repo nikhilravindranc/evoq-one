@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { track } from "@/lib/track";
-import { BG, DEEP, I, LINE, MUTED, NEUTRAL, SAGE, TERRA } from "../theme";
+import { I } from "../theme";
+import { BG, DEEP, LINE, MUTED, NEUTRAL, PRIMARY, ACCENT } from "./palette";
+import { NightField, Horizon, Skyline } from "./fx";
 import { DemoButton, SR_BASE, SpaceShell } from "./SpaceShell";
 import { BookingFlowUI, CalendarUI, CatalogueUI, CheckInUI, ReportsUI, ReservationUI, SettingsUI } from "./ui";
 
@@ -185,19 +187,20 @@ export function SpaceFeatures() {
   }, []);
 
   return (
-    <SpaceShell page="features">
-      <style>{css}</style>
-
-      <section className="sr-out sf-top">
-        <div className="sr-in">
+    <SpaceShell
+      page="features"
+      hero={
+        <div className="sr-hd-in sf-top">
           <span className="sr-label">Features</span>
           <h1 className="sr-h1">Room booking features for spaces, availability, reservations and reports.</h1>
           <p className="sr-lead">From the space catalogue and availability rules to the public booking page, check in, reports and integrations. The AI assistants and agent actions are explained in their own section below.</p>
-          <div className="sr-ctas"><DemoButton location="space_features_top" /><a href="#ai" className="sr-btn secondary">Go to AI capabilities</a></div>
+          <div className="sr-ctas"><DemoButton location="space_features_top" className="sr-btn light" /><a href="#ai" className="sr-btn outline-light">Go to AI capabilities</a></div>
         </div>
-      </section>
+      }
+    >
+      <style>{css}</style>
 
-      <div className="sr-out">
+      <div className="sr-out" style={{ paddingTop: 56 }}>
         <div className="sr-in sf-layout">
           <nav className="sf-nav" aria-label="Feature groups">
             <span className="sf-nav-k">On this page</span>
@@ -245,10 +248,13 @@ export function SpaceFeatures() {
       </div>
 
       <section className="sr-close">
+        <NightField stars={64} pings={3} seed={9} />
+        <Horizon top="58%" />
+        <Skyline />
         <div className="sr-close-band" data-rv="0">
           <h2 className="sr-h2">See these features with your own spaces and rules.</h2>
           <p className="sr-lead">We will set up the demo around the locations, spaces and approval rules you describe.</p>
-          <div className="sr-ctas"><DemoButton location="space_features_close" /><a href={`${SR_BASE}/pricing`} className="sr-btn secondary">View pricing</a></div>
+          <div className="sr-ctas"><DemoButton location="space_features_close" className="sr-btn light" /><a href={`${SR_BASE}/pricing`} className="sr-btn outline-light">View pricing</a></div>
         </div>
       </section>
     </SpaceShell>
@@ -256,39 +262,39 @@ export function SpaceFeatures() {
 }
 
 const css = `
-  .sf-top{padding-top:72px;padding-bottom:56px}
+  .sf-top{padding-top:56px;padding-bottom:64px}
   .sf-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:48px;align-items:start;padding-bottom:40px}
   .sf-nav{position:sticky;top:84px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 110px);overflow-y:auto;padding-right:6px}
   .sf-nav-k{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${NEUTRAL};margin:0 0 8px 10px}
   .sf-nav a{padding:7px 10px;border-radius:8px;font-size:14px;line-height:1.35;color:${MUTED};text-decoration:none;border-left:2px solid transparent}
-  .sf-nav a:hover{color:${DEEP};background:rgba(100,133,109,.07)}
-  .sf-nav a.on{color:${DEEP};font-weight:600;background:rgba(100,133,109,.12);border-left-color:${SAGE};border-radius:0 8px 8px 0}
-  .sf-nav a.ai{margin-top:8px;color:${TERRA};font-weight:600}
+  .sf-nav a:hover{color:${DEEP};background:rgba(78,111,88,.07)}
+  .sf-nav a.on{color:${DEEP};font-weight:600;background:rgba(78,111,88,.12);border-left-color:${PRIMARY};border-radius:0 8px 8px 0}
+  .sf-nav a.ai{margin-top:8px;color:${ACCENT};font-weight:600}
   .sf-group{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:56px 0;border-top:1px solid ${LINE};scroll-margin-top:90px}
   .sf-group:first-child{border-top:0;padding-top:8px}
-  .sf-n{font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:700;color:${TERRA}}
+  .sf-n{font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:700;color:${ACCENT}}
   .sf-h2{font-size:28px;line-height:1.2;margin-top:6px!important;display:flex;flex-wrap:wrap;align-items:center;gap:10px;text-wrap:balance}
-  .sf-status{font-family:var(--font-sans),system-ui,sans-serif;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(100,133,109,.14);color:${SAGE}}
+  .sf-status{font-family:var(--font-sans),system-ui,sans-serif;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(78,111,88,.14);color:${PRIMARY}}
   .sf-intro{font-size:16.5px;color:${MUTED};margin:10px 0 0}
-  .sf-note{margin:16px 0 0;padding:10px 14px;border-radius:10px;background:rgba(200,120,90,.08);color:${DEEP};font-size:14px}
+  .sf-note{margin:16px 0 0;padding:10px 14px;border-radius:10px;background:rgba(78,111,88,.08);color:${DEEP};font-size:14px}
   .sf-vis{background:${BG};border-radius:20px;padding:22px}
   .sf-ai{padding:72px 0 24px;border-top:1px solid ${LINE};scroll-margin-top:90px}
   .sf-states{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0 24px}
-  .sf-state{border-radius:14px;padding:16px 18px;display:grid;gap:4px;background:#fff;box-shadow:0 0 0 1px rgba(38,51,43,.07)}
+  .sf-state{border-radius:14px;padding:16px 18px;display:grid;gap:4px;background:#fff;box-shadow:0 0 0 1px rgba(22,36,28,.07)}
   .sf-state b{font-family:var(--font-display),system-ui,sans-serif;color:${DEEP};font-size:16px}
   .sf-state span{font-size:14px;color:${MUTED}}
-  .sf-state.rec{box-shadow:inset 4px 0 0 #9AA79D,0 0 0 1px rgba(38,51,43,.07)}
-  .sf-state.prep{box-shadow:inset 4px 0 0 #D9A23A,0 0 0 1px rgba(38,51,43,.07)}
-  .sf-state.done{box-shadow:inset 4px 0 0 ${SAGE},0 0 0 1px rgba(38,51,43,.07)}
+  .sf-state.rec{box-shadow:inset 4px 0 0 #9BA8B7,0 0 0 1px rgba(22,36,28,.07)}
+  .sf-state.prep{box-shadow:inset 4px 0 0 #D9A23A,0 0 0 1px rgba(22,36,28,.07)}
+  .sf-state.done{box-shadow:inset 4px 0 0 ${PRIMARY},0 0 0 1px rgba(22,36,28,.07)}
   .sf-ai-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-  .sf-ai-card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 0 0 1px rgba(38,51,43,.07);display:flex;flex-direction:column}
+  .sf-ai-card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 0 0 1px rgba(22,36,28,.07);display:flex;flex-direction:column}
   .sf-ai-card h3{font-size:19px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px!important}
   .sf-ai-card dl{margin:0 0 16px;display:grid;gap:10px}
   .sf-ai-card dt{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${NEUTRAL}}
   .sf-ai-card dd{margin:2px 0 0;font-size:15px;color:${MUTED}}
   .sf-demo{margin-top:auto;background:${BG};border-radius:12px;padding:14px;display:grid;gap:8px}
   .sf-demo p{margin:0;font-size:13.5px;line-height:1.45;border-radius:12px;padding:9px 12px}
-  .sf-demo .sf-q{justify-self:end;max-width:85%;background:${SAGE};color:#fff;border-bottom-right-radius:4px}
+  .sf-demo .sf-q{justify-self:end;max-width:85%;background:${PRIMARY};color:#fff;border-bottom-right-radius:4px}
   .sf-demo .sf-a{background:#fff;color:${DEEP};max-width:92%;border-bottom-left-radius:4px}
   .sf-demo .sf-k{padding:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A35A04}
   .sf-demo .sf-acts{padding:0;display:flex;justify-content:flex-end;gap:8px}
@@ -299,7 +305,7 @@ const css = `
     .sf-nav{position:sticky;top:57px;z-index:5;flex-direction:row;overflow-x:auto;max-height:none;background:${BG};padding:8px 0;margin:0 -4px}
     .sf-nav-k{display:none}
     .sf-nav a{white-space:nowrap;border-left:0;border-radius:999px!important;border:1px solid ${LINE}}
-    .sf-nav a.on{border-color:${SAGE}}
+    .sf-nav a.on{border-color:${PRIMARY}}
     .sf-nav a.ai{margin-top:0}
     .sf-states,.sf-ai-grid{grid-template-columns:minmax(0,1fr)}
     .sf-vis{padding:12px}

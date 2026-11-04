@@ -1,181 +1,192 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
-import { useState } from "react";
-import { BG, DEEP, I, LINE, MUTED, NEUTRAL, SAGE, TERRA } from "../theme";
+import { useEffect, useRef, useState } from "react";
+import { I, U } from "../theme";
+import { BG, DEEP, INK, LINE, MUTED, NEUTRAL, PRIMARY, PRIMARY_HOVER, ACCENT, SAND } from "./palette";
+import { NightField, Horizon, Skyline } from "./fx";
 import { DemoButton, SR_BASE, SpaceShell } from "./SpaceShell";
-import { BookingFlowUI, CalendarUI, CatalogueUI, DashboardUI, ReservationUI } from "./ui";
+import { SpaceLocations } from "./SpaceLocations";
+import { SpaceRules } from "./SpaceRules";
+import { SpaceTryIt } from "./SpaceTryIt";
+import { CalendarUI, CatalogueUI, BookingFlowUI, ReservationUI, ReportsUI, SPACE_IMG } from "./ui";
 
-/* Space & Room Reservations, Home: the narrative page. Problem, product, journey, audiences,
-   use cases, product preview and an AI teaser. The full capability list lives on Features. */
+/* Space & Room Reservations, Home. The story: the problem, how a booking runs from setup to report,
+   the rules that keep it fair, who uses it, the AI assistants, then the demo request. The full
+   capability list lives on Features, so nothing here sends visitors away from the page. */
 
-const F = `${SR_BASE}/features`;
-
-const CHALLENGES = [
-  { t: "Room conflicts", d: "Two teams arrive at the Board Room at 10:00 because each booking lived in a different calendar." },
-  { t: "Manual requests", d: "Hall requests arrive by email and phone, and someone retypes them into a spreadsheet." },
-  { t: "Calendars split by building", d: "Each site keeps its own calendar, so nobody can see availability across locations." },
-  { t: "Unclear availability", d: "People cannot tell whether a room is free, blocked for maintenance or waiting for approval." },
-  { t: "Rules that depend on who you ask", d: "Approval, cancellation and setup time rules change from person to person instead of from space to space." },
-];
-
-const FLOW = [
-  { t: "Configure spaces", d: "Capacity, amenities, equipment, photos and status.", href: `${F}#spaces` },
-  { t: "Set availability", d: "Hours, notice periods, booking length and buffers.", href: `${F}#availability` },
-  { t: "Publish a booking page", d: "People find a space and pick a time.", href: `${F}#public-booking` },
-  { t: "Manage reservations", d: "Approve, reschedule, cancel and keep the history.", href: `${F}#lifecycle` },
-];
+const HERO_PHOTO = U("1431540015161-0bf868a2d407", 2000);
 
 const STEPS = [
-  { t: "Configure locations and spaces", d: "Add buildings and floors, then each bookable room, hall or item with its capacity, amenities and photos.", href: `${F}#locations` },
-  { t: "Define the rules", d: "Set operating hours, minimum notice, how far ahead people can book, booking length, buffers and which spaces need approval.", href: `${F}#rules` },
-  { t: "Publish", d: "Share a branded booking page where visitors discover spaces, choose a time and answer your questions.", href: `${F}#public-booking` },
-  { t: "Receive reservations", d: "Requests and confirmed bookings land in the calendar with the organizer and a booking reference.", href: `${F}#calendar` },
-  { t: "Review and manage", d: "Approve, reject, reschedule or cancel, and every change stays in the reservation history.", href: `${F}#lifecycle` },
-  { t: "Check in and report", d: "Confirm arrivals by QR code or reference, mark no shows and review utilization by location.", href: `${F}#checkin` },
-];
-
-const AUDIENCES = [
   {
-    k: "offices", name: "Corporate offices",
-    problem: "Meeting rooms fill up with holds that nobody uses, while teams with a real need cannot find a room.",
-    flow: "Employees book by capacity and equipment from the calendar. Bookings that are not checked in within the grace period are released, and facilities teams see which rooms are actually used.",
-    features: ["Check in and release", "Resource aware calendar", "Utilization reports"],
+    n: "1", t: "Set up your spaces",
+    d: "Add each room, hall and shared item once, with the details people look for before they book.",
+    pts: ["Capacity, floor and location", "Amenities, equipment and photos", "Status, so a blocked room is never offered"],
+    img: SPACE_IMG.glass, ui: <CatalogueUI count={2} />,
   },
   {
-    k: "coworking", name: "Coworking spaces",
-    problem: "Members expect to book meeting rooms themselves, and what they pay depends on the room and the time.",
-    flow: "Members book from your branded page, rates apply where you set them, and each booking is kept on the member's contact record with its payment status.",
-    features: ["Branded booking page", "Rates and payment status", "Contacts and history"],
+    n: "2", t: "Publish a booking page",
+    d: "Share a branded page where visitors find a space, pick a time and answer your questions.",
+    pts: ["Search by date, time and capacity", "Layout and equipment choices", "Clear status before they send the request"],
+    img: SPACE_IMG.lounge, ui: <BookingFlowUI />,
   },
   {
-    k: "training", name: "Training and education",
-    problem: "A training room is only ready when the layout, the projector and the setup time are right.",
-    flow: "Bookers choose a layout and the equipment they need. Setup and cleanup buffers hold the room around each session, and equipment cannot be reserved twice for the same time.",
-    features: ["Layouts and equipment", "Setup and cleanup buffers", "Custom booking fields"],
+    n: "3", t: "Approve and notify",
+    d: "Requests reach your team with the organizer and a booking reference. Every decision tells the organizer.",
+    pts: ["Approve, reject or reschedule from the record", "Setup and cleanup time held around the session", "Confirmation and changes sent by email"],
+    img: SPACE_IMG.training, ui: <ReservationUI />,
   },
   {
-    k: "venues", name: "Venues and shared facilities",
-    problem: "Outside groups request halls weeks ahead, and each request needs a decision and a clear answer.",
-    flow: "Requests arrive through your booking page with answers to your questions and acceptance of your terms. They wait for approval, and deposits apply where you configure them.",
-    features: ["Approval workflow", "Custom questions and terms", "Deposits where configured"],
-  },
-  {
-    k: "locations", name: "Several locations",
-    problem: "Each site runs its own process, so nobody can compare demand or share spaces across the organization.",
-    flow: "Each location keeps its own hours, floors and administrators, while reports compare bookings and utilization across sites.",
-    features: ["Locations and floors", "Roles by location", "Reports by location"],
+    n: "4", t: "Track and report",
+    d: "See what is booked today, who arrived and which spaces sit unused, across every location.",
+    pts: ["Check in by QR code or reference", "No shows marked in the booking", "Utilization by location, exported to CSV"],
+    img: SPACE_IMG.corridor, ui: <ReportsUI />,
   },
 ];
 
-const USES = [
-  { t: "Employee meeting room booking", need: "A team needs a room for six people with a screen at 14:00.", act: "They filter by capacity and equipment and book a free room from the calendar.", res: "The room is confirmed and the organizer gets a calendar file for the meeting." },
-  { t: "Coworking member reservation", need: "A member wants the meeting room on Friday morning.", act: "The member books on your public page at the rate you set for that room.", res: "The booking and its payment status sit on the member's contact record." },
-  { t: "Training room with equipment", need: "The people team runs a two hour onboarding session with a projector.", act: "The booking includes the classroom layout, the projector kit and setup time before the session.", res: "Facilities knows what to prepare, and the projector is not booked twice." },
-  { t: "External venue request", need: "A community group asks for Hall A on a Saturday.", act: "The request arrives pending approval, with their answers to your booking questions.", res: "An operator approves it, and the group receives a confirmation with a booking reference." },
-  { t: "Facilities utilization review", need: "Facilities wants to know which rooms are underused.", act: "They filter reports by location and period, then export the data to CSV.", res: "Hall A is booked for 22% of its bookable hours, so it opens to outside groups." },
+const WHO = [
+  { name: "Corporate offices", img: SPACE_IMG.board, line: "Meeting rooms stop filling with holds nobody uses.", tags: ["Check in and release", "Utilization reports"] },
+  { name: "Coworking spaces", img: SPACE_IMG.lounge, line: "Members book rooms themselves, at the rate you set.", tags: ["Branded booking page", "Rates and payment status"] },
+  { name: "Training and education", img: SPACE_IMG.training, line: "The layout, the projector and the setup time are ready before the session.", tags: ["Layouts and equipment", "Setup buffers"] },
+  { name: "Venues and facilities", img: SPACE_IMG.prayer, line: "Outside groups send a request and get a clear answer.", tags: ["Approval workflow", "Terms and deposits"] },
 ];
 
-const PREVIEW = [
-  { k: "dashboard", name: "Dashboard", ui: <DashboardUI />, notes: ["Today's reservations, approvals and check ins for the selected location", "Approvals waiting for a decision, with the requesting team", "Switch location to see another site"] },
-  { k: "calendar", name: "Calendar", ui: <CalendarUI />, notes: ["Day, week, month and list views", "Each space and item on its own row, so conflicts are visible", "Confirmed, pending and blocked time shown differently"] },
-  { k: "spaces", name: "Spaces", ui: <CatalogueUI />, notes: ["Capacity, location and floor for every space", "Amenities and equipment people can filter by", "Which spaces need approval before a booking is confirmed"] },
-  { k: "booking", name: "Booking page", ui: <BookingFlowUI />, notes: ["Visitors choose a date, a time and the duration", "Layout and equipment choices where the space offers them", "Clear status before they send the request"] },
-  { k: "reservation", name: "Reservation", ui: <ReservationUI />, notes: ["Everything about the booking, including setup and cleanup time", "Approve, reject or reschedule from the record", "A booking reference for check in and changes"] },
+const AI_DWELL = 6500;
+const AI = [
+  { k: "visitor", src: "/characters/evi.webp", t: "EVI helps visitors book", d: "Describe the space in plain words and get matching rooms with their availability." },
+  { k: "team", src: "/characters/evi.webp", t: "EVI helps your team", d: "Ask about today's bookings, approvals and conflicts and get answers from your records." },
+  { k: "agent", src: "/characters/kai.webp", t: "Kai prepares changes", d: "The Operations agent drafts a reschedule or a decision, and a person approves it." },
 ];
+
+const ATTN = [
+  ["2 requests waiting for approval", "Town hall and Client review", "warn", "Review"],
+  ["1 conflict", "Hall A is blocked on Friday morning and a workshop is booked there", "off", "Open"],
+  ["4 check ins before noon", "Board Room, Glass Room and 2 more", "ok", "View"],
+] as const;
+
+/* The characters wear the same violet ring as on the EVOQ home page, so they read as the assistants. */
+function AiTile({ src, size }: { src: string; size: number }) {
+  return (
+    <span className="sh-tile" style={{ width: size, height: size }}>
+      <img src={src} alt="" width={size} height={size} />
+    </span>
+  );
+}
+const Face = ({ src }: { src: string }) => <img className="sh-face" src={src} alt="" width={36} height={36} />;
 
 export function SpaceHome() {
-  const [aud, setAud] = useState(AUDIENCES[0].k);
-  const [pv, setPv] = useState(PREVIEW[0].k);
-  const a = AUDIENCES.find((x) => x.k === aud)!;
-  const p = PREVIEW.find((x) => x.k === pv)!;
+  const [ai, setAi] = useState(0);
+  const [aiAuto, setAiAuto] = useState(true);
+  const aiRef = useRef<HTMLDivElement>(null);
+  const [aiSeen, setAiSeen] = useState(false);
+
+  // the assistants take turns once while the section is on screen; a click hands control over
+  useEffect(() => {
+    const el = aiRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) setAiSeen(true); }, { threshold: 0.45 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!aiAuto || !aiSeen || ai >= AI.length - 1) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setTimeout(() => setAi((i) => i + 1), AI_DWELL);
+    return () => clearTimeout(t);
+  }, [ai, aiAuto, aiSeen]);
+  const pickAi = (i: number) => { setAiAuto(false); setAi(i); };
+  const [decision, setDecision] = useState<"approved" | "rejected" | null>(null);
 
   return (
-    <SpaceShell page="home">
-      <style>{css}</style>
-
-      {/* 1. hero */}
-      <section className="sh-hero">
-        <div className="sh-hero-band">
-          <span className="sh-shape ring" aria-hidden /><span className="sh-shape disc" aria-hidden />
-          <div className="sh-hero-grid">
-            <div className="sh-hero-copy">
-              <span className="sh-tag"><i>{I.rules}</i>EVOQ Bookings · Space &amp; Room Reservations</span>
-              <h1 className="sr-h1">Make every space easier to find, reserve and manage.</h1>
-              <p className="sr-lead">Publish meeting rooms, halls, training rooms and shared equipment with their own availability and rules. People book what they need, and your team reviews, confirms and tracks each reservation across locations.</p>
-              <div className="sr-ctas">
-                <DemoButton location="space_home_hero" />
-                <a href={F} className="sr-btn secondary">Explore features</a>
-              </div>
-            </div>
-            <div className="sh-hero-vis" aria-hidden>
-              <div className="sh-hero-cal"><CalendarUI compact /></div>
-              <div className="sh-hero-pub"><BookingFlowUI /></div>
-              <div className="sh-hero-chip"><span className="sr-badge warn">Pending approval</span><b>Hall A · Town hall</b><small>Sat 21 Nov · 15:00</small></div>
+    <SpaceShell
+      page="home"
+      full
+      heroImg={HERO_PHOTO}
+      hero={
+        <div className="sr-hd-in sh-hero-grid">
+          <div className="sh-hero-copy">
+            <h1 className="sh-h1">Rooms, halls and equipment, booked without the back and forth.</h1>
+            <p className="sr-lead">Visitors pick a space and a time on your booking page. Your team approves requests, moves bookings and sees every location in a single calendar.</p>
+            <div className="sr-ctas">
+              <DemoButton location="space_home_hero" className="sr-btn light" />
+              <a href="#how-it-works" className="sh-hero-link">See how it works {I.arrow}</a>
             </div>
           </div>
+          <SpaceTryIt />
         </div>
-      </section>
+      }
+    >
+      <style>{css}</style>
 
       {/* 2. the operational challenge */}
       <section className="sr-out sr-sec" id="challenge">
         <div className="sr-in">
           <div className="sr-head" data-rv="0">
-            <span className="sr-label">The operational challenge</span>
             <h2 className="sr-h2">Double bookings, email requests and calendars nobody trusts.</h2>
-            <p className="sr-lead">Most room booking problems have little to do with the rooms. They start when requests arrive in different places and the rules live in a few people&apos;s heads.</p>
+            <p className="sr-lead">Most booking problems have little to do with the rooms. Requests arrive in different places, and the rules live in a few people&apos;s heads.</p>
           </div>
-          <div className="sh-chal">
-            {CHALLENGES.map((c, i) => (
-              <div key={c.t} className="sh-chal-card" data-rv={i}>
-                <span className="sh-chal-n">{String(i + 1).padStart(2, "0")}</span>
-                <h3>{c.t}</h3>
-                <p>{c.d}</p>
+          <div className="sh-ba" data-rv="1">
+            <div className="sh-before">
+              <span className="sh-pill bad">Today</span>
+              <div className="sh-mail">
+                <div className="sh-mail-h"><i>FD</i><span><b>Facilities inbox</b><small>Re: Hall A on Saturday?</small></span><em>9:41</em></div>
+                <p>Hi, could we have the hall from 14:00 for about 40 people? Not sure if the projector is free. Thanks!</p>
+              </div>
+              <div className="sh-sheet">
+                <div className="sh-sheet-r head"><span>Room</span><span>Time</span><span>Team</span></div>
+                <div className="sh-sheet-r"><span>Board Room</span><span>10:00</span><span>Sales</span></div>
+                <div className="sh-sheet-r clash"><span>Board Room</span><span>10:00</span><span>Finance</span></div>
+                <div className="sh-sheet-r"><span>Training 2</span><span>13:00</span><span>People</span></div>
+              </div>
+              <div className="sh-note">Hall A blocked Fri? Ask Dan</div>
+            </div>
+            <span className="sh-arrow" aria-hidden>{I.arrow}</span>
+            <div className="sh-after">
+              <span className="sh-pill good">With EVOQ Bookings</span>
+              <CalendarUI compact />
+            </div>
+          </div>
+          <div className="sh-pains">
+            {[
+              ["Requests in email", "Each request is retyped into a spreadsheet and answered by hand."],
+              ["Double bookings", "Two teams arrive at the same room because their bookings lived in different calendars."],
+              ["No view across sites", "Each building keeps its own calendar, so nobody sees what is free elsewhere."],
+            ].map(([t, d], i) => (
+              <div key={t} data-rv={i}><h3>{t}</h3><p>{d}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. how it works, from setup to report */}
+      <section className="sr-out sr-sec sh-how" id="how-it-works">
+        <div className="sr-in">
+          <div className="sr-head c" data-rv="0">
+            <span className="sr-label">How it works</span>
+            <h2 className="sr-h2">From a new space to a utilization report.</h2>
+            <p className="sr-lead">Describe each space once. The page visitors book from and the calendar your team manages always show the same information.</p>
+          </div>
+          <div className="sh-rows">
+            {STEPS.map((s, i) => (
+              <div key={s.t} className={`sh-row${i % 2 ? " flip" : ""}`}>
+                <div className="sh-row-t" data-rv="0">
+                  <span className="sh-row-n">{s.n}</span>
+                  <h3>{s.t}</h3>
+                  <p>{s.d}</p>
+                  <ul>{s.pts.map((p) => <li key={p}>{I.check}{p}</li>)}</ul>
+                </div>
+                <div className="sh-row-v" data-rv="1">
+                  <img src={s.img} alt="" loading="lazy" />
+                  <div className="sh-row-ui">{s.ui}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 3. space reservation management, explained */}
-      <section className="sr-out sr-sec sh-explain">
-        <div className="sr-in">
-          <div className="sr-head c" data-rv="0">
-            <span className="sr-label">Space reservation management</span>
-            <h2 className="sr-h2">Describe each space once. People book it within your rules.</h2>
-            <p className="sr-lead">The space, its availability and its booking rules are kept together, so the page visitors book from and the calendar your team manages show the same information.</p>
-          </div>
-          <div className="sh-flow" data-rv="1">
-            {FLOW.map((f, i) => (
-              <a key={f.t} href={f.href} className="sh-flow-node">
-                <span className="sh-flow-n">{i + 1}</span>
-                <b>{f.t}</b>
-                <small>{f.d}</small>
-                <em>See the features {I.arrow}</em>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. how it works */}
-      <section className="sr-out sr-sec" id="how-it-works">
-        <div className="sr-in">
-          <div className="sr-head" data-rv="0">
-            <span className="sr-label">How it works</span>
-            <h2 className="sr-h2">From a new space to a utilization report, in six steps.</h2>
-          </div>
-          <ol className="sh-steps">
-            {STEPS.map((s, i) => (
-              <li key={s.t} data-rv={i}>
-                <span className="sh-step-n">{i + 1}</span>
-                <h3>{s.t}</h3>
-                <p>{s.d}</p>
-                <a href={s.href} className="sr-link">Related features {I.arrow}</a>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+      {/* 4. rules, on the lit horizon */}
+      <SpaceRules />
 
       {/* 5. who it's for */}
       <section className="sr-out sr-sec sh-who" id="who-its-for">
@@ -183,108 +194,112 @@ export function SpaceHome() {
           <div className="sr-head" data-rv="0">
             <span className="sr-label">Who it&apos;s for</span>
             <h2 className="sr-h2">An office books rooms differently from a coworking space.</h2>
-            <p className="sr-lead">Choose the setup closest to yours to see the problem it usually starts with and how EVOQ Bookings handles it.</p>
           </div>
-          <div className="sh-tabs" role="tablist" aria-label="Who it is for">
-            {AUDIENCES.map((x) => (
-              <button key={x.k} type="button" role="tab" aria-selected={x.k === aud} className={x.k === aud ? "on" : ""} onClick={() => setAud(x.k)}>{x.name}</button>
-            ))}
-          </div>
-          <div className="sh-aud" role="tabpanel" key={a.k}>
-            <div className="sh-aud-col">
-              <span className="sh-aud-k">The problem</span>
-              <p className="sh-aud-problem">{a.problem}</p>
-            </div>
-            <div className="sh-aud-col">
-              <span className="sh-aud-k">How it works in EVOQ</span>
-              <p>{a.flow}</p>
-              <div className="sh-aud-feat">{a.features.map((f) => <span key={f}>{I.check}{f}</span>)}</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. use cases */}
-      <section className="sr-out sr-sec" id="use-cases">
-        <div className="sr-in">
-          <div className="sr-head" data-rv="0">
-            <span className="sr-label">Use cases</span>
-            <h2 className="sr-h2">What a booking looks like from start to finish.</h2>
-          </div>
-          <div className="sh-uses">
-            {USES.map((u, i) => (
-              <article key={u.t} className="sh-use" data-rv={i % 3}>
-                <h3>{u.t}</h3>
-                <dl>
-                  <div><dt>The need</dt><dd>{u.need}</dd></div>
-                  <div><dt>In EVOQ</dt><dd>{u.act}</dd></div>
-                  <div className="res"><dt>The result</dt><dd>{u.res}</dd></div>
-                </dl>
+          <div className="sh-who-grid">
+            {WHO.map((w, i) => (
+              <article key={w.name} className="sh-who-card" data-rv={i}>
+                <img src={w.img} alt="" loading="lazy" />
+                <div className="sh-who-b">
+                  <h3>{w.name}</h3>
+                  <p>{w.line}</p>
+                  <span className="sh-who-tags">{w.tags.map((t) => <em key={t}>{t}</em>)}</span>
+                </div>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 7. product experience preview */}
-      <section className="sr-out sr-sec sh-prev" id="product">
+      {/* 6. several locations, the constellation */}
+      <SpaceLocations />
+
+      {/* 7. AI assistants */}
+      <section className="sr-out sr-sec" id="ai">
         <div className="sr-in">
           <div className="sr-head c" data-rv="0">
-            <span className="sr-label">Product preview</span>
-            <h2 className="sr-h2">The screens your team and your visitors use.</h2>
-          </div>
-          <div className="sh-tabs c" role="tablist" aria-label="Product screens">
-            {PREVIEW.map((x) => (
-              <button key={x.k} type="button" role="tab" aria-selected={x.k === pv} className={x.k === pv ? "on" : ""} onClick={() => setPv(x.k)}>{x.name}</button>
-            ))}
-          </div>
-          <div className="sh-prev-stage" role="tabpanel" key={p.k}>
-            <div className="sh-prev-ui">{p.ui}</div>
-            <ul className="sh-prev-notes">
-              {p.notes.map((n, i) => <li key={n}><span>{i + 1}</span>{n}</li>)}
-              <li className="more"><a href={F} className="sr-link">All features {I.arrow}</a></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. AI and assisted operations teaser */}
-      <section className="sr-out sr-sec" id="ai">
-        <div className="sr-in sh-ai">
-          <div data-rv="0">
             <span className="sr-label">AI assistants</span>
-            <h2 className="sr-h2" style={{ marginTop: 14 }}>Visitors describe what they need. Your team approves what changes.</h2>
-            <p className="sr-lead">A booking assistant helps visitors find a suitable space from a plain request. An administrative assistant answers questions about today&apos;s bookings, approvals and conflicts. When an agent prepares a change to a reservation, it waits for a person to approve it.</p>
-            <div className="sr-ctas"><a href={`${F}#ai`} className="sr-btn secondary">See the AI capabilities</a></div>
+            <h2 className="sr-h2">Describe what you need. Your team approves what changes.</h2>
+            <p className="sr-lead">EVI answers from your bookings, and Kai, the Operations agent, prepares changes. Nothing moves until a person approves it.</p>
           </div>
-          <div className="sh-ai-vis" data-rv="1" aria-hidden>
-            <div className="sh-bubble me">I need a room for 10 people with a screen, Thursday afternoon.</div>
-            <div className="sh-bubble bot">
-              <small>Interpreted as</small>
-              <span className="sh-crit"><em>Thu 19 Nov</em><em>13:00 to 17:00</em><em>10+ seats</em><em>Screen</em></span>
-              <b>2 spaces match</b>
-              <span className="sh-match"><span>Board Room · 12 seats</span><span className="sr-badge ok">Free 14:00</span></span>
-              <span className="sh-match"><span>Training Room 2 · 24 seats</span><span className="sr-badge warn">Needs approval</span></span>
+          <div className="sh-ai" data-rv="1" ref={aiRef}>
+            <div className="sh-ai-rail" role="tablist" aria-label="AI assistants">
+              {AI.map((x, i) => (
+                <button key={x.k} type="button" role="tab" aria-selected={ai === i} className={ai === i ? "on" : ""} onClick={() => pickAi(i)}>
+                  <AiTile src={x.src} size={46} />
+                  <span><b>{x.t}</b><small>{x.d}</small></span>
+                  {ai === i && aiAuto && aiSeen && i < AI.length - 1 && <i className="sh-ai-bar" style={{ animationDuration: `${AI_DWELL}ms` }} aria-hidden />}
+                </button>
+              ))}
             </div>
-            <div className="sh-prepared">
-              <span className="sh-prep-k">Prepared for review</span>
-              <b>Move the vendor workshop to Training Room 2</b>
-              <small>Hall A is blocked for maintenance on Friday morning.</small>
-              <span className="sh-prep-act"><span className="sr-btn ghost sm">Reject</span><span className="sr-btn primary sm">Approve</span></span>
+            <div className="sh-ai-stage" role="tabpanel" key={ai}>
+              {ai === 0 && (
+                <>
+                  <div className="sh-msg me"><span>I need a room for 10 people with a screen, Thursday afternoon.</span><Face src="/characters/sam.webp" /></div>
+                  <div className="sh-msg bot">
+                    <AiTile src="/characters/evi.webp" size={40} />
+                    <div className="sh-bot-b">
+                      <span className="sh-crit"><em>Thu 19 Nov</em><em>13:00 to 17:00</em><em>10+ seats</em><em>Screen</em></span>
+                      <p>Two spaces match.</p>
+                      <div className="sh-opt"><img src={SPACE_IMG.board} alt="" /><span><b>Board Room</b><small>12 seats · Display</small></span><em className="sr-badge ok">Free 14:00</em></div>
+                      <div className="sh-opt"><img src={SPACE_IMG.training} alt="" /><span><b>Training Room 2</b><small>24 seats · Projector</small></span><em className="sr-badge warn">Needs approval</em></div>
+                    </div>
+                  </div>
+                </>
+              )}
+              {ai === 1 && (
+                <>
+                  <div className="sh-msg me"><span>What needs my attention today?</span><Face src="/characters/mia.webp" /></div>
+                  <div className="sh-msg bot">
+                    <AiTile src="/characters/evi.webp" size={40} />
+                    <div className="sh-bot-b">
+                      <p>Three things, from today&apos;s bookings.</p>
+                      {ATTN.map(([t, d, k, c]) => (
+                        <div key={t} className="sh-attn"><span><b>{t}</b><small>{d}</small></span><em className={`sr-badge ${k}`}>{c}</em></div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+              {ai === 2 && (
+                <>
+                  <div className="sh-msg bot">
+                    <AiTile src="/characters/evi.webp" size={40} />
+                    <div className="sh-bot-b"><p>Hall A is blocked on Friday morning. I asked Kai to prepare a move for the vendor workshop.</p></div>
+                  </div>
+                  <div className="sh-agent">
+                    <AiTile src="/characters/kai.webp" size={56} />
+                    <div>
+                      <span className="sh-prep-k">{decision === "approved" ? "Approved by Mia" : decision === "rejected" ? "Rejected by Mia" : "Kai · Operations agent · Prepared for review"}</span>
+                      <b>Move the vendor workshop to Training Room 2</b>
+                      <small>{decision === "approved" ? "The organizer was notified and the calendar is updated." : decision === "rejected" ? "The workshop stays in Hall A. Nothing was changed." : "Same time, Friday 09:00 to 11:00, with the same setup and cleanup buffers."}</small>
+                      {!decision ? (
+                        <span className="sh-prep-act">
+                          <button type="button" className="sr-btn ghost sm" onClick={() => setDecision("rejected")}>Reject</button>
+                          <button type="button" className="sr-btn primary sm" onClick={() => setDecision("approved")}>Approve</button>
+                        </span>
+                      ) : (
+                        <span className="sh-prep-act"><button type="button" className="sr-btn ghost sm" onClick={() => setDecision(null)}>Undo</button></span>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* 9. closing CTA */}
+      {/* 7. closing CTA */}
       <section className="sr-close">
+        <NightField stars={64} pings={3} seed={9} />
+        <Horizon top="58%" />
+        <Skyline />
         <div className="sr-close-band" data-rv="0">
-          <span className="sr-label">For offices, coworking spaces, training centers and venues</span>
-          <h2 className="sr-h2" style={{ marginTop: 14 }}>See your own spaces, rules and locations in EVOQ Bookings.</h2>
+          <h2 className="sr-h2">See your own spaces, rules and locations in EVOQ Bookings.</h2>
           <p className="sr-lead">Tell us how many locations and spaces you manage and what people book today. We will tailor the demo to your setup.</p>
           <div className="sr-ctas">
-            <DemoButton location="space_home_close" />
-            <a href={`${SR_BASE}/pricing`} className="sr-btn secondary">View pricing</a>
+            <DemoButton location="space_home_close" className="sr-btn light" />
+            <a href={`${SR_BASE}/pricing`} className="sr-btn outline-light">View pricing</a>
           </div>
         </div>
       </section>
@@ -293,107 +308,137 @@ export function SpaceHome() {
 }
 
 const css = `
-  .sh-hero{padding:4px 16px 0}
-  .sh-hero-band{position:relative;border-radius:28px;background:linear-gradient(100deg,#DCE8DF 0%,#F3E8D8 52%,#E8C9B7 100%);padding:72px 24px 80px;overflow:hidden}
-  .sh-shape{position:absolute;pointer-events:none}
-  .sh-shape.ring{top:-90px;right:6%;width:300px;height:300px;border-radius:50%;border:1.5px solid ${TERRA};opacity:.2}
-  .sh-shape.disc{bottom:-150px;left:-100px;width:360px;height:360px;border-radius:50%;background:${SAGE};opacity:.08}
-  .sh-hero-grid{position:relative;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:44px;align-items:center}
-  .sh-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;background:rgba(255,255,255,.7);font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:600;color:${DEEP}}
-  .sh-tag i{width:24px;height:24px;border-radius:50%;background:${SAGE};color:#fff;display:grid;place-items:center}
-  .sh-tag i svg{width:14px;height:14px}
-  .sh-hero-vis{position:relative;min-height:540px}
-  .sh-hero-cal{position:absolute;top:0;left:10%;right:0}
-  .sh-hero-pub{position:absolute;left:0;bottom:0;width:52%;transform:rotate(-1deg)}
-  .sh-hero-chip{position:absolute;right:4%;bottom:36px;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 18px 36px -18px rgba(38,51,43,.5);display:grid;gap:3px;line-height:1.3}
-  .sh-hero-chip b{font-size:13px;color:${DEEP}}.sh-hero-chip small{font-size:11.5px;color:${NEUTRAL}}
+  .sh-hero-grid{position:relative;padding:48px 0 56px;display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:40px;align-items:center}
+  .sh-h1{font-family:var(--font-display),system-ui,sans-serif;font-size:46px;line-height:1.06;letter-spacing:-.025em;font-weight:600;margin:0!important;text-wrap:balance;color:#fff}
+  .sh-hero-copy .sr-lead{margin-top:20px}
+  .sh-hero-copy .sr-ctas{align-items:center;gap:22px;margin-top:32px}
+  .sh-hero-link{display:inline-flex;align-items:center;gap:7px;color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:15px;text-decoration:none;border-bottom:1.5px solid rgba(255,255,255,.45);padding-bottom:2px}
+  .sh-hero-link:hover{border-bottom-color:#fff}
+  .sh-hero-link svg{width:15px;height:15px;transform:rotate(90deg)}
 
-  .sh-chal{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-  .sh-chal-card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 0 0 1px rgba(38,51,43,.07)}
-  .sh-chal-n{font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:700;color:${TERRA}}
-  .sh-chal-card h3{font-size:17px;line-height:1.3;margin:10px 0 8px!important}
-  .sh-chal-card p{margin:0;font-size:14.5px;color:${MUTED}}
+  /* challenge */
+  .sh-ba{display:grid;grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);gap:0;align-items:stretch}
+  .sh-before{position:relative;border-radius:22px;background:#E6EDE5;padding:56px 26px 30px;display:grid;gap:14px;align-content:start;overflow:hidden}
+  .sh-after{position:relative;border-radius:22px;background:#fff;padding:56px 22px 22px;box-shadow:0 0 0 1px rgba(22,36,28,.07);display:flex;flex-direction:column;justify-content:center}
+  .sh-pill{position:absolute;top:18px;left:22px;font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:999px}
+  .sh-pill.bad{background:rgba(22,36,28,.1);color:${DEEP}}
+  .sh-pill.good{background:rgba(78,111,88,.12);color:${PRIMARY_HOVER}}
+  .sh-arrow{align-self:center;justify-self:center;width:36px;height:36px;border-radius:50%;background:${PRIMARY};color:#fff;display:grid;place-items:center;z-index:2;box-shadow:0 0 0 5px ${BG}}
+  .sh-arrow svg{width:17px;height:17px}
+  .sh-mail{background:#fff;border-radius:12px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(22,36,28,.5);transform:rotate(-.8deg)}
+  .sh-mail-h{display:flex;align-items:center;gap:10px}
+  .sh-mail-h i{width:30px;height:30px;border-radius:50%;background:${SAND};color:${DEEP};display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700}
+  .sh-mail-h span{display:grid;line-height:1.3;min-width:0}.sh-mail-h b{font-size:13px;color:${INK}}.sh-mail-h small{font-size:12px;color:${NEUTRAL};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sh-mail-h em{margin-left:auto;font-style:normal;font-size:11.5px;color:${NEUTRAL}}
+  .sh-mail p{margin:10px 0 0;font-size:13.5px;color:${MUTED}}
+  .sh-sheet{background:#fff;border-radius:10px;overflow:hidden;font-size:12.5px;box-shadow:0 8px 20px -14px rgba(22,36,28,.5);transform:rotate(.6deg)}
+  .sh-sheet-r{display:grid;grid-template-columns:1.3fr .8fr 1fr;padding:7px 14px;border-top:1px solid ${LINE};color:${INK}}
+  .sh-sheet-r.head{border-top:0;background:#EEF1EA;color:${NEUTRAL};font-weight:600;font-size:11.5px}
+  .sh-sheet-r.clash{background:rgba(220,38,38,.1);color:#B42318;font-weight:600}
+  .sh-note{justify-self:start;background:#F8E7A3;color:#5B4A12;font-size:13px;padding:10px 14px;border-radius:4px;transform:rotate(-2deg);box-shadow:0 8px 16px -10px rgba(22,36,28,.5);font-weight:500}
+  .sh-pains{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:44px}
+  .sh-pains h3{font-size:18px;margin:0 0 6px!important}
+  .sh-pains p{margin:0;font-size:15px;color:${MUTED}}
 
-  .sh-explain{background:#fff}
-  .sh-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative}
-  .sh-flow::before{content:"";position:absolute;top:30px;left:12%;right:12%;border-top:2px dashed ${LINE}}
-  .sh-flow-node{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:0 10px 18px;text-decoration:none;color:inherit}
-  .sh-flow-n{width:60px;height:60px;border-radius:50%;background:${BG};border:2px solid ${SAGE};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-size:20px;font-weight:700;color:${SAGE};margin-bottom:8px}
-  .sh-flow-node b{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}
-  .sh-flow-node small{font-size:14px;color:${MUTED};line-height:1.45}
-  .sh-flow-node em{font-style:normal;font-size:13.5px;font-weight:600;color:${TERRA};display:inline-flex;align-items:center;gap:5px;margin-top:4px}
-  .sh-flow-node em svg{width:14px;height:14px}
-  .sh-flow-node:hover .sh-flow-n{background:${SAGE};color:#fff}
+  /* how it works */
+  .sh-how{background:#fff}
+  .sh-rows{display:grid;gap:84px;margin-top:8px}
+  .sh-row{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:center}
+  .sh-row.flip{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+  .sh-row.flip .sh-row-t{order:2}
+  .sh-row-n{width:36px;height:36px;border-radius:50%;background:${PRIMARY};color:#fff;display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:15px}
+  .sh-row-t h3{font-size:28px;line-height:1.15;letter-spacing:-.015em;margin:16px 0 12px!important}
+  .sh-row-t p{margin:0;color:${MUTED};font-size:17px}
+  .sh-row-t ul{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:9px}
+  .sh-row-t li{display:flex;gap:9px;align-items:flex-start;font-size:15px;color:${INK}}
+  .sh-row-t li svg{width:16px;height:16px;color:${PRIMARY};flex-shrink:0;margin-top:4px}
+  .sh-row-v{position:relative;padding-bottom:34px}
+  .sh-row-v>img{width:100%;height:400px;object-fit:cover;border-radius:22px;display:block}
+  .sh-row-ui{position:absolute;right:-18px;bottom:0;width:min(62%,380px)}
+  .sh-row.flip .sh-row-ui{right:auto;left:-18px}
+  .sh-row-ui .sr-win{box-shadow:0 30px 60px -26px rgba(22,36,28,.55),0 0 0 1px rgba(22,36,28,.08)}
 
-  .sh-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
-  .sh-steps li{background:#fff;border-radius:16px;padding:24px;box-shadow:0 0 0 1px rgba(38,51,43,.07);display:flex;flex-direction:column}
-  .sh-step-n{width:34px;height:34px;border-radius:10px;background:rgba(100,133,109,.14);color:${SAGE};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;margin-bottom:14px}
-  .sh-steps h3{font-size:18px;margin-bottom:8px!important}
-  .sh-steps p{margin:0 0 14px;color:${MUTED};font-size:15px;flex:1}
-
+  /* who */
   .sh-who{background:#fff}
-  .sh-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
-  .sh-tabs.c{justify-content:center}
-  .sh-tabs button{border:1.5px solid ${LINE};background:#fff;border-radius:999px;padding:9px 16px;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:600;color:${MUTED};cursor:pointer}
-  .sh-tabs button.on{border-color:${SAGE};background:${SAGE};color:#fff}
-  .sh-aud{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;animation:shIn .35s ease}
-  .sh-aud-col{background:${BG};border-radius:18px;padding:28px}
-  .sh-aud-k{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${TERRA}}
-  .sh-aud-problem{font-family:var(--font-display),system-ui,sans-serif;font-size:22px;line-height:1.35;color:${DEEP};margin:10px 0 0}
-  .sh-aud-col p{margin:10px 0 0;font-size:16px}
-  .sh-aud-feat{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-  .sh-aud-feat span{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:600;color:${DEEP}}
-  .sh-aud-feat svg{width:14px;height:14px;color:${SAGE}}
+  .sh-who-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .sh-who-card{border-radius:20px;overflow:hidden;background:${BG};box-shadow:0 0 0 1px rgba(22,36,28,.07);display:flex;flex-direction:column}
+  .sh-who-card img{width:100%;height:210px;object-fit:cover;display:block}
+  .sh-who-b{padding:20px 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .sh-who-b h3{font-size:19px;margin:0!important}
+  .sh-who-b p{margin:0;font-size:14.5px;color:${MUTED}}
+  .sh-who-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+  .sh-who-tags em{font-style:normal;font-size:12px;padding:3px 10px;border-radius:999px;background:#fff;color:${MUTED};box-shadow:0 0 0 1px ${LINE}}
+
+  /* AI */
+  .sh-ai{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:22px;align-items:stretch}
+  .sh-ai-rail{display:grid;gap:12px;align-content:start}
+  .sh-ai-rail button{display:grid;grid-template-columns:46px minmax(0,1fr);gap:14px;align-items:center;text-align:left;background:#fff;border:0;border-radius:18px;padding:16px 18px;cursor:pointer;box-shadow:0 0 0 1px rgba(22,36,28,.08);font:inherit;color:inherit;transition:box-shadow .2s ease}
+  .sh-ai-rail button{position:relative;overflow:hidden}
+  .sh-ai-bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:${PRIMARY};transform-origin:left;animation:shBar linear forwards}
+  @keyframes shBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @media (prefers-reduced-motion:reduce){.sh-ai-bar{display:none}}
+  .sh-ai-rail button:hover{box-shadow:0 0 0 1px rgba(78,111,88,.4)}
+  .sh-ai-rail button.on{box-shadow:0 0 0 2px ${PRIMARY},0 18px 34px -24px rgba(22,36,28,.5)}
+  .sh-ai-rail button>span{display:grid;gap:2px}
+  .sh-ai-rail b{font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;color:${DEEP}}
+  .sh-ai-rail small{font-size:13.5px;color:${MUTED};line-height:1.45}
+  .sh-tile{display:block;border-radius:26%;overflow:hidden;background:#E9E4FF;flex-shrink:0;box-shadow:0 0 0 2px #8F7BFF,0 0 0 4.5px rgba(255,255,255,.7)}
+  .sh-tile img{width:100%;height:100%;object-fit:cover;display:block}
+  .sh-ai-stage{background:#E3EBE2;border-radius:26px;padding:28px;display:grid;gap:16px;align-content:start;min-height:370px;animation:shIn .35s ease both}
   @keyframes shIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .sh-msg.me{display:flex;gap:10px;justify-content:flex-end;align-items:flex-end}
+  .sh-msg.me>span{max-width:76%;background:${PRIMARY};color:#fff;padding:11px 16px;border-radius:16px 16px 4px 16px;font-size:14.5px}
+  .sh-face{width:36px;height:36px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #fff;flex-shrink:0}
+  .sh-msg.bot{display:flex;gap:12px;align-items:flex-start}
+  .sh-bot-b{background:#fff;border-radius:4px 16px 16px 16px;padding:14px;display:grid;gap:10px;box-shadow:0 10px 24px -18px rgba(22,36,28,.5);min-width:0;flex:1}
+  .sh-bot-b p{margin:0;font-size:14px;color:${INK}}
+  .sh-crit{display:flex;flex-wrap:wrap;gap:6px}
+  .sh-crit em{font-style:normal;font-size:12px;padding:3px 10px;border-radius:999px;background:${BG};color:${MUTED};box-shadow:0 0 0 1px ${LINE}}
+  .sh-opt{display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:11px;align-items:center;padding:6px;border-radius:11px;box-shadow:0 0 0 1px ${LINE}}
+  .sh-opt img{width:54px;height:44px;object-fit:cover;border-radius:8px}
+  .sh-opt span{display:grid;min-width:0}.sh-opt b{font-size:13.5px;color:${DEEP}}.sh-opt small{font-size:12px;color:${NEUTRAL}}
+  .sh-attn{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;box-shadow:0 0 0 1px ${LINE}}
+  .sh-attn span{display:grid;min-width:0}.sh-attn b{font-size:13.5px;color:${DEEP}}.sh-attn small{font-size:12px;color:${NEUTRAL}}
+  .sh-agent{display:grid;grid-template-columns:56px minmax(0,1fr);gap:16px;align-items:center;background:#fff;border-radius:18px;padding:18px 20px;box-shadow:0 14px 30px -20px rgba(22,36,28,.55)}
+  .sh-agent>div{display:grid;gap:3px}
+  .sh-prep-k{font-family:var(--font-display),system-ui,sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:${ACCENT}}
+  .sh-agent b{font-size:15.5px;color:${DEEP}}.sh-agent small{font-size:13px;color:${MUTED}}
+  .sh-prep-act{display:flex;gap:8px;margin-top:8px}
 
-  .sh-uses{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .sh-use{background:#fff;border-radius:16px;padding:24px;box-shadow:0 0 0 1px rgba(38,51,43,.07)}
-  .sh-use h3{font-size:18px;margin-bottom:14px!important}
-  .sh-use dl{margin:0;display:grid;gap:12px}
-  .sh-use dt{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${NEUTRAL}}
-  .sh-use dd{margin:2px 0 0;font-size:15px;color:${MUTED}}
-  .sh-use .res{background:rgba(100,133,109,.08);border-radius:10px;padding:10px 12px}
-  .sh-use .res dt{color:${SAGE}}.sh-use .res dd{color:${DEEP};font-weight:500}
-
-  .sh-prev{background:#fff}
-  .sh-prev-stage{display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:center;animation:shIn .35s ease}
-  .sh-prev-ui{background:${BG};border-radius:22px;padding:28px}
-  .sh-prev-notes{list-style:none;margin:0;padding:0;display:grid;gap:16px}
-  .sh-prev-notes li{display:flex;gap:12px;font-size:16px;line-height:1.5}
-  .sh-prev-notes li span{width:26px;height:26px;border-radius:50%;background:${SAGE};color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex-shrink:0}
-  .sh-prev-notes li.more{padding-left:38px}
-
-  .sh-ai{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-  .sh-ai-vis{background:linear-gradient(140deg,#DCE8DF,#F3E8D8);border-radius:22px;padding:28px;display:grid;gap:12px}
-  .sh-bubble{max-width:88%;border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.45}
-  .sh-bubble.me{justify-self:end;background:${SAGE};color:#fff;border-bottom-right-radius:4px}
-  .sh-bubble.bot{background:#fff;border-bottom-left-radius:4px;display:grid;gap:7px;box-shadow:0 12px 28px -20px rgba(38,51,43,.5)}
-  .sh-bubble.bot small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${NEUTRAL}}
-  .sh-bubble.bot b{color:${DEEP}}
-  .sh-crit{display:flex;flex-wrap:wrap;gap:5px}
-  .sh-crit em{font-style:normal;font-size:12px;padding:2px 8px;border-radius:999px;background:${BG};color:${DEEP}}
-  .sh-match{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:13px;color:${DEEP};padding-top:6px;border-top:1px solid ${LINE}}
-  .sh-prepared{background:#fff;border-radius:14px;padding:14px 16px;display:grid;gap:4px;box-shadow:0 0 0 1.5px rgba(217,119,6,.35)}
-  .sh-prep-k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A35A04}
-  .sh-prepared b{font-size:14.5px;color:${DEEP}}.sh-prepared small{font-size:12.5px;color:${MUTED}}
-  .sh-prep-act{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
-
-  @media (max-width:1100px){.sh-chal{grid-template-columns:repeat(3,1fr)}}
-  @media (max-width:960px){
-    .sh-hero-grid,.sh-ai,.sh-prev-stage,.sh-aud{grid-template-columns:minmax(0,1fr)}
-    .sh-hero-vis{min-height:0;display:grid;gap:14px}
-    .sh-hero-cal,.sh-hero-pub,.sh-hero-chip{position:static;width:auto;transform:none}
-    .sh-hero-pub,.sh-hero-chip{display:none}
-    .sh-steps,.sh-uses{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .sh-flow{grid-template-columns:repeat(2,1fr);row-gap:28px}.sh-flow::before{display:none}
+  @media (max-width:1100px){
+    .sh-who-grid{grid-template-columns:repeat(2,1fr)}
+    .sh-row,.sh-row.flip{gap:40px}
   }
-  @media (max-width:640px){
-    .sh-hero-band{padding:48px 18px 48px}
-    .sh-chal,.sh-steps,.sh-uses,.sh-flow{grid-template-columns:minmax(0,1fr)}
-    .sh-hero-cal{display:none}
-    .sh-hero-pub{display:block}
-    .sh-aud-problem{font-size:19px}
-    .sh-prev-ui{padding:14px}
+  @media (max-width:980px){
+    .sh-hero-grid,.sh-ai{grid-template-columns:minmax(0,1fr)}
+    .sh-ai-stage{min-height:0}
+    .sh-hero-grid{gap:36px}
+    .sh-row,.sh-row.flip{grid-template-columns:minmax(0,1fr);gap:28px}
+    .sh-row.flip .sh-row-t{order:0}
+    .sh-rows{gap:64px}
+    .sh-row-v>img{height:300px}
+    .sh-row-ui,.sh-row.flip .sh-row-ui{right:12px;left:auto;width:min(70%,340px)}
+  }
+  @media (max-width:860px){
+    .sh-h1{font-size:36px}
+    .sh-ba{grid-template-columns:minmax(0,1fr);gap:0}
+    .sh-arrow{transform:rotate(90deg);margin:-14px 0}
+    .sh-pains{grid-template-columns:minmax(0,1fr);gap:20px}
+    .sh-hero-grid{padding:36px 0 40px}
+  }
+  @media (max-width:560px){
+    .sh-who-grid{grid-template-columns:minmax(0,1fr)}
+    .sh-row-v{padding-bottom:0}
+    .sh-row-ui,.sh-row.flip .sh-row-ui{position:relative;z-index:1;right:auto;left:auto;width:auto;margin-top:-56px;padding:0 12px}
+    .sh-row-v>img{height:240px}
+    .sh-before{padding:52px 16px 22px}
+    .sh-after{padding:52px 12px 12px}
+    .sh-ai-stage{padding:16px}
+    .sh-ai-rail button{padding:14px}
+    .sh-attn{align-items:flex-start;flex-direction:column;gap:6px}
+    .sh-opt{grid-template-columns:44px minmax(0,1fr)}
+    .sh-opt img{width:44px;height:38px}
+    .sh-opt .sr-badge{grid-column:2;justify-self:start}
+    .sh-agent{grid-template-columns:48px minmax(0,1fr);gap:10px;padding:14px}
   }
 `;
-
