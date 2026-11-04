@@ -126,7 +126,7 @@ function BookingSection() {
   return (
     <section className="ap-out ap-sec ap-band" id="booking">
       <div className="ap-in">
-        <div className="ap-head c" data-rv="0">
+        <div className="ap-head c wide" data-rv="0">
           <span className="ap-label">Online appointment booking</span>
           <h2 className="ap-h2">Make it easier for clients to book the services they need.</h2>
           <p className="ap-lead">Give clients a clear path from choosing a service to confirming an appointment. They can select a provider, find an available time and submit their details through your online booking page.</p>
@@ -410,7 +410,7 @@ export function ApptHome() {
       {/* 5. the appointment lifecycle */}
       <section className="ap-out ap-sec ap-white" id="lifecycle">
         <div className="ap-in">
-          <div className="ap-head c" data-rv="0">
+          <div className="ap-head c wide" data-rv="0">
             <span className="ap-label">Manage the appointment lifecycle</span>
             <h2 className="ap-h2">More control over the work surrounding each booking.</h2>
             <p className="ap-lead">An appointment involves more than selecting a date and time. Collect the right information, keep clients informed and manage the updates that happen before and after a scheduled visit.</p>

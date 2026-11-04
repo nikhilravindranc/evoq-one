@@ -207,6 +207,8 @@ const css = `
   .ap-head .ap-label{margin-bottom:14px}
   .ap-head.c{margin-left:auto;margin-right:auto;text-align:center}
   .ap-head.c .ap-lead{margin-left:auto;margin-right:auto}
+  .ap-head.wide{max-width:1160px}
+  .ap-head.wide .ap-lead{max-width:1100px}
   .ap-note{display:flex;align-items:flex-start;gap:12px;margin:40px 0 0;padding:16px 20px;border-radius:16px;background:${MIST_SOFT};color:${INK};font-size:15.5px;line-height:1.5}
   .ap-note svg{width:18px;height:18px;color:${PRIMARY};flex-shrink:0;margin-top:2px}
 
@@ -258,15 +260,16 @@ const css = `
 
   /* closing band: inset panel, like the EVOQ Bookings enquiry band */
   .ap-close{padding:0 20px 96px;background:${BG}}
-  .ap-close-in{position:relative;overflow:hidden;max-width:1000px;margin:0 auto;border-radius:28px;padding:72px 32px;text-align:center;background:radial-gradient(55% 70% at 92% 0%,rgba(217,185,140,.45),rgba(217,185,140,0) 70%),radial-gradient(60% 70% at 0% 100%,rgba(143,182,154,.4),rgba(143,182,154,0) 70%),linear-gradient(180deg,${MIST_SOFT} 0%,${BG} 100%)}
-  .ap-close-c{position:relative;z-index:1;max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
-  .ap-close-c .ap-lead{margin-left:auto;margin-right:auto}
+  .ap-close-in{position:relative;overflow:hidden;max-width:1240px;margin:0 auto;border-radius:32px;padding:120px 40px;text-align:center;background:radial-gradient(55% 70% at 92% 0%,rgba(217,185,140,.45),rgba(217,185,140,0) 70%),radial-gradient(60% 70% at 0% 100%,rgba(143,182,154,.4),rgba(143,182,154,0) 70%),linear-gradient(180deg,${MIST_SOFT} 0%,${BG} 100%)}
+  .ap-close-c{position:relative;z-index:1;max-width:860px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+  .ap-close-c .ap-h2{font-size:46px}
+  .ap-close-c .ap-lead{margin-left:auto;margin-right:auto;font-size:19px}
   .ap-close-c .ap-ctas{justify-content:center}
   .ap-cs{position:absolute;pointer-events:none;z-index:0}
-  .ap-cs.ring{bottom:-140px;left:-80px;width:320px;height:320px;border-radius:50%;border:1.5px solid ${PRIMARY};opacity:.2}
+  .ap-cs.ring{bottom:-180px;left:-100px;width:400px;height:400px;border-radius:50%;border:1.5px solid ${PRIMARY};opacity:.2}
   .ap-cs.dots{top:48px;right:10%;width:96px;height:72px;background-image:radial-gradient(${PRIMARY} 1.4px,transparent 1.6px);background-size:16px 16px;opacity:.3}
   .ap-cs.sun{bottom:56px;right:16%;width:64px;height:64px;border-radius:50%;background:${SAND};opacity:.45}
-  @media (max-width:860px){.ap-close{padding:0 12px 64px}.ap-close-in{border-radius:20px;padding:56px 18px}.ap-cs.dots{display:none}}
+  @media (max-width:860px){.ap-close{padding:0 12px 64px}.ap-close-in{border-radius:20px;padding:64px 18px}.ap-close-c .ap-h2{font-size:30px}.ap-cs.dots{display:none}}
 
   /* get started modal */
   .ap-modal{position:fixed;inset:0;z-index:100;background:rgba(30,45,34,.45);display:grid;place-items:center;padding:20px;overflow-y:auto}
