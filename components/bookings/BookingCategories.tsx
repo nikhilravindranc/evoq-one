@@ -1,12 +1,11 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useRef } from "react";
-import { BG, DEEP, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAND, TERRA, U, useScrollSteps } from "./theme";
+import { DEEP, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAND, U } from "./theme";
 
-/* Booking categories in the Calendly "Scheduling capabilities" pattern: the section pins while you scroll
-   and the categories open one after another, each with its own photo and booking UI on the right.
-   Photos differ from the hero. On tablets and phones it is not pinned; items open on tap. */
+/* Booking categories: all four booking types visible at once as cards. Each card has a photo with a
+   small booking UI, what it is for, and one action: open the microsite, or talk to the team where the
+   page is still to come. */
 
 /* booking types that already have their own microsite */
 export const LIVE_PAGES: Record<string, string> = {
@@ -72,118 +71,94 @@ function StageUI({ k }: { k: (typeof CATEGORIES)[number]["key"] }) {
   );
 }
 
-const css = `
-  .bc-scroll{position:relative}
-  .bc-sticky{padding:112px 20px}
-  .bc-scroll.pinned .bc-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:24px 20px}
-  .bc{width:100%;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:72px;align-items:center}
-  .bc-head .bk-label{margin-bottom:14px}
-  .bc-head .bk-h2{text-align:left}
-  .bc-list{margin-top:32px;border-bottom:1px solid ${LINE}}
-  .bc-item{position:relative;display:block;width:100%;padding:18px 0;border:0;border-top:1px solid ${LINE};background:none;text-align:left;font:inherit;color:${INK};cursor:pointer}
-  .bc-bar{position:absolute;left:0;top:-1px;height:2px;width:0;background:${SAGE};transition:width .12s linear}
-  .bc-name{display:flex;align-items:center;gap:12px;font-family:var(--font-display),system-ui,sans-serif;font-size:17px;font-weight:600;color:${MUTED};transition:color .3s ease}
-  .bc-item.on .bc-name{color:${DEEP}}
-  .bc-name i{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;background:rgba(200,120,90,.1);color:${TERRA};flex-shrink:0;transition:background .3s ease,color .3s ease}
-  .bc-name i svg{width:18px;height:18px}
-  .bc-item.on .bc-name i{background:${SAGE};color:#fff}
-  .bc-more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.2,.7,.2,1)}
-  .bc-item.on .bc-more{grid-template-rows:1fr}
-  .bc-more>div{overflow:hidden}
-  .bc-more h3{margin:12px 0 0!important;font-size:19px;line-height:1.3}
-  .bc-more p{margin:6px 0 0;font-size:15px;line-height:1.6;color:${MUTED}}
-  .bc-fit{font-size:13.5px!important}
-  .bc-fit b{color:${INK};font-weight:600}
-  .bc-go{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:600;color:${TERRA};transition:gap .2s ease}
-  .bc-go:hover{gap:9px}
+const SHORT: Record<string, string> = { space: "Spaces", appt: "Appointments" };
+const TONE: Record<string, string> = { space: "#B4583A", appt: "#4E6F58", stay: "#9A6B1F", activity: "#4A5E73" };
 
-  .bc-stage{position:relative;height:min(620px,calc(100vh - 120px));min-height:460px;border-radius:24px;overflow:hidden;background:${SAND}}
-  .bc-stage img.bc-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity .7s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
-  .bc-stage img.bc-photo.on{opacity:1;transform:scale(1)}
-  .bc-stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,51,43,0) 35%,rgba(38,51,43,.38));pointer-events:none}
-  .bc-ui-wrap{position:absolute;left:28px;right:28px;bottom:28px;z-index:1;display:flex;justify-content:flex-end}
-  .bc-ui{width:min(400px,100%);padding:16px;border-radius:14px;background:#fff;box-shadow:0 26px 50px -26px rgba(38,51,43,.6);display:grid;gap:8px;animation:bcIn .55s cubic-bezier(.2,.7,.2,1) both}
-  .bc-ui-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:2px}
-  .bc-ui-head b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${DEEP};white-space:nowrap}
-  .bc-chips{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-  .bc-chips em{font-style:normal;padding:3px 9px;border-radius:999px;background:${BG};font-size:11.5px;font-weight:600;color:${MUTED};white-space:nowrap}
-  .bc-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;border:1px solid ${LINE};animation:bcIn .5s cubic-bezier(.2,.7,.2,1) both}
-  .bc-row.sel{border-color:${SAGE};box-shadow:inset 0 0 0 1px ${SAGE}}
+const css = `
+  .bc-sec{padding:112px 20px}
+  .bc-in{max-width:1240px;margin:0 auto}
+  .bc-head{max-width:720px;margin:0 auto 56px;text-align:center}
+  .bc-head .bk-label{margin-bottom:14px}
+  .bc-head .bk-lead{margin:18px auto 0}
+  .bc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+  .bc-card{position:relative;display:flex;flex-direction:column;border-radius:20px;background:#fff;box-shadow:0 0 0 1px ${LINE};overflow:hidden;transition:box-shadow .25s ease,transform .25s ease}
+  .bc-card:hover,.bc-card:focus-within{box-shadow:0 0 0 2px var(--tone),0 28px 48px -32px rgba(38,51,43,.55);transform:translateY(-4px)}
+  .bc-photo{position:relative;aspect-ratio:4/3;background:${SAND};overflow:hidden}
+  .bc-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+  .bc-card:hover .bc-photo img{transform:scale(1.04)}
+  .bc-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,51,43,0) 45%,rgba(38,51,43,.4));pointer-events:none}
+  .bc-ui-wrap{position:absolute;left:12px;right:12px;bottom:12px;z-index:1}
+  .bc-ui{padding:8px;border-radius:12px;background:#fff;box-shadow:0 18px 34px -20px rgba(38,51,43,.6);display:grid;gap:8px}
+  .bc-ui-head,.bc-row:not(.sel),.bc-txt small,.bc-time{display:none}
+  .bc-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:6px 8px;border-radius:10px;border:1px solid var(--tone);background:#fff}
   .bc-ico{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:rgba(100,133,109,.12);color:${DEEP}}
   .bc-ico svg{width:17px;height:17px}
   .bc-av{width:34px;height:34px;border-radius:50%;object-fit:cover}
   .bc-txt{display:grid;min-width:0}
-  .bc-txt b{font-size:13.5px;font-weight:600;color:${INK};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .bc-txt small{font-size:12px;color:${MUTED};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .bc-badge{padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;white-space:nowrap}
+  .bc-txt b{font-size:13px;font-weight:600;color:${INK};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bc-txt small{font-size:11.5px;color:${MUTED};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bc-badge{padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
   .bc-badge.ok{background:rgba(22,138,74,.1);color:${OK}}
   .bc-badge.off{background:rgba(104,114,128,.12);color:${NEUTRAL}}
-  .bc-time{font-size:12px;font-weight:600;color:${DEEP};white-space:nowrap}
-  .bc-cap{display:flex;align-items:center;gap:7px}
-  .bc-cap i{display:block;width:54px;height:5px;border-radius:3px;background:${LINE};overflow:hidden}
+  .bc-time{font-size:11.5px;font-weight:600;color:${DEEP};white-space:nowrap}
+  .bc-cap{display:flex;align-items:center;gap:6px}
+  .bc-cap i{display:block;width:34px;height:5px;border-radius:3px;background:${LINE};overflow:hidden}
   .bc-cap s{display:block;height:100%;background:${SAGE};border-radius:3px}
-  .bc-cap small{font-size:11.5px;color:${MUTED}}
+  .bc-cap small{font-size:11px;color:${MUTED}}
+  .bc-body{display:flex;flex-direction:column;flex:1;padding:22px 22px 24px}
+  .bc-name{display:flex;align-items:center;gap:10px;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;font-weight:600;color:${MUTED}}
+  .bc-name i{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:var(--tone);color:#fff;flex-shrink:0}
+  .bc-name i svg{width:17px;height:17px}
+  .bc-body h3{margin:14px 0 0!important;font-size:20px;line-height:1.25;letter-spacing:-.01em}
+  .bc-fit{margin:10px 0 0;font-size:14.5px;line-height:1.55;color:${MUTED}}
+  .bc-go{position:static;display:inline-flex;align-items:center;gap:6px;width:fit-content;margin-top:auto;padding:18px 0 0;border:0;background:none;font:inherit;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:600;color:var(--tone);text-decoration:none;cursor:pointer;transition:gap .2s ease}
+  .bc-go::after{content:"";position:absolute;inset:0}
+  .bc-go svg{width:16px;height:16px}
+  .bc-card:hover .bc-go{gap:10px}
+  .bc-go:focus-visible{outline:2px solid var(--tone);outline-offset:-4px;border-radius:20px}
   @keyframes bcIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){.bc-ui,.bc-row{animation:none}.bc-stage img.bc-photo{transition:opacity .2s}}
-  @media (max-width:980px){
-    .bc{grid-template-columns:1fr;gap:28px}
-    .bc-stage{height:auto;min-height:0;aspect-ratio:4/3}
-    .bc-head{text-align:center}.bc-head .bk-h2{text-align:center}
-  }
+  @media (max-width:1100px){.bc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media (max-width:640px){
-    .bc-sticky{padding:72px 20px}
-    .bc-stage{aspect-ratio:auto;height:420px;border-radius:16px}
-    .bc-ui-wrap{left:12px;right:12px;bottom:12px}
-    .bc-ui{padding:12px}
-    .bc-chips em:nth-child(n+2){display:none}
+    .bc-sec{padding:72px 20px}
+    .bc-head{margin-bottom:36px}
+    .bc-grid{grid-template-columns:minmax(0,1fr);gap:16px}
+    .bc-body{padding:20px}
   }
 `;
 
 export function BookingCategories({ onDiscuss }: { onDiscuss: (option: string, key: string) => void }) {
-  const root = useRef<HTMLElement>(null);
-  const { index, local, pinned, go } = useScrollSteps(root, CATEGORIES.length);
-  const active = CATEGORIES[index];
-
   return (
-    <section ref={root} id="booking-types" className={`bc-scroll${pinned ? " pinned" : ""}`} style={pinned ? { height: `${CATEGORIES.length * 75 + 100}vh` } : undefined}>
+    <section id="booking-types" className="bc-sec">
       <style>{css}</style>
-      <div className="bc-sticky">
-        <div className="bc">
-          <div>
-            <div className="bc-head">
-              <span className="bk-label">Booking categories</span>
-              <h2 className="bk-h2">Find the booking experience that fits your needs.</h2>
-            </div>
-            <div className="bc-list" role="tablist" aria-label="Booking categories">
-              {CATEGORIES.map((c, i) => {
-                const on = i === index;
-                return (
-                  <div key={c.key} role="tab" tabIndex={0} aria-selected={on} className={`bc-item${on ? " on" : ""}`}
-                    onClick={() => go(i)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(i); } }}>
-                    <span className="bc-bar" style={{ width: on && pinned ? `${Math.round(local * 100)}%` : on ? "100%" : 0 }} />
-                    <div className="bc-name"><i>{I[c.key]}</i><span>{c.name}</span></div>
-                    <div className="bc-more" aria-hidden={!on}>
-                      <div>
-                        <h3>{c.title}</h3>
-                        <p>{c.text}</p>
-                        <p className="bc-fit"><b>Relevant for:</b> {c.fit}</p>
-                        {LIVE_PAGES[c.key] ? (
-                          <a className="bc-go" style={{ display: "flex", width: "fit-content", textDecoration: "none" }} tabIndex={on ? 0 : -1} href={LIVE_PAGES[c.key]} onClick={(e) => e.stopPropagation()}>Explore {c.name} {I.arrow}</a>
-                        ) : (
-                          <button type="button" className="bc-go" tabIndex={on ? 0 : -1} onClick={(e) => { e.stopPropagation(); onDiscuss(c.option, c.key); }}>Talk to us about {c.name} {I.arrow}</button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="bc-stage" aria-live="polite">
-            {CATEGORIES.map((c, i) => <img key={c.key} src={c.img} alt={i === index ? c.alt : ""} className={`bc-photo${i === index ? " on" : ""}`} />)}
-            <div className="bc-ui-wrap"><StageUI key={active.key} k={active.key} /></div>
-          </div>
+      <div className="bc-in">
+        <div className="bc-head" data-rv="0">
+          <span className="bk-label">Booking categories</span>
+          <h2 className="bk-h2">Find the booking experience that fits your needs.</h2>
+          <p className="bk-lead">Choose the type of booking you offer to see how it works for your organization.</p>
+        </div>
+        <div className="bc-grid">
+          {CATEGORIES.map((c, i) => {
+            const href = LIVE_PAGES[c.key];
+            const style = { ["--tone" as string]: TONE[c.key] };
+            return (
+              <article key={c.key} className="bc-card" style={style} data-rv={i}>
+                <div className="bc-photo">
+                  <img src={c.img} alt={c.alt} loading="lazy" />
+                  <div className="bc-ui-wrap" aria-hidden><StageUI k={c.key} /></div>
+                </div>
+                <div className="bc-body">
+                  <span className="bc-name"><i>{I[c.key]}</i>{c.name}</span>
+                  <h3>{c.title}</h3>
+                  <p className="bc-fit">{c.fit}</p>
+                  {href ? (
+                    <a className="bc-go" href={href}>Explore {SHORT[c.key]} {I.arrow}</a>
+                  ) : (
+                    <button type="button" className="bc-go" onClick={() => onDiscuss(c.option, c.key)}>Talk to us about this {I.arrow}</button>
+                  )}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
