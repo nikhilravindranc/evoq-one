@@ -6,7 +6,7 @@ import { Footer } from "@/components/sections/Footer";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 import { track } from "@/lib/track";
 import { I } from "../theme";
-import { BG, DEEP, ERR, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, OK, PRIMARY, PRIMARY_HOVER } from "./palette";
+import { BAND, BG, DEEP, ERR, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, OK, PRIMARY, PRIMARY_HOVER, SAND } from "./palette";
 
 /* Shell for the Appointment Scheduling microsite inside EVOQ Bookings: the EVOQ top bar, a light microsite
    bar, the get started form and the shared styles. Every surface is light; the page keeps the Bookings
@@ -192,13 +192,14 @@ export function ApptShell({ hero, children }: { hero: ReactNode; children: React
 }
 
 const css = `
-  .ap-root{background:${BG};color:${INK};font-family:var(--font-sans),system-ui,sans-serif;font-size:16px;line-height:1.6;min-height:100vh}
+  .ap-root{background:#fff;color:${INK};font-family:var(--font-sans),system-ui,sans-serif;font-size:16px;line-height:1.6;min-height:100vh}
   .ap-root h1,.ap-root h2,.ap-root h3{font-family:var(--font-display),system-ui,sans-serif;color:${DEEP};font-weight:600;margin:0}
   .ap-root p{text-wrap:pretty}
   .ap-out{padding:0 20px}
   .ap-in{max-width:1240px;margin:0 auto}
   .ap-sec{padding-top:96px;padding-bottom:96px;scroll-margin-top:60px}
   .ap-white{background:#fff}
+  .ap-band{background:${BAND}}
   .ap-label{display:inline-block;font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:${PRIMARY}}
   .ap-h2{font-size:38px;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
   .ap-lead{font-size:18px;line-height:1.6;color:${MUTED};margin:18px 0 0;max-width:62ch;text-wrap:pretty}
@@ -206,7 +207,7 @@ const css = `
   .ap-head .ap-label{margin-bottom:14px}
   .ap-head.c{margin-left:auto;margin-right:auto;text-align:center}
   .ap-head.c .ap-lead{margin-left:auto;margin-right:auto}
-  .ap-note{display:flex;align-items:flex-start;gap:12px;margin:34px 0 0;padding:16px 20px;border-radius:16px;background:${MIST_SOFT};color:${INK};font-size:15.5px;line-height:1.5}
+  .ap-note{display:flex;align-items:flex-start;gap:12px;margin:40px 0 0;padding:16px 20px;border-radius:16px;background:${MIST_SOFT};color:${INK};font-size:15.5px;line-height:1.5}
   .ap-note svg{width:18px;height:18px;color:${PRIMARY};flex-shrink:0;margin-top:2px}
 
   .ap-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:8px;font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;border:1.5px solid transparent;transition:background .18s ease,border-color .18s ease,color .18s ease;white-space:nowrap}
@@ -222,11 +223,10 @@ const css = `
   .ap-badge.moss{background:${MIST};color:${DEEP}}
 
   /* header, always light */
-  .ap-hd{position:relative;isolation:isolate;min-height:100vh;display:flex;flex-direction:column}
+  .ap-hd{position:relative;isolation:isolate}
   .ap-hd-bg{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(55% 60% at 92% 8%,rgba(217,185,140,.45),rgba(217,185,140,0) 70%),radial-gradient(60% 55% at 0% 100%,rgba(143,182,154,.35),rgba(143,182,154,0) 70%),linear-gradient(180deg,${MIST_SOFT} 0%,${BG} 100%)}
-  .ap-hd-bg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;background-image:repeating-linear-gradient(90deg,rgba(78,111,88,.22) 0 1px,transparent 1px 60px),repeating-linear-gradient(90deg,rgba(78,111,88,.12) 0 1px,transparent 1px 15px);-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000)}
   .ap-hd-top{position:relative;z-index:60}
-  .ap-hd-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 20px}
+  .ap-hd-body{padding:0 20px}
   .ap-hd-in{width:100%;max-width:1240px;margin:0 auto}
   .ap-sub{position:relative;z-index:5;border-bottom:1px solid ${LINE};padding:0 20px}
   .ap-sub-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:24px;min-height:52px}
@@ -256,13 +256,17 @@ const css = `
   @keyframes apBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
   @keyframes apIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  /* closing band, light */
-  .ap-close{position:relative;overflow:hidden;padding:96px 20px 110px;background:linear-gradient(180deg,${BG},${MIST_SOFT})}
-  .ap-close::before{content:"";position:absolute;left:50%;bottom:-62%;width:140%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(217,185,140,.35),rgba(217,185,140,0) 70%);pointer-events:none}
-  .ap-close::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background-image:repeating-linear-gradient(90deg,rgba(78,111,88,.22) 0 1px,transparent 1px 60px),repeating-linear-gradient(90deg,rgba(78,111,88,.12) 0 1px,transparent 1px 15px);-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000)}
-  .ap-close-in{position:relative;max-width:980px;margin:0 auto;text-align:center}
-  .ap-close .ap-lead{margin-left:auto;margin-right:auto}
-  .ap-close .ap-ctas{justify-content:center}
+  /* closing band: inset panel, like the EVOQ Bookings enquiry band */
+  .ap-close{padding:0 20px 96px;background:${BG}}
+  .ap-close-in{position:relative;overflow:hidden;max-width:1000px;margin:0 auto;border-radius:28px;padding:72px 32px;text-align:center;background:radial-gradient(55% 70% at 92% 0%,rgba(217,185,140,.45),rgba(217,185,140,0) 70%),radial-gradient(60% 70% at 0% 100%,rgba(143,182,154,.4),rgba(143,182,154,0) 70%),linear-gradient(180deg,${MIST_SOFT} 0%,${BG} 100%)}
+  .ap-close-c{position:relative;z-index:1;max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+  .ap-close-c .ap-lead{margin-left:auto;margin-right:auto}
+  .ap-close-c .ap-ctas{justify-content:center}
+  .ap-cs{position:absolute;pointer-events:none;z-index:0}
+  .ap-cs.ring{bottom:-140px;left:-80px;width:320px;height:320px;border-radius:50%;border:1.5px solid ${PRIMARY};opacity:.2}
+  .ap-cs.dots{top:48px;right:10%;width:96px;height:72px;background-image:radial-gradient(${PRIMARY} 1.4px,transparent 1.6px);background-size:16px 16px;opacity:.3}
+  .ap-cs.sun{bottom:56px;right:16%;width:64px;height:64px;border-radius:50%;background:${SAND};opacity:.45}
+  @media (max-width:860px){.ap-close{padding:0 12px 64px}.ap-close-in{border-radius:20px;padding:56px 18px}.ap-cs.dots{display:none}}
 
   /* get started modal */
   .ap-modal{position:fixed;inset:0;z-index:100;background:rgba(30,45,34,.45);display:grid;place-items:center;padding:20px;overflow-y:auto}

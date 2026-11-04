@@ -1,41 +1,18 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { I } from "../theme";
-import { SPACE_IMG } from "../space/ui";
 import { ApptShell, StartButton } from "./ApptShell";
-import { ApptTryIt } from "./ApptTryIt";
-import { BG, DEEP, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, PRIMARY, SAND } from "./palette";
+import { BAND, DEEP, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, PRIMARY, VIS } from "./palette";
 
 /* Appointment Scheduling, Home. Content from the microsite brief: online booking, appointment management,
    availability rules, the appointment lifecycle, industries, EVI, integrations, why EVOQ Appointments and
-   how to get started. Every section is on a light background. Sample data in every product view. */
+   how to get started. White and pale grey sections, real photography, and plain lists instead of card
+   grids; the moss green stays on buttons, labels and small marks. Sample data in every product view. */
 
 const PH = (f: string) => `/healthcare/pm/${f}`;
-
-/* turn taking for tabbed visuals: once while on screen, a click hands control over */
-function useTurns(count: number, dwell: number) {
-  const [i, setI] = useState(0);
-  const [auto, setAuto] = useState(true);
-  const [seen, setSeen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) setSeen(true); }, { threshold: 0.4 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  useEffect(() => {
-    if (!auto || !seen || i >= count - 1) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setTimeout(() => setI((n) => n + 1), dwell);
-    return () => clearTimeout(t);
-  }, [i, auto, seen, count, dwell]);
-  const pick = (n: number) => { setAuto(false); setI(n); };
-  return [ref, { i, pick, running: auto && seen }] as const;
-}
+const ST = (f: string) => `/healthcare/stock/${f}`;
 
 const Win = ({ url, children, className = "" }: { url: string; children: ReactNode; className?: string }) => (
   <div className={`ap-win ${className}`}>
@@ -44,7 +21,44 @@ const Win = ({ url, children, className = "" }: { url: string; children: ReactNo
   </div>
 );
 
-/* ---------- 2. online booking ---------- */
+/* ---------- 1. hero: photo mosaic with two phone screens ---------- */
+function HeroVisual() {
+  return (
+    <div className="ah-mos">
+      <div className="ah-mos-grid" aria-hidden>
+        <img className="a" src={ST("care-aesthetics.jpg")} alt="" />
+        <img className="b" src={ST("pm-tile-wellness.jpg")} alt="" />
+        <img className="c" src={ST("pm-tile-physio.jpg")} alt="" />
+        <img className="d" src={ST("pm-tile-derm.jpg")} alt="" />
+      </div>
+
+      <div className="ah-phone one" aria-label="Client booking screen, sample">
+        <div className="ah-ph-notch" />
+        <div className="ah-ph-in">
+          <div className="ah-ph-top"><span className="ah-logo">R</span><b>Riverside Clinic</b></div>
+          <small className="ah-ph-k">Service</small>
+          <div className="ah-ph-svc"><b>Initial consultation</b><small>30 min · In person</small></div>
+          <small className="ah-ph-k">Provider</small>
+          <div className="ah-ph-pro"><img src={PH("doctor.jpg")} alt="" /><b>Dr. Priya</b><em>Next free 14:30</em></div>
+          <small className="ah-ph-k">Thursday 19 November</small>
+          <div className="ah-ph-slots">
+            {["09:00", "09:30", "10:00", "11:00", "14:30", "15:00"].map((t, n) => <span key={t} className={n === 4 ? "on" : n === 2 ? "off" : ""}>{t}</span>)}
+          </div>
+          <span className="ah-ph-btn">Confirm booking</span>
+        </div>
+      </div>
+
+      <div className="ah-today" aria-hidden><i />7 appointments today</div>
+
+      <div className="ah-toast" aria-hidden>
+        <span className="ah-toast-i">{I.check}</span>
+        <span><b>New booking</b><small>Sam Lee · Thu 14:30</small></span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- 2. online booking: one booking page, all six capabilities ---------- */
 const BOOK = [
   { t: "Service selection", d: "Present available services with descriptions and appointment durations." },
   { t: "Provider selection", d: "Let clients choose a preferred provider where applicable." },
@@ -53,58 +67,83 @@ const BOOK = [
   { t: "Booking details", d: "Collect contact information and relevant appointment details." },
   { t: "Online booking page", d: "Share your booking page directly or add it to your website." },
 ];
-const PEOPLE = [
-  { n: "Dr. Priya", r: "General practitioner", img: PH("doctor.jpg"), s: "Next free Thu 14:30" },
-  { n: "Ana", r: "Nurse practitioner", img: PH("nurse.jpg"), s: "Next free today 16:00" },
-  { n: "Joy", r: "Physiotherapist", img: PH("stock-provider-smile.jpg"), s: "Next free Fri 09:30" },
-];
-function BookView({ i }: { i: number }) {
-  if (i === 0)
-    return (
-      <div className="ah-list">
-        {[["Initial consultation", "30 min", PH("stock-patient.jpg")], ["Follow up visit", "20 min", PH("practice-clinics.jpg")], ["Physiotherapy session", "45 min", PH("practice-physio.jpg")], ["Skin check", "15 min", PH("practice-derm.jpg")]].map(([n, d, im]) => (
-          <div key={n} className="ah-item"><img src={im} alt="" /><span><b>{n}</b><small>{d} · In person</small></span><em className="ap-badge moss">{d}</em></div>
-        ))}
-      </div>
-    );
-  if (i === 1)
-    return (
-      <div className="ah-list">
-        <div className="ah-item any"><span className="ah-any">{I.people}</span><span><b>Any available provider</b><small>Shows the earliest time</small></span></div>
-        {PEOPLE.map((p) => <div key={p.n} className="ah-item"><img className="round" src={p.img} alt="" /><span><b>{p.n}</b><small>{p.r}</small></span><em className="ap-badge ok">{p.s}</em></div>)}
-      </div>
-    );
-  if (i === 2)
-    return (
-      <div className="ah-list">
-        {[["Riverside Clinic", "Ground floor · 6 rooms", "Nearest"], ["City Centre", "Level 2 · 4 rooms", ""], ["Northside", "Ground floor · 3 rooms", ""], ["Video appointment", "Online", ""]].map(([n, d, b]) => (
-          <div key={n} className="ah-item"><span className="ah-any">{n === "Video appointment" ? I.message : I.pin}</span><span><b>{n}</b><small>{d}</small></span>{b && <em className="ap-badge moss">{b}</em>}</div>
-        ))}
-      </div>
-    );
-  if (i === 3)
-    return (
-      <div>
-        <div className="ah-seg">{["Wed 18", "Thu 19", "Fri 20", "Sat 21"].map((d, n) => <span key={d} className={n === 1 ? "on" : ""}>{d}</span>)}</div>
-        <div className="ah-slots">{["09:00", "09:30", "10:00", "11:00", "11:30", "13:30", "14:30", "15:00", "16:00"].map((t, n) => <span key={t} className={n === 6 ? "on" : n === 2 || n === 4 ? "off" : ""}>{t}</span>)}</div>
-        <p className="ah-fine">Times follow provider hours, the service length and buffers.</p>
-      </div>
-    );
-  if (i === 4)
-    return (
-      <div className="ah-form">
-        {[["Full name", "Sam Lee"], ["Email", "sam@example.com"], ["Phone", "+00 0000 0000"], ["Reason for the visit", "Back pain for two weeks"]].map(([k, v]) => <label key={k}>{k}<span>{v}</span></label>)}
-        <span className="ah-check">{I.check}I agree to the clinic&apos;s booking policy</span>
-      </div>
-    );
+
+function BookingPage({ hl }: { hl: number | null }) {
+  const g = (n: number) => `ah-g${hl === n ? " on" : ""}`;
   return (
-    <div className="ah-share">
-      <div className="ah-link"><span>book.riverside-clinic.example</span><em>Copy link</em></div>
-      <div className="ah-code">&lt;script src=&quot;book.riverside-clinic.example/embed.js&quot;&gt;&lt;/script&gt;</div>
-      <div className="ah-list">
-        {[["Website button", "Opens the booking page"], ["Embedded page", "Booking inside your site"], ["Direct link", "For email and social profiles"]].map(([n, d]) => <div key={n} className="ah-item"><span className="ah-any">{I.layers}</span><span><b>{n}</b><small>{d}</small></span></div>)}
+    <Win url="book.riverside-clinic.example" className={`ah-bkwin${hl ? " hl" : ""}`}>
+      <div className="ah-bk-top"><span className="ah-logo">R</span><b>Riverside Clinic</b><small>Book an appointment</small></div>
+      <div className="ah-bk">
+        <div className="ah-bk-col">
+          <div className={g(1)}>
+            <div className="ah-bk-h"><b>1</b>Service</div>
+            {[["Initial consultation", "30 min"], ["Follow up visit", "20 min"], ["Physiotherapy session", "45 min"]].map(([n, d], i) => (
+              <div key={n} className={`ah-row${i === 0 ? " sel" : ""}`}><span className="ah-radio" /><span><b>{n}</b><small>{d} · In person</small></span></div>
+            ))}
+          </div>
+          <div className={g(2)}>
+            <div className="ah-bk-h"><b>2</b>Provider</div>
+            <div className="ah-pros">
+              {[["Dr. Priya", PH("doctor.jpg")], ["Ana", PH("nurse.jpg")], ["Joy", PH("stock-provider-smile.jpg")]].map(([n, im], i) => (
+                <span key={n} className={i === 0 ? "sel" : ""}><img src={im} alt="" />{n}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="ah-bk-col">
+          <div className={g(3)}>
+            <div className="ah-bk-h"><b>3</b>Location</div>
+            {[["Riverside Clinic", "Ground floor · 6 rooms"], ["City Centre", "Level 2 · 4 rooms"], ["Video appointment", "Online"]].map(([n, d], i) => (
+              <div key={n} className={`ah-row${i === 0 ? " sel" : ""}`}><span className="ah-radio" /><span><b>{n}</b><small>{d}</small></span></div>
+            ))}
+          </div>
+          <div className={g(4)}>
+            <div className="ah-bk-h"><b>4</b>Time</div>
+            <div className="ah-seg">{["Wed 18", "Thu 19", "Fri 20"].map((d, n) => <span key={d} className={n === 1 ? "on" : ""}>{d}</span>)}</div>
+            <div className="ah-slots">{["09:00", "09:30", "10:00", "11:00", "14:30", "15:00"].map((t, n) => <span key={t} className={n === 4 ? "on" : n === 2 ? "off" : ""}>{t}</span>)}</div>
+          </div>
+        </div>
+        <div className="ah-bk-col">
+          <div className={g(5)}>
+            <div className="ah-bk-h"><b>5</b>Your details</div>
+            <div className="ah-form">
+              {[["Full name", "Sam Lee"], ["Email", "sam@example.com"], ["Reason for the visit", "Back pain for two weeks"]].map(([k, v]) => <label key={k}>{k}<span>{v}</span></label>)}
+            </div>
+            <span className="ah-btn-mock">Confirm booking</span>
+          </div>
+          <div className={g(6)}>
+            <div className="ah-bk-h"><b>6</b>Booking page</div>
+            <div className="ah-link"><span>book.riverside-clinic.example</span><em>Copy link</em></div>
+          </div>
+        </div>
       </div>
-    </div>
+    </Win>
+  );
+}
+
+function BookingSection() {
+  const [hl, setHl] = useState<number | null>(null);
+  return (
+    <section className="ap-out ap-sec ap-band" id="booking">
+      <div className="ap-in">
+        <div className="ap-head c" data-rv="0">
+          <span className="ap-label">Online appointment booking</span>
+          <h2 className="ap-h2">Make it easier for clients to book the services they need.</h2>
+          <p className="ap-lead">Give clients a clear path from choosing a service to confirming an appointment. They can select a provider, find an available time and submit their details through your online booking page.</p>
+        </div>
+        <div data-rv="1"><BookingPage hl={hl} /></div>
+        <p className="ah-caps-hint">Each step below matches the numbered area of the booking page above.</p>
+        <ol className="ah-caps">
+          {BOOK.map((b, n) => (
+            <li key={b.t} tabIndex={0} className={hl === n + 1 ? "on" : ""} onMouseEnter={() => setHl(n + 1)} onMouseLeave={() => setHl(null)} onFocus={() => setHl(n + 1)} onBlur={() => setHl(null)}>
+              <em className="ah-cap-n">{n + 1}</em>
+              <span><b>{b.t}</b><small>{b.d}</small></span>
+            </li>
+          ))}
+        </ol>
+        <p className="ap-note">{I.check}Clients can book at a time that suits them, without having to coordinate every appointment through calls and messages.</p>
+      </div>
+    </section>
   );
 }
 
@@ -185,7 +224,7 @@ function RulesView() {
   );
 }
 
-/* ---------- 5. lifecycle ---------- */
+/* ---------- 5. lifecycle: every stage shown in turn, no tabs ---------- */
 const LIFE = [
   { t: "Appointment intake", d: "Collect client contact details, service-specific information and custom responses during the booking process." },
   { t: "Confirmations & reminders", d: "Keep clients and providers informed with appointment confirmations, reminders and scheduling updates through supported communication channels." },
@@ -240,12 +279,12 @@ function LifeView({ i }: { i: number }) {
 
 /* ---------- 6. industries ---------- */
 const INDUSTRIES = [
-  { t: "Healthcare & clinics", d: "Schedule consultations, follow-up appointments and provider visits. Manage practitioner availability, appointment durations and location-based schedules.", img: PH("practice-clinics.jpg") },
-  { t: "Beauty & aesthetics", d: "Organize consultations and aesthetic services with provider selection, service durations, appointment preparation and booking requirements.", img: PH("practice-aesthetics.jpg") },
-  { t: "Salons & spas", d: "Manage services, stylist or therapist schedules, appointment durations and client bookings across individual providers.", img: SPACE_IMG.lounge },
-  { t: "Wellness & fitness", d: "Schedule personal sessions, instructor-led appointments and group activities with appropriate availability and capacity.", img: PH("practice-physio.jpg") },
-  { t: "Professional services", d: "Coordinate consultations and client meetings with specialist selection, appointment requirements and virtual or in-person options.", img: "/industries/v2/ps-main2-hd.jpg" },
-  { t: "Education & training", d: "Manage student consultations, tutoring sessions and instructor appointments, including individual and group scheduling.", img: SPACE_IMG.training },
+  { t: "Healthcare & clinics", d: "Schedule consultations, follow-up appointments and provider visits. Manage practitioner availability, appointment durations and location-based schedules.", img: ST("care-clinics-2.jpg"), alt: "Clinician speaking with a patient at a desk" },
+  { t: "Beauty & aesthetics", d: "Organize consultations and aesthetic services with provider selection, service durations, appointment preparation and booking requirements.", img: ST("care-aesthetics.jpg"), alt: "Client receiving a facial treatment" },
+  { t: "Salons & spas", d: "Manage services, stylist or therapist schedules, appointment durations and client bookings across individual providers.", img: ST("org-aesthetics-facial.jpg"), alt: "Therapist giving a light treatment to a client" },
+  { t: "Wellness & fitness", d: "Schedule personal sessions, instructor-led appointments and group activities with appropriate availability and capacity.", img: ST("pm-tile-wellness.jpg"), alt: "Group yoga class in a bright studio" },
+  { t: "Professional services", d: "Coordinate consultations and client meetings with specialist selection, appointment requirements and virtual or in-person options.", img: "/industries/v2/ps-main2-hd.jpg", alt: "Adviser meeting a client in an office" },
+  { t: "Education & training", d: "Manage student consultations, tutoring sessions and instructor appointments, including individual and group scheduling.", img: "/industries/v2/mo-team-hd.jpg", alt: "Small group working together at a table" },
 ];
 
 /* ---------- 7. EVI ---------- */
@@ -294,12 +333,12 @@ const SYNC = [
 
 /* ---------- 9. why ---------- */
 const WHY = [
-  { t: "Service-led scheduling", d: "Configure appointment services with their own durations, pricing and booking requirements.", img: PH("practice-aesthetics.jpg") },
-  { t: "Provider-based availability", d: "Manage schedules around the people delivering each service.", img: PH("doctor.jpg") },
-  { t: "Controlled booking", d: "Define when and how clients can book available appointments.", img: PH("stock-visit.jpg") },
-  { t: "Client-facing booking", d: "Give clients a direct way to find and confirm appointments.", img: PH("stock-frontdesk.jpg") },
-  { t: "Multi-location operations", d: "Coordinate services, providers and schedules across supported locations.", img: "/industries/v2/hc-main-hd.jpg" },
-  { t: "EVOQ ecosystem", d: "Extend appointment processes through connected EVOQ applications.", img: "/healthcare/journey-consult.jpg" },
+  { ic: I.edit, t: "Service-led scheduling", d: "Configure appointment services with their own durations, pricing and booking requirements." },
+  { ic: I.people, t: "Provider-based availability", d: "Manage schedules around the people delivering each service." },
+  { ic: I.rules, t: "Controlled booking", d: "Define when and how clients can book available appointments." },
+  { ic: I.appt, t: "Client-facing booking", d: "Give clients a direct way to find and confirm appointments." },
+  { ic: I.pin, t: "Multi-location operations", d: "Coordinate services, providers and schedules across supported locations." },
+  { ic: I.layers, t: "EVOQ ecosystem", d: "Extend appointment processes through connected EVOQ applications." },
 ];
 
 /* ---------- 10. get started ---------- */
@@ -313,8 +352,6 @@ const START = [
 ];
 
 export function ApptHome() {
-  const [bookRef, book] = useTurns(BOOK.length, 6000);
-  const [lifeRef, life] = useTurns(LIFE.length, 7000);
   return (
     <ApptShell
       hero={
@@ -329,46 +366,23 @@ export function ApptHome() {
               <a href="#booking" className="ap-btn secondary">Explore features</a>
             </div>
           </div>
-          <ApptTryIt />
+          <HeroVisual />
         </div>
       }
     >
       <style>{css}</style>
 
       {/* 2. online appointment booking */}
-      <section className="ap-out ap-sec ap-white" id="booking">
-        <div className="ap-in">
-          <div className="ap-head" data-rv="0">
-            <span className="ap-label">Online appointment booking</span>
-            <h2 className="ap-h2">Make it easier for clients to book the services they need.</h2>
-            <p className="ap-lead">Give clients a clear path from choosing a service to confirming an appointment. They can select a provider, find an available time and submit their details through your online booking page.</p>
-          </div>
-          <div className="ah-split" ref={bookRef} data-rv="1">
-            <div className="ah-tabs" role="tablist" aria-label="Booking capabilities">
-              {BOOK.map((b, n) => (
-                <button key={b.t} type="button" role="tab" aria-selected={book.i === n} className={book.i === n ? "on" : ""} onClick={() => book.pick(n)}>
-                  <b>{n + 1}</b><span><em>{b.t}</em><small>{b.d}</small></span>
-                  {book.i === n && book.running && n < BOOK.length - 1 && <i className="ap-bar" style={{ ["--dwell" as string]: "6s" }} aria-hidden />}
-                </button>
-              ))}
-            </div>
-            <Win url="book.riverside-clinic.example" className="ah-book">
-              <div className="ah-book-h"><span className="ah-logo">R</span><b>Riverside Clinic</b><small>{BOOK[book.i].t}</small></div>
-              <div className="ah-view" key={book.i}><BookView i={book.i} /></div>
-            </Win>
-          </div>
-          <p className="ap-note">{I.check}Clients can book at a time that suits them, without having to coordinate every appointment through calls and messages.</p>
-        </div>
-      </section>
+      <BookingSection />
 
       {/* 3. appointment management */}
-      <section className="ap-out ap-sec" id="management">
+      <section className="ap-out ap-sec ap-white" id="management">
         <div className="ap-in ah-two">
           <div data-rv="0">
             <span className="ap-label">Appointment management</span>
             <h2 className="ap-h2" style={{ marginTop: 14 }}>A clear view of every appointment and provider schedule.</h2>
             <p className="ap-lead">Keep track of daily appointments, provider availability and booking updates through a centralized scheduling interface. See what is coming up, identify schedule changes and manage appointments as they progress.</p>
-            <ul className="ah-checks">
+            <ul className="ah-list">
               {["Day, week and month calendar views", "Appointments organized by provider, service and location", "Appointment status tracking", "Manual appointment creation and updates", "Rescheduling and cancellation management", "Access to upcoming and past appointments"].map((t) => <li key={t}>{I.check}{t}</li>)}
             </ul>
             <p className="ap-note">{I.clock}From the first booking to the final appointment update, maintain visibility into your daily schedule.</p>
@@ -378,14 +392,14 @@ export function ApptHome() {
       </section>
 
       {/* 4. availability and scheduling controls */}
-      <section className="ap-out ap-sec ap-white" id="availability">
+      <section className="ap-out ap-sec ap-band" id="availability">
         <div className="ap-in ah-two flip">
           <div data-rv="1"><RulesView /></div>
           <div data-rv="0">
             <span className="ap-label">Availability &amp; scheduling controls</span>
             <h2 className="ap-h2" style={{ marginTop: 14 }}>Set the rules behind every available time slot.</h2>
             <p className="ap-lead">Appointment availability depends on more than operating hours. Configure schedules around service durations, provider working hours, preparation time and booking policies.</p>
-            <ul className="ah-checks cols">
+            <ul className="ah-list cols">
               {["Organization and location operating hours", "Individual provider availability", "Service-specific durations", "Preparation and buffer times", "Booking intervals and advance booking limits", "Blocked dates, breaks and unavailable periods", "Cancellation and rescheduling policies", "Appointment capacity and scheduling rules"].map((t) => <li key={t}>{I.check}{t}</li>)}
             </ul>
             <p className="ap-note">{I.edit}Control when services can be booked and which appointment slots are offered to clients.</p>
@@ -394,35 +408,29 @@ export function ApptHome() {
       </section>
 
       {/* 5. the appointment lifecycle */}
-      <section className="ap-out ap-sec" id="lifecycle">
+      <section className="ap-out ap-sec ap-white" id="lifecycle">
         <div className="ap-in">
           <div className="ap-head c" data-rv="0">
             <span className="ap-label">Manage the appointment lifecycle</span>
             <h2 className="ap-h2">More control over the work surrounding each booking.</h2>
             <p className="ap-lead">An appointment involves more than selecting a date and time. Collect the right information, keep clients informed and manage the updates that happen before and after a scheduled visit.</p>
           </div>
-          <div className="ah-pills" role="tablist" aria-label="Lifecycle" data-rv="1">
+          <div className="ah-life">
             {LIFE.map((l, n) => (
-              <button key={l.t} type="button" role="tab" aria-selected={life.i === n} className={life.i === n ? "on" : ""} onClick={() => life.pick(n)}>
-                {life.i === n && life.running && n < LIFE.length - 1 && <i className="ap-bar" style={{ ["--dwell" as string]: "7s", background: SAND }} aria-hidden />}
-                {l.t}
-              </button>
+              <div key={l.t} className="ah-life-i" data-rv={n % 3}>
+                <div className="ah-life-t"><span className="ah-n">{n + 1}</span><h3>{l.t}</h3></div>
+                <p>{l.d}</p>
+                <div className="ah-vis"><LifeView i={n} /></div>
+              </div>
             ))}
           </div>
-          <div className="ah-box" ref={lifeRef} data-rv="2">
-            <div className="ah-box-t" key={`t${life.i}`}>
-              <span className="ah-n">{life.i + 1}</span>
-              <h3>{LIFE[life.i].t}</h3>
-              <p>{LIFE[life.i].d}</p>
-            </div>
-            <div className="ah-box-v" key={`v${life.i}`}><LifeView i={life.i} /></div>
-          </div>
           <p className="ap-note">{I.check}Keep the details and administrative tasks associated with each appointment within view.</p>
+          <div className="ap-ctas" style={{ justifyContent: "center" }}><a href="#booking" className="ap-btn secondary">Explore features</a></div>
         </div>
       </section>
 
       {/* 6. industries */}
-      <section className="ap-out ap-sec ap-white" id="industries">
+      <section className="ap-out ap-sec ap-band" id="industries">
         <div className="ap-in">
           <div className="ap-head" data-rv="0">
             <span className="ap-label">Appointment scheduling across industries</span>
@@ -431,19 +439,19 @@ export function ApptHome() {
           </div>
           <div className="ah-ind">
             {INDUSTRIES.map((x, n) => (
-              <article key={x.t} className="ah-ind-c" data-rv={n % 3}>
-                <img src={x.img} alt="" loading="lazy" />
-                <div><h3>{x.t}</h3><p>{x.d}</p></div>
+              <article key={x.t} data-rv={n % 3}>
+                <img src={x.img} alt={x.alt} loading="lazy" />
+                <h3>{x.t}</h3>
+                <p>{x.d}</p>
               </article>
             ))}
           </div>
-          <div className="ap-ctas" style={{ justifyContent: "center" }}><a href="#booking" className="ap-btn secondary">Explore features</a></div>
         </div>
       </section>
 
       {/* 7. EVI */}
-      <section className="ap-out ap-sec" id="evi">
-        <div className="ap-in ah-evi">
+      <section className="ap-out ap-sec ap-white" id="evi">
+        <div className="ap-in ah-two">
           <div data-rv="0">
             <span className="ap-label">EVI, AI assistance for appointments</span>
             <h2 className="ap-h2" style={{ marginTop: 14 }}>A smarter way to work with appointment information.</h2>
@@ -452,14 +460,14 @@ export function ApptHome() {
             <div className="ap-ctas"><a href="/products/ai" className="ap-btn secondary">Explore EVI</a></div>
           </div>
           <div data-rv="1">
-            <EviCard />
+            <div className="ah-evi-bg"><EviCard /></div>
             <p className="ah-fine">EVI can help interpret the request, review relevant scheduling information and prepare suitable options, subject to available integrations and implemented capabilities.</p>
           </div>
         </div>
       </section>
 
       {/* 8. integrations and the EVOQ ecosystem */}
-      <section className="ap-out ap-sec ap-white" id="integrations">
+      <section className="ap-out ap-sec ap-band" id="integrations">
         <div className="ap-in">
           <div className="ap-head c" data-rv="0">
             <span className="ap-label">Integrations &amp; EVOQ ecosystem</span>
@@ -467,19 +475,19 @@ export function ApptHome() {
             <p className="ap-lead">Appointments are often part of a larger client relationship. Connect scheduling with supported applications to help information move between the systems involved in managing enquiries, client relationships, payments and communication.</p>
           </div>
           <div className="ah-hub">
-            <div className="ah-hub-col">{INT_L.map((n) => <div key={n.t} className="ah-node l"><span className="ah-ic">{n.ic}</span><span><b>{n.t}</b><small>{n.d}</small></span></div>)}</div>
+            <div className="ah-hub-col l">{INT_L.map((n) => <div key={n.t} className="ah-node"><span className="ah-ic">{n.ic}</span><span><b>{n.t}</b><small>{n.d}</small></span></div>)}</div>
             <div className="ah-core" data-rv="1">
               <div className="ah-core-h"><img className="round" src={PH("doctor.jpg")} alt="" /><span><b>Initial consultation</b><small>AP 31027 · Thu 19 Nov, 14:30</small></span><em className="ap-badge ok">Confirmed</em></div>
               <ul>{SYNC.map(([ic, t]) => <li key={t}><span className="ah-dot">{ic}</span>{t}<em>{I.check}</em></li>)}</ul>
             </div>
-            <div className="ah-hub-col">{INT_R.map((n) => <div key={n.t} className="ah-node r"><span className="ah-ic">{n.ic}</span><span><b>{n.t}</b><small>{n.d}</small></span></div>)}</div>
+            <div className="ah-hub-col">{INT_R.map((n) => <div key={n.t} className="ah-node"><span className="ah-ic">{n.ic}</span><span><b>{n.t}</b><small>{n.d}</small></span></div>)}</div>
           </div>
           <p className="ap-note">{I.layers}Keep appointment scheduling aligned with the wider tools and processes your organization relies on.</p>
         </div>
       </section>
 
-      {/* 9. why EVOQ Appointments */}
-      <section className="ap-out ap-sec" id="why">
+      {/* 9. why EVOQ Appointments: a photo and a plain list */}
+      <section className="ap-out ap-sec ap-white" id="why">
         <div className="ap-in">
           <div className="ap-head c" data-rv="0">
             <span className="ap-label">Why EVOQ Appointments</span>
@@ -487,18 +495,21 @@ export function ApptHome() {
             <p className="ap-lead">A booking calendar is only part of appointment operations. Service configuration, provider availability, booking requirements and ongoing appointment administration all influence how well scheduling works. EVOQ Appointments brings these capabilities into a service-based scheduling experience.</p>
           </div>
           <div className="ah-why">
-            {WHY.map((w, n) => (
-              <article key={w.t} className="ah-why-c" data-rv={n % 3}>
-                <img src={w.img} alt="" loading="lazy" />
-                <div><h3>{w.t}</h3><p>{w.d}</p></div>
-              </article>
-            ))}
+            <img className="ah-why-img" src={PH("stock-patient.jpg")} alt="Provider welcoming a client at a clinic desk" loading="lazy" data-rv="0" />
+            <ul data-rv="1">
+              {WHY.map((w) => (
+                <li key={w.t}>
+                  <span className="ah-why-ic">{w.ic}</span>
+                  <span><b>{w.t}</b><small>{w.d}</small></span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
       {/* 10. get started */}
-      <section className="ap-out ap-sec ap-white" id="start">
+      <section className="ap-out ap-sec ap-band" id="start">
         <div className="ap-in">
           <div className="ap-head c" data-rv="0">
             <span className="ap-label">Get started with Appointments</span>
@@ -509,7 +520,6 @@ export function ApptHome() {
             {START.map((s, n) => (
               <li key={s.t} data-rv={n % 3}>
                 <span className="ah-start-n">{String(n + 1).padStart(2, "0")}</span>
-                <span className="ah-ic">{s.ic}</span>
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
               </li>
@@ -522,9 +532,12 @@ export function ApptHome() {
       {/* 11. final call to action */}
       <section className="ap-close">
         <div className="ap-close-in" data-rv="0">
-          <h2 className="ap-h2">Give every appointment a clearer path from booking to completion.</h2>
-          <p className="ap-lead">Manage services, provider schedules, availability and client bookings with EVOQ Appointments.</p>
-          <div className="ap-ctas"><StartButton location="close" /><a href="#booking" className="ap-btn secondary">Explore features</a></div>
+          <span className="ap-cs ring" aria-hidden /><span className="ap-cs dots" aria-hidden /><span className="ap-cs sun" aria-hidden />
+          <div className="ap-close-c">
+            <h2 className="ap-h2">Give every appointment a clearer path from booking to completion.</h2>
+            <p className="ap-lead">Manage services, provider schedules, availability and client bookings with EVOQ Appointments.</p>
+            <div className="ap-ctas"><StartButton location="close" /><a href="#booking" className="ap-btn secondary">Explore features</a></div>
+          </div>
         </div>
       </section>
     </ApptShell>
@@ -532,89 +545,135 @@ export function ApptHome() {
 }
 
 const css = `
-  .ah-hero{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:44px;align-items:center;padding:44px 0 64px}
-  .ah-h1{font-size:50px;line-height:1.06;letter-spacing:-.025em;margin:14px 0 0!important;text-wrap:balance}
-  .ah-sub{margin:14px 0 0;font-size:15.5px;line-height:1.6;color:${NEUTRAL};max-width:56ch}
-  .ah-win-b{padding:14px}
   .round{border-radius:50%!important}
-
-  /* booking */
-  .ah-split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:28px;align-items:start}
-  .ah-tabs{display:grid;gap:8px}
-  .ah-tabs button{position:relative;overflow:hidden;display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;align-items:start;text-align:left;border:0;background:${BG};border-radius:16px;padding:13px 16px;cursor:pointer;font:inherit;color:inherit;box-shadow:0 0 0 1px ${LINE}}
-  .ah-tabs button:hover{box-shadow:0 0 0 1px rgba(78,111,88,.5)}
-  .ah-tabs button.on{background:#fff;box-shadow:0 0 0 2px ${PRIMARY},0 16px 30px -22px rgba(30,45,34,.45)}
-  .ah-tabs b{width:28px;height:28px;border-radius:50%;background:${MIST};color:${DEEP};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px}
-  .ah-tabs button.on b{background:${PRIMARY};color:#fff}
-  .ah-tabs span{display:grid;gap:1px}.ah-tabs em{font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:15.5px;color:${DEEP}}.ah-tabs small{font-size:13px;line-height:1.4;color:${MUTED}}
-  .ah-book-h{display:flex;align-items:center;gap:9px;margin-bottom:12px}
-  .ah-logo{width:24px;height:24px;border-radius:7px;background:${DEEP};color:#fff;display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;font-size:13px}
-  .ah-book-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;color:${DEEP}}.ah-book-h small{margin-left:auto;font-size:12px;color:${NEUTRAL}}
-  .ah-view{min-height:300px;animation:apIn .35s ease both}
-  .ah-list{display:grid;gap:8px}
-  .ah-item{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:11px;align-items:center;padding:7px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
-  .ah-item img{width:48px;height:42px;object-fit:cover;border-radius:9px;display:block}
-  .ah-item img.round{width:42px;height:42px;margin:0 3px}
-  .ah-item span:not(.ah-any){display:grid;min-width:0}.ah-item b{font-size:13.5px;color:${DEEP}}.ah-item small{font-size:12px;color:${NEUTRAL}}
-  .ah-any{width:42px;height:42px;margin:0 3px;border-radius:12px;background:${MIST_SOFT};color:${PRIMARY};display:grid;place-items:center}.ah-any svg{width:19px;height:19px}
-  .ah-seg{display:inline-flex;gap:2px;background:${BG};border-radius:9px;padding:3px;box-shadow:0 0 0 1px ${LINE};margin-bottom:12px}
-  .ah-seg span,.ah-seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-size:12.5px;font-weight:600;color:${MUTED};font-family:var(--font-display),system-ui,sans-serif;cursor:pointer}
-  .ah-seg .on{background:#fff;color:${DEEP};box-shadow:0 1px 3px rgba(30,45,34,.18)}
-  .ah-seg.sm{margin:0}
-  .ah-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .ah-slots span{padding:10px 0;text-align:center;border-radius:10px;background:#fff;box-shadow:0 0 0 1.5px ${LINE};font-size:13px;font-weight:600;color:${INK};font-family:var(--font-display),system-ui,sans-serif}
-  .ah-slots .on{background:${PRIMARY};color:#fff;box-shadow:none}
-  .ah-slots .off{background:repeating-linear-gradient(135deg,#F1F3EF 0 6px,#E8ECE6 6px 12px);color:#A4ADA5}
+  .ah-win-b{padding:16px}
+  .ah-logo{width:24px;height:24px;border-radius:7px;background:${DEEP};color:#fff;display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;font-size:13px;flex-shrink:0}
   .ah-fine{margin:12px 0 0;font-size:12.5px;color:${NEUTRAL}}
-  .ah-form{display:grid;gap:10px}
-  .ah-form label{display:grid;gap:4px;font-size:12px;font-weight:600;color:${NEUTRAL}}
-  .ah-form label span{padding:10px 12px;border-radius:9px;background:#fff;box-shadow:0 0 0 1.5px ${LINE};font-size:13.5px;font-weight:500;color:${INK}}
-  .ah-check{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:${MUTED}}.ah-check svg{width:15px;height:15px;color:#fff;background:${PRIMARY};border-radius:4px;padding:1px}
-  .ah-share{display:grid;gap:10px}
-  .ah-link{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:${MIST_SOFT};font-size:13px;font-weight:600;color:${DEEP}}
-  .ah-link em{font-style:normal;font-size:12px;color:${PRIMARY}}
-  .ah-code{padding:10px 12px;border-radius:10px;background:#F1F3EF;font-family:ui-monospace,monospace;font-size:11.5px;color:${MUTED};overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+
+  /* hero */
+  .ah-hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center;padding:56px 0 88px}
+  .ah-h1{font-size:54px;line-height:1.05;letter-spacing:-.028em;margin:16px 0 0!important;text-wrap:balance}
+  .ah-sub{margin:14px 0 0;font-size:15.5px;line-height:1.6;color:${NEUTRAL};max-width:56ch}
+  .ah-mos{position:relative;height:580px}
+  .ah-mos-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1.25fr .75fr;gap:12px}
+  .ah-mos-grid img{width:100%;height:100%;object-fit:cover;border-radius:20px;display:block}
+  .ah-mos-grid .a{grid-column:1/3;grid-row:1}
+  .ah-mos-grid .b{grid-column:3;grid-row:1/3;object-position:30% center}
+  .ah-mos-grid .c{grid-column:1;grid-row:2;object-position:60% center}
+  .ah-mos-grid .d{grid-column:2;grid-row:2;object-position:35% center}
+  .ah-phone{position:absolute;width:226px;padding:9px;border-radius:36px;background:#fff;box-shadow:0 44px 70px -30px rgba(30,45,34,.6),0 0 0 1px rgba(30,45,34,.12)}
+  .ah-phone.one{left:32%;top:46px;z-index:2}
+  .ah-ph-notch{width:62px;height:6px;border-radius:6px;background:#E3E6E0;margin:5px auto 9px}
+  .ah-ph-in{padding:0 8px 12px;display:grid;gap:7px;font-size:12px;color:${INK}}
+  .ah-ph-top{display:flex;align-items:center;gap:8px;padding-bottom:4px}
+  .ah-ph-top b{font-family:var(--font-display),system-ui,sans-serif;font-size:14px;color:${DEEP}}
+  .ah-ph-top small{margin-left:auto;font-size:11px;color:${NEUTRAL}}
+  .ah-ph-k{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${NEUTRAL};margin-top:3px}
+  .ah-ph-svc{display:grid;padding:8px 10px;border-radius:10px;box-shadow:0 0 0 1.5px ${PRIMARY};background:#fff}
+  .ah-ph-svc b{font-size:12.5px;color:${DEEP}}.ah-ph-svc small{font-size:11px;color:${NEUTRAL}}
+  .ah-ph-pro{display:grid;grid-template-columns:28px auto minmax(0,1fr);align-items:center;gap:8px;padding:6px 8px;border-radius:10px;box-shadow:0 0 0 1px ${LINE}}
+  .ah-ph-pro img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+  .ah-ph-pro b{font-size:12.5px;color:${DEEP}}.ah-ph-pro em{justify-self:end;font-style:normal;font-size:10.5px;font-weight:600;color:${PRIMARY};white-space:nowrap}
+  .ah-ph-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .ah-ph-slots span{padding:7px 0;text-align:center;border-radius:8px;box-shadow:0 0 0 1px ${LINE};font-size:11.5px;font-weight:600;color:${INK};font-family:var(--font-display),system-ui,sans-serif}
+  .ah-ph-slots .on{background:${PRIMARY};color:#fff;box-shadow:none}
+  .ah-ph-slots .off{background:repeating-linear-gradient(135deg,#F1F3EF 0 5px,#E8ECE6 5px 10px);color:#A4ADA5;box-shadow:none}
+  .ah-ph-btn{margin-top:4px;padding:10px 0;text-align:center;border-radius:9px;background:${DEEP};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px;font-weight:600}
+  .ah-today{position:absolute;left:16px;top:16px;z-index:4;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:#fff;font-size:12.5px;font-weight:600;color:${DEEP};box-shadow:0 14px 28px -16px rgba(30,45,34,.55)}
+  .ah-today i{width:8px;height:8px;border-radius:50%;background:${PRIMARY}}
+  .ah-toast{position:absolute;right:16px;bottom:18px;z-index:4;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:14px;background:#fff;box-shadow:0 24px 44px -20px rgba(30,45,34,.55),0 0 0 1px rgba(30,45,34,.08)}
+  .ah-toast-i{width:30px;height:30px;border-radius:50%;background:rgba(22,138,74,.12);color:#168A4A;display:grid;place-items:center}.ah-toast-i svg{width:16px;height:16px}
+  .ah-toast span:last-child{display:grid}.ah-toast b{font-size:13px;color:${DEEP}}.ah-toast small{font-size:11.5px;color:${NEUTRAL}}
+
+  /* shared product bits */
+  .ah-seg{display:inline-flex;gap:2px;background:#fff;border-radius:9px;padding:3px;box-shadow:0 0 0 1px ${LINE};margin-bottom:10px}
+  .ah-seg span,.ah-seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-size:12.5px;font-weight:600;color:${MUTED};font-family:var(--font-display),system-ui,sans-serif;cursor:pointer}
+  .ah-seg .on{background:${BAND};color:${DEEP};box-shadow:0 1px 3px rgba(30,45,34,.16)}
+  .ah-seg.sm{margin:0}
+  .ah-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .ah-slots span{padding:9px 0;text-align:center;border-radius:9px;background:#fff;box-shadow:0 0 0 1.5px ${LINE};font-size:12.5px;font-weight:600;color:${INK};font-family:var(--font-display),system-ui,sans-serif}
+  .ah-slots .on{background:${PRIMARY};color:#fff;box-shadow:none}
+  .ah-slots .off{background:repeating-linear-gradient(135deg,#F1F3EF 0 6px,#E8ECE6 6px 12px);color:#A4ADA5;box-shadow:none}
+  .ah-item{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:11px;align-items:center;padding:7px;border-radius:12px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
+  .ah-item img.round{width:42px;height:42px;margin:0 3px;object-fit:cover}
+  .ah-item span{display:grid;min-width:0}.ah-item b{font-size:13.5px;color:${DEEP}}.ah-item small{font-size:12px;color:${NEUTRAL}}
+  .ah-form{display:grid;gap:8px}
+  .ah-form label{display:grid;gap:3px;font-size:11.5px;font-weight:600;color:${NEUTRAL}}
+  .ah-form label span{padding:9px 11px;border-radius:9px;background:#fff;box-shadow:0 0 0 1.5px ${LINE};font-size:13px;font-weight:500;color:${INK}}
+  .ah-link{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:${BAND};font-size:12.5px;font-weight:600;color:${DEEP}}
+  .ah-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ah-link em{font-style:normal;font-size:12px;color:${PRIMARY};white-space:nowrap}
+
+  /* booking page window */
+  .ah-bkwin{max-width:1120px;margin:0 auto}
+  .ah-bk-top{display:flex;align-items:center;gap:9px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid ${LINE}}
+  .ah-bk-top b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${DEEP}}.ah-bk-top small{margin-left:auto;font-size:12.5px;color:${NEUTRAL}}
+  .ah-bk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+  .ah-bk-col{display:grid;gap:22px;align-content:start}
+  .ah-g{display:grid;gap:9px;padding:10px;margin:-10px;border-radius:14px;transition:opacity .2s ease,background .2s ease,box-shadow .2s ease}
+  .ah-bkwin.hl .ah-g:not(.on){opacity:.38}
+  .ah-g.on{background:${MIST_SOFT};box-shadow:0 0 0 2px ${PRIMARY}}
+  .ah-bk-h{display:flex;align-items:center;gap:9px;font-family:var(--font-display),system-ui,sans-serif;font-size:13.5px;font-weight:600;color:${DEEP}}
+  .ah-bk-h b{width:22px;height:22px;border-radius:50%;background:${DEEP};color:#fff;display:grid;place-items:center;font-size:11.5px}
+  .ah-row{display:grid;grid-template-columns:18px minmax(0,1fr);gap:11px;align-items:center;padding:10px 12px;border-radius:11px;box-shadow:0 0 0 1px ${LINE};background:#fff}
+  .ah-row.sel{box-shadow:0 0 0 2px ${PRIMARY}}
+  .ah-row span:last-child{display:grid}.ah-row b{font-size:13.5px;color:${DEEP}}.ah-row small{font-size:12px;color:${NEUTRAL}}
+  .ah-radio{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #B9C2BA}
+  .ah-row.sel .ah-radio{box-shadow:inset 0 0 0 5px ${PRIMARY}}
+  .ah-pros{display:flex;flex-wrap:wrap;gap:8px}
+  .ah-pros span{display:inline-flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:999px;box-shadow:0 0 0 1px ${LINE};font-size:13px;font-weight:600;color:${INK}}
+  .ah-pros span.sel{box-shadow:0 0 0 2px ${PRIMARY};color:${DEEP}}
+  .ah-pros img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+  .ah-btn-mock{margin-top:2px;padding:11px 0;text-align:center;border-radius:9px;background:${PRIMARY};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:13.5px;font-weight:600}
+  .ah-caps-hint{margin:34px 0 0;text-align:center;font-size:14px;color:${NEUTRAL}}
+  .ah-caps{list-style:none;margin:16px auto 0;padding:0;max-width:1120px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 24px}
+  .ah-caps li{display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;align-items:start;padding:14px;border-radius:14px;cursor:default;transition:background .2s ease}
+  .ah-caps li:hover,.ah-caps li.on{background:#fff}
+  .ah-caps li:focus-visible{outline:2px solid ${PRIMARY}}
+  .ah-cap-n{width:30px;height:30px;border-radius:50%;background:${DEEP};color:#fff;font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:13.5px;display:grid;place-items:center}
+  .ah-caps li span:last-child{display:grid;gap:3px}.ah-caps b{font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;color:${DEEP}}.ah-caps small{font-size:14.5px;line-height:1.5;color:${MUTED}}
 
   /* two column sections */
-  .ah-two{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:center}
-  .ah-two.flip{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)}
-  .ah-checks{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:9px}
-  .ah-checks.cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 18px}
-  .ah-checks li{display:flex;gap:9px;align-items:flex-start;font-size:15px;color:${INK}}
-  .ah-checks li svg{width:16px;height:16px;color:${PRIMARY};flex-shrink:0;margin-top:4px}
+  .ah-two{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:64px;align-items:center}
+  .ah-two.flip{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .ah-list{list-style:none;margin:26px 0 0;padding:0;display:grid}
+  .ah-list li{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid ${LINE};font-size:15.5px;color:${INK}}
+  .ah-list li:last-child{border-bottom:1px solid ${LINE}}
+  .ah-list li svg{width:16px;height:16px;color:${PRIMARY};flex-shrink:0;margin-top:5px}
+  .ah-list.cols{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+  .ah-list.cols li:nth-last-child(2){border-bottom:1px solid ${LINE}}
 
   /* calendar */
   .ah-cal-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
   .ah-cal-top b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${DEEP}}
-  .ah-day{display:grid;grid-template-columns:46px repeat(3,minmax(0,1fr));gap:8px;height:300px}
+  .ah-day{display:grid;grid-template-columns:46px repeat(3,minmax(0,1fr));gap:8px;height:320px}
   .ah-hours{display:grid;grid-template-rows:repeat(6,1fr);padding-top:34px;font-size:11px;color:${NEUTRAL}}
   .ah-colm{display:grid;grid-template-rows:auto 1fr;gap:6px;min-width:0}
   .ah-colh{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:${DEEP};height:28px;white-space:nowrap;overflow:hidden}
   .ah-colh img{width:26px;height:26px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #fff,0 2px 5px rgba(30,45,34,.25)}
-  .ah-colb{position:relative;border-radius:10px;background:repeating-linear-gradient(180deg,${BG} 0 calc(16.66% - 1px),${LINE} calc(16.66% - 1px) 16.66%)}
+  .ah-colb{position:relative;border-radius:10px;background:repeating-linear-gradient(180deg,${BAND} 0 calc(16.66% - 1px),${LINE} calc(16.66% - 1px) 16.66%)}
   .ah-colb i{position:absolute;left:4px;right:4px;border-radius:7px;padding:5px 7px;font-style:normal;font-size:11px;font-weight:600;line-height:1.25;overflow:hidden}
-  .ah-colb i.ok{background:rgba(78,111,88,.16);color:${DEEP};box-shadow:inset 3px 0 0 ${PRIMARY}}
+  .ah-colb i.ok{background:${MIST};color:${DEEP};box-shadow:inset 3px 0 0 ${PRIMARY}}
   .ah-colb i.warn{background:#FBF1DC;color:#7A4A06;box-shadow:inset 3px 0 0 #D97706}
   .ah-colb i.off{background:repeating-linear-gradient(135deg,#ECEFEA 0 6px,#E3E8E1 6px 12px);color:${NEUTRAL}}
-  .ah-week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-items:end;height:300px;padding:10px 4px 0}
+  .ah-week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-items:end;height:320px;padding:10px 4px 0}
   .ah-week div{display:grid;justify-items:center;gap:6px;align-content:end;height:100%}
   .ah-week b{font-size:12px;color:${DEEP};order:3}.ah-week span{width:60%;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,${PRIMARY},rgba(78,111,88,.55))}.ah-week small{font-size:11.5px;color:${NEUTRAL}}
-  .ah-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;height:300px;align-content:start}
-  .ah-month span{display:grid;gap:5px;padding:7px;border-radius:8px;background:${BG};box-shadow:0 0 0 1px ${LINE}}
+  .ah-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;height:320px;align-content:start}
+  .ah-month span{display:grid;gap:5px;padding:7px;border-radius:8px;background:${BAND};box-shadow:0 0 0 1px ${LINE}}
   .ah-month span.off{opacity:.5}.ah-month b{font-size:11px;color:${DEEP}}.ah-month i{height:5px;border-radius:5px;background:${PRIMARY};opacity:.7}
   .ah-legend{display:flex;gap:14px;margin-top:12px;font-size:12px;color:${MUTED}}
   .ah-legend span{display:inline-flex;align-items:center;gap:6px}.ah-legend i{width:12px;height:9px;border-radius:3px}
-  .ah-legend .ok{background:rgba(78,111,88,.3)}.ah-legend .warn{background:#F5D9A0}.ah-legend .off{background:#E3E8E1}
+  .ah-legend .ok{background:${MIST}}.ah-legend .warn{background:#F5D9A0}.ah-legend .off{background:#E3E8E1}
 
   /* rules */
-  .ah-rules{background:#fff;border-radius:22px;padding:22px;box-shadow:0 30px 60px -34px rgba(30,45,34,.4),0 0 0 1px ${LINE};display:grid;gap:12px}
+  .ah-rules{background:#fff;border-radius:20px;padding:22px;box-shadow:0 30px 60px -36px rgba(30,45,34,.35),0 0 0 1px ${LINE};display:grid;gap:12px}
   .ah-rules-h{display:flex;align-items:center;gap:11px;padding-bottom:12px;border-bottom:1px solid ${LINE}}
   .ah-rules-h img{width:40px;height:40px;border-radius:50%;object-fit:cover}
   .ah-rules-h span{display:grid}.ah-rules-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}.ah-rules-h small{font-size:12.5px;color:${NEUTRAL}}
   .ah-week-h{display:grid;gap:6px}
   .ah-week-h div{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:center;font-size:12px;color:${MUTED}}
   .ah-week-h b{font-weight:600;color:${DEEP}}
-  .ah-week-h span{position:relative;height:16px;border-radius:5px;background:${BG};box-shadow:0 0 0 1px ${LINE}}
+  .ah-week-h span{position:relative;height:16px;border-radius:5px;background:${BAND};box-shadow:0 0 0 1px ${LINE}}
   .ah-week-h i{position:absolute;top:3px;bottom:3px;border-radius:3px;background:${PRIMARY}}
   .ah-week-h em{position:absolute;left:8px;top:-1px;font-style:normal;font-size:11px;color:${NEUTRAL}}
   .ah-ctl{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-top:1px solid ${LINE};font-size:13.5px;color:${MUTED}}
@@ -622,53 +681,50 @@ const css = `
   .ah-chips{display:flex;gap:6px}
   .ah-chips button{border:1.5px solid ${LINE};background:#fff;border-radius:999px;padding:5px 12px;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:12.5px;color:${MUTED};cursor:pointer}
   .ah-chips button.on{border-color:${PRIMARY};color:${DEEP};background:${MIST_SOFT}}
-  .ah-out{padding:12px 14px;border-radius:14px;background:${MIST_SOFT};display:grid;gap:8px;font-size:13.5px;color:${MUTED}}
+  .ah-out{padding:12px 14px;border-radius:14px;background:${BAND};display:grid;gap:8px;font-size:13.5px;color:${MUTED}}
   .ah-out b{color:${DEEP}}
   .ah-out div{display:flex;flex-wrap:wrap;gap:6px}
   .ah-out em{font-style:normal;font-size:12px;font-weight:600;padding:3px 9px;border-radius:7px;background:#fff;color:${DEEP};box-shadow:0 0 0 1px ${LINE}}
 
-  /* lifecycle box */
-  .ah-pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:-14px 0 24px}
-  .ah-pills button{position:relative;overflow:hidden;border:1px solid ${LINE};background:#fff;color:${MUTED};border-radius:999px;padding:9px 18px;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:14px;cursor:pointer}
-  .ah-pills button:hover{border-color:${PRIMARY}}
-  .ah-pills button.on{background:${PRIMARY};border-color:${PRIMARY};color:#fff}
-  .ah-box{position:relative;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center;padding:40px 44px;border-radius:30px;background:#EDF2EA;overflow:hidden;box-shadow:0 0 0 1px rgba(30,45,34,.05)}
-  .ah-box::before{content:"";position:absolute;right:-120px;top:-140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(closest-side,rgba(217,185,140,.5),rgba(217,185,140,0));pointer-events:none}
-  .ah-box-t,.ah-box-v{position:relative;animation:apIn .4s ease both}
-  .ah-n{width:36px;height:36px;border-radius:50%;background:${PRIMARY};color:#fff;display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:15px}
-  .ah-box-t h3{font-size:28px;line-height:1.15;margin:16px 0 10px!important}
-  .ah-box-t p{margin:0;font-size:16.5px;color:${MUTED}}
-  .ah-card{background:#fff;border-radius:20px;padding:20px;display:grid;gap:10px;box-shadow:0 24px 50px -30px rgba(30,45,34,.45),0 0 0 1px ${LINE};max-width:440px;margin-left:auto}
+  /* lifecycle: three stages on top, two below */
+  .ah-life{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:44px 36px}
+  .ah-life-i{grid-column:span 2;display:flex;flex-direction:column}
+  .ah-life-i:nth-child(n+4){grid-column:span 3}
+  .ah-life-t{display:flex;align-items:center;gap:12px}
+  .ah-n{width:34px;height:34px;border-radius:50%;background:${PRIMARY};color:#fff;display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:15px;flex-shrink:0}
+  .ah-life-t h3{font-size:21px;line-height:1.2}
+  .ah-life-i p{margin:12px 0 18px;font-size:15.5px;line-height:1.55;color:${MUTED}}
+  .ah-vis{flex:1;border-radius:20px;background:${VIS};padding:20px;display:grid;place-items:center}
+  .ah-card{width:100%;max-width:440px;background:#fff;border-radius:18px;padding:20px;display:grid;gap:10px;box-shadow:0 24px 50px -32px rgba(30,45,34,.4),0 0 0 1px ${LINE}}
   .ah-k{font-family:var(--font-display),system-ui,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${PRIMARY}}
   .ah-q{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid ${LINE};font-size:13.5px;color:${MUTED}}
   .ah-q b{color:${DEEP}}.ah-q.hot{background:${MIST_SOFT};margin:0 -10px;padding:9px 10px;border-radius:9px;border-bottom:0}
   .ah-card .ap-badge{justify-self:start}
   .ah-move{display:flex;align-items:center;gap:12px;font-size:13.5px;font-weight:600;color:${MUTED}}
-  .ah-move span{padding:7px 12px;border-radius:9px;background:${BG};box-shadow:0 0 0 1px ${LINE}}.ah-move span.on{background:${PRIMARY};color:#fff;box-shadow:none}
+  .ah-move span{padding:7px 12px;border-radius:9px;background:${BAND};box-shadow:0 0 0 1px ${LINE}}.ah-move span.on{background:${PRIMARY};color:#fff;box-shadow:none}
   .ah-move svg{width:16px;height:16px;color:${PRIMARY}}
-  .ah-msgs{display:grid;gap:10px;max-width:440px;margin-left:auto}
+  .ah-msgs{display:grid;gap:10px;width:100%;max-width:420px}
   .ah-msg{display:grid;gap:2px;padding:12px 14px;border-radius:16px 16px 16px 4px;background:#fff;box-shadow:0 14px 30px -22px rgba(30,45,34,.5),0 0 0 1px ${LINE}}
   .ah-msg.team{border-radius:16px 16px 4px 16px;background:${MIST_SOFT};justify-self:end}
   .ah-ch{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${PRIMARY}}.ah-msg b{font-size:14px;color:${DEEP}}.ah-msg small{font-size:12.5px;color:${MUTED}}
 
-  /* industries and why */
-  .ah-ind,.ah-why{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-  .ah-ind-c,.ah-why-c{border-radius:20px;overflow:hidden;background:${BG};box-shadow:0 0 0 1px ${LINE};display:flex;flex-direction:column}
-  .ah-why-c{background:#fff}
-  .ah-ind-c img,.ah-why-c img{width:100%;height:190px;object-fit:cover;display:block}
-  .ah-ind-c>div,.ah-why-c>div{padding:18px 20px 22px;display:grid;gap:8px}
-  .ah-ind-c h3,.ah-why-c h3{font-size:18.5px}
-  .ah-ind-c p,.ah-why-c p{margin:0;font-size:14.5px;line-height:1.55;color:${MUTED}}
+  /* industries: photos with captions, no cards */
+  .ah-ind{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px 28px;margin-bottom:48px}
+  .ah-ind article{display:grid;gap:8px;align-content:start}
+  .ah-ind img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:18px;display:block;margin-bottom:10px}
+  .ah-ind h3{font-size:20px}
+  .ah-ind p{margin:0;font-size:15px;line-height:1.55;color:${MUTED}}
 
   /* EVI */
-  .ah-evi{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:56px;align-items:center;background:#EDF2EA;border-radius:34px;padding:48px}
-  .ah-steps{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:14px}
-  .ah-steps li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;align-items:start;font-size:14.5px;line-height:1.5;color:${MUTED}}
-  .ah-steps b{width:30px;height:30px;border-radius:50%;border:1.5px solid ${PRIMARY};color:${PRIMARY};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-size:13px;background:#fff}
+  .ah-steps{list-style:none;margin:24px 0 0;padding:0;display:grid}
+  .ah-steps li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;align-items:start;padding:14px 0;border-top:1px solid ${LINE};font-size:14.5px;line-height:1.5;color:${MUTED}}
+  .ah-steps li:last-child{border-bottom:1px solid ${LINE}}
+  .ah-steps b{width:30px;height:30px;border-radius:50%;background:${BAND};color:${DEEP};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-size:13px}
   .ah-steps em{display:block;font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:16px;color:${DEEP}}
-  .ah-chat{background:#fff;border-radius:24px;padding:18px;display:grid;gap:12px;box-shadow:0 30px 60px -34px rgba(30,45,34,.45),0 0 0 1px ${LINE}}
-  .ah-me{justify-self:end;max-width:82%;background:${PRIMARY};color:#fff;padding:10px 15px;border-radius:16px 16px 4px 16px;font-size:14.5px}
-  .ah-bot{display:grid;gap:8px;padding:12px;border-radius:4px 16px 16px 16px;background:${BG}}
+  .ah-evi-bg{border-radius:24px;background:${VIS};padding:28px}
+  .ah-chat{background:#fff;border-radius:20px;padding:18px;display:grid;gap:12px;box-shadow:0 24px 50px -32px rgba(30,45,34,.4),0 0 0 1px ${LINE}}
+  .ah-me{justify-self:end;max-width:82%;background:${DEEP};color:#fff;padding:10px 15px;border-radius:16px 16px 4px 16px;font-size:14.5px}
+  .ah-bot{display:grid;gap:8px;padding:12px;border-radius:4px 16px 16px 16px;background:${BAND}}
   .ah-bot p{margin:0;font-size:14px;color:${INK}}
   .ah-who{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display),system-ui,sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${PRIMARY}}
   .ah-who img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:#E3DCC9;box-shadow:0 0 0 1.5px #fff,0 0 0 3px rgba(78,111,88,.5)}
@@ -677,53 +733,75 @@ const css = `
   .ah-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
   .ah-undo{justify-self:start;background:none;border:0;padding:0;font:inherit;font-size:13px;font-weight:600;color:${PRIMARY};cursor:pointer;text-decoration:underline}
 
-  /* integrations hub */
-  .ah-hub{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,380px) minmax(0,1fr);gap:56px;align-items:center}
-  .ah-hub-col{display:grid;gap:14px}
-  .ah-node{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;background:${BG};border-radius:18px;padding:16px 18px;box-shadow:0 0 0 1px ${LINE}}
-  .ah-node span:last-child{display:grid;gap:3px}.ah-node b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}.ah-node small{font-size:13.5px;line-height:1.45;color:${MUTED}}
-  .ah-node::after{content:"";position:absolute;top:50%;width:56px;border-top:2px dashed rgba(78,111,88,.45)}
-  .ah-node.l::after{left:100%}.ah-node.r::after{right:100%}
-  .ah-node::before{content:"";position:absolute;top:50%;width:9px;height:9px;margin-top:-4px;border-radius:50%;background:${PRIMARY};z-index:1}
-  .ah-node.l::before{right:-5px}.ah-node.r::before{left:-5px}
-  .ah-ic{width:44px;height:44px;border-radius:12px;background:${MIST};color:${PRIMARY};display:grid;place-items:center}.ah-ic svg{width:22px;height:22px}
-  .ah-core{background:#fff;border-radius:24px;padding:18px;box-shadow:0 30px 60px -34px rgba(30,45,34,.45),0 0 0 1px ${LINE}}
+  /* integrations */
+  .ah-hub{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px) minmax(0,1fr);gap:56px;align-items:center}
+  .ah-hub-col{display:grid;gap:34px}
+  .ah-node{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start}
+  .ah-hub-col.l .ah-node{grid-template-columns:minmax(0,1fr) 44px;text-align:right}
+  .ah-hub-col.l .ah-node .ah-ic{order:2}
+  .ah-node span:last-child{display:grid;gap:3px}.ah-node b{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}.ah-node small{font-size:14.5px;line-height:1.5;color:${MUTED}}
+  .ah-ic{width:44px;height:44px;border-radius:50%;background:#fff;color:${PRIMARY};display:grid;place-items:center;box-shadow:0 0 0 1px ${LINE}}.ah-ic svg{width:21px;height:21px}
+  .ah-core{background:#fff;border-radius:22px;padding:18px;box-shadow:0 30px 60px -36px rgba(30,45,34,.4),0 0 0 1px ${LINE}}
   .ah-core-h{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid ${LINE}}
   .ah-core-h img{width:44px;height:44px;object-fit:cover}
   .ah-core-h span{display:grid}.ah-core-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:15.5px;color:${DEEP}}.ah-core-h small{font-size:12px;color:${NEUTRAL}}
   .ah-core ul{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
   .ah-core li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px;color:${DEEP};font-weight:500}
-  .ah-dot{width:34px;height:34px;border-radius:50%;background:${MIST_SOFT};color:${PRIMARY};display:grid;place-items:center}.ah-dot svg{width:16px;height:16px}
+  .ah-dot{width:34px;height:34px;border-radius:50%;background:${BAND};color:${PRIMARY};display:grid;place-items:center}.ah-dot svg{width:16px;height:16px}
   .ah-core li em{color:${PRIMARY}}.ah-core li em svg{width:15px;height:15px}
 
-  /* get started */
-  .ah-start{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;counter-reset:s}
-  .ah-start li{position:relative;background:${BG};border-radius:20px;padding:22px;display:grid;gap:8px;align-content:start;box-shadow:0 0 0 1px ${LINE}}
-  .ah-start-n{position:absolute;top:18px;right:20px;font-family:var(--font-display),system-ui,sans-serif;font-weight:700;font-size:28px;color:rgba(78,111,88,.22)}
-  .ah-start h3{font-size:18px;margin-top:6px!important}
-  .ah-start p{margin:0;font-size:14.5px;line-height:1.5;color:${MUTED}}
+  /* why: one photo and a plain list */
+  .ah-why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:stretch}
+  .ah-why-img{width:100%;height:100%;min-height:440px;object-fit:cover;border-radius:24px;display:block}
+  .ah-why ul{list-style:none;margin:0;padding:0;display:grid;align-content:center}
+  .ah-why li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:16px;align-items:start;padding:20px 0;border-top:1px solid ${LINE}}
+  .ah-why li:first-child{border-top:0;padding-top:0}.ah-why li:last-child{padding-bottom:0}
+  .ah-why-ic{width:44px;height:44px;border-radius:50%;background:${BAND};color:${PRIMARY};display:grid;place-items:center}.ah-why-ic svg{width:20px;height:20px}
+  .ah-why li span:last-child{display:grid;gap:3px}.ah-why b{font-family:var(--font-display),system-ui,sans-serif;font-size:18px;color:${DEEP}}.ah-why small{font-size:15px;line-height:1.5;color:${MUTED}}
 
-  @media (max-width:1100px){.ah-hub{grid-template-columns:minmax(0,1fr) minmax(0,340px) minmax(0,1fr);gap:40px}.ah-node::after{width:40px}}
+  /* get started */
+  .ah-start{list-style:none;margin:0 0 44px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 36px}
+  .ah-start li{padding-top:18px;border-top:2px solid ${DEEP};display:grid;gap:6px;align-content:start}
+  .ah-start-n{font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:14px;letter-spacing:.06em;color:${PRIMARY}}
+  .ah-start h3{font-size:21px}
+  .ah-start p{margin:0;font-size:15.5px;line-height:1.55;color:${MUTED}}
+
+  @media (max-width:1100px){.ah-hub{grid-template-columns:minmax(0,1fr) minmax(0,340px) minmax(0,1fr);gap:36px}.ah-h1{font-size:46px}}
   @media (max-width:980px){
-    .ah-hero,.ah-split,.ah-two,.ah-two.flip,.ah-box,.ah-evi{grid-template-columns:minmax(0,1fr)}
-    .ah-hero{gap:36px;padding:32px 0 48px}
-    .ah-h1{font-size:38px}
-    .ah-box,.ah-evi{padding:28px 24px;gap:28px}
-    .ah-card,.ah-msgs{margin-left:0}
-    .ah-hub{grid-template-columns:minmax(0,1fr);gap:18px}.ah-core{order:-1;max-width:440px;width:100%;margin:0 auto}
-    .ah-hub-col{grid-template-columns:repeat(2,minmax(0,1fr))}.ah-node::after,.ah-node::before{display:none}
-    .ah-ind,.ah-why,.ah-start{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .ah-hero,.ah-two,.ah-two.flip,.ah-why{grid-template-columns:minmax(0,1fr)}
+    .ah-hero{gap:44px;padding:36px 0 56px}
+    .ah-h1{font-size:40px}
+    .ah-mos{height:480px;max-width:640px;margin:0 auto;width:100%}
+    .ah-phone{width:206px}.ah-phone.one{left:30%}
+    .ah-bk{grid-template-columns:minmax(0,1fr);gap:20px}
+    .ah-caps{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .ah-life{grid-template-columns:repeat(2,minmax(0,1fr))}.ah-life-i,.ah-life-i:nth-child(n+4){grid-column:span 1}
+    .ah-hub{grid-template-columns:minmax(0,1fr);gap:28px}.ah-core{order:-1;max-width:440px;width:100%;margin:0 auto}
+    .ah-hub-col,.ah-hub-col.l{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+    .ah-hub-col.l .ah-node{grid-template-columns:44px minmax(0,1fr);text-align:left}.ah-hub-col.l .ah-node .ah-ic{order:0}
+    .ah-ind{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .ah-start{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .ah-why-img{min-height:0;aspect-ratio:3/2}
   }
   @media (max-width:600px){
-    .ah-h1{font-size:33px}
-    .ah-ind,.ah-why,.ah-start,.ah-hub-col,.ah-checks.cols{grid-template-columns:minmax(0,1fr)}
-    .ah-tabs small{display:none}
+    .ah-h1{font-size:34px}
+    .ah-mos{height:440px}
+    .ah-mos-grid{gap:8px}
+    .ah-phone.one{left:auto;right:8px;width:178px;top:52px;padding:7px;border-radius:30px}
+    .ah-ph-in{padding:0 4px 8px;font-size:11px}.ah-ph-pro,.ah-ph-k{display:none}
+    .ah-ph-slots span{padding:6px 0;font-size:10.5px}
+    .ah-today{left:10px;top:10px;font-size:11.5px}
+    .ah-ph-in{gap:6px}
+    .ah-toast{display:none}
+    .ah-caps li{padding:12px 8px}
+    .ah-caps,.ah-ind,.ah-start,.ah-hub-col,.ah-hub-col.l,.ah-list.cols{grid-template-columns:minmax(0,1fr)}
+    .ah-list.cols li:nth-last-child(2){border-bottom:0}
+    .ah-life{grid-template-columns:minmax(0,1fr)}
+    .ah-vis{padding:16px 12px}
+    .ah-evi-bg{padding:14px}
     .ah-day{grid-template-columns:38px repeat(3,minmax(0,1fr));gap:5px}
-    .ah-colb i{font-size:10px;padding:4px 5px}
-    .ah-colh{font-size:11px}
-    .ah-slots{grid-template-columns:repeat(3,minmax(0,1fr))}
-    .ah-item{grid-template-columns:44px minmax(0,1fr)}.ah-item .ap-badge{grid-column:2;justify-self:start}
+    .ah-colb i{font-size:10px;padding:4px 5px}.ah-colh{font-size:11px}
     .ah-ctl{flex-direction:column;align-items:flex-start;gap:6px}.ah-ctl b{text-align:left}
+    .ah-item{grid-template-columns:44px minmax(0,1fr)}.ah-item .ap-badge{grid-column:2;justify-self:start}
   }
-  @media (prefers-reduced-motion:reduce){.ah-view,.ah-box-t,.ah-box-v{animation:none}}
 `;
