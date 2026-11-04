@@ -38,17 +38,16 @@ export function SpaceAi() {
           <span className="sr-label">AI assistants</span>
           <h2 className="sr-h2" style={{ marginTop: 14 }}>Booking help that asks before it acts.</h2>
           <p className="sr-lead">EVI answers from your bookings, and Kai prepares changes for your team to review. Nothing moves until a person approves it.</p>
-          <div className="ai-low">
-            <img className="ai-evi" src="/characters/evi-cut-tablet.png" alt="EVI, the AI assistant" width={230} height={238} />
           <ol className="ai-steps">
             {STEPS.map(([t, d], i) => (
               <li key={t}><b>{i + 1}</b><span><em>{t}</em>{d}</span></li>
             ))}
           </ol>
-          </div>
         </div>
 
-        <div className="ai-card" data-rv="1" ref={ref}>
+        <div className="ai-right" data-rv="1">
+          <img className="ai-evi" src="/characters/evi-cut-mirror.png" alt="EVI, the AI assistant" width={200} height={160} />
+        <div className="ai-card" ref={ref}>
           <div className="ai-seg" role="tablist" aria-label="AI scenes">
             {VIEWS.map((x, i) => (
               <button key={x} type="button" role="tab" aria-selected={v === i} className={v === i ? "on" : ""} onClick={() => { setAuto(false); setV(i); }}>
@@ -64,7 +63,7 @@ export function SpaceAi() {
                 <div className="ai-me">I need a room for 10 people with a screen, Thursday afternoon.</div>
                 <div className="ai-bot">
                   <div>
-                    <span className="ai-who">EVI</span>
+                    <span className="ai-who"><img src="/characters/evi.webp" alt="" width={24} height={24} />EVI</span>
                     <span className="ai-crit"><em>Thu 19 Nov</em><em>13:00 to 17:00</em><em>10+ seats</em><em>Screen</em></span>
                     <div className="ai-opt"><img src={SPACE_IMG.board} alt="" /><span><b>Board Room</b><small>12 seats · Display</small></span><em className="sr-badge ok">Free 14:00</em></div>
                     <div className="ai-opt"><img src={SPACE_IMG.training} alt="" /><span><b>Training Room 2</b><small>24 seats · Projector</small></span><em className="sr-badge warn">Needs approval</em></div>
@@ -77,7 +76,7 @@ export function SpaceAi() {
                 <div className="ai-me">What needs my attention today?</div>
                 <div className="ai-bot">
                   <div>
-                    <span className="ai-who">EVI</span>
+                    <span className="ai-who"><img src="/characters/evi.webp" alt="" width={24} height={24} />EVI</span>
                     {[
                       ["2 requests waiting for approval", "Town hall and Client review", "warn", "Review"],
                       ["1 conflict", "Hall A is blocked on Friday morning and a workshop is booked there", "off", "Open"],
@@ -92,8 +91,7 @@ export function SpaceAi() {
             {v === 2 && (
               <>
                 <div className="ai-bot">
-                  <img src="/characters/evi.webp" alt="EVI" width={32} height={32} />
-                  <div><span className="ai-who">EVI</span><p className="ai-say">Hall A is blocked on Friday morning, so I asked Kai to prepare a move for the vendor workshop.</p></div>
+                  <div><span className="ai-who"><img src="/characters/evi.webp" alt="" width={24} height={24} />EVI</span><p className="ai-say">Hall A is blocked on Friday morning, so I asked Kai to prepare a move for the vendor workshop.</p></div>
                 </div>
                 <div className="ai-prep">
                   <div className="ai-prep-h"><img src="/characters/kai.webp" alt="Kai" width={26} height={26} /><span>Kai · prepared for review</span><em className={`sr-badge ${decision === "approved" ? "ok" : decision === "rejected" ? "off" : "warn"}`}>{decision === "approved" ? "Approved" : decision === "rejected" ? "Rejected" : "Waiting"}</em></div>
@@ -116,20 +114,21 @@ export function SpaceAi() {
             )}
           </div>
         </div>
+        </div>
       </div>
     </section>
   );
 }
 
 const css = `
-  .ai-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:stretch}
-  .ai-panel{text-align:left;position:relative;overflow:hidden;background:#F3E8D8;border-radius:34px;padding:44px 44px 0;box-shadow:0 0 0 1px rgba(43,33,28,.05)}
-  .ai-panel::before{content:"";position:absolute;left:-140px;bottom:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(closest-side,rgba(217,185,140,.7),rgba(217,185,140,0));pointer-events:none}
+  .ai-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+  .ai-panel{text-align:left;position:relative;overflow:hidden;background:#F3E8D8;border-radius:34px;padding:44px;box-shadow:0 0 0 1px rgba(43,33,28,.05)}
+  .ai-panel::before{content:"";position:absolute;right:-90px;top:-150px;width:520px;height:520px;border-radius:50%;background:radial-gradient(closest-side,rgba(217,185,140,.7),rgba(217,185,140,0));pointer-events:none}
   .ai-copy{position:relative;display:flex;flex-direction:column}
-  .ai-low{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:end;margin-top:auto;padding-top:18px}
-  .ai-evi{width:230px;height:auto;display:block;align-self:end;filter:drop-shadow(0 18px 24px rgba(43,33,28,.18))}
-  .ai-card{align-self:center;margin-bottom:44px;position:relative}
-  .ai-steps{list-style:none;margin:0 0 30px;padding:0;display:grid;gap:14px}
+  .ai-right{position:relative;padding-top:112px;min-width:0}
+  .ai-evi{position:absolute;top:0;right:36px;width:200px;height:auto;z-index:1;filter:drop-shadow(0 14px 20px rgba(43,33,28,.18))}
+  .ai-card{position:relative;z-index:2}
+  .ai-steps{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
   .ai-steps li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:14px;align-items:start;font-size:15px;line-height:1.5;color:${MUTED}}
   .ai-steps b{width:30px;height:30px;border-radius:50%;border:1.5px solid ${PRIMARY};color:${PRIMARY};display:grid;place-items:center;font-family:var(--font-display),system-ui,sans-serif;font-size:13px}
   .ai-steps em{display:block;font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-weight:600;font-size:16px;color:${DEEP};margin-bottom:1px}
@@ -143,7 +142,7 @@ const css = `
   @keyframes aiIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .ai-me{justify-self:end;max-width:80%;background:${PRIMARY};color:#fff;padding:10px 15px;border-radius:16px 16px 4px 16px;font-size:14.5px}
   .ai-bot{display:block}
-  .ai-who{font-family:var(--font-display),system-ui,sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${PRIMARY}}
+  .ai-who{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display),system-ui,sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${PRIMARY}}
   .ai-bot>div{background:${BG};border-radius:4px 16px 16px 16px;padding:12px;display:grid;gap:9px;min-width:0}
   .ai-say{margin:0;font-size:14px;color:${INK}}
   .ai-crit{display:flex;flex-wrap:wrap;gap:6px}
@@ -154,7 +153,7 @@ const css = `
   .ai-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 11px;border-radius:11px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
   .ai-prep{background:${BG};border-radius:16px;padding:14px 16px;display:grid;gap:10px;box-shadow:0 0 0 1px ${LINE}}
   .ai-prep-h{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:${PRIMARY};font-family:var(--font-display),system-ui,sans-serif}
-  .ai-prep-h img{width:26px;height:26px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px #fff,0 0 0 3px #8F7BFF}
+  .ai-who img,.ai-prep-h img{width:24px;height:24px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px #fff,0 0 0 3px #8F7BFF;flex-shrink:0}
   .ai-prep-h .sr-badge{margin-left:auto;letter-spacing:0;text-transform:none}
   .ai-prep>b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}
   .ai-prep dl{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -164,13 +163,12 @@ const css = `
   .ai-done button{background:none;border:0;padding:0 0 0 6px;font:inherit;font-weight:600;color:${PRIMARY};cursor:pointer;text-decoration:underline}
   @media (max-width:980px){
     .ai-in{grid-template-columns:minmax(0,1fr);gap:28px}.ai-stage{min-height:0}
-    .ai-panel{padding:30px 24px 0;border-radius:28px}
-    .ai-card{margin-bottom:30px}
-    .ai-low{grid-template-columns:150px minmax(0,1fr)}.ai-evi{width:150px}
+    .ai-panel{padding:30px 24px;border-radius:28px}
+    .ai-right{padding-top:92px}.ai-evi{width:160px;right:20px}
   }
   @media (max-width:560px){
-    .ai-panel{padding:24px 16px 0}
-    .ai-low{grid-template-columns:minmax(0,1fr)}.ai-evi{width:130px;margin:0 auto -0px;order:2}
+    .ai-panel{padding:24px 16px}
+    .ai-right{padding-top:78px}.ai-evi{width:130px}
     .ai-card{padding:12px}
     .ai-seg button{font-size:12px;padding:8px 4px}
     .ai-opt{grid-template-columns:42px minmax(0,1fr)}.ai-opt img{width:42px;height:36px}.ai-opt .sr-badge{grid-column:2;justify-self:start}

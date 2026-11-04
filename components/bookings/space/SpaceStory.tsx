@@ -81,7 +81,7 @@ export function SpaceWhy() {
       <style>{css}</style>
       <div className="sr-in">
         <div className="sr-head c ss-why-h" data-rv="0">
-          <h2 className="sr-h2">Why choose Spaces &amp; Rooms?</h2>
+          <h2 className="sr-h2">Why choose EVOQ Bookings?</h2>
           <p className="sr-lead">Four reasons teams move their bookings out of inboxes and spreadsheets.</p>
         </div>
         <div className="ss-why-grid">

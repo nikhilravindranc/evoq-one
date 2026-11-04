@@ -11,11 +11,11 @@ import { SPACE_IMG } from "./ui";
    what it looks like with EVOQ Bookings. The picture follows the problem you choose; the problems take
    turns once while the section is on screen, and a click hands control over. Sample data. */
 
-type Scene = { t: string; d: string; before: ReactNode; after: ReactNode };
+type Scene = { t: string; d: string; img: string; before: ReactNode; after: ReactNode };
 
 const SCENES: Scene[] = [
   {
-    t: "Requests in email", d: "Retyped into a spreadsheet and answered by hand.",
+    t: "Requests in email", d: "Retyped into a spreadsheet and answered by hand.", img: SPACE_IMG.prayer,
     before: (
       <>
         <div className="cx-mail"><div className="cx-mail-h"><i>FD</i><span><b>Facilities inbox</b><small>Re: Hall A on Saturday?</small></span><em>9:41</em></div><p>Could we have the hall from 14:00 for about 40 people? Not sure if the projector is free. Thanks!</p></div>
@@ -31,7 +31,7 @@ const SCENES: Scene[] = [
     ),
   },
   {
-    t: "Double bookings", d: "Two teams arrive at a room that two calendars both gave away.",
+    t: "Double bookings", d: "Two teams arrive at a room that two calendars both gave away.", img: SPACE_IMG.board,
     before: (
       <>
         <div className="cx-sheet">
@@ -51,7 +51,7 @@ const SCENES: Scene[] = [
     ),
   },
   {
-    t: "No view across sites", d: "Each building keeps its own calendar and nobody sees what is free.",
+    t: "No view across sites", d: "Each building keeps its own calendar and nobody sees what is free.", img: SPACE_IMG.corridor,
     before: (
       <>
         <div className="cx-cals">
@@ -62,15 +62,15 @@ const SCENES: Scene[] = [
     ),
     after: (
       <div className="cx-card">
-        {[["Head office", 24, 7, 64], ["Riverside", 38, 11, 71], ["Annex", 9, 2, 33]].map(([n, s, b, u]) => (
-          <div key={n as string} className="cx-site"><b>{n}</b><small>{s} spaces · {b} booked</small><i><i style={{ width: `${u}%` }} /></i></div>
+        {[["Head office", 24, 7, 64, SPACE_IMG.corridor], ["Riverside", 38, 11, 71, SPACE_IMG.lounge], ["Annex", 9, 2, 33, SPACE_IMG.glass]].map(([n, s, b, u, im]) => (
+          <div key={n as string} className="cx-site"><img src={im as string} alt="" /><b>{n}</b><small>{s} spaces · {b} booked</small><i><i style={{ width: `${u}%` }} /></i></div>
         ))}
         <div className="cx-tag good">{I.check}Every site in a single list</div>
       </div>
     ),
   },
   {
-    t: "Rules in a few heads", d: "Approval and cancellation depend on who answers the email.",
+    t: "Rules in a few heads", d: "Approval and cancellation depend on who answers the email.", img: SPACE_IMG.glass,
     before: (
       <>
         <div className="cx-notes"><span>Ask Dan first</span><span>Does the hall need approval?</span><span>Mia said 24 hours notice. Or was it 48?</span></div>
@@ -87,7 +87,7 @@ const SCENES: Scene[] = [
     ),
   },
   {
-    t: "Rooms held and unused", d: "Bookings nobody turns up for keep the room from others.",
+    t: "Rooms held and unused", d: "Bookings nobody turns up for keep the room from others.", img: SPACE_IMG.training,
     before: (
       <>
         <div className="cx-room"><img src={SPACE_IMG.training} alt="" /><span><b>Training Room 2</b><small>Booked 13:00 to 15:00</small></span><em>Empty</em></div>
@@ -103,7 +103,7 @@ const SCENES: Scene[] = [
     ),
   },
   {
-    t: "No clear picture", d: "Nobody can say which spaces are busy and which sit empty.",
+    t: "No clear picture", d: "Nobody can say which spaces are busy and which sit empty.", img: SPACE_IMG.lounge,
     before: (
       <>
         <div className="cx-guess"><span>?</span><span>?</span><span>?</span></div>
@@ -113,8 +113,8 @@ const SCENES: Scene[] = [
     ),
     after: (
       <div className="cx-card">
-        {[["Board Room", 81, "Busy"], ["Training Room 2", 56, "Steady"], ["Hall A", 22, "Quiet"]].map(([n, u, k]) => (
-          <div key={n as string} className="cx-site"><b>{n}</b><small>{k}</small><i><i style={{ width: `${u}%` }} /></i></div>
+        {[["Board Room", 81, "Busy", SPACE_IMG.board], ["Training Room 2", 56, "Steady", SPACE_IMG.training], ["Hall A", 22, "Quiet", SPACE_IMG.prayer]].map(([n, u, k, im]) => (
+          <div key={n as string} className="cx-site"><img src={im as string} alt="" /><b>{n}</b><small>{k}</small><i><i style={{ width: `${u}%` }} /></i></div>
         ))}
         <div className="cx-tag good">{I.check}Utilization you can export</div>
       </div>
@@ -152,9 +152,9 @@ export function SpaceChallenge() {
             ))}
           </div>
           <div className="cx-stage" key={i} role="tabpanel">
-            <div className="cx-pane before"><span className="cx-pill bad">Today</span>{s.before}</div>
+            <div className="cx-pane before"><span className="cx-fill" style={{ backgroundImage: `url(${s.img})` }} aria-hidden /><span className="cx-pill bad">Today</span>{s.before}</div>
             <span className="cx-arrow" aria-hidden>{I.arrow}</span>
-            <div className="cx-pane after"><span className="cx-pill good">With EVOQ Bookings</span>{s.after}</div>
+            <div className="cx-pane after"><div className="cx-band" aria-hidden><img src={s.img} alt="" /></div><span className="cx-pill good">With EVOQ Bookings</span>{s.after}</div>
           </div>
         </div>
       </div>
@@ -179,8 +179,16 @@ const css = `
   .cx-stage{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);align-items:stretch;animation:cxIn .35s ease both;min-height:340px}
   @keyframes cxIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .cx-pane{position:relative;border-radius:22px;padding:52px 18px 18px;display:grid;gap:12px;align-content:center;overflow:hidden}
-  .cx-pane.before{background:#EFE6DA}
-  .cx-pane.after{background:#fff;box-shadow:0 0 0 1px rgba(43,33,28,.07)}
+  .cx-pane.before{background:#E9DDCF;isolation:isolate}
+  .cx-fill{position:absolute;inset:0;z-index:-1;background-size:cover;background-position:center;filter:grayscale(.85) contrast(.9);opacity:.5}
+  .cx-pane.before::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(239,230,218,.55),rgba(233,221,207,.86))}
+  .cx-pane.after{background:#fff;box-shadow:0 0 0 1px rgba(43,33,28,.07);padding-top:0;align-content:stretch;grid-template-rows:minmax(104px,1fr) auto}
+  .cx-band{margin:0 -18px;overflow:hidden;position:relative;min-height:104px}
+  .cx-band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .cx-band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,33,28,.18),rgba(43,33,28,0) 55%)}
+  .cx-pane.after .cx-pill{background:#fff;color:${PRIMARY_HOVER};box-shadow:0 6px 14px -8px rgba(43,33,28,.5)}
+  .cx-pane.after>:not(.cx-band):not(.cx-pill){position:relative}
+  .cx-pane.after .cx-card{margin-top:-34px;background:#fff;border-radius:16px;padding:14px;box-shadow:0 14px 30px -18px rgba(43,33,28,.55),0 0 0 1px ${LINE}}
   .cx-pill{position:absolute;top:16px;left:18px;font-family:var(--font-display),system-ui,sans-serif;font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px}
   .cx-pill.bad{background:rgba(43,33,28,.1);color:${DEEP}}.cx-pill.good{background:rgba(180,88,58,.12);color:${PRIMARY_HOVER}}
   .cx-arrow{align-self:center;justify-self:center;width:34px;height:34px;border-radius:50%;background:${PRIMARY};color:#fff;display:grid;place-items:center;z-index:2;box-shadow:0 0 0 5px ${BG}}
@@ -188,7 +196,7 @@ const css = `
   .cx-card{display:grid;gap:10px}
   .cx-tag{display:inline-flex;align-items:center;gap:6px;justify-self:start;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px}
   .cx-tag svg{width:13px;height:13px}
-  .cx-tag.bad{background:rgba(220,38,38,.1);color:#B42318}.cx-tag.good{background:rgba(22,138,74,.1);color:#116B38}
+  .cx-tag.bad{background:#fff;color:#B42318;box-shadow:0 6px 14px -8px rgba(43,33,28,.45)}.cx-tag.good{background:rgba(22,138,74,.1);color:#116B38}
   .cx-mail{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 8px 20px -14px rgba(43,33,28,.5);transform:rotate(-.8deg)}
   .cx-mail-h{display:flex;align-items:center;gap:9px}.cx-mail-h i{width:28px;height:28px;border-radius:50%;background:${SAND};color:${DEEP};display:grid;place-items:center;font-style:normal;font-size:10.5px;font-weight:700}
   .cx-mail-h span{display:grid;line-height:1.3;min-width:0}.cx-mail-h b{font-size:12.5px;color:${INK}}.cx-mail-h small{font-size:11.5px;color:${NEUTRAL};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -209,9 +217,10 @@ const css = `
   .cx-cals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
   .cx-cals div{background:#fff;border-radius:10px;padding:10px;display:grid;gap:5px;box-shadow:0 6px 16px -12px rgba(43,33,28,.5)}
   .cx-cals b{font-size:11.5px;color:${DEEP}}.cx-cals i{height:8px;border-radius:4px;background:#E8DACB}.cx-cals i:nth-of-type(2){width:70%}.cx-cals i:nth-of-type(3){width:45%}
-  .cx-site{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center}
+  .cx-site{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:2px 10px;align-items:center}
+  .cx-site>img{width:32px;height:28px;object-fit:cover;border-radius:7px;grid-row:1/3}
   .cx-site b{font-size:13px;color:${DEEP}}.cx-site small{font-size:11.5px;color:${NEUTRAL};text-align:right}
-  .cx-site>i{grid-column:1/-1;height:7px;border-radius:7px;background:#EDE4D8;overflow:hidden;display:block}.cx-site>i>i{display:block;height:100%;background:${PRIMARY};border-radius:7px}
+  .cx-site>i{grid-column:2/-1;height:7px;border-radius:7px;background:#EDE4D8;overflow:hidden;display:block}.cx-site>i>i{display:block;height:100%;background:${PRIMARY};border-radius:7px}
   .cx-notes{display:grid;gap:8px}
   .cx-notes span{justify-self:start;background:#F8E7A3;color:#5B4A12;font-size:12.5px;font-weight:500;padding:8px 12px;border-radius:4px;box-shadow:0 8px 16px -10px rgba(43,33,28,.5)}
   .cx-notes span:nth-child(1){transform:rotate(-2deg)}.cx-notes span:nth-child(2){transform:rotate(1.5deg);margin-left:22px}.cx-notes span:nth-child(3){transform:rotate(-1deg)}
