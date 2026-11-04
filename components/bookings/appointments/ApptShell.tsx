@@ -219,7 +219,7 @@ const css = `
   .ap-btn.ghost{background:#fff;color:${INK};border-color:${LINE}}
   .ap-root button:focus-visible,.ap-root a:focus-visible{outline:2px solid ${PRIMARY};outline-offset:2px}
   .ap-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-  .ap-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;line-height:1.5}
+  .ap-badge{font-style:normal;display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;line-height:1.5}
   .ap-badge svg{width:12px;height:12px}
   .ap-badge.ok{background:rgba(22,138,74,.1);color:${OK}}.ap-badge.warn{background:rgba(217,119,6,.12);color:#A35A04}.ap-badge.off{background:rgba(104,114,128,.12);color:${NEUTRAL}}
   .ap-badge.moss{background:${MIST};color:${DEEP}}
@@ -261,9 +261,9 @@ const css = `
   /* closing band: inset panel, like the EVOQ Bookings enquiry band */
   .ap-close{padding:0 20px 96px;background:${BG}}
   .ap-close-in{position:relative;overflow:hidden;max-width:1240px;margin:0 auto;border-radius:32px;padding:120px 40px;text-align:center;background:radial-gradient(55% 70% at 92% 0%,rgba(217,185,140,.45),rgba(217,185,140,0) 70%),radial-gradient(60% 70% at 0% 100%,rgba(143,182,154,.4),rgba(143,182,154,0) 70%),linear-gradient(180deg,${MIST_SOFT} 0%,${BG} 100%)}
-  .ap-close-c{position:relative;z-index:1;max-width:860px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+  .ap-close-c{position:relative;z-index:1;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
   .ap-close-c .ap-h2{font-size:46px}
-  .ap-close-c .ap-lead{margin-left:auto;margin-right:auto;font-size:19px}
+  .ap-close-c .ap-lead{margin-left:auto;margin-right:auto;font-size:19px;max-width:none}
   .ap-close-c .ap-ctas{justify-content:center}
   .ap-cs{position:absolute;pointer-events:none;z-index:0}
   .ap-cs.ring{bottom:-180px;left:-100px;width:400px;height:400px;border-radius:50%;border:1.5px solid ${PRIMARY};opacity:.2}

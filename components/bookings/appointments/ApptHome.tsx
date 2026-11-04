@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Caveat } from "next/font/google";
 import { I } from "../theme";
+import { ProductBadge } from "@/components/shared/ProductBadge";
 import { ApptShell, StartButton } from "./ApptShell";
 import { BAND, DEEP, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, PRIMARY, VIS } from "./palette";
 
@@ -248,42 +249,41 @@ function BookingSection() {
 }
 
 /* ---------- 3. appointment management ---------- */
-const COLS = [
-  { n: "Dr. Priya", img: PH("doctor.jpg"), b: [[0, 1, "Lee, consultation", "ok"], [2, 1, "Patel, follow up", "ok"], [4, 2, "Garcia, review", "warn"]] },
-  { n: "Ana", img: PH("nurse.jpg"), b: [[1, 1, "Chen, vaccination", "ok"], [3, 1, "Walk in", "off"], [5, 1, "Okafor, check", "ok"]] },
-  { n: "Joy", img: PH("stock-provider-smile.jpg"), b: [[0, 2, "Silva, physio", "ok"], [3, 2, "Brown, physio", "warn"]] },
+const DAY = [
+  ["09:00 – 09:30", "Lee, consultation", PH("doctor.jpg"), "ok", "Confirmed"],
+  ["10:30 – 10:50", "Patel, follow up", PH("doctor.jpg"), "ok", "Confirmed"],
+  ["11:00 – 11:45", "Silva, physiotherapy", PH("stock-provider-smile.jpg"), "warn", "Pending"],
+  ["14:30 – 15:00", "Sam Lee, consultation", PH("doctor.jpg"), "ok", "Confirmed"],
 ] as const;
-function CalView() {
+function ScheduleCard() {
   const [view, setView] = useState<"Day" | "Week" | "Month">("Day");
   return (
-    <Win url="app.riverside-clinic.example/calendar" className="ah-cal">
-      <div className="ah-cal-top">
-        <b>Thursday, 19 November</b>
-        <span className="ah-seg sm">{(["Day", "Week", "Month"] as const).map((v) => <button key={v} type="button" className={view === v ? "on" : ""} aria-pressed={view === v} onClick={() => setView(v)}>{v}</button>)}</span>
+    <div className="ah-dcard">
+      <div className="ah-dcard-h"><span className="ah-logo">R</span><b>Riverside Clinic</b><small>Schedule</small></div>
+      <div className="ah-dtabs" role="group" aria-label="Calendar view">
+        {(["Day", "Week", "Month"] as const).map((v) => <button key={v} type="button" className={view === v ? "on" : ""} aria-pressed={view === v} onClick={() => setView(v)}>{v}</button>)}
       </div>
       {view === "Day" && (
-        <div className="ah-day">
-          <div className="ah-hours">{["09:00", "10:00", "11:00", "12:00", "13:00", "14:00"].map((h) => <span key={h}>{h}</span>)}</div>
-          {COLS.map((c) => (
-            <div key={c.n} className="ah-colm">
-              <span className="ah-colh"><img src={c.img} alt="" />{c.n}</span>
-              <div className="ah-colb">{c.b.map(([s, l, t, k]) => <i key={t} className={k} style={{ top: `${(s as number) * 16.66}%`, height: `calc(${(l as number) * 16.66}% - 4px)` }}>{t}</i>)}</div>
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="ah-dstrip">{[["Wed", 18], ["Thu", 19], ["Fri", 20], ["Sat", 21], ["Mon", 23]].map(([d, n]) => <span key={d} className={n === 19 ? "on" : ""}>{d}<b>{n}</b></span>)}</div>
+          <div className="ah-dlist">
+            {DAY.map(([t, n, im, k, st]) => (
+              <div key={t} className="ah-dappt"><span><b>{t}</b><small>{n}</small></span><span className="ah-dappt-r"><img src={im} alt="" /><em className={`ap-badge ${k}`}>{st}</em></span></div>
+            ))}
+          </div>
+        </>
       )}
       {view === "Week" && (
         <div className="ah-week">
           {[["Mon", 14], ["Tue", 18], ["Wed", 16], ["Thu", 21], ["Fri", 12]].map(([d, n]) => (
-            <div key={d}><b>{d}</b><span style={{ height: `${(n as number) * 4}px` }} /><small>{n} appts</small></div>
+            <div key={d}><b>{d}</b><span style={{ height: `${(n as number) * 7}px` }} /><small>{n} appts</small></div>
           ))}
         </div>
       )}
       {view === "Month" && (
-        <div className="ah-month">{Array.from({ length: 30 }, (_, n) => <span key={n} className={n % 7 === 6 ? "off" : ""}><b>{n + 1}</b><i style={{ width: `${30 + ((n * 37) % 60)}%` }} /></span>)}</div>
+        <div className="ah-month">{Array.from({ length: 28 }, (_, n) => <span key={n} className={n % 7 === 6 ? "off" : ""}><b>{n + 1}</b><i style={{ width: `${30 + ((n * 37) % 60)}%` }} /></span>)}</div>
       )}
-      <div className="ah-legend"><span><i className="ok" />Confirmed</span><span><i className="warn" />Pending</span><span><i className="off" />Blocked</span></div>
-    </Win>
+    </div>
   );
 }
 
@@ -300,7 +300,7 @@ function RulesView() {
   }
   return (
     <div className="ah-rules">
-      <div className="ah-rules-h"><img src={PH("doctor.jpg")} alt="" /><span><b>Dr. Priya</b><small>Initial consultation · 30 min</small></span></div>
+      <div className="ah-rules-h"><img src={PH("doctor.jpg")} alt="" /><span><b>Dr. Priya</b><small>General practitioner</small><em className="ap-badge moss">Initial consultation · 30 min</em></span></div>
       <div className="ah-week-h">
         {[["Mon", 20, 70], ["Tue", 20, 70], ["Wed", 30, 50], ["Thu", 20, 70], ["Fri", 20, 50], ["Sat", 0, 0]].map(([d, s, w]) => (
           <div key={d as string}><b>{d}</b><span>{(w as number) > 0 ? <i style={{ left: `${s}%`, width: `${w}%` }} /> : <em>Off</em>}</span></div>
@@ -424,12 +424,13 @@ const INT_R = [
   { ic: I.layers, t: "Payment integrations", d: "Support appointment payment requirements through available payment connections." },
   { ic: I.space, t: "EVOQ applications", d: "Extend appointment operations through relevant EVOQ applications, including CRM and other connected services." },
 ];
-const SYNC = [
-  [I.rules, "Added to the provider's calendar"],
-  [I.message, "Confirmation sent by email and SMS"],
-  [I.layers, "Deposit recorded"],
-  [I.people, "Linked to the client in EVOQ CRM"],
-] as const;
+const SYNC: [ReactNode, string][] = [
+  [<span key="c" className="ah-dot">{I.rules}</span>, "Added to the provider's calendar"],
+  [<span key="m" className="ah-dot">{I.message}</span>, "Confirmation sent by email and SMS"],
+  [<ProductBadge key="b" productKey="billing" size={34} />, "Deposit recorded in EVOQ Billing"],
+  [<ProductBadge key="r" productKey="crm" size={34} />, "Linked to the client in EVOQ CRM"],
+];
+const APPS = [["bookings", "Bookings"], ["crm", "CRM"], ["billing", "Billing"], ["campaigns", "Campaigns"], ["desk", "Desk"], ["sync", "Sync"]];
 
 /* ---------- 9. why ---------- */
 const WHY = [
@@ -481,28 +482,37 @@ export function ApptHome() {
           <div data-rv="0">
             <span className="ap-label">Appointment management</span>
             <h2 className="ap-h2" style={{ marginTop: 14 }}>A clear view of every appointment and provider schedule.</h2>
-            <p className="ap-lead">Keep track of daily appointments, provider availability and booking updates through a centralized scheduling interface. See what is coming up, identify schedule changes and manage appointments as they progress.</p>
-            <ul className="ah-list">
-              {["Day, week and month calendar views", "Appointments organized by provider, service and location", "Appointment status tracking", "Manual appointment creation and updates", "Rescheduling and cancellation management", "Access to upcoming and past appointments"].map((t) => <li key={t}>{I.check}{t}</li>)}
+            <p className="ap-lead">Keep track of daily appointments, provider availability and booking updates through a centralized scheduling interface.</p>
+            <ul className="ah-tight">
+              {["Day, week and month views", "By provider, service and location", "Appointment status tracking", "Manual creation and updates", "Rescheduling and cancellations", "Upcoming and past appointments"].map((t) => <li key={t}>{I.check}{t}</li>)}
             </ul>
-            <p className="ap-note">{I.clock}From the first booking to the final appointment update, maintain visibility into your daily schedule.</p>
           </div>
-          <div data-rv="1"><CalView /></div>
+          <div className="ah-comp mg" data-rv="1">
+            <span className="ah-blob" aria-hidden />
+            <img className="ah-comp-photo" src={PH("stock-provider-smile.jpg")} alt="Physiotherapist smiling in a clinic" loading="lazy" />
+            <ScheduleCard />
+            <div className="ah-comp-note">
+              <span className="ah-avs">{[PH("doctor.jpg"), PH("nurse.jpg"), PH("stock-provider-smile.jpg")].map((im) => <img key={im} src={im} alt="" />)}</span>
+              <span><b>3 providers · 12 appointments today</b><small>2 changes waiting for review</small></span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* 4. availability and scheduling controls */}
       <section className="ap-out ap-sec ap-band" id="availability">
-        <div className="ap-in ah-two flip">
-          <div data-rv="1"><RulesView /></div>
+        <div className="ap-in ah-two">
           <div data-rv="0">
             <span className="ap-label">Availability &amp; scheduling controls</span>
             <h2 className="ap-h2" style={{ marginTop: 14 }}>Set the rules behind every available time slot.</h2>
-            <p className="ap-lead">Appointment availability depends on more than operating hours. Configure schedules around service durations, provider working hours, preparation time and booking policies.</p>
-            <ul className="ah-list cols">
-              {["Organization and location operating hours", "Individual provider availability", "Service-specific durations", "Preparation and buffer times", "Booking intervals and advance booking limits", "Blocked dates, breaks and unavailable periods", "Cancellation and rescheduling policies", "Appointment capacity and scheduling rules"].map((t) => <li key={t}>{I.check}{t}</li>)}
+            <p className="ap-lead">Configure schedules around service durations, provider working hours, preparation time and booking policies.</p>
+            <ul className="ah-tight">
+              {["Operating hours by location", "Individual provider availability", "Service-specific durations", "Preparation and buffer times", "Intervals and advance limits", "Blocked dates and breaks", "Cancellation policies", "Capacity and scheduling rules"].map((t) => <li key={t}>{I.check}{t}</li>)}
             </ul>
-            <p className="ap-note">{I.edit}Control when services can be booked and which appointment slots are offered to clients.</p>
+          </div>
+          <div className="ah-comp av" data-rv="1">
+            <span className="ah-blob" aria-hidden />
+            <RulesView />
           </div>
         </div>
       </section>
@@ -555,13 +565,15 @@ export function ApptHome() {
           <div data-rv="0">
             <span className="ap-label">EVI, AI assistance for appointments</span>
             <h2 className="ap-h2" style={{ marginTop: 14 }}>A smarter way to work with appointment information.</h2>
-            <p className="ap-lead">EVI is evolving to help administrators work with appointment schedules, identify relevant information and prepare actions through natural-language interactions.</p>
-            <ol className="ah-steps">{EVI_POINTS.map(([t, d], n) => <li key={t}><b>{n + 1}</b><span><em>{t}</em>{d}</span></li>)}</ol>
+            <p className="ap-lead">Ask EVI about schedules in plain language. It finds the details and prepares actions for your approval.</p>
+            <ul className="ah-evi-pts">
+              {EVI_POINTS.map(([t], n) => <li key={t}><span className="ah-why-ic">{[I.search, I.clock, I.edit, I.message][n]}</span>{t}</li>)}
+            </ul>
             <div className="ap-ctas"><a href="/products/ai" className="ap-btn secondary">Explore EVI</a></div>
           </div>
-          <div data-rv="1">
-            <div className="ah-evi-bg"><EviCard /></div>
-            <p className="ah-fine">EVI can help interpret the request, review relevant scheduling information and prepare suitable options, subject to available integrations and implemented capabilities.</p>
+          <div className="ah-comp ev" data-rv="1">
+            <span className="ah-blob" aria-hidden />
+            <EviCard />
           </div>
         </div>
       </section>
@@ -578,9 +590,9 @@ export function ApptHome() {
             <div className="ah-hub-col l">{INT_L.map((n) => <div key={n.t} className="ah-node"><span className="ah-ic">{n.ic}</span><span><b>{n.t}</b><small>{n.d}</small></span></div>)}</div>
             <div className="ah-core" data-rv="1">
               <div className="ah-core-h"><img className="round" src={PH("doctor.jpg")} alt="" /><span><b>Initial consultation</b><small>AP 31027 · Thu 19 Nov, 14:30</small></span><em className="ap-badge ok">Confirmed</em></div>
-              <ul>{SYNC.map(([ic, t]) => <li key={t}><span className="ah-dot">{ic}</span>{t}<em>{I.check}</em></li>)}</ul>
+              <ul>{SYNC.map(([ic, t]) => <li key={t}>{ic}{t}<em>{I.check}</em></li>)}</ul>
             </div>
-            <div className="ah-hub-col">{INT_R.map((n) => <div key={n.t} className="ah-node"><span className="ah-ic">{n.ic}</span><span><b>{n.t}</b><small>{n.d}</small></span></div>)}</div>
+            <div className="ah-hub-col">{INT_R.map((n, k) => <div key={n.t} className="ah-node"><span className="ah-ic">{n.ic}</span><span><b>{n.t}</b><small>{n.d}</small>{k === 1 && <span className="ah-apps">{APPS.map(([a, n]) => <span key={a} title={`EVOQ ${n}`}><ProductBadge productKey={a} size={30} /></span>)}</span>}</span></div>)}</div>
           </div>
           <p className="ap-note">{I.layers}Keep appointment scheduling aligned with the wider tools and processes your organization relies on.</p>
         </div>
@@ -589,7 +601,7 @@ export function ApptHome() {
       {/* 9. why EVOQ Appointments: a photo and a plain list */}
       <section className="ap-out ap-sec ap-white" id="why">
         <div className="ap-in">
-          <div className="ap-head c" data-rv="0">
+          <div className="ap-head c wide" data-rv="0">
             <span className="ap-label">Why EVOQ Appointments</span>
             <h2 className="ap-h2">Appointment management that reflects how services are delivered.</h2>
             <p className="ap-lead">A booking calendar is only part of appointment operations. Service configuration, provider availability, booking requirements and ongoing appointment administration all influence how well scheduling works. EVOQ Appointments brings these capabilities into a service-based scheduling experience.</p>
@@ -611,7 +623,7 @@ export function ApptHome() {
       {/* 10. get started */}
       <section className="ap-out ap-sec ap-band" id="start">
         <div className="ap-in">
-          <div className="ap-head c" data-rv="0">
+          <div className="ap-head c wide" data-rv="0">
             <span className="ap-label">Get started with Appointments</span>
             <h2 className="ap-h2">Set up your appointment operations around the way you work.</h2>
             <p className="ap-lead">Start with your organization profile and configure the details that shape your booking experience.</p>
@@ -625,7 +637,6 @@ export function ApptHome() {
               </li>
             ))}
           </ol>
-          <div className="ap-ctas" style={{ justifyContent: "center" }}><StartButton location="get_started_steps" /></div>
         </div>
       </section>
 
@@ -662,7 +673,7 @@ const css = `
   .ah-mos-grid .c{grid-column:1;grid-row:2;object-position:60% center}
   .ah-mos-grid .d{grid-column:2;grid-row:2;object-position:35% center}
   .ah-phone{position:absolute;width:226px;padding:9px;border-radius:36px;background:#fff;box-shadow:0 44px 70px -30px rgba(30,45,34,.6),0 0 0 1px rgba(30,45,34,.12)}
-  .ah-phone.one{left:32%;top:46px;z-index:2}
+  .ah-phone.one{right:-14px;bottom:-46px;z-index:2}
   .ah-ph-notch{width:62px;height:6px;border-radius:6px;background:#E3E6E0;margin:5px auto 9px}
   .ah-ph-in{padding:0 8px 12px;display:grid;gap:7px;font-size:12px;color:${INK}}
   .ah-ph-top{display:flex;align-items:center;gap:8px;padding-bottom:4px}
@@ -681,7 +692,7 @@ const css = `
   .ah-ph-btn{margin-top:4px;padding:10px 0;text-align:center;border-radius:9px;background:${DEEP};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px;font-weight:600}
   .ah-today{position:absolute;left:16px;top:16px;z-index:4;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:#fff;font-size:12.5px;font-weight:600;color:${DEEP};box-shadow:0 14px 28px -16px rgba(30,45,34,.55)}
   .ah-today i{width:8px;height:8px;border-radius:50%;background:${PRIMARY}}
-  .ah-toast{position:absolute;right:16px;bottom:18px;z-index:4;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:14px;background:#fff;box-shadow:0 24px 44px -20px rgba(30,45,34,.55),0 0 0 1px rgba(30,45,34,.08)}
+  .ah-toast{position:absolute;left:16px;bottom:18px;z-index:4;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:14px;background:#fff;box-shadow:0 24px 44px -20px rgba(30,45,34,.55),0 0 0 1px rgba(30,45,34,.08)}
   .ah-toast-i{width:30px;height:30px;border-radius:50%;background:rgba(22,138,74,.12);color:#168A4A;display:grid;place-items:center}.ah-toast-i svg{width:16px;height:16px}
   .ah-toast span:last-child{display:grid}.ah-toast b{font-size:13px;color:${DEEP}}.ah-toast small{font-size:11.5px;color:${NEUTRAL}}
 
@@ -802,8 +813,8 @@ const css = `
   /* rules */
   .ah-rules{background:#fff;border-radius:20px;padding:22px;box-shadow:0 30px 60px -36px rgba(30,45,34,.35),0 0 0 1px ${LINE};display:grid;gap:12px}
   .ah-rules-h{display:flex;align-items:center;gap:11px;padding-bottom:12px;border-bottom:1px solid ${LINE}}
-  .ah-rules-h img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-  .ah-rules-h span{display:grid}.ah-rules-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}.ah-rules-h small{font-size:12.5px;color:${NEUTRAL}}
+  .ah-rules-h img{width:76px;height:76px;border-radius:18px;object-fit:cover;object-position:50% 15%}
+  .ah-rules-h span{display:grid;gap:2px;justify-items:start}.ah-rules-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}.ah-rules-h small{font-size:12.5px;color:${NEUTRAL}}
   .ah-week-h{display:grid;gap:6px}
   .ah-week-h div{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:center;font-size:12px;color:${MUTED}}
   .ah-week-h b{font-weight:600;color:${DEEP}}
@@ -867,13 +878,64 @@ const css = `
   .ah-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
   .ah-undo{justify-self:start;background:none;border:0;padding:0;font:inherit;font-size:13px;font-weight:600;color:${PRIMARY};cursor:pointer;text-decoration:underline}
 
+  /* composed visuals on a soft shape */
+  .ah-tight{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:11px}
+  .ah-tight li{display:flex;gap:9px;align-items:flex-start;font-size:15px;line-height:1.4;color:${INK}}
+  .ah-tight svg{width:16px;height:16px;color:${PRIMARY};flex-shrink:0;margin-top:2px}
+  .ah-comp{position:relative}
+  .ah-blob{position:absolute;z-index:0;border-radius:40px}
+  .ah-comp.mg{height:620px}
+  .ah-comp.mg .ah-blob{left:12%;right:3%;top:0;bottom:40px;background:#D6E5D9}
+  .ah-comp-photo{position:absolute;z-index:1;right:0;top:40px;width:41%;height:440px;object-fit:cover;object-position:50% 20%;border-radius:26px}
+  .ah-dcard{position:absolute;z-index:2;left:0;top:60px;width:56%;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 34px 64px -34px rgba(30,45,34,.5),0 0 0 1px rgba(30,45,34,.07)}
+  .ah-dcard-h{display:flex;align-items:center;gap:9px;padding:16px 18px 2px}
+  .ah-dcard-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${DEEP}}.ah-dcard-h small{margin-left:auto;font-size:12px;color:${NEUTRAL}}
+  .ah-dtabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid ${LINE}}
+  .ah-dtabs button{border:0;background:none;padding:12px 0 10px;font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:${NEUTRAL};cursor:pointer;box-shadow:inset 0 -2px 0 transparent}
+  .ah-dtabs button.on{color:${PRIMARY};box-shadow:inset 0 -2.5px 0 ${PRIMARY}}
+  .ah-dstrip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:12px 10px;background:${BAND}}
+  .ah-dstrip span{display:grid;justify-items:center;gap:4px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:${NEUTRAL}}
+  .ah-dstrip b{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:14px;color:${DEEP};letter-spacing:0}
+  .ah-dstrip .on b{background:${PRIMARY};color:#fff}
+  .ah-dappt{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 18px;border-top:1px solid ${LINE}}
+  .ah-dappt:first-child{border-top:0}
+  .ah-dappt b{display:block;font-size:13.5px;color:${DEEP}}.ah-dappt small{display:block;font-size:12.5px;color:${NEUTRAL};white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ah-dappt span:first-child{min-width:0}
+  .ah-dappt-r{display:flex;align-items:center;gap:8px}
+  .ah-dappt-r img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+  .ah-dcard .ah-week{height:250px;padding:16px 18px 14px}
+  .ah-dcard .ah-month{height:auto;padding:14px 16px 16px;gap:5px}
+  .ah-comp-note{position:absolute;z-index:2;left:0;bottom:18px;width:56%;display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:20px;background:#F3F4F0;box-shadow:0 0 0 1px ${LINE},0 20px 40px -30px rgba(30,45,34,.5)}
+  .ah-comp-note span:last-child{display:grid;min-width:0}.ah-comp-note b{font-size:14px;color:${DEEP}}.ah-comp-note small{font-size:12.5px;color:${NEUTRAL}}
+  .ah-avs{display:flex;flex-shrink:0}.ah-avs img{width:32px;height:32px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2.5px #F3F4F0}.ah-avs img+img{margin-left:-9px}
+  .ah-comp.av{padding:52px 0}
+  .ah-comp.av .ah-blob{left:20%;right:0;top:0;bottom:0;border-radius:220px 40px 40px 40px;background:#EEDDB9}
+  .ah-comp.av .ah-rules{position:relative;z-index:1;width:84%;box-shadow:0 34px 64px -34px rgba(30,45,34,.5),0 0 0 1px rgba(30,45,34,.07)}
+  .ah-comp.ev{padding:52px 0}
+  .ah-comp.ev .ah-blob{left:18%;right:0;top:0;bottom:0;border-radius:40px 220px 40px 40px;background:#F1E4C9}
+  .ah-comp.ev .ah-chat{position:relative;z-index:1;width:82%;max-width:470px;box-shadow:0 34px 64px -34px rgba(30,45,34,.5),0 0 0 1px rgba(30,45,34,.07)}
+  .ah-evi-pts{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:12px}
+  .ah-evi-pts li{display:flex;align-items:center;gap:14px;font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;font-weight:600;color:${DEEP}}
+  .ah-apps{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .ah-core li>span:first-child,.ah-core li>img{flex-shrink:0}
+  @media (max-width:640px){
+    .ah-tight{grid-template-columns:minmax(0,1fr)}
+    .ah-comp.mg{height:auto;padding:24px 14px 18px}
+    .ah-comp.mg .ah-blob{left:0;right:0;bottom:0}
+    .ah-comp-photo{display:none}
+    .ah-dcard,.ah-comp-note{position:relative;left:auto;top:auto;bottom:auto;width:100%}
+    .ah-comp-note{margin-top:14px}
+    .ah-comp.av{padding:28px 0 0}.ah-comp.av .ah-blob{left:10%;border-radius:140px 32px 32px 32px}.ah-comp.av .ah-rules{width:100%}
+      .ah-comp.ev{padding:28px 0 0}.ah-comp.ev .ah-blob{left:10%;border-radius:32px 140px 32px 32px}.ah-comp.ev .ah-chat{width:100%}
+  }
+
   /* integrations */
   .ah-hub{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px) minmax(0,1fr);gap:56px;align-items:center}
   .ah-hub-col{display:grid;gap:34px}
   .ah-node{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start}
   .ah-hub-col.l .ah-node{grid-template-columns:minmax(0,1fr) 44px;text-align:right}
   .ah-hub-col.l .ah-node .ah-ic{order:2}
-  .ah-node span:last-child{display:grid;gap:3px}.ah-node b{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}.ah-node small{font-size:14.5px;line-height:1.5;color:${MUTED}}
+  .ah-node>span:last-child{display:grid;gap:3px}.ah-node b{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}.ah-node small{font-size:14.5px;line-height:1.5;color:${MUTED}}
   .ah-ic{width:44px;height:44px;border-radius:50%;background:#fff;color:${PRIMARY};display:grid;place-items:center;box-shadow:0 0 0 1px ${LINE}}.ah-ic svg{width:21px;height:21px}
   .ah-core{background:#fff;border-radius:22px;padding:18px;box-shadow:0 30px 60px -36px rgba(30,45,34,.4),0 0 0 1px ${LINE}}
   .ah-core-h{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid ${LINE}}
@@ -906,7 +968,7 @@ const css = `
     .ah-hero{gap:44px;padding:36px 0 56px}
     .ah-h1{font-size:40px}
     .ah-mos{height:480px;max-width:640px;margin:0 auto;width:100%}
-    .ah-phone{width:206px}.ah-phone.one{left:30%}
+    .ah-phone{width:206px}.ah-phone.one{right:-6px}
     .ah-life{grid-template-columns:repeat(2,minmax(0,1fr))}.ah-life-i,.ah-life-i:nth-child(n+4){grid-column:span 1}
     .ah-hub{grid-template-columns:minmax(0,1fr);gap:28px}.ah-core{order:-1;max-width:440px;width:100%;margin:0 auto}
     .ah-hub-col,.ah-hub-col.l{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
@@ -919,12 +981,13 @@ const css = `
     .ah-h1{font-size:34px}
     .ah-mos{height:440px}
     .ah-mos-grid{gap:8px}
-    .ah-phone.one{left:auto;right:8px;width:178px;top:52px;padding:7px;border-radius:30px}
+    .ah-phone.one{right:-4px;bottom:-34px;width:164px;padding:7px;border-radius:28px}
     .ah-ph-in{padding:0 4px 8px;font-size:11px}.ah-ph-pro,.ah-ph-k{display:none}
     .ah-ph-slots span{padding:6px 0;font-size:10.5px}
     .ah-today{left:10px;top:10px;font-size:11.5px}
     .ah-ph-in{gap:6px}
     .ah-toast{display:none}
+    .ah-ind,.ah-start,.ah-hub-col,.ah-hub-col.l,.ah-list.cols{grid-template-columns:minmax(0,1fr)}
     .ah-list.cols li:nth-last-child(2){border-bottom:0}
     .ah-life{grid-template-columns:minmax(0,1fr)}
     .ah-vis{padding:16px 12px}
