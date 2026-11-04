@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { track } from "@/lib/track";
@@ -107,9 +108,13 @@ const GROUPS: Group[] = [
   },
 ];
 
-type Ai = { t: string; helps: string; uses: string; approval: string; demo: ReactNode; status?: Status };
+type Who = { img: string; name: string };
+const EVI = (img: string): Who => ({ img: `/characters/${img}.webp`, name: "EVI" });
+const KAI: Who = { img: "/characters/kai.webp", name: "Kai, Operations agent" };
+type Ai = { who: Who; t: string; helps: string; uses: string; approval: string; demo: ReactNode; status?: Status };
 const AI: Ai[] = [
   {
+    who: EVI("evi"),
     t: "Visitor booking assistant",
     helps: "Visitors describe the space they need in their own words and see suitable options.",
     uses: "Date, time, capacity and requirements taken from the request, matched against spaces and availability.",
@@ -117,6 +122,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-q">A quiet room for 4 on Monday at 9</p><p className="sf-a">Focus Room 4, Level 2, is free from 09:00. Board Room also fits and has a screen.</p></>,
   },
   {
+    who: EVI("evi-working"),
     t: "Administrative assistant",
     helps: "Operators find booking information and handle routine reservation questions.",
     uses: "Today's bookings, available spaces, pending approvals and booking conflicts.",
@@ -124,6 +130,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-q">What is waiting for approval at Head office?</p><p className="sf-a">3 requests: Town hall in Hall A, Client review in Board Room and a vendor workshop on Friday.</p></>,
   },
   {
+    who: KAI,
     t: "Agent prepared booking actions",
     helps: "An agent prepares an action or a recommendation for an operator to review.",
     uses: "The reservation, the space rules and the calendar around it.",
@@ -131,6 +138,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-k">Prepared for review</p><p className="sf-a">Reschedule the vendor workshop to Training Room 2, Friday 10:00. Impact: 1 organizer notified.</p><p className="sf-acts"><span className="sr-btn ghost sm">Reject</span><span className="sr-btn primary sm">Approve</span></p></>,
   },
   {
+    who: KAI,
     t: "Rescheduling and alternatives",
     helps: "Finds other spaces or times when a requested space is unavailable or a booking has to move.",
     uses: "Capacity, equipment, location and availability of comparable spaces.",
@@ -138,6 +146,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-k">Hall A is blocked on Friday morning</p><p className="sf-a">Training Room 2 at 10:00 fits 24 people and has a projector. Hall A is free again at 14:00.</p></>,
   },
   {
+    who: EVI("evi-mirror"),
     t: "Analytics assistant",
     helps: "Interprets reservation and utilization data and summarizes patterns.",
     uses: "The same reports and metrics your team sees, for the period and locations you choose.",
@@ -145,6 +154,7 @@ const AI: Ai[] = [
     demo: <><p className="sf-q">Which rooms were underused last month?</p><p className="sf-a">Hall A was booked for 22% of its bookable hours. Peak demand was Tuesday to Thursday, 10:00 to 12:00.</p></>,
   },
   {
+    who: EVI("evi-done"),
     t: "Conversational product help",
     helps: "A conversation that helps people move through booking information and related actions.",
     uses: "The screens and records the person already has access to.",
@@ -226,13 +236,20 @@ export function SpaceFeatures() {
               <span className="sr-label">AI assistants and agents</span>
               <h2 className="sr-h2" style={{ marginTop: 14 }}>What each assistant helps with, what it uses and where a person decides.</h2>
               <p className="sr-lead">Assistants help visitors and operators find information and prepare work. Any change to a reservation that an agent prepares waits for explicit human approval.</p>
+              <div className="sf-cast">
+                <div><span className="sf-tile big"><img src="/characters/evi.webp" alt="" width={72} height={72} loading="lazy" /></span><span><b>EVI</b><small>The assistant. Answers from your bookings and helps visitors and your team.</small></span></div>
+                <div><span className="sf-tile big"><img src="/characters/kai.webp" alt="" width={72} height={72} loading="lazy" /></span><span><b>Kai</b><small>The Operations agent. Prepares changes, and a person approves them.</small></span></div>
+              </div>
               <div className="sf-states">
                 {STATES.map((s) => <div key={s.k} className={`sf-state ${s.c}`}><b>{s.k}</b><span>{s.d}</span></div>)}
               </div>
               <div className="sf-ai-grid">
                 {AI.map((a) => (
                   <article key={a.t} className="sf-ai-card">
-                    <h3>{a.t}{a.status && <span className="sf-status">{a.status}</span>}</h3>
+                    <div className="sf-ai-h">
+                      <span className="sf-tile"><img src={a.who.img} alt="" width={56} height={56} loading="lazy" /></span>
+                      <div><h3>{a.t}{a.status && <span className="sf-status">{a.status}</span>}</h3><span className="sf-who">{a.who.name}</span></div>
+                    </div>
                     <dl>
                       <div><dt>Helps you</dt><dd>{a.helps}</dd></div>
                       <div><dt>Uses</dt><dd>{a.uses}</dd></div>
@@ -288,7 +305,16 @@ const css = `
   .sf-state.done{box-shadow:inset 4px 0 0 ${PRIMARY},0 0 0 1px rgba(22,36,28,.07)}
   .sf-ai-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
   .sf-ai-card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 0 0 1px rgba(22,36,28,.07);display:flex;flex-direction:column}
-  .sf-ai-card h3{font-size:19px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px!important}
+  .sf-ai-h{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;align-items:center;margin-bottom:14px}
+  .sf-ai-h div{display:grid;gap:2px;min-width:0}
+  .sf-ai-card h3{font-size:19px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0!important}
+  .sf-who{font-size:12.5px;font-weight:600;color:${PRIMARY}}
+  .sf-tile{display:block;width:56px;height:56px;border-radius:26%;overflow:hidden;background:#E9E4FF;flex-shrink:0;box-shadow:0 0 0 2px #8F7BFF,0 0 0 4.5px rgba(255,255,255,.8)}
+  .sf-tile img{width:100%;height:100%;object-fit:cover;display:block}
+  .sf-tile.big{width:72px;height:72px}
+  .sf-cast{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:26px 0 0}
+  .sf-cast>div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:center;background:#fff;border-radius:16px;padding:16px 18px;box-shadow:0 0 0 1px rgba(22,36,28,.07)}
+  .sf-cast span:last-child{display:grid;gap:2px}.sf-cast b{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}.sf-cast small{font-size:14px;color:${MUTED};line-height:1.45}
   .sf-ai-card dl{margin:0 0 16px;display:grid;gap:10px}
   .sf-ai-card dt{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${NEUTRAL}}
   .sf-ai-card dd{margin:2px 0 0;font-size:15px;color:${MUTED}}
@@ -307,7 +333,7 @@ const css = `
     .sf-nav a{white-space:nowrap;border-left:0;border-radius:999px!important;border:1px solid ${LINE}}
     .sf-nav a.on{border-color:${PRIMARY}}
     .sf-nav a.ai{margin-top:0}
-    .sf-states,.sf-ai-grid{grid-template-columns:minmax(0,1fr)}
+    .sf-states,.sf-ai-grid,.sf-cast{grid-template-columns:minmax(0,1fr)}
     .sf-vis{padding:12px}
   }
 `;
