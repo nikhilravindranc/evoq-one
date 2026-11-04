@@ -8,6 +8,12 @@ import { BG, DEEP, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAND, TERRA, U, useSc
    and the categories open one after another, each with its own photo and booking UI on the right.
    Photos differ from the hero. On tablets and phones it is not pinned; items open on tap. */
 
+/* booking types that already have their own microsite */
+export const LIVE_PAGES: Record<string, string> = {
+  space: "/products/bookings/space-and-room-reservations",
+  appt: "/products/bookings/appointment-scheduling",
+};
+
 export const CATEGORIES = [
   { key: "space", name: "Space & Room Reservations", title: "Make space reservations easier to organize.", text: "From meeting rooms and prayer rooms to halls and shared facilities, give people a clear way to explore spaces and request reservations according to availability and usage requirements.", fit: "Offices, coworking spaces, religious institutions and community centers.", img: U("1497366754035-f200968a6e72", 1200), alt: "Corridor of glass-walled meeting rooms", option: "Meeting rooms, prayer rooms and shared spaces" },
   { key: "appt", name: "Appointment Scheduling", title: "Make time for the services people need.", text: "Support booking scenarios where availability depends on a service, provider or appointment duration. From consultations and treatments to professional services, the booking process should reflect how each appointment is scheduled.", fit: "Clinics, healthcare practices, consultants and service providers.", img: "/healthcare/pm/stock-frontdesk.jpg", alt: "Visitor speaking with a receptionist at a clinic front desk", option: "Consultations, treatments and professional services" },
@@ -161,8 +167,11 @@ export function BookingCategories({ onDiscuss }: { onDiscuss: (option: string, k
                         <h3>{c.title}</h3>
                         <p>{c.text}</p>
                         <p className="bc-fit"><b>Relevant for:</b> {c.fit}</p>
-                        <button type="button" className="bc-go" tabIndex={on ? 0 : -1} onClick={(e) => { e.stopPropagation(); onDiscuss(c.option, c.key); }}>Discuss this booking type {I.arrow}</button>
-                        {c.key === "space" && <a className="bc-go" style={{ display: "flex", width: "fit-content", textDecoration: "none" }} tabIndex={on ? 0 : -1} href="/products/bookings/space-and-room-reservations" onClick={(e) => e.stopPropagation()}>Explore Space &amp; Room Reservations {I.arrow}</a>}
+                        {LIVE_PAGES[c.key] ? (
+                          <a className="bc-go" style={{ display: "flex", width: "fit-content", textDecoration: "none" }} tabIndex={on ? 0 : -1} href={LIVE_PAGES[c.key]} onClick={(e) => e.stopPropagation()}>Explore {c.name} {I.arrow}</a>
+                        ) : (
+                          <button type="button" className="bc-go" tabIndex={on ? 0 : -1} onClick={(e) => { e.stopPropagation(); onDiscuss(c.option, c.key); }}>Talk to us about {c.name} {I.arrow}</button>
+                        )}
                       </div>
                     </div>
                   </div>

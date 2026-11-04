@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FloorPlan } from "./FloorPlan";
 import { BG, DEEP, I, INK, LINE, MUTED, OK, SAGE, TERRA, U, useScrollSteps } from "./theme";
 
@@ -20,6 +20,85 @@ const PHOTO = {
   team: U("1573164574572-cb89e39749b4", 1000),
   done: U("1606836591695-4d58a73eba1e", 1000),
 };
+
+/* the other three booking types share one scene layout, driven by this data */
+const OTHER = [
+  {
+    key: "appt", label: "Appointments",
+    photos: ["/healthcare/pm/stock-patient.jpg", U("1573164574572-cb89e39749b4", 1000), U("1606836591695-4d58a73eba1e", 1000)],
+    steps: [
+      { title: "Choose a service and provider", text: "Pick the service, then the provider and a time from the open slots." },
+      { title: "Confirm your details", text: "Add contact details and any notes the provider needs before the visit." },
+      { title: "Receive the confirmation", text: "The appointment is confirmed, with reminders and a link to reschedule or cancel." },
+    ],
+    pick: { title: "Available times", items: [["Initial consultation", "30 min · Dr. Dana", "10:30"], ["Initial consultation", "30 min · Dr. Marcus", "11:00"], ["Follow-up visit", "15 min · Dr. Dana", "11:45"]] },
+    form: { title: "Your details", sub: "Initial consultation", fields: [["Name", "Sam Carter"], ["Email", "sam@example.com"], ["Notes", "First visit"]] },
+    done: { title: "Appointment confirmed", ref: "Reminder set for the day before", rows: [["Service", "Initial consultation"], ["When", "Thu, 19 Nov · 10:30 AM"]] },
+  },
+  {
+    key: "stay", label: "Stays",
+    photos: [U("1596178067639-5c6e68aea6dc", 1000), U("1573164574572-cb89e39749b4", 1000), U("1596178067639-5c6e68aea6dc", 1000)],
+    steps: [
+      { title: "Choose dates and a room", text: "Select the dates and guests, then compare the rooms that are open for the stay." },
+      { title: "Add guest details", text: "Enter the guest information, preferences and any extras for the stay." },
+      { title: "Confirm the stay", text: "Submit the booking and send the stay details to the guest." },
+    ],
+    pick: { title: "Open rooms", items: [["Garden Room", "2 guests · 2 nights", "Open"], ["Deluxe Suite", "3 guests · 2 nights", "Open"], ["Family Room", "4 guests · 2 nights", "Open"]] },
+    form: { title: "Guest details", sub: "Garden Room", fields: [["Guest", "Sam Carter"], ["Stay", "19 – 21 Nov, 2 nights"], ["Requests", "Late check-in"]] },
+    done: { title: "Stay confirmed", ref: "Details sent to the guest", rows: [["Room", "Garden Room"], ["Stay", "19 – 21 Nov"]] },
+  },
+  {
+    key: "activity", label: "Facilities",
+    photos: [U("1499510318569-1a3d67dc3976", 1000), U("1573164574572-cb89e39749b4", 1000), U("1499510318569-1a3d67dc3976", 1000)],
+    steps: [
+      { title: "Choose a facility and slot", text: "Find the court, studio or activity and pick an open time slot." },
+      { title: "Add group details", text: "Enter the group size, contact details and any equipment needed." },
+      { title: "Confirm the booking", text: "Submit the booking and send the confirmation with the slot details." },
+    ],
+    pick: { title: "Open slots", items: [["Court 2", "60 min · Thursday", "18:00"], ["Court 3", "60 min · Thursday", "19:00"], ["Studio A", "45 min · Thursday", "19:30"]] },
+    form: { title: "Group details", sub: "Court 2", fields: [["Name", "Sam Carter"], ["Group size", "4 players"], ["Equipment", "Rackets"]] },
+    done: { title: "Booking confirmed", ref: "Confirmation sent", rows: [["Facility", "Court 2"], ["When", "Thu, 19 Nov · 6:00 PM"]] },
+  },
+];
+
+const TYPES = [
+  { key: "space", label: "Spaces", steps: STEPS },
+  ...OTHER.map((o) => ({ key: o.key, label: o.label, steps: o.steps })),
+];
+
+function OtherScene({ t, n, on }: { t: number; n: number; on: boolean }) {
+  const d = OTHER[t - 1];
+  return (
+    <div className={`bs-scene${on ? " on" : ""}`} aria-hidden={!on}>
+      <div className="bs-photo"><img src={d.photos[n]} alt="" /></div>
+      {n === 0 && (
+        <div className="bs-card bs-pick">
+          <b>{d.pick.title}</b>
+          {d.pick.items.map(([a, m, t2], i) => (
+            <div key={a + m} className={`bs-opt${i === 0 ? " sel" : ""}`}><span><strong>{a}</strong><small>{m}</small></span><em>{t2}</em></div>
+          ))}
+        </div>
+      )}
+      {n === 1 && (
+        <div className="bs-card bs-form">
+          <div className="bs-r"><b>{d.form.title}</b><small>{d.form.sub}</small></div>
+          {d.form.fields.map(([a, b], i) => (
+            <label key={a} className={`bs-field${i === 2 ? " focus" : ""}`}><small>{a}</small><span>{b}{i === 2 && <i className="bs-caret" />}</span></label>
+          ))}
+        </div>
+      )}
+      {n === 2 && (
+        <div className="bs-card bs-done">
+          <span className="bs-tick">{I.check}</span>
+          <b>{d.done.title}</b>
+          <small>{d.done.ref}</small>
+          <dl>{d.done.rows.map(([a, b]) => <div key={a}><dt>{a}</dt><dd>{b}</dd></div>)}</dl>
+          <span className="bs-badge ok">Confirmed</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function Scene({ n, on }: { n: number; on: boolean }) {
   return (
@@ -119,6 +198,17 @@ const css = `
   .bs-badge{padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600}
   .bs-badge.ok{background:rgba(22,138,74,.1);color:${OK}}
 
+  .bs-pick{right:0;bottom:8%;width:290px;display:grid;gap:8px}
+  .bs-opt{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;border:1px solid ${LINE}}
+  .bs-opt.sel{border-color:${SAGE};background:rgba(100,133,109,.08)}
+  .bs-opt span{display:grid;gap:1px}
+  .bs-opt strong{font-size:13px;color:${DEEP};font-weight:600}
+  .bs-opt em{font-style:normal;font-size:12px;font-weight:700;color:${SAGE};white-space:nowrap}
+  .bs-types{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .bs-type{padding:9px 18px;border-radius:999px;border:1px solid #D6DAD3;background:#fff;font:inherit;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;font-weight:600;color:${MUTED};cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease}
+  .bs-type:hover{border-color:${SAGE};color:${DEEP}}
+  .bs-type.on{background:${SAGE};border-color:${SAGE};color:#fff}
+
   .bs-copy{position:relative;min-height:220px}
   .bs-text{position:absolute;inset:0 0 auto;opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.7,.2,1);pointer-events:none}
   .bs-text.on{position:relative;opacity:1;transform:none;pointer-events:auto}
@@ -158,7 +248,7 @@ const css = `
     .bs-plan{width:92%;padding:10px}
     .bs-photo{width:92%;height:78%}
     .bs-room{width:200px}.bs-room img{height:84px}
-    .bs-form,.bs-done{width:220px}
+    .bs-form,.bs-done,.bs-pick{width:230px}
     .bs-key{display:none}
     .bs-plan.small{display:none}
     .bs-text h3{font-size:23px}
@@ -173,6 +263,8 @@ const ICONS = [I.search, I.edit, I.check];
 export function BookingSteps() {
   const root = useRef<HTMLElement>(null);
   const { index, local, pinned, go } = useScrollSteps(root, STEPS.length);
+  const [type, setType] = useState(0);
+  const steps = TYPES[type].steps;
 
   return (
     <section ref={root} id="how-it-works" className={`bs-scroll${pinned ? " pinned" : ""}`} style={pinned ? { height: `${STEPS.length * 70 + 100}vh` } : undefined}>
@@ -182,13 +274,22 @@ export function BookingSteps() {
           <div className="bs-head">
             <span className="bk-label">How booking works</span>
             <h2 className="bk-h2">From choosing an option to making a reservation.</h2>
+            <div className="bs-types" role="group" aria-label="Booking type">
+              {TYPES.map((t, i) => (
+                <button key={t.key} type="button" className={`bs-type${i === type ? " on" : ""}`} aria-pressed={i === type} onClick={() => setType(i)}>{t.label}</button>
+              ))}
+            </div>
           </div>
 
           <div className="bs-main">
-            <div className="bs-visual">{STEPS.map((s, i) => <Scene key={s.title} n={i} on={i === index} />)}</div>
+            <div className="bs-visual">
+              {type === 0
+                ? STEPS.map((s, i) => <Scene key={s.title} n={i} on={i === index} />)
+                : STEPS.map((s, i) => <OtherScene key={TYPES[type].key + i} t={type} n={i} on={i === index} />)}
+            </div>
             <div className="bs-copy" aria-live="polite">
-              {STEPS.map((s, i) => (
-                <div key={s.title} className={`bs-text${i === index ? " on" : ""}`} aria-hidden={i !== index}>
+              {steps.map((s, i) => (
+                <div key={TYPES[type].key + s.title} className={`bs-text${i === index ? " on" : ""}`} aria-hidden={i !== index}>
                   <span className="bs-step-ico">{ICONS[i]}</span>
                   <span className="bs-num">Step 0{i + 1}</span>
                   <h3>{s.title}</h3>
@@ -201,7 +302,7 @@ export function BookingSteps() {
           <div className="bs-rail">
             <button type="button" className="bs-arrow prev" aria-label="Previous step" disabled={index === 0} onClick={() => go(index - 1)}>{I.arrow}</button>
             <div className="bs-tabs">
-              {STEPS.map((s, i) => (
+              {steps.map((s, i) => (
                 <button key={s.title} type="button" className={`bs-tab${i === index ? " on" : ""}`} aria-pressed={i === index} onClick={() => go(i)}>
                   <i><s style={{ width: i < index ? "100%" : i === index ? `${pinned ? Math.round(local * 100) : 100}%` : 0 }} /></i>
                   <span>Step 0{i + 1}</span>

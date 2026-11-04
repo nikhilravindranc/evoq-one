@@ -7,6 +7,7 @@ import { Footer } from "@/components/sections/Footer";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 import { ProductBadge } from "@/components/shared/ProductBadge";
 import { BookingCategories, CATEGORIES } from "./BookingCategories";
+import { BookingTypeLinks } from "./BookingTypeLinks";
 import { BookingSteps } from "./BookingSteps";
 import { FloorPlan } from "./FloorPlan";
 import { BG, DEEP, ERR, GRADIENT, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAGE_HOVER, SAND, TERRA, U } from "./theme";
@@ -655,12 +656,15 @@ export function BookingsPage() {
               <p className="bk-lead">From reserving rooms and shared spaces to scheduling appointments, booking accommodation and accessing facilities, EVOQ Bookings brings different reservation needs under one product.</p>
               <div className="bk-ctas">
                 <a href="#enquiry" className="bk-btn primary" onClick={(e) => { e.preventDefault(); toEnquiry(undefined, "bookings_hero"); }}>Discuss Your Requirements</a>
-                <a href="#booking-types" className="bk-btn secondary" onClick={() => trackCta("explore_booking_types", "bookings_hero")}>Explore Booking Types</a>
+                <a href="#booking-links" className="bk-btn secondary" onClick={() => trackCta("explore_booking_types", "bookings_hero")}>Explore Booking Types</a>
               </div>
             </div>
             <HeroShowcase />
           </div></div>
         </section>
+
+        {/* quick access to the booking type pages */}
+        <BookingTypeLinks onDiscuss={(o, k) => toEnquiry(o, `bookings_quick_${k}`)} />
 
         {/* 02 introduction */}
         <Wrap className="bk-sec">
