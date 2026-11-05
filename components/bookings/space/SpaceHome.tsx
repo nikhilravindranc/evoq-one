@@ -20,10 +20,11 @@ import { SPACE_IMG } from "./ui";
 const HERO_PHOTO = U("1431540015161-0bf868a2d407", 2000);
 
 const WHO = [
-  { name: "Corporate offices", img: SPACE_IMG.board, line: "Meeting rooms stop filling with holds nobody uses.", tags: ["Check in and release", "Utilization reports"] },
-  { name: "Coworking spaces", img: SPACE_IMG.lounge, line: "Members book rooms themselves, at the rate you set.", tags: ["Branded booking page", "Rates and payment status"] },
-  { name: "Training and education", img: SPACE_IMG.training, line: "The layout, the projector and the setup time are ready before the session.", tags: ["Layouts and equipment", "Setup buffers"] },
-  { name: "Venues and facilities", img: SPACE_IMG.prayer, line: "Outside groups send a request and get a clear answer.", tags: ["Approval workflow", "Terms and deposits"] },
+  { name: "Corporate offices", img: SPACE_IMG.board, alt: "Meeting room with a long table", line: "Meeting rooms stop filling with holds nobody uses.", tags: ["Check in and release", "Utilization reports"] },
+  { name: "Coworking spaces", img: SPACE_IMG.lounge, alt: "Coworking lounge with shared tables", line: "Members book meeting rooms themselves, at the rate you set.", tags: ["Branded booking page", "Rates and payment status"] },
+  { name: "Training and education", img: SPACE_IMG.training, alt: "Training room set up classroom style", line: "The layout, the projector and the setup time are ready before the session.", tags: ["Layouts and equipment", "Setup buffers"] },
+  { name: "Venues and facilities", img: SPACE_IMG.corridor, alt: "Corridor of glass walled rooms in a venue", line: "Outside groups send a request and get a clear answer.", tags: ["Approval workflow", "Terms and deposits"] },
+  { name: "Religious and community centers", img: SPACE_IMG.prayer, alt: "Quiet prayer room with floor mats and soft light", line: "Prayer rooms for members and halls for community groups, each with its own rules.", tags: ["Rules per space", "Branded booking page"] },
 ];
 
 export function SpaceHome() {
@@ -71,7 +72,7 @@ export function SpaceHome() {
           <div className="sh-who-grid">
             {WHO.map((w, i) => (
               <article key={w.name} className="sh-who-card" data-rv={i}>
-                <img src={w.img} alt="" loading="lazy" />
+                <img src={w.img} alt={w.alt} loading="lazy" />
                 <div className="sh-who-b">
                   <h3>{w.name}</h3>
                   <p>{w.line}</p>
@@ -115,7 +116,9 @@ const css = `
 
   /* who */
   .sh-who{background:#fff}
-  .sh-who-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .sh-who-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}
+  .sh-who-card{grid-column:span 2}.sh-who-card:nth-child(n+4){grid-column:span 3}
+  .sh-who-card:nth-child(n+4) img{height:230px}
   .sh-who-card{border-radius:20px;overflow:hidden;background:${BG};box-shadow:0 0 0 1px rgba(43,33,28,.07);display:flex;flex-direction:column}
   .sh-who-card img{width:100%;height:210px;object-fit:cover;display:block}
   .sh-who-b{padding:20px 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
@@ -124,13 +127,13 @@ const css = `
   .sh-who-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
   .sh-who-tags em{font-style:normal;font-size:12px;padding:3px 10px;border-radius:999px;background:#fff;color:${MUTED};box-shadow:0 0 0 1px ${LINE}}
 
-  @media (max-width:1100px){.sh-who-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:1100px){.sh-who-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sh-who-card,.sh-who-card:nth-child(n+4){grid-column:span 1}.sh-who-card:last-child{grid-column:span 2}.sh-who-card:nth-child(n+4) img{height:210px}}
   @media (max-width:980px){.sh-hero-grid{grid-template-columns:minmax(0,1fr);gap:36px}}
   @media (max-width:860px){
     .sh-h1{font-size:36px}
     .sh-hero-grid{padding:36px 0 40px}
   }
   @media (max-width:560px){
-    .sh-who-grid{grid-template-columns:minmax(0,1fr)}
+    .sh-who-grid{grid-template-columns:minmax(0,1fr)}.sh-who-card:last-child{grid-column:span 1}
   }
 `;
