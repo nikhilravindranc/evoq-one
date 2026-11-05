@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
+import { BookingsNav } from "../BookingsNav";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 import { track } from "@/lib/track";
 import { I } from "../theme";
@@ -12,15 +13,13 @@ import { BAND, BG, DEEP, ERR, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, OK, PR
    bar, the get started form and the shared styles. Every surface is light; the page keeps the Bookings
    family look (type, corners, windows, pointers) that Spaces uses, in the moss palette. */
 
-export const AP_BASE = "/products/bookings/appointment-scheduling";
+export const AP_BASE = "/products/bookings/appointments";
 export const AP_NAME = "Appointments";
-const NAV: { label: string; href: string }[] = [
-  { label: "Booking", href: "#booking" },
-  { label: "Management", href: "#management" },
-  { label: "Availability", href: "#availability" },
-  { label: "Lifecycle", href: "#lifecycle" },
-  { label: "Industries", href: "#industries" },
-  { label: "EVI", href: "#evi" },
+export type ApPage = "home" | "features" | "pricing";
+const NAV: { k: ApPage; label: string; href: string }[] = [
+  { k: "home", label: "Overview", href: AP_BASE },
+  { k: "features", label: "Features", href: `${AP_BASE}/features` },
+  { k: "pricing", label: "Pricing", href: `${AP_BASE}/pricing` },
 ];
 
 const StartCtx = createContext<(location: string) => void>(() => {});
@@ -133,18 +132,7 @@ export function ApMark() {
   );
 }
 
-function SubNav() {
-  return (
-    <div className="ap-sub">
-      <div className="ap-sub-in">
-        <a href={AP_BASE} className="ap-sub-brand" aria-label="Appointments home"><ApMark /><b>{AP_NAME}</b></a>
-        <nav className="ap-sub-nav" aria-label="Appointments">{NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}</nav>
-      </div>
-    </div>
-  );
-}
-
-function StickyBar() {
+function StickyBar({ page }: { page: ApPage }) {
   const [on, setOn] = useState(false);
   useEffect(() => {
     const f = () => setOn(window.scrollY > 560);
@@ -156,21 +144,21 @@ function StickyBar() {
     <div className={`ap-stick${on ? " on" : ""}`} aria-hidden={!on}>
       <div className="ap-stick-in">
         <span className="ap-sub-brand"><ApMark /><b>{AP_NAME}</b></span>
-        <nav className="ap-sub-nav" aria-label="Appointments sections">{NAV.map((n) => <a key={n.href} href={n.href} tabIndex={on ? 0 : -1}>{n.label}</a>)}</nav>
+        <nav className="ap-sub-nav" aria-label="Appointments pages">{NAV.map((n) => <a key={n.k} href={n.href} tabIndex={on ? 0 : -1} aria-current={n.k === page ? "page" : undefined}>{n.label}</a>)}</nav>
         <StartButton location="sticky" className="ap-btn primary sm" />
       </div>
     </div>
   );
 }
 
-export function ApptShell({ hero, children }: { hero: ReactNode; children: ReactNode }) {
+export function ApptShell({ page = "home", hero, children }: { page?: ApPage; hero: ReactNode; children: ReactNode }) {
   const [from, setFrom] = useState<string | null>(null);
   const open = useCallback((location: string) => {
     track("click_get_started", { location, page: "appointments" });
     setFrom(location);
   }, []);
   const close = useCallback(() => setFrom(null), []);
-  useEffect(() => { track("view_appointments_home", { page: "appointments" }); }, []);
+  useEffect(() => { track(`view_appointments_${page}`, { page: "appointments" }); }, [page]);
   return (
     <StartCtx.Provider value={open}>
       <div className="ap-root hs-root">
@@ -179,10 +167,10 @@ export function ApptShell({ hero, children }: { hero: ReactNode; children: React
         <header className="ap-hd">
           <span className="ap-hd-bg" aria-hidden />
           <div className="ap-hd-top"><Topbar light darkCTA={false} ctaColor={PRIMARY} /></div>
-          <SubNav />
+          <BookingsNav product="appointments" page={page} />
           <div className="ap-hd-body">{hero}</div>
         </header>
-        <StickyBar />
+        <StickyBar page={page} />
         <main>{children}</main>
         <Footer />
         <StartModal location={from} onClose={close} />
@@ -239,6 +227,7 @@ const css = `
   .ap-sub-nav{display:flex;gap:22px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
   .ap-sub-nav a{position:relative;padding:15px 0;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:600;color:${MUTED};text-decoration:none;white-space:nowrap}
   .ap-sub-nav a:hover{color:${DEEP}}
+  .ap-sub-nav a[aria-current="page"]{color:${DEEP}}
   .ap-stick{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid ${LINE};transform:translateY(-100%);transition:transform .25s ease}
   .ap-stick.on{transform:none}
   .ap-stick-in{max-width:1240px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;gap:24px}

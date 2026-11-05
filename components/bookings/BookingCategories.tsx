@@ -9,8 +9,8 @@ import { DEEP, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAND, U } from "./theme";
 
 /* booking types that already have their own microsite */
 export const LIVE_PAGES: Record<string, string> = {
-  space: "/products/bookings/space-and-room-reservations",
-  appt: "/products/bookings/appointment-scheduling",
+  space: "/products/bookings/spaces",
+  appt: "/products/bookings/appointments",
 };
 
 export const CATEGORIES = [

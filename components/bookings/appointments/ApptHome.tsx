@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Caveat } from "next/font/google";
 import { I } from "../theme";
 import { ProductBadge } from "@/components/shared/ProductBadge";
-import { ApptShell, StartButton } from "./ApptShell";
+import { AP_BASE, ApptShell, StartButton } from "./ApptShell";
 import { BAND, DEEP, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, PRIMARY, VIS } from "./palette";
 
 /* Appointment Scheduling, Home. Content from the microsite brief: online booking, appointment management,
@@ -464,7 +464,7 @@ export function ApptHome() {
             <p className="ah-sub">EVOQ Appointments brings online booking and appointment management together, helping service-led organizations coordinate appointments across providers, services and locations.</p>
             <div className="ap-ctas">
               <StartButton location="hero" />
-              <a href="#booking" className="ap-btn secondary">Explore features</a>
+              <a href={`${AP_BASE}/features`} className="ap-btn secondary">Explore features</a>
             </div>
           </div>
           <HeroVisual />
@@ -535,7 +535,7 @@ export function ApptHome() {
             ))}
           </div>
           <p className="ap-note">{I.check}Keep the details and administrative tasks associated with each appointment within view.</p>
-          <div className="ap-ctas" style={{ justifyContent: "center" }}><a href="#booking" className="ap-btn secondary">Explore features</a></div>
+          <div className="ap-ctas" style={{ justifyContent: "center" }}><a href={`${AP_BASE}/features`} className="ap-btn secondary">Explore features</a></div>
         </div>
       </section>
 
@@ -647,7 +647,7 @@ export function ApptHome() {
           <div className="ap-close-c">
             <h2 className="ap-h2">Give every appointment a clearer path from booking to completion.</h2>
             <p className="ap-lead">Manage services, provider schedules, availability and client bookings with EVOQ Appointments.</p>
-            <div className="ap-ctas"><StartButton location="close" /><a href="#booking" className="ap-btn secondary">Explore features</a></div>
+            <div className="ap-ctas"><StartButton location="close" /><a href={`${AP_BASE}/features`} className="ap-btn secondary">Explore features</a></div>
           </div>
         </div>
       </section>

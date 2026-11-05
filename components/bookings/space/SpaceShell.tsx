@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
+import { BookingsNav } from "../BookingsNav";
 import { Footer } from "@/components/sections/Footer";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 import { track } from "@/lib/track";
@@ -13,10 +14,10 @@ import { BG, DEEP, ERR, INK, LINE, MUTED, NEUTRAL, OK, PRIMARY, PRIMARY_HOVER, A
    microsite bar (Home, Features, Pricing and a Request a demo button), the demo request form and
    the shared styles. The microsite keeps the EVOQ Bookings identity; it is a category, not a brand. */
 
-export const SR_BASE = "/products/bookings/space-and-room-reservations";
+export const SR_BASE = "/products/bookings/spaces";
 export type SrPage = "home" | "features" | "pricing";
 const NAV: { k: SrPage; label: string; href: string }[] = [
-  { k: "home", label: "Home", href: SR_BASE },
+  { k: "home", label: "Overview", href: SR_BASE },
   { k: "features", label: "Features", href: `${SR_BASE}/features` },
   { k: "pricing", label: "Pricing", href: `${SR_BASE}/pricing` },
 ];
@@ -135,22 +136,6 @@ function SrMark() {
   );
 }
 
-function SubNav({ page }: { page: SrPage }) {
-  return (
-    <div className="sr-sub">
-      <div className="sr-sub-in">
-        <a href={SR_BASE} className="sr-sub-brand" aria-label="Spaces home">
-          <SrMark />
-          <b>{SR_NAME}</b>
-        </a>
-        <nav className="sr-sub-nav" aria-label="Spaces">
-          {NAV.map((n) => <a key={n.k} href={n.href} aria-current={n.k === page ? "page" : undefined}>{n.label}</a>)}
-        </nav>
-      </div>
-    </div>
-  );
-}
-
 /* Appears once the header has scrolled away, so the demo button stays within reach. */
 function StickyBar({ page }: { page: SrPage }) {
   const [on, setOn] = useState(false);
@@ -201,7 +186,7 @@ export function SpaceShell({ page, hero, full, heroImg, children }: { page: SrPa
             </>
           )}
           <div className="sr-hd-top"><Topbar darkCTA light={false} theme={TOP_THEME} /></div>
-          <SubNav page={page} />
+          <BookingsNav product="spaces" page={page} tone="dark" />
           <div className="sr-hd-body">{hero}</div>
         </header>
         <StickyBar page={page} />

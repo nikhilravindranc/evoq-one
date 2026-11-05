@@ -30,9 +30,14 @@ const nextConfig: NextConfig = {
       ["/manufacturing", "/solutions/manufacturing"],
       ["/solutions/industries", "/industries"],
       // the microsite plan's proposed paths
-      ["/products/bookings/space-booking", "/products/bookings/space-and-room-reservations"],
-      ["/products/bookings/space-booking/features", "/products/bookings/space-and-room-reservations/features"],
-      ["/products/bookings/space-booking/pricing", "/products/bookings/space-and-room-reservations/pricing"],
+      ["/products/bookings/space-booking", "/products/bookings/spaces"],
+      ["/products/bookings/space-booking/features", "/products/bookings/spaces/features"],
+      ["/products/bookings/space-booking/pricing", "/products/bookings/spaces/pricing"],
+      // earlier long names of the Spaces and Appointments pages
+      ["/products/bookings/space-and-room-reservations", "/products/bookings/spaces"],
+      ["/products/bookings/space-and-room-reservations/features", "/products/bookings/spaces/features"],
+      ["/products/bookings/space-and-room-reservations/pricing", "/products/bookings/spaces/pricing"],
+      ["/products/bookings/appointment-scheduling", "/products/bookings/appointments"],
     ];
     return moved.map(([source, destination]) => ({ source, destination, permanent: true }));
   },

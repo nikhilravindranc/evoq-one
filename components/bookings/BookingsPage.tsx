@@ -7,6 +7,7 @@ import { Footer } from "@/components/sections/Footer";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 import { ProductBadge } from "@/components/shared/ProductBadge";
 import { BookingCategories, CATEGORIES } from "./BookingCategories";
+import { BookingsNav } from "./BookingsNav";
 import { BookingSteps } from "./BookingSteps";
 import { FloorPlan } from "./FloorPlan";
 import { BG, DEEP, ERR, GRADIENT, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAGE_HOVER, SAND, TERRA, U } from "./theme";
@@ -640,6 +641,7 @@ export function BookingsPage() {
       <style>{css}</style>
       <HsMotion />
       <Topbar darkCTA={false} light ctaColor={SAGE} />
+      <BookingsNav product="overview" />
 
       <main>
         {/* 01 hero: inset gradient panel */}
