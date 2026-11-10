@@ -80,36 +80,98 @@ const OFFICE: { t: string; d: string; ic: ReactNode }[] = [
   { t: "Exceptions and follow-ups", d: "Identify visits that could not be completed, work awaiting approval, outstanding estimates and other items requiring a decision.", ic: Ic.alert },
 ];
 
-function Office() {
-  return (
-    <section className="so-sec so-band" id="office">
-      <div className="so-out"><div className="so-in sx flip">
-        <div className="sx-vis of-vis" data-rv>
-          <span className="sx-shape" aria-hidden />
-          <div className="of-shot"><img src="/serviceops/app/dispatch.png" alt="The ServiceOps Dispatch screen with a technician timeline, work to schedule and an Optimize the day button" /></div>
-          <div className="of-load">
-            <b>Technician workload</b>
-            {[["Michael T.", 72], ["Sarah W.", 55], ["Ravi K.", 38]].map(([n, v]) => (
-              <span key={n as string} className="of-bar"><small>{n}</small><u><i style={{ width: `${v}%` }} /></u></span>
-            ))}
-          </div>
-          <div className="of-rank">
-            <b>Ranked options</b>
-            <span><i>1</i>Ravi K.<em className="so-badge ok">Available</em></span>
-            <span><i>2</i>Sarah W.<em className="so-badge soft">Partly booked</em></span>
-          </div>
-        </div>
+/* The office view: the Dispatch screen drawn as live UI, with work waiting on the left and a technician
+   timeline on the right. Names and jobs are sample data. */
+const DP_JOBS = [
+  { t: "Rooftop unit not cooling", c: "Northgate Gym", m: "2 h", p: "High", pick: false },
+  { t: "Door reopening on floor 3", c: "Pine St. Clinic", m: "1 h", p: "Normal", pick: true },
+  { t: "Low water pressure, floors 6 to 8", c: "Lakeview Hotel", m: "3 h", p: "Normal", pick: false },
+];
+const DP_HOURS = ["7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM"];
+const DP_TECHS: { n: string; z: string; l: string; i: string; jobs: { s: number; w: number; t: string; k: string }[]; ghost?: boolean }[] = [
+  { n: "Michael Thompson", z: "North", l: "6 of 9 h", i: "MT", jobs: [{ s: 0, w: 2.5, t: "Chiller repair", k: "a" }, { s: 4, w: 3, t: "Quarterly maintenance", k: "b" }] },
+  { n: "Sarah Wilson", z: "South", l: "5 of 9 h", i: "SW", jobs: [{ s: 1, w: 3, t: "Panel installation", k: "c" }, { s: 5.5, w: 2, t: "Inspection", k: "d" }] },
+  { n: "Ravi Kumar", z: "Central", l: "2 of 9 h", i: "RK", jobs: [{ s: 0, w: 2, t: "Boiler service", k: "b" }], ghost: true },
+  { n: "Chris Walker", z: "North", l: "7 of 9 h", i: "CW", jobs: [{ s: 0, w: 4, t: "Rooftop unit repair", k: "a" }, { s: 4.5, w: 3, t: "Lighting repair", k: "a" }] },
+  { n: "Emily Johnson", z: "East", l: "3 of 9 h", i: "EJ", jobs: [{ s: 2, w: 3, t: "Water pressure check", k: "d" }] },
+];
 
-        <div className="sx-copy" data-rv>
-          <Eyebrow>Office operations</Eyebrow>
-          <h2 className="so-h2">Know what needs attention before the day gets away from you.</h2>
-          <p className="so-lead">Service managers, dispatchers and coordinators need more than a list of open jobs. They need to understand what is waiting, what is approved, who is available and which issues require intervention. ServiceOps gives the office a working view of daily service operations.</p>
-          <ul className="sh-rows">
-            {OFFICE.map((o) => (
-              <li key={o.t}><i>{o.ic}</i><span><b>{o.t}</b><small>{o.d}</small></span></li>
+function Dispatch() {
+  return (
+    <div className="dp" data-rv>
+      <div className="dp-chrome" aria-hidden><i /><i /><i /><span>ServiceOps, Dispatch</span></div>
+      <div className="dp-body">
+        <aside className="dp-side">
+          <div className="dp-side-h"><b>To schedule</b><em>3</em></div>
+          <div className="dp-tabs"><span className="on">Work orders</span><span>Attention</span><span>Follow-ups</span></div>
+          <ul>
+            {DP_JOBS.map((j) => (
+              <li key={j.t} className={j.pick ? "pick" : ""}>
+                <b>{j.t}</b>
+                <small>{j.c}</small>
+                <span><em className={`dp-p ${j.p.toLowerCase()}`}>{j.p}</em><em className="dp-m">{j.m}</em></span>
+              </li>
             ))}
           </ul>
+        </aside>
+        <div className="dp-main">
+          <div className="dp-top">
+            <div><b>Tue, Nov 10</b><small>5 technicians, 3 jobs waiting</small></div>
+            <div className="dp-seg"><span>Workload</span><span className="on">Timeline</span><span>Map</span></div>
+            <span className="dp-opt"><img src="/serviceops/agents/evi-ai-assistant.jpg" alt="" />Optimize the day</span>
+          </div>
+          <div className="dp-scroll">
+            <div className="dp-grid">
+              <div className="dp-hours"><span />{DP_HOURS.map((h) => <small key={h}>{h}</small>)}</div>
+              <span className="dp-now" aria-hidden />
+              {DP_TECHS.map((t) => (
+                <div className="dp-row" key={t.n}>
+                  <div className="dp-who"><i>{t.i}</i><span><b>{t.n}</b><small>{t.z} · {t.l}</small></span></div>
+                  <div className="dp-track">
+                    {t.jobs.map((j) => (
+                      <em key={j.t} className={`dp-job ${j.k}`} style={{ left: `${(j.s / 9) * 100}%`, width: `calc(${(j.w / 9) * 100}% - 4px)` }}>{j.t}</em>
+                    ))}
+                    {t.ghost && (
+                      <>
+                        <em className="dp-ghost" style={{ left: `${(3.2 / 9) * 100}%`, width: `calc(${(1.5 / 9) * 100}% - 4px)` }}>Door reopening</em>
+                        <div className="dp-pop" style={{ left: `calc(${(4.8 / 9) * 100}% + 14px)` }}>
+                          <b>Ranked options</b>
+                          <span><i>1</i>Ravi Kumar<em className="so-badge ok">Available</em></span>
+                          <span><i>2</i>Sarah Wilson<em className="so-badge soft">Partly booked</em></span>
+                          <span><i>3</i>Emily Johnson<em className="so-badge soft">Other zone</em></span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function Office() {
+  return (
+    <section className="so-sec so-white" id="office">
+      <div className="so-out"><div className="so-in">
+        <div className="of-head" data-rv>
+          <div>
+            <Eyebrow>Office operations</Eyebrow>
+            <h2 className="so-h2">Know what needs attention before the day gets away from you.</h2>
+          </div>
+          <p className="so-lead">Service managers, dispatchers and coordinators need more than a list of open jobs. They need to understand what is waiting, what is approved, who is available and which issues require intervention. ServiceOps gives the office a working view of daily service operations.</p>
+        </div>
+        <Dispatch />
+        <ul className="of-cols">
+          {OFFICE.map((o, i) => (
+            <li key={o.t} data-rv style={{ ["--hs-d" as string]: `${i * 70}ms` }}>
+              <i>{o.ic}</i><b>{o.t}</b><small>{o.d}</small>
+            </li>
+          ))}
+        </ul>
       </div></div>
     </section>
   );
@@ -140,12 +202,6 @@ function Technician() {
         <div className="sx-vis tk-vis" data-rv>
           <span className="sx-shape" aria-hidden />
           <img className="tk-photo" src="/solutions/field-service.jpg" alt="A technician checking parts on site" />
-          <div className="tk-check">
-            <div className="tk-check-h"><b>Pre-start checklist</b><em className="so-badge ok">3 of 5</em></div>
-            {[["Isolate power", 1], ["Check filters", 1], ["Record meter reading", 1], ["Take after photo", 0], ["Customer sign-off", 0]].map(([t, d]) => (
-              <span key={t as string} className={d ? "done" : ""}><i>{d ? Ic.check : null}</i>{t}</span>
-            ))}
-          </div>
           <Phone className="tk-phone">
             <div className="ph-top"><b>Today</b><small>4 jobs</small></div>
             <div className="ph-job">
@@ -331,7 +387,7 @@ function Closing() {
         <span className="so-cs ring" aria-hidden /><span className="so-cs dots" aria-hidden /><span className="so-cs sun" aria-hidden />
         <div className="so-close-c">
           <h2 className="so-h2">Give every service job a clearer path forward.</h2>
-          <p className="so-lead">Coordinate service requests, technicians, equipment, parts and financial outcomes with EVOQ ServiceOps.</p>
+          <p className="so-lead">Coordinate service requests, technicians, equipment, parts and financial outcomes with ServiceOps.</p>
           <div className="so-ctas">
             <Link href={`${SO_BASE}/features`} className="so-btn primary">Explore ServiceOps {Ic.arrow}</Link>
             <DemoButton location="closing_expert" className="so-btn secondary">Talk to an Expert</DemoButton>
@@ -398,7 +454,6 @@ const css = `
   #equipment .sx.flip{grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr)}
   .sx-copy .so-label{margin-bottom:14px}
   .sx-vis{position:relative;min-height:470px}
-  .of-vis{min-height:500px}
   .tk-vis{min-height:560px}.cu-vis{min-height:520px}
   .sx-shape{position:absolute;inset:-4% -6%;background:radial-gradient(42% 42% at 72% 28%,rgba(253,214,140,.55),transparent 70%),radial-gradient(40% 40% at 22% 78%,rgba(244,186,150,.4),transparent 70%);filter:blur(28px)}
   .sh-points{list-style:none;margin:22px 0 0;padding:0}
@@ -414,19 +469,137 @@ const css = `
   .sh-rows b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP};margin-bottom:3px}
   .sh-rows small{font-size:14px;color:${MUTED}}
 
-  /* office */
-  .of-shot{position:absolute;left:0;top:0;width:100%;overflow:hidden;border-radius:22px;background:#fff;box-shadow:0 30px 60px -26px rgba(42,27,12,.45),0 0 0 1px ${LINE}}
-  .of-shot img{display:block;width:100%;height:auto}
-  .of-load{position:absolute;right:-2%;bottom:0;width:48%;min-width:190px;background:#fff;border-radius:18px;padding:16px 18px;box-shadow:0 22px 50px -22px rgba(42,27,12,.45),0 0 0 1px ${LINE}}
-  .of-load>b,.of-rank>b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;color:${DEEP};margin-bottom:10px}
-  .of-bar{display:grid;grid-template-columns:62px 1fr;gap:8px;align-items:center;margin-top:7px}
-  .of-bar small{font-size:12px}
-  .of-bar u{height:7px;border-radius:4px;background:${TINT};overflow:hidden}
-  .of-bar u i{display:block;height:100%;border-radius:4px;background:${PRIMARY}}
-  .of-rank{position:absolute;left:3%;bottom:-6%;width:48%;min-width:210px;background:#fff;border-radius:18px;padding:16px 18px;box-shadow:0 22px 50px -22px rgba(42,27,12,.45),0 0 0 1px ${LINE}}
-  .of-rank span{white-space:nowrap;display:flex;align-items:center;gap:9px;padding:6px 0;font-size:13px;font-weight:600;color:${DEEP}}
-  .of-rank span i{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:${TINT};color:${PRIMARY};font-style:normal;font-size:11px;font-weight:700}
-  .of-rank em{margin-left:auto}
+  /* office: a large, readable Dispatch screen and four plain columns */
+  .dp{border-radius:24px;background:#fff;overflow:hidden;box-shadow:0 40px 80px -40px rgba(42,27,12,.45),0 0 0 1px ${LINE}}
+  .dp-chrome{display:flex;align-items:center;gap:7px;padding:12px 18px;background:${PAPER};border-bottom:1px solid ${LINE}}
+  .dp-chrome i{width:10px;height:10px;border-radius:50%;background:#E6D9BD}
+  .dp-chrome span{margin-left:10px;font-size:12.5px;color:${NEUTRAL}}
+  .dp-body{display:grid;grid-template-columns:280px minmax(0,1fr)}
+  .dp-side{padding:20px 18px;border-right:1px solid ${LINE};background:#FFFDF9}
+  .dp-side-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .dp-side-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}
+  .dp-side-h em{display:grid;place-items:center;min-width:24px;height:24px;border-radius:999px;background:${TINT};font-style:normal;font-size:12px;font-weight:700;color:#78350F}
+  .dp-tabs{display:flex;gap:4px;margin-bottom:14px;padding:3px;border-radius:999px;background:${PAPER}}
+  .dp-tabs span{flex:1;padding:6px 4px;border-radius:999px;text-align:center;font-size:12px;font-weight:600;color:${MUTED};white-space:nowrap}
+  .dp-tabs span.on{background:#fff;color:${DEEP};box-shadow:0 1px 3px rgba(42,27,12,.15)}
+  .dp-side ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .dp-side li{padding:12px 13px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
+  .dp-side li.pick{box-shadow:0 0 0 2px ${PRIMARY};background:#FFF8EC}
+  .dp-side li b{display:block;font-size:13.5px;line-height:1.3;color:${DEEP}}
+  .dp-side li small{display:block;margin:2px 0 8px;font-size:12.5px;color:${NEUTRAL}}
+  .dp-side li span{display:flex;gap:6px}
+  .dp-p,.dp-m{padding:2px 9px;border-radius:999px;font-style:normal;font-size:11.5px;font-weight:600}
+  .dp-p.high{background:rgba(194,65,12,.12);color:#C2410C}.dp-p.normal{background:${TINT};color:#78350F}.dp-p.low{background:#EEF0F2;color:#5B6572}
+  .dp-m{background:${PAPER};color:${MUTED}}
+  .dp-main{min-width:0;padding:20px 22px 22px}
+  .dp-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+  .dp-top>div:first-child{margin-right:auto}
+  .dp-top b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}
+  .dp-top small{display:block;font-size:12.5px;color:${NEUTRAL}}
+  .dp-seg{display:flex;padding:3px;border-radius:999px;background:${PAPER}}
+  .dp-seg span{padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:600;color:${MUTED}}
+  .dp-seg span.on{background:#fff;color:${DEEP};box-shadow:0 1px 3px rgba(42,27,12,.15)}
+  .dp-opt{display:inline-flex;align-items:center;gap:8px;padding:5px 16px 5px 5px;border-radius:999px;background:#F59E0B;font-size:13px;font-weight:700;color:#2A1B0C;white-space:nowrap}
+  .dp-opt img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+  .dp-scroll{overflow-x:auto}
+  .dp-grid{position:relative;min-width:640px}
+  .dp-hours,.dp-row{display:grid;grid-template-columns:172px minmax(0,1fr)}
+  .dp-hours{margin-bottom:6px}
+  .dp-hours small{display:inline}
+  .dp-hours{grid-template-columns:172px repeat(9,minmax(0,1fr))}
+  .dp-hours small{font-size:12px;color:${NEUTRAL}}
+  .dp-row{border-top:1px solid ${LINE}}
+  .dp-who{display:flex;align-items:center;gap:10px;padding:12px 0}
+  .dp-who i{display:grid;place-items:center;width:34px;height:34px;flex-shrink:0;border-radius:50%;background:${TINT};font-style:normal;font-size:12px;font-weight:700;color:#78350F}
+  .dp-who b{display:block;font-size:13.5px;line-height:1.2;color:${DEEP}}
+  .dp-who small{display:block;font-size:12px;color:${NEUTRAL}}
+  .dp-track{position:relative;height:100%;min-height:68px;background-image:linear-gradient(90deg,${LINE} 1px,transparent 1px);background-size:calc(100% / 9) 100%}
+  .dp-job{position:absolute;top:11px;bottom:11px;display:block;padding:0 10px;border-radius:9px;font-style:normal;font-size:12.5px;font-weight:600;line-height:44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dp-job.a{background:#FDE6D2;color:#9A3412;box-shadow:inset 3px 0 0 #EA7B2C}
+  .dp-job.b{background:#DDF3E6;color:#166534;box-shadow:inset 3px 0 0 #2FA566}
+  .dp-job.c{background:#DCE8FC;color:#1E429F;box-shadow:inset 3px 0 0 #4F7CE0}
+  .dp-job.d{background:#EBE3FA;color:#5B3FB0;box-shadow:inset 3px 0 0 #8A6BE3}
+  .dp-ghost{position:absolute;top:11px;bottom:11px;display:block;padding:0 8px;border-radius:9px;border:2px dashed ${PRIMARY};background:rgba(253,230,138,.35);font-style:normal;font-size:12px;font-weight:700;line-height:40px;color:#78350F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dp-now{position:absolute;z-index:3;top:20px;bottom:0;left:calc(172px + (100% - 172px) * .3778);width:2px;background:#E5484D}
+  .dp-now::before{content:"";position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:#E5484D}
+  .dp-pop{position:absolute;z-index:6;top:50%;translate:0 -50%;width:262px;padding:14px 16px;border-radius:18px;background:#fff;box-shadow:0 26px 54px -18px rgba(42,27,12,.6),0 0 0 1px ${LINE};animation:dpPop .6s .4s cubic-bezier(.2,.8,.2,1) both}
+  .dp-pop::before{content:"";position:absolute;left:-6px;top:50%;margin-top:-6px;width:12px;height:12px;background:#fff;transform:rotate(45deg);box-shadow:-2px 2px 3px -1px rgba(42,27,12,.12)}
+  .dp-pop b{display:block;margin-bottom:6px;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;color:${DEEP}}
+  .dp-pop span{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:13px;font-weight:600;color:${DEEP};white-space:nowrap}
+  .dp-pop span i{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:${TINT};color:${PRIMARY};font-style:normal;font-size:11px;font-weight:700}
+  .dp-pop span em{margin-left:auto}
+  @keyframes dpPop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+
+  /* office: a large, readable Dispatch screen and four plain columns */
+  #office.so-sec{padding-top:88px;padding-bottom:88px}
+  .of-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:64px;align-items:end;margin-bottom:44px}
+  .of-head .so-label{margin-bottom:14px}
+  .of-head .so-lead{margin:0}
+  .dp{border-radius:24px;background:#fff;overflow:hidden;box-shadow:0 40px 80px -40px rgba(42,27,12,.45),0 0 0 1px ${LINE}}
+  .dp-chrome{display:flex;align-items:center;gap:7px;padding:12px 18px;background:${PAPER};border-bottom:1px solid ${LINE}}
+  .dp-chrome i{width:10px;height:10px;border-radius:50%;background:#E6D9BD}
+  .dp-chrome span{margin-left:10px;font-size:12.5px;color:${NEUTRAL}}
+  .dp-body{display:grid;grid-template-columns:280px minmax(0,1fr)}
+  .dp-side{padding:20px 18px;border-right:1px solid ${LINE};background:#FFFDF9}
+  .dp-side-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .dp-side-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;color:${DEEP}}
+  .dp-side-h em{display:grid;place-items:center;min-width:24px;height:24px;border-radius:999px;background:${TINT};font-style:normal;font-size:12px;font-weight:700;color:#78350F}
+  .dp-tabs{display:flex;gap:4px;margin-bottom:14px;padding:3px;border-radius:999px;background:${PAPER}}
+  .dp-tabs span{flex:1;padding:6px 4px;border-radius:999px;text-align:center;font-size:12px;font-weight:600;color:${MUTED};white-space:nowrap}
+  .dp-tabs span.on{background:#fff;color:${DEEP};box-shadow:0 1px 3px rgba(42,27,12,.15)}
+  .dp-side ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .dp-side li{padding:12px 13px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
+  .dp-side li.pick{box-shadow:0 0 0 2px ${PRIMARY};background:#FFF8EC}
+  .dp-side li b{display:block;font-size:13.5px;line-height:1.3;color:${DEEP}}
+  .dp-side li small{display:block;margin:2px 0 8px;font-size:12.5px;color:${NEUTRAL}}
+  .dp-side li span{display:flex;gap:6px}
+  .dp-p,.dp-m{padding:2px 9px;border-radius:999px;font-style:normal;font-size:11.5px;font-weight:600}
+  .dp-p.high{background:rgba(194,65,12,.12);color:#C2410C}.dp-p.normal{background:${TINT};color:#78350F}.dp-p.low{background:#EEF0F2;color:#5B6572}
+  .dp-m{background:${PAPER};color:${MUTED}}
+  .dp-main{min-width:0;padding:20px 22px 22px}
+  .dp-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+  .dp-top>div:first-child{margin-right:auto}
+  .dp-top b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}
+  .dp-top small{display:block;font-size:12.5px;color:${NEUTRAL}}
+  .dp-seg{display:flex;padding:3px;border-radius:999px;background:${PAPER}}
+  .dp-seg span{padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:600;color:${MUTED}}
+  .dp-seg span.on{background:#fff;color:${DEEP};box-shadow:0 1px 3px rgba(42,27,12,.15)}
+  .dp-opt{display:inline-flex;align-items:center;gap:8px;padding:5px 16px 5px 5px;border-radius:999px;background:#F59E0B;font-size:13px;font-weight:700;color:#2A1B0C;white-space:nowrap}
+  .dp-opt img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+  .dp-scroll{overflow-x:auto}
+  .dp-grid{position:relative;min-width:640px}
+  .dp-hours,.dp-row{display:grid;grid-template-columns:172px minmax(0,1fr)}
+  .dp-hours{margin-bottom:6px}
+  .dp-hours small{display:inline}
+  .dp-hours{grid-template-columns:172px repeat(9,minmax(0,1fr))}
+  .dp-hours small{font-size:12px;color:${NEUTRAL}}
+  .dp-row{border-top:1px solid ${LINE}}
+  .dp-who{display:flex;align-items:center;gap:10px;padding:12px 0}
+  .dp-who i{display:grid;place-items:center;width:34px;height:34px;flex-shrink:0;border-radius:50%;background:${TINT};font-style:normal;font-size:12px;font-weight:700;color:#78350F}
+  .dp-who b{display:block;font-size:13.5px;line-height:1.2;color:${DEEP}}
+  .dp-who small{display:block;font-size:12px;color:${NEUTRAL}}
+  .dp-track{position:relative;height:100%;min-height:68px;background-image:linear-gradient(90deg,${LINE} 1px,transparent 1px);background-size:calc(100% / 9) 100%}
+  .dp-job{position:absolute;top:11px;bottom:11px;display:block;padding:0 10px;border-radius:9px;font-style:normal;font-size:12.5px;font-weight:600;line-height:44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dp-job.a{background:#FDE6D2;color:#9A3412;box-shadow:inset 3px 0 0 #EA7B2C}
+  .dp-job.b{background:#DDF3E6;color:#166534;box-shadow:inset 3px 0 0 #2FA566}
+  .dp-job.c{background:#DCE8FC;color:#1E429F;box-shadow:inset 3px 0 0 #4F7CE0}
+  .dp-job.d{background:#EBE3FA;color:#5B3FB0;box-shadow:inset 3px 0 0 #8A6BE3}
+  .dp-ghost{position:absolute;top:11px;bottom:11px;display:block;padding:0 8px;border-radius:9px;border:2px dashed ${PRIMARY};background:rgba(253,230,138,.35);font-style:normal;font-size:12px;font-weight:700;line-height:40px;color:#78350F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dp-now{position:absolute;z-index:3;top:20px;bottom:0;left:calc(172px + (100% - 172px) * .3778);width:2px;background:#E5484D}
+  .dp-now::before{content:"";position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:#E5484D}
+  .dp-pop{position:absolute;z-index:6;top:50%;translate:0 -50%;width:262px;padding:14px 16px;border-radius:18px;background:#fff;box-shadow:0 26px 54px -18px rgba(42,27,12,.6),0 0 0 1px ${LINE};animation:dpPop .6s .4s cubic-bezier(.2,.8,.2,1) both}
+  .dp-pop::before{content:"";position:absolute;left:-6px;top:50%;margin-top:-6px;width:12px;height:12px;background:#fff;transform:rotate(45deg);box-shadow:-2px 2px 3px -1px rgba(42,27,12,.12)}
+  .dp-pop b{display:block;margin-bottom:6px;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;color:${DEEP}}
+  .dp-pop span{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:13px;font-weight:600;color:${DEEP};white-space:nowrap}
+  .dp-pop span i{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:${TINT};color:${PRIMARY};font-style:normal;font-size:11px;font-weight:700}
+  .dp-pop span em{margin-left:auto}
+  @keyframes dpPop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+  .of-cols{list-style:none;margin:48px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:36px}
+  .of-cols li{padding-top:20px;border-top:2px solid ${DEEP}}
+  .of-cols i{display:grid;place-items:center;width:40px;height:40px;margin-bottom:14px;border-radius:12px;background:${TINT};color:${PRIMARY}}
+  .of-cols i svg{width:20px;height:20px}
+  .of-cols b{display:block;margin-bottom:6px;font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}
+  .of-cols small{font-size:14.5px;line-height:1.55;color:${MUTED}}
 
   /* phones */
   .sh-phone{position:relative;width:262px;border-radius:40px;background:#22160A;padding:9px;box-shadow:0 36px 70px -26px rgba(42,27,12,.6)}
@@ -443,11 +616,11 @@ const css = `
   .ph-acts svg{width:14px;height:14px}
   .ph-list{padding:12px 13px;border-radius:16px;background:#fff;box-shadow:0 0 0 1px ${LINE}}
   .ph-list>small{font-weight:600;margin-bottom:4px}
-  .ph-list span,.tk-check span{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:13px;color:${INK}}
-  .ph-list span i,.tk-check span i{display:grid;place-items:center;width:17px;height:17px;border-radius:5px;border:1.8px solid #D9C9A8;flex-shrink:0}
-  .ph-list span.done,.tk-check span.done{color:${NEUTRAL}}
-  .ph-list span.done i,.tk-check span.done i{background:${PRIMARY};border-color:${PRIMARY};color:#fff}
-  .ph-list span i svg,.tk-check span i svg{width:10px;height:10px}
+  .ph-list span{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:13px;color:${INK}}
+  .ph-list span i{display:grid;place-items:center;width:17px;height:17px;border-radius:5px;border:1.8px solid #D9C9A8;flex-shrink:0}
+  .ph-list span.done{color:${NEUTRAL}}
+  .ph-list span.done i{background:${PRIMARY};border-color:${PRIMARY};color:#fff}
+  .ph-list span i svg{width:10px;height:10px}
   .ph-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:auto}
   .ph-bar span{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:12px;background:${TINT};color:#78350F;font-size:11px;font-weight:600}
   .ph-bar svg{width:17px;height:17px}
@@ -458,9 +631,6 @@ const css = `
   .tk-vis{display:flex;justify-content:flex-end}
   .tk-photo{position:absolute;left:0;top:2%;width:74%;height:90%;object-fit:cover;object-position:28% 50%;border-radius:30px;box-shadow:0 30px 70px -30px rgba(42,27,12,.5)}
   .tk-phone{position:relative;z-index:2;margin:36px 0 0 0}
-  .tk-check{position:absolute;z-index:3;left:-18px;bottom:8%;width:218px;padding:15px 16px;border-radius:18px;background:#fff;box-shadow:0 22px 50px -20px rgba(42,27,12,.5),0 0 0 1px ${LINE}}
-  .tk-check-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-  .tk-check-h b{font-family:var(--font-display),system-ui,sans-serif;font-size:14px;color:${DEEP}}
 
   /* equipment */
   .eq-vis{min-height:450px}
@@ -542,6 +712,7 @@ const css = `
   }
   @media (max-width:980px){
     .sh-hero{grid-template-columns:1fr;padding:40px 0 72px}
+    .of-head{grid-template-columns:1fr;gap:16px}.of-cols{grid-template-columns:1fr 1fr}
     .sh-vis{margin:16px auto 0;max-width:520px}
     .sx,.sx.flip,#office .sx.flip,#equipment .sx.flip{grid-template-columns:1fr;gap:48px}
     .sx .sx-copy,.sx.flip .sx-copy{order:-1}
@@ -549,14 +720,16 @@ const css = `
   }
   @media (max-width:760px){
     .sh-sub{font-size:17px}
+    .of-head{grid-template-columns:1fr;gap:16px}
+    .dp-body{grid-template-columns:1fr}
+    .dp-side{display:none}
+    .of-cols{grid-template-columns:1fr 1fr;gap:28px 22px}
+    .dp-top{flex-wrap:wrap}
     .sh-vis{margin-bottom:56px}
     .sh-p2{left:-2%;top:30%;width:214px;padding:10px;gap:9px}
     .sh-p2 img{width:30px;height:30px}
     .sh-p2 em{font-size:12px}
     .sh-p3{right:0;bottom:-18%;width:186px;padding:11px 13px}
-    .of-vis{padding:14px 10px 0}
-    .of-shot{position:relative;top:0;width:100%}
-    .of-load,.of-rank{position:relative;width:100%;left:0;right:0;bottom:0;margin-top:12px}
   }
   @media (max-width:520px){
     .sx-vis{min-height:0;padding:18px 12px}
@@ -564,7 +737,6 @@ const css = `
     .tk-vis{flex-direction:column;align-items:center;gap:14px}
     .tk-photo{position:relative;left:0;top:0;width:100%;height:220px}
     .tk-phone{margin:0}
-    .tk-check{position:relative;left:0;bottom:0;width:100%;order:3}
     .eq-card,.cs-job,.cs-rep,.eq-scan{position:relative;left:0;right:0;top:0;bottom:0;width:100%}
     .eq-scan,.cs-rep{margin-top:14px}
     .eq-scan-c{left:10px}

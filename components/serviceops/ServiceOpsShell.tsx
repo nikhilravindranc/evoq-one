@@ -72,7 +72,7 @@ export function ServiceOpsShell({ page, hero, children }: { page: SoPage; hero: 
 }
 
 const css = `
-  .so-root{background:#fff;color:${INK};font-family:var(--font-sans),system-ui,sans-serif;font-size:16px;line-height:1.6;min-height:100vh}
+  .so-root{overflow-x:clip;background:#fff;color:${INK};font-family:var(--font-sans),system-ui,sans-serif;font-size:16px;line-height:1.6;min-height:100vh}
   .so-root h1,.so-root h2,.so-root h3{font-family:var(--font-display),system-ui,sans-serif;color:${DEEP};font-weight:600;margin:0}
   .so-root p{text-wrap:pretty}
   .so-root main{position:relative}
@@ -123,9 +123,9 @@ const css = `
   /* closing band: inset panel */
   .so-close{padding:0 20px 104px;background:#fff}
   .so-close-in{position:relative;overflow:hidden;max-width:1240px;margin:0 auto;border-radius:40px;padding:128px 40px;text-align:center;background:radial-gradient(45% 60% at 90% 0%,rgba(253,214,140,.5),rgba(253,214,140,0) 70%),${BAND}}
-  .so-close-c{position:relative;z-index:1;max-width:860px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+  .so-close-c{position:relative;z-index:1;max-width:1040px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
   .so-close-c .so-h2{font-size:44px}
-  .so-close-c .so-lead{margin-left:auto;margin-right:auto;font-size:19px}
+  .so-close-c .so-lead{margin-left:auto;margin-right:auto;font-size:19px;max-width:none;white-space:nowrap}
   .so-close-c .so-ctas{justify-content:center}
   .so-cs{position:absolute;pointer-events:none;z-index:0}
   .so-cs.ring{bottom:-180px;left:-100px;width:400px;height:400px;border-radius:50%;border:1.5px solid ${PRIMARY};opacity:.2}
@@ -141,6 +141,7 @@ const css = `
     .so-sec{padding-top:68px;padding-bottom:68px}
     .so-head{margin-bottom:36px}
     .so-bar-in{gap:14px;min-height:52px}
+    .so-close-c .so-lead{white-space:normal;max-width:62ch}
     .so-close{padding:0 12px 64px}.so-close-in{border-radius:28px;padding:72px 18px}.so-close-c .so-h2{font-size:30px}.so-cs.dots{display:none}
   }
 `;

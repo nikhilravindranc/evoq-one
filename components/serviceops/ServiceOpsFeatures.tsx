@@ -203,7 +203,7 @@ export function ServiceOpsFeatures() {
       hero={
         <div className="so-hd-in sf-hero">
           <div>
-            <span className="so-label">EVOQ ServiceOps · Features</span>
+            <span className="so-label">ServiceOps · Features</span>
             <h1 className="sf-h1">What ServiceOps does today.</h1>
             <p className="so-lead">The features in the app now, by area. Each line says what you can do, and anything partial or planned says so.</p>
             <p className="sf-sub">AI features run on a built-in demo model with clearly labelled sample answers until a live AI model is connected.</p>
