@@ -17,7 +17,7 @@ const FAMILY: { key: string; name: string; desc: string; href?: string }[] = [
   { key: "overview", name: "EVOQ Bookings", desc: "One booking system for rooms, appointments, stays and facilities.", href: BASE },
   { key: "spaces", name: "Spaces", desc: "Space and room reservations for offices, venues and communities.", href: `${BASE}/spaces` },
   { key: "appointments", name: "Appointments", desc: "Service-based scheduling across providers and locations.", href: `${BASE}/appointments` },
-  { key: "stays", name: "Hospitality", desc: "Hotel rooms, resort stays and villas." },
+  { key: "stays", name: "Stays", desc: "Hotel rooms, resort stays and villas." },
   { key: "facilities", name: "Facilities", desc: "Clubs, courts, studios and event venues." },
 ];
 
@@ -89,7 +89,7 @@ export function BookingsNav({ product, page = "home", tone = "light" }: { produc
           { key: "overview", name: "Overview", href: BASE, on: true },
           { key: "spaces", name: "Spaces", href: `${BASE}/spaces` },
           { key: "appointments", name: "Appointments", href: `${BASE}/appointments` },
-          { key: "stays", name: "Hospitality" },
+          { key: "stays", name: "Stays" },
           { key: "facilities", name: "Facilities" },
         ]
       : [

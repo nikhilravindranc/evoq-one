@@ -14,10 +14,10 @@ export const LIVE_PAGES: Record<string, string> = {
 };
 
 export const CATEGORIES = [
-  { key: "space", name: "Space & Room Reservations", title: "Make space reservations easier to organize.", text: "From meeting rooms and prayer rooms to halls and shared facilities, give people a clear way to explore spaces and request reservations according to availability and usage requirements.", fit: "Offices, coworking spaces, religious institutions and community centers.", img: U("1497366754035-f200968a6e72", 1200), alt: "Corridor of glass-walled meeting rooms", option: "Meeting rooms, prayer rooms and shared spaces" },
-  { key: "appt", name: "Appointment Scheduling", title: "Make time for the services people need.", text: "Support booking scenarios where availability depends on a service, provider or appointment duration. From consultations and treatments to professional services, the booking process should reflect how each appointment is scheduled.", fit: "Clinics, healthcare practices, consultants and service providers.", img: "/healthcare/pm/stock-frontdesk.jpg", alt: "Visitor speaking with a receptionist at a clinic front desk", option: "Consultations, treatments and professional services" },
-  { key: "stay", name: "Hospitality Reservations", title: "Give guests a clearer way to plan their stay.", text: "Hotel rooms, resort stays and villas involve date-based availability and accommodation requirements. A hospitality booking experience needs to account for the details that matter when guests plan a stay.", fit: "Hotels, resorts, villa operators and accommodation providers.", img: U("1611892440504-42a792e24d32", 1200), alt: "Hotel bedroom opening onto a private garden", option: "Hotel rooms, resort stays and villas" },
-  { key: "activity", name: "Activities & Facility Booking", title: "Make facilities and activities available to reserve.", text: "Clubs, recreation centers and venues offer more than rooms. Their bookable options may include activity sessions, event spaces, recreational facilities and member amenities, each with its own reservation requirements.", fit: "Clubs, resorts, recreation centers and event venues.", img: U("1782958995190-75701221aab4", 1200), alt: "Indoor swimming pool with lanes and natural light", option: "Club facilities, activities and event spaces" },
+  { key: "space", name: "Spaces", title: "Make space reservations easier to organize.", text: "From meeting rooms and prayer rooms to halls and shared facilities, give people a clear way to explore spaces and request reservations according to availability and usage requirements.", fit: "Offices, coworking spaces, religious institutions and community centers.", img: U("1497366754035-f200968a6e72", 1200), alt: "Corridor of glass-walled meeting rooms", option: "Meeting rooms, prayer rooms and shared spaces" },
+  { key: "appt", name: "Appointments", title: "Make time for the services people need.", text: "Support booking scenarios where availability depends on a service, provider or appointment duration. From consultations and treatments to professional services, the booking process should reflect how each appointment is scheduled.", fit: "Clinics, healthcare practices, consultants and service providers.", img: "/healthcare/pm/stock-frontdesk.jpg", alt: "Visitor speaking with a receptionist at a clinic front desk", option: "Consultations, treatments and professional services" },
+  { key: "stay", name: "Stays", title: "Give guests a clearer way to plan their stay.", text: "Hotel rooms, resort stays and villas involve date-based availability and accommodation requirements. A hospitality booking experience needs to account for the details that matter when guests plan a stay.", fit: "Hotels, resorts, villa operators and accommodation providers.", img: U("1611892440504-42a792e24d32", 1200), alt: "Hotel bedroom opening onto a private garden", option: "Hotel rooms, resort stays and villas" },
+  { key: "activity", name: "Facilities", title: "Make facilities and activities available to reserve.", text: "Clubs, recreation centers and venues offer more than rooms. Their bookable options may include activity sessions, event spaces, recreational facilities and member amenities, each with its own reservation requirements.", fit: "Clubs, resorts, recreation centers and event venues.", img: U("1782958995190-75701221aab4", 1200), alt: "Indoor swimming pool with lanes and natural light", option: "Club facilities, activities and event spaces" },
 ] as const;
 
 /* ---------- the booking UI shown on the stage, one per category (illustrative) ---------- */
@@ -71,7 +71,6 @@ function StageUI({ k }: { k: (typeof CATEGORIES)[number]["key"] }) {
   );
 }
 
-const SHORT: Record<string, string> = { space: "Spaces", appt: "Appointments" };
 const TONE: Record<string, string> = { space: "#B4583A", appt: "#4E6F58", stay: "#9A6B1F", activity: "#4A5E73" };
 
 const css = `
@@ -151,7 +150,7 @@ export function BookingCategories({ onDiscuss }: { onDiscuss: (option: string, k
                   <h3>{c.title}</h3>
                   <p className="bc-fit">{c.fit}</p>
                   {href ? (
-                    <a className="bc-go" href={href}>Explore {SHORT[c.key]} {I.arrow}</a>
+                    <a className="bc-go" href={href}>Explore {c.name} {I.arrow}</a>
                   ) : (
                     <button type="button" className="bc-go" onClick={() => onDiscuss(c.option, c.key)}>Talk to us about this {I.arrow}</button>
                   )}
