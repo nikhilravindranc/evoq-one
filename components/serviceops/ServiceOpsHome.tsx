@@ -40,7 +40,7 @@ function Hero() {
     <div className="so-hd-in sh-hero">
       <div className="sh-copy">
         <Eyebrow>Field service management</Eyebrow>
-        <h1 className="sh-h1"><span>Every service visit is a promise.</span> <span>Make sure you deliver.</span></h1>
+        <h1 className="sh-h1"><span>Every service visit is a promise.</span> <span>Keep it, from request to sign-off.</span></h1>
         <p className="sh-sub">
           From the first service request to the final sign-off, give customers a service experience they can rely on.
           Coordinate office operations, guide technicians in the field and keep every job moving towards completion.
@@ -54,7 +54,6 @@ function Hero() {
       <div className="sh-vis">
         <span className="sh-blob" aria-hidden />
         <img className="sh-photo" src="/industries/v2/fs-detail-hd.jpg" alt="A technician working on equipment at a customer site" />
-        <span className="sh-anchor" data-fo-start aria-hidden />
         <div className="sh-pop sh-p2">
           <img src="/logos/serviceops-icon.png" alt="" />
           <span><small>ServiceOps, now</small><b>Your technician is on the way</b><em>Ryan arrives between 10:00 and 11:00</em></span>
@@ -428,7 +427,6 @@ const css = `
   .sh-blob{position:absolute;inset:-8% -12% -10% -4%;background:radial-gradient(40% 40% at 78% 24%,rgba(253,214,140,.55),transparent 70%),radial-gradient(38% 38% at 20% 82%,rgba(244,186,150,.4),transparent 70%);filter:blur(30px)}
   .sh-photo{position:absolute;inset:0 6% 12% 0;width:94%;height:88%;object-fit:cover;object-position:30% 30%;border-radius:36px;box-shadow:0 30px 70px -28px rgba(42,27,12,.5)}
   .sh-pop{position:absolute;opacity:0;transform:translateY(14px) scale(.94);animation:shPop .7s cubic-bezier(.2,.8,.2,1) forwards;background:#fff;box-shadow:0 18px 40px -16px rgba(42,27,12,.5),0 0 0 1px ${LINE}}
-  .sh-anchor{position:absolute;top:9%;right:13%;width:1px;height:1px}
   .sh-p2 b,.sh-p3 b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;color:${DEEP};line-height:1.25}
   .sh-p2{left:-8%;top:38%;width:280px;display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:20px;animation-delay:1.7s}
   .sh-p2 img{width:38px;height:38px;border-radius:11px;flex-shrink:0}

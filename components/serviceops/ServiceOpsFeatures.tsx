@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Ic } from "./icons";
 import { DEEP, INK, LINE, MUTED, NEUTRAL, PRIMARY, TINT } from "./palette";
 import { DemoButton, SO_BASE, ServiceOpsShell } from "./ServiceOpsShell";
@@ -8,13 +9,13 @@ import { DemoButton, SO_BASE, ServiceOpsShell } from "./ServiceOpsShell";
    you can do. Anything that is partial, planned, runs on the demo AI or needs setup says so on the line, so the page
    is as plain about limits as it is about features. */
 
-type Status = "partial" | "planned" | "demo" | "setup";
-type F = { n: string; d: string; s?: Status; note?: string };
+export type Status = "partial" | "planned" | "demo" | "setup";
+export type F = { n: string; d: string; s?: Status; note?: string };
 type Area = { id: string; k: string; title: string; lead: string; items: F[] };
 
-const CHIP: Record<Status, string> = { partial: "Partial", planned: "Planned", demo: "Demo AI", setup: "Needs setup" };
+export const CHIP: Record<Status, string> = { partial: "Partial", planned: "Planned", demo: "Demo AI", setup: "Needs setup" };
 
-const AREAS: Area[] = [
+export const AREAS: Area[] = [
   {
     id: "work", k: "Work", title: "From request to finished job.",
     lead: "Requests, work orders, estimates, dispatch and jobs, in the order a job moves.",
@@ -163,7 +164,7 @@ const AREAS: Area[] = [
   },
 ];
 
-const ROLES: [string, string, string][] = [
+export const ROLES: [string, string, string][] = [
   ["Administrator", "Everything, including users and integrations.", "Users, Integrations, Settings"],
   ["Service manager", "All work, billing, insights and settings.", "Insights, Profitability, Billing"],
   ["Dispatcher", "Requests, scheduling, dispatch and jobs.", "Dispatch, Requests, Jobs"],
@@ -171,7 +172,7 @@ const ROLES: [string, string, string][] = [
   ["Technician", "Own jobs, work orders, assets and timesheet.", "My jobs, Assets, Timesheets"],
 ];
 
-const NOT_YET = [
+export const NOT_YET = [
   "Agents that run automatically each day on the server.",
   "A switch and a usage count for each AI helper.",
   "Phone and SMS receptionist, and a WhatsApp and Telegram assistant.",
@@ -196,9 +197,48 @@ function Row({ f }: { f: F }) {
   );
 }
 
-export function ServiceOpsFeatures() {
+/* "On this page": the area that is in view on the right is the one lit on the left. */
+function Toc() {
+  const ids = [...AREAS.map((a) => a.id), "not-yet"];
+  const [on, setOn] = useState(ids[0]);
+  useEffect(() => {
+    const els = ids.map((id) => document.getElementById(id)).filter((e): e is HTMLElement => !!e);
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const line = window.innerHeight * 0.38;
+      let cur = els[0]?.id ?? ids[0];
+      for (const el of els) if (el.getBoundingClientRect().top <= line) cur = el.id;
+      setOn((p) => (p === cur ? p : cur));
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const items = [...AREAS.map((a, n) => ({ id: a.id, k: a.k, n: String(n + 1).padStart(2, "0") })), { id: "not-yet", k: "Not available yet", n: "10" }];
+  return (
+    <nav className="sf-toc" aria-label="Features by area">
+      <span className="sf-toc-k">On this page</span>
+      {items.map((it) => (
+        <a key={it.id} href={`#${it.id}`} className={it.id === on ? "on" : ""} aria-current={it.id === on ? "true" : undefined}>
+          <i>{it.n}</i>{it.k}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+export function ServiceOpsFeatures({ base = SO_BASE }: { base?: string }) {
   return (
     <ServiceOpsShell
+      base={base}
       page="features"
       hero={
         <div className="so-hd-in sf-hero">
@@ -209,7 +249,7 @@ export function ServiceOpsFeatures() {
             <p className="sf-sub">AI features run on a built-in demo model with clearly labelled sample answers until a live AI model is connected.</p>
             <div className="so-ctas">
               <DemoButton location="features_hero" />
-              <a href={SO_BASE} className="so-btn secondary">Explore ServiceOps</a>
+              <a href={base} className="so-btn secondary">Explore ServiceOps</a>
             </div>
           </div>
           <div className="sf-key">
@@ -249,11 +289,7 @@ export function ServiceOpsFeatures() {
       {/* the catalogue */}
       <section className="so-out so-sec so-band" id="catalogue" style={{ paddingTop: 80 }}>
         <div className="so-in sf-layout">
-          <nav className="sf-toc" aria-label="Features by area">
-            <span className="sf-toc-k">On this page</span>
-            {AREAS.map((a, n) => <a key={a.id} href={`#${a.id}`}><i>{String(n + 1).padStart(2, "0")}</i>{a.k}</a>)}
-            <a href="#not-yet"><i>10</i>Not available yet</a>
-          </nav>
+          <Toc />
           <div className="sf-main">
             {AREAS.map((a, n) => (
               <section key={a.id} id={a.id} className="sf-area" data-rv="0">
@@ -282,7 +318,7 @@ export function ServiceOpsFeatures() {
           <div className="so-close-c">
             <h2 className="so-h2">See these features with your own jobs.</h2>
             <p className="so-lead">Tell us how requests, dispatch and invoices run today, and we will walk through ServiceOps in a demo.</p>
-            <div className="so-ctas"><DemoButton location="features_close" /><a href={SO_BASE} className="so-btn secondary">Explore ServiceOps</a></div>
+            <div className="so-ctas"><DemoButton location="features_close" /><a href={base} className="so-btn secondary">Explore ServiceOps</a></div>
           </div>
         </div>
       </section>
@@ -320,7 +356,12 @@ const css = `
   .sf-toc-k{margin-bottom:8px;font-family:var(--font-display),system-ui,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${NEUTRAL}}
   .sf-toc a{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:500;color:${MUTED};text-decoration:none;transition:background .15s ease,color .15s ease}
   .sf-toc a i{font-style:normal;font-size:11.5px;font-weight:700;color:${PRIMARY};min-width:18px}
+  .sf-toc a{position:relative}
+  .sf-toc a i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:transparent;transition:background .25s ease,color .25s ease}
   .sf-toc a:hover{background:#fff;color:${DEEP}}
+  .sf-toc a.on{background:#fff;color:${DEEP};font-weight:600;box-shadow:0 10px 24px -16px rgba(42,27,12,.5),0 0 0 1px ${LINE}}
+  .sf-toc a.on i{background:${PRIMARY};color:#fff}
+  .sf-toc a.on::before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:3px;border-radius:2px;background:${PRIMARY}}
   .sf-main{display:grid;gap:84px}
   .sf-area{scroll-margin-top:84px}
   .sf-area-h{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;align-items:start;margin-bottom:28px}

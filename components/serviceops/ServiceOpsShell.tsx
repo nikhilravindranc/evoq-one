@@ -24,15 +24,15 @@ export function DemoButton({ location, className = "so-btn primary", children = 
   return <button type="button" className={className} onClick={() => open(location)}>{children}</button>;
 }
 
-function ProductBar({ page }: { page: SoPage }) {
+function ProductBar({ page, base }: { page: SoPage; base: string }) {
   const menu = [
-    { k: "home", name: "Overview", href: SO_BASE },
-    { k: "features", name: "Features", href: `${SO_BASE}/features` },
+    { k: "home", name: "Overview", href: base },
+    { k: "features", name: "Features", href: `${base}/features` },
   ];
   return (
     <div className="so-bar">
       <div className="so-bar-in">
-        <Link href={SO_BASE} className="so-brand" aria-label="ServiceOps overview">
+        <Link href={base} className="so-brand" aria-label="ServiceOps overview">
           <img src="/logos/ServiceOps.png" alt="ServiceOps" height={30} />
         </Link>
         <nav className="so-menu" aria-label="ServiceOps">
@@ -45,7 +45,7 @@ function ProductBar({ page }: { page: SoPage }) {
   );
 }
 
-export function ServiceOpsShell({ page, hero, children }: { page: SoPage; hero: ReactNode; children: ReactNode }) {
+export function ServiceOpsShell({ page, hero, children, base = SO_BASE }: { page: SoPage; hero: ReactNode; children: ReactNode; base?: string }) {
   const [from, setFrom] = useState<string | null>(null);
   const open = useCallback((location: string) => {
     track("click_demo_cta", { location, page: `serviceops_${page}` });
@@ -60,7 +60,7 @@ export function ServiceOpsShell({ page, hero, children }: { page: SoPage; hero: 
         <header className="so-hd">
           <span className="so-hd-bg" aria-hidden />
           <div className="so-hd-top"><Topbar light darkCTA={false} ctaColor={PRIMARY} /></div>
-          <ProductBar page={page} />
+          <ProductBar page={page} base={base} />
           <div className="so-hd-body">{hero}</div>
         </header>
         <main>{children}</main>

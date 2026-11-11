@@ -5,44 +5,39 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Ic } from "./icons";
 import { BAND, DEEP, INK, LINE, MUTED, NEUTRAL, PAPER, PRIMARY } from "./palette";
 
-/* The two story sections after the hero: the scroll-revealed statement with what the customer sees, and the
-   lifecycle (one road, one technician, six stops, five selectable work type paths). Sample data is illustrative. */
+/* The story after the hero. First a pinned scene: the customer's phone tracks one job from request to sign-off
+   while the left side explains the step in view. Then the five work types, each with a photo and its stages.
+   Names, times and the work order number are sample data. */
 
 const Eyebrow = ({ children }: { children: ReactNode }) => <span className="so-label">{children}</span>;
 
-/* ---------- statement: words fill in as you scroll, the customer's phone fills with messages ---------- */
-const ST_P = [
-  "Your customer never sees the scheduling, the stock or the paperwork behind a job. They see a technician who arrives informed, finishes the work and leaves a clear record.",
-  "ServiceOps is built around that moment, and around everyone who makes it happen before and after.",
+/* ---------- 1. the visit, as the customer's device shows it ---------- */
+const STEPS: { t: string; d: string; m: string; s: string }[] = [
+  { t: "The journey begins with a request.", d: "A customer reports an issue, requests an installation or needs scheduled maintenance. Requests can arrive by phone, email, online booking, the customer portal or from a technician.", m: "Request received", s: "We will confirm a time shortly." },
+  { t: "The work is reviewed and authorized.", d: "The service coordinator reviews the request, creates a work order, prepares an estimate when required and obtains the necessary approvals.", m: "Request approved", s: "Your estimate has been approved." },
+  { t: "The right workflow takes over.", d: "The work type determines the process. Installation, Service, Repair, Maintenance and Inspection can each follow their own stages, questions and conditions.", m: "Service plan set", s: "The right steps for this type of work." },
+  { t: "A technician is assigned.", d: "Dispatchers review workload, availability and scheduling options before assigning the work.", m: "Ryan is assigned", s: "Arriving between 10:00 and 11:00." },
+  { t: "The service visit takes place.", d: "The technician follows the required checklist, records work performed, adds photos and parts, reports issues and obtains customer sign-off.", m: "Visit in progress", s: "Ryan is on site. Checklist 3 of 5." },
+  { t: "The job moves towards closure.", d: "Completed work is ready for billing, while service history, equipment records and follow-up requirements remain available for future visits.", m: "Work complete", s: "Signed off. Your invoice is ready." },
 ];
 const ST_CHIPS = ["Dispatch board", "Parts and stock", "Checklists", "Estimates", "Approvals", "Job costing"];
-const ST_MSGS: { t: string; d: string; at: number }[] = [
-  { t: "Request received", d: "We will confirm a time shortly.", at: 0.12 },
-  { t: "Ryan is assigned", d: "Arriving between 10:00 and 11:00.", at: 0.36 },
-  { t: "Ryan is on the way", d: "Parking at the main entrance.", at: 0.6 },
-  { t: "Work complete", d: "Signed off. Your invoice is ready.", at: 0.82 },
-];
 
 function Statement() {
   const ref = useRef<HTMLElement>(null);
+  const [idx, setIdx] = useState(0);
+
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
-    const words = [...root.querySelectorAll<HTMLElement>("[data-w]")];
-    const msgs = [...root.querySelectorAll<HTMLElement>("[data-b]")];
     const wide = window.matchMedia("(min-width:981px)");
     const still = window.matchMedia("(prefers-reduced-motion: reduce)");
     let raf = 0;
     const update = () => {
       raf = 0;
+      if (!wide.matches || still.matches) { setIdx(STEPS.length - 1); return; }
       const r = root.getBoundingClientRect();
-      const live = wide.matches && !still.matches;
-      const p = live ? Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - window.innerHeight))) : 1;
-      words.forEach((w, i) => {
-        const t = ((p - 0.04) / 0.62) * words.length - i;
-        w.style.opacity = String(0.2 + 0.8 * Math.min(1, Math.max(0, t)));
-      });
-      msgs.forEach((m) => m.classList.toggle("on", p >= Number(m.dataset.b)));
+      const p = Math.min(0.9999, Math.max(0, -r.top / Math.max(1, r.height - window.innerHeight)));
+      setIdx((prev) => { const i = Math.floor(p * STEPS.length); return prev === i ? prev : i; });
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
     update();
@@ -55,32 +50,57 @@ function Statement() {
     };
   }, []);
 
+  const go = (i: number) => {
+    const root = ref.current;
+    if (!root || !window.matchMedia("(min-width:981px)").matches) return;
+    const r = root.getBoundingClientRect();
+    const y = window.scrollY + r.top + ((i + 0.5) / STEPS.length) * (r.height - window.innerHeight);
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  const cur = STEPS[idx];
   return (
     <section className="st-sec" ref={ref}>
       <div className="st-stick">
         <div className="st-in">
           <div className="st-copy">
-            <h2 className="st-h">To your customer, the visit is the product.</h2>
-            <div className="st-p">
-              {ST_P.map((p, pi) => (
-                <p key={pi}>
-                  {p.split(" ").map((w, i) => <span key={i} data-w className="st-w">{w} </span>)}
-                </p>
-              ))}
+            <h2 className="st-h"><span>Your customer never sees your software.</span> <span>They see the visit.</span></h2>
+            <p className="st-lead">They do not see the scheduling, the stock or the paperwork behind a job. They see a technician who arrives informed, finishes the work and leaves a clear record.</p>
+
+            <div className="st-step" key={idx}>
+              <span className="st-count"><b>{String(idx + 1).padStart(2, "0")}</b> of {String(STEPS.length).padStart(2, "0")}</span>
+              <h3>{cur.t}</h3>
+              <p>{cur.d}</p>
             </div>
+            <ol className="st-dots" aria-label="Steps from request to sign-off">
+              {STEPS.map((s, i) => (
+                <li key={s.m}><button type="button" className={i === idx ? "on" : i < idx ? "done" : ""} onClick={() => go(i)} aria-label={`Step ${i + 1}: ${s.t}`} /></li>
+              ))}
+            </ol>
+
+            <ol className="st-all">
+              {STEPS.map((s, i) => (
+                <li key={s.t}><em>{String(i + 1).padStart(2, "0")}</em><div><b>{s.t}</b><p>{s.d}</p></div></li>
+              ))}
+            </ol>
           </div>
+
           <div className="st-scene">
             {ST_CHIPS.map((c, i) => <span key={c} className={`st-chip c${i}`}>{c}</span>)}
             <div className="st-phone">
               <i className="st-notch" aria-hidden />
               <div className="st-scr">
-                <div className="st-top"><b>Your visit</b><small>Today</small></div>
-                {ST_MSGS.map((m) => (
-                  <div key={m.t} className="st-msg" data-b={m.at}>
-                    <img src="/logos/serviceops-icon.png" alt="" />
-                    <span><b>{m.t}</b><small>{m.d}</small></span>
-                  </div>
-                ))}
+                <div className="st-top"><b>Your visit</b><small>WO-1042</small></div>
+                <ol className="st-tl" style={{ ["--si" as string]: idx }}>
+                  <span className="st-rail" aria-hidden><i style={{ height: `${(idx / (STEPS.length - 1)) * 100}%` }} /></span>
+                  <span className="st-token" aria-hidden>{Ic.wrench}</span>
+                  {STEPS.map((s, i) => (
+                    <li key={s.m} className={i < idx ? "done" : i === idx ? "now" : ""}>
+                      <i>{i <= idx ? Ic.check : null}</i>
+                      <span><b>{s.m}</b><small>{s.s}</small></span>
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
           </div>
@@ -90,203 +110,40 @@ function Statement() {
   );
 }
 
-/* ---------- lifecycle road: six stops, driven by a work order that travels down the page ---------- */
-const STEPS: { t: string; d: string }[] = [
-  { t: "The journey begins with a request.", d: "A customer reports an issue, requests an installation or needs scheduled maintenance. Requests can arrive by phone, email, online booking, the customer portal or from a technician." },
-  { t: "The work is reviewed and authorized.", d: "The service coordinator reviews the request, creates a work order, prepares an estimate when required and obtains the necessary approvals." },
-  { t: "The right workflow takes over.", d: "The work type determines the process. Installation, Service, Repair, Maintenance and Inspection can each follow their own stages, questions and conditions." },
-  { t: "A technician is assigned.", d: "Dispatchers review workload, availability and scheduling options before assigning the work." },
-  { t: "The service visit takes place.", d: "The technician follows the required checklist, records work performed, adds photos and parts, reports issues and obtains customer sign-off." },
-  { t: "The job moves towards closure.", d: "Completed work is ready for billing, while service history, equipment records and follow-up requirements remain available for future visits." },
+/* ---------- 2. five work types: a photo each, and the stages it follows ---------- */
+const TYPES: { k: string; n: string; d: string; ic: ReactNode; img: string; alt: string; pos: string; stages: string[] }[] = [
+  { k: "install", n: "Installation", d: "Coordinate new equipment installation, required checks and completion.", ic: Ic.plug, img: "/solutions/construction.jpg", alt: "A site lead checking installation plans", pos: "50% 30%", stages: ["Requested", "Approved", "Checks", "Installed", "Complete"] },
+  { k: "service", n: "Service", d: "Handle customer reported service needs and planned service visits.", ic: Ic.wrench, img: "/industries/v2/fs-main-hd.jpg", alt: "A technician during a service visit", pos: "60% 35%", stages: ["Requested", "Scheduled", "Visit", "Complete"] },
+  { k: "repair", n: "Repair", d: "Record the issue, guide the repair process and document the work performed.", ic: Ic.gear, img: "/industries/v2/fs-detail-hd.jpg", alt: "A technician repairing a control panel", pos: "40% 40%", stages: ["Issue recorded", "Approved", "Repair", "Documented", "Complete"] },
+  { k: "maint", n: "Maintenance", d: "Schedule recurring maintenance and raise work orders when service is due.", ic: Ic.calendar, img: "/industries/v2/mf-main-hd.jpg", alt: "A maintenance technician beside plant equipment", pos: "55% 40%", stages: ["Plan due", "Work order", "Visit", "Complete"] },
+  { k: "inspect", n: "Inspection", d: "Follow inspection stages and record the required findings.", ic: Ic.search, img: "/industries/v2/mf-circle-hd.jpg", alt: "An inspector on a plant floor", pos: "50% 30%", stages: ["Scheduled", "Inspect", "Findings recorded", "Complete"] },
 ];
 
-function Road() {
+function WorkTypes() {
+  const [on, setOn] = useState(0);
+  const t = TYPES[on];
   return (
-    <div className="rd">
-      <span className="rd-road" aria-hidden><i /></span>
-      <ol className="rd-grid">
-        {STEPS.map((s, i) => (
-          <li key={s.t} className="rd-stop">
-            <span className="rd-node" data-n={i} />
-            <span className="rd-txt"><em>{String(i + 1).padStart(2, "0")}</em><b>{s.t}</b><span>{s.d}</span></span>
+    <div className="wt" data-rv>
+      <ul className="wt-list" role="tablist" aria-label="Work types">
+        {TYPES.map((x, i) => (
+          <li key={x.k} className={i === on ? "on" : ""}>
+            <button type="button" role="tab" aria-selected={i === on} onClick={() => setOn(i)}>
+              <i>{x.ic}</i>
+              <span><b>{x.n}</b><small>{x.d}</small></span>
+            </button>
           </li>
         ))}
-      </ol>
-    </div>
-  );
-}
-
-/* The work order that leaves the hero and rides the page down into the road, one step per stop. Its position is a
-   function of the scroll position only, so it flows with the reader and never needs a timer. */
-const FO_LABELS = ["Request received", "Request authorized", "Workflow set", "Technician assigned", "Visit in progress", "Closed, ready to bill"];
-const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
-const smooth = (t: number) => { const x = clamp(t, 0, 1); return x * x * (3 - 2 * x); };
-
-function FlowObject() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    const main = el?.parentElement;
-    if (!el || !main) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.style.display = "none"; return; }
-    const label = el.querySelector<HTMLElement>("[data-fl]");
-    let raf = 0;
-    let lastX = 0;
-    let tilt = 0;
-    let shown = -1;
-
-    const center = (n: Element) => {
-      const r = n.getBoundingClientRect();
-      return { x: r.left + r.width / 2 + window.scrollX, y: r.top + r.height / 2 + window.scrollY };
-    };
-
-    const update = () => {
-      raf = 0;
-      const start = document.querySelector("[data-fo-start]");
-      const nodes = [...document.querySelectorAll("[data-n]")];
-      const rd = document.querySelector<HTMLElement>(".rd");
-      if (!start || nodes.length < STEPS.length || !rd) return;
-      const vh = window.innerHeight;
-      const sy = window.scrollY;
-      const m = main.getBoundingClientRect();
-      const mx = m.left + window.scrollX;
-      const my = m.top + window.scrollY;
-      const a0 = center(start);
-      const ns = nodes.map(center);
-      const row = Math.abs(ns[ns.length - 1].y - ns[0].y) < 40;
-
-      /* scroll positions at which the object sits on each anchor */
-      const P = [a0, ...ns];
-      const S: number[] = [0];
-      const first = row ? ns[0].y - vh * 0.78 : ns[0].y - vh * 0.55;
-      S.push(Math.max(first, 80));
-      for (let k = 1; k < ns.length; k++) S.push(row ? S[1] + k * 88 : Math.max(ns[k].y - vh * 0.55, S[k] + 60));
-      const end = S[S.length - 1];
-
-      let i = 0;
-      while (i < S.length - 2 && sy >= S[i + 1]) i++;
-      const t = clamp((sy - S[i]) / Math.max(1, S[i + 1] - S[i]), 0, 1);
-      let x: number;
-      let y: number;
-      if (sy >= end) { x = P[P.length - 1].x; y = P[P.length - 1].y; }
-      else if (i === 0) {
-        /* the long flight from the hero: it glides down the page and swings across to the road at the end */
-        y = P[0].y + (P[1].y - P[0].y) * t;
-        x = P[0].x + (P[1].x - P[0].x) * smooth((t - 0.55) / 0.45);
-      } else {
-        const e = smooth((t - 0.12) / 0.76);
-        x = P[i].x + (P[i + 1].x - P[i].x) * e;
-        y = P[i].y + (P[i + 1].y - P[i].y) * e;
-      }
-      /* which stop it has reached: lights the road and sets the label */
-      let k = -1;
-      for (let j = 1; j < S.length; j++) if (sy >= S[j] - (S[j] - S[j - 1]) * 0.4) k = j - 1;
-      if (k !== shown) {
-        shown = k;
-        if (label) label.textContent = FO_LABELS[Math.max(0, k)];
-        rd.querySelectorAll<HTMLElement>(".rd-stop").forEach((s, n) => {
-          s.classList.toggle("on", n <= k);
-          s.classList.toggle("now", n === k);
-        });
-      }
-      const w = el.offsetWidth;
-      const off = 0;
-      const px = clamp(x + off - mx - w / 2, 8 - mx, window.innerWidth - 8 - w - mx);
-      const bob = Math.sin(sy / 90) * 5;
-      tilt += (clamp((x - lastX) * 0.5, -10, 10) - tilt) * 0.2;
-      lastX = x;
-      el.style.transform = `translate3d(${px}px,${y - my - el.offsetHeight / 2 + bob}px,0) rotate(${tilt}deg)`;
-      el.style.opacity = String(sy > end + 140 ? clamp(1 - (sy - end - 140) / 260, 0, 1) : 1);
-
-      const fill = k < 0 ? 0 : row ? Math.max(0, x - ns[0].x) : Math.max(0, y - ns[0].y);
-      rd.style.setProperty("--fx", `${fill}px`);
-      rd.style.setProperty("--fy", `${fill}px`);
-    };
-
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    update();
-    const ro = new ResizeObserver(onScroll);
-    ro.observe(main);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    window.addEventListener("load", onScroll);
-    const late = window.setTimeout(onScroll, 600);
-    return () => {
-      ro.disconnect();
-      window.clearTimeout(late);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      window.removeEventListener("load", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  return (
-    <div className="fo" ref={ref} aria-hidden>
-      <div className="fo-card">
-        <i>{Ic.wrench}</i>
-        <span><small>WO-1042</small><b data-fl>Request received</b></span>
-      </div>
-    </div>
-  );
-}
-
-/* ---------- five work types, five defined paths: a work order travels the selected path ---------- */
-const TYPES: { k: string; n: string; d: string; ic: ReactNode; stages: string[] }[] = [
-  { k: "install", n: "Installation", d: "Coordinate new equipment installation, required checks and completion.", ic: Ic.plug, stages: ["Requested", "Approved", "Checks", "Installed", "Complete"] },
-  { k: "service", n: "Service", d: "Handle customer reported service needs and planned service visits.", ic: Ic.wrench, stages: ["Requested", "Scheduled", "Visit", "Complete"] },
-  { k: "repair", n: "Repair", d: "Record the issue, guide the repair process and document the work performed.", ic: Ic.gear, stages: ["Issue recorded", "Approved", "Repair", "Documented", "Complete"] },
-  { k: "maint", n: "Maintenance", d: "Schedule recurring maintenance and raise work orders when service is due.", ic: Ic.calendar, stages: ["Plan due", "Work order", "Visit", "Complete"] },
-  { k: "inspect", n: "Inspection", d: "Follow inspection stages and record the required findings.", ic: Ic.search, stages: ["Scheduled", "Inspect", "Findings recorded", "Complete"] },
-];
-
-function WorkPaths() {
-  const [on, setOn] = useState(0);
-  const [tick, setTick] = useState(0);
-  const root = useRef<HTMLDivElement>(null);
-  const seen = useRef(false);
-  const type = TYPES[on];
-  const last = type.stages.length - 1;
-  const step = Math.min(tick, last);
-
-  useEffect(() => {
-    const el = root.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => { seen.current = e.isIntersecting; }, { threshold: 0.3 });
-    io.observe(el);
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const id = window.setInterval(() => {
-      if (still || !seen.current) return;
-      setTick((t) => (t >= 9 ? 0 : t + 1));
-    }, 1000);
-    return () => { io.disconnect(); window.clearInterval(id); };
-  }, []);
-
-  return (
-    <div className="wp" ref={root} data-rv>
-      <div className="wp-tabs" role="tablist" aria-label="Work types">
-        {TYPES.map((t, i) => (
-          <button key={t.k} type="button" role="tab" aria-selected={i === on} className={`wp-tab${i === on ? " on" : ""}`} onClick={() => { setOn(i); setTick(0); }}>
-            {t.ic}{t.n}
-          </button>
+      </ul>
+      <div className="wt-pic">
+        {TYPES.map((x, i) => (
+          <img key={x.k} src={x.img} alt={x.alt} style={{ objectPosition: x.pos }} className={i === on ? "on" : ""} />
         ))}
-      </div>
-      <div className="wp-stage">
-        <div className="wp-info">
-          <b>{type.n}</b>
-          <p>{type.d}</p>
-          <span className="wp-pills"><em>Own stages</em><em>Own questions</em><em>Own conditions</em></span>
-        </div>
-        <div className="wp-track">
-          <span className="wp-tok" style={{ left: `${((step + 0.5) / type.stages.length) * 100}%` }} aria-hidden>
-            <span className="wp-card">{type.ic}<b>WO-1042</b>{step === last && <i>{Ic.check}</i>}</span>
-          </span>
-          {type.stages.map((s, i) => (
-            <span key={s + i} className={`wp-n${i <= step ? " done" : ""}${i === step ? " cur" : ""}`}>
-              <i>{i < step || (i === step && step === last) ? Ic.check : null}</i>
-              <b>{s}</b>
-            </span>
-          ))}
+        <div className="wt-path" key={t.k}>
+          <ol>
+            {t.stages.map((s, i) => (
+              <li key={s} style={{ ["--d" as string]: `${i * 70}ms` }}><i>{i + 1}</i>{s}</li>
+            ))}
+          </ol>
         </div>
       </div>
     </div>
@@ -302,11 +159,8 @@ function Lifecycle() {
           <h2 className="so-h2">Not every service job follows the same path.</h2>
           <p className="so-lead">An installation is different from a repair. A maintenance visit has different requirements from an inspection. ServiceOps lets companies define workflows around the type of work they perform, so each job follows the right stages, requirements and approvals.</p>
         </div>
-
-        <Road />
-
-        <h3 className="wp-h" data-rv>Five work types, five defined paths.</h3>
-        <WorkPaths />
+        <h3 className="wt-h" data-rv>Five work types, five defined paths.</h3>
+        <WorkTypes />
         <p className="lc-close" data-rv>Your service processes can differ. ServiceOps gives each type of work a defined path, while keeping the wider operation coordinated.</p>
       </div></div>
     </section>
@@ -319,122 +173,105 @@ export function ServiceOpsFlow() {
       <style>{css}</style>
       <Statement />
       <Lifecycle />
-      <FlowObject />
     </>
   );
 }
 
 const css = `
-  /* statement */
-  .st-sec{position:relative;height:210vh;padding:0 20px;background:#fff}
-  .st-stick{position:sticky;top:84px;height:calc(100vh - 108px);min-height:540px;max-height:660px;max-width:1240px;margin:0 auto}
-  .st-in{position:relative;overflow:hidden;height:100%;border-radius:40px;background:${BAND};padding:0 64px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:48px;align-items:center}
-  .st-h{--h2-size:38px;max-width:15ch;text-wrap:balance}
-  .st-p{margin-top:22px}
-  .st-p p{margin:0 0 14px;font-size:19px;line-height:1.6;color:${DEEP}}
-  .st-w{opacity:.2;transition:opacity .15s linear}
+  /* the pinned scene: copy and the step in view on the left, the customer's phone on the right */
+  .st-sec{position:relative;height:340vh;padding:0 20px;background:#fff}
+  .st-stick{position:sticky;top:84px;height:calc(100vh - 108px);min-height:560px;max-height:680px;max-width:1240px;margin:0 auto}
+  .st-in{position:relative;overflow:hidden;height:100%;border-radius:40px;background:${BAND};padding:0 64px;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:48px;align-items:center}
+  .st-h{margin:0;text-wrap:balance}
+  .st-h span{display:block}.st-h span+span{color:${PRIMARY}}
+  .st-lead{margin:18px 0 0;max-width:52ch;font-size:16.5px;line-height:1.6;color:${MUTED}}
+  .st-step{margin-top:26px;padding:20px 22px;border-radius:22px;background:#fff;box-shadow:0 18px 40px -28px rgba(42,27,12,.5),0 0 0 1px ${LINE};animation:stIn .45s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes stIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .st-count{display:block;margin-bottom:8px;font-size:12.5px;letter-spacing:.06em;color:${NEUTRAL}}
+  .st-count b{color:${PRIMARY};font-family:var(--font-display),system-ui,sans-serif;font-size:14px}
+  .st-step h3{--h3-size:20px;margin:0 0 6px!important;line-height:1.25}
+  .st-step p{margin:0;font-size:15px;line-height:1.55;color:${MUTED}}
+  .st-dots{list-style:none;display:flex;gap:8px;margin:18px 0 0;padding:0}
+  .st-dots button{display:block;width:34px;height:6px;padding:0;border:0;border-radius:3px;background:#DCCFB8;cursor:pointer;transition:background .3s ease,width .3s ease}
+  .st-dots button.done{background:#E0A25A}.st-dots button.on{background:${PRIMARY};width:52px}
+  .st-all{display:none;list-style:none;margin:26px 0 0;padding:0}
   .st-scene{position:relative;height:100%;display:grid;place-items:center}
-  .st-phone{position:relative;z-index:2;width:236px;border-radius:38px;background:#22160A;padding:8px;box-shadow:0 36px 70px -26px rgba(42,27,12,.6)}
-  .st-notch{position:absolute;z-index:2;left:50%;top:14px;width:64px;height:16px;margin-left:-32px;border-radius:12px;background:#22160A}
-  .st-scr{border-radius:30px;background:#FFFDF8;min-height:430px;padding:38px 12px 14px;display:flex;flex-direction:column;gap:10px}
-  .st-top{display:flex;align-items:baseline;justify-content:space-between}
-  .st-top b{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${DEEP}}
-  .st-top small,.st-msg small{display:block;font-size:12px;line-height:1.4;color:${NEUTRAL}}
-  .st-msg{display:flex;gap:10px;align-items:flex-start;padding:11px;border-radius:14px;background:#fff;box-shadow:0 0 0 1px ${LINE};opacity:0;transform:translateY(16px) scale(.97);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.7,.2,1)}
-  .st-msg.on{opacity:1;transform:none}
-  .st-msg img{width:26px;height:26px;border-radius:8px;flex-shrink:0}
-  .st-msg b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:13.5px;color:${DEEP}}
+  .st-phone{position:relative;z-index:2;width:262px;border-radius:40px;background:#22160A;padding:9px;box-shadow:0 36px 70px -26px rgba(42,27,12,.6)}
+  .st-notch{position:absolute;z-index:2;left:50%;top:15px;width:70px;height:18px;margin-left:-35px;border-radius:12px;background:#22160A}
+  .st-scr{border-radius:32px;background:#FFFDF8;min-height:476px;padding:42px 14px 16px}
+  .st-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+  .st-top b{font-family:var(--font-display),system-ui,sans-serif;font-size:18px;color:${DEEP}}
+  .st-top small{font-size:12px;color:${NEUTRAL}}
+  .st-tl{position:relative;list-style:none;margin:0;padding:0}
+  .st-rail{position:absolute;left:12px;top:16px;bottom:26px;width:3px;border-radius:2px;background:#EADFC9}
+  .st-rail i{position:absolute;left:0;top:0;width:100%;border-radius:2px;background:${PRIMARY};transition:height .6s cubic-bezier(.4,0,.2,1)}
+  .st-token{position:absolute;z-index:3;left:0;top:calc(var(--si,0) * 66px + 2px);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:${PRIMARY};box-shadow:0 6px 14px -4px rgba(42,27,12,.55),0 0 0 2px ${PRIMARY};transition:top .6s cubic-bezier(.4,0,.2,1)}
+  .st-token svg{width:14px;height:14px}
+  .st-tl li{position:relative;display:flex;gap:14px;align-items:flex-start;height:66px;padding-top:2px}
+  .st-tl li>i{position:relative;z-index:2;display:grid;place-items:center;flex-shrink:0;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid #E0D4BE;color:#fff;transition:background .4s ease,border-color .4s ease}
+  .st-tl li>i svg{width:12px;height:12px}
+  .st-tl li.done>i{background:${PRIMARY};border-color:${PRIMARY}}
+  .st-tl li.now>i{opacity:0}
+  .st-tl li span{display:block;padding-top:1px;opacity:.38;transition:opacity .4s ease}
+  .st-tl li.done span,.st-tl li.now span{opacity:1}
+  .st-tl li b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;line-height:1.25;color:${DEEP}}
+  .st-tl li small{display:block;margin-top:2px;font-size:12.5px;line-height:1.35;color:${NEUTRAL}}
   .st-chip{position:absolute;z-index:1;padding:9px 15px;border-radius:999px;background:#fff;box-shadow:0 10px 26px -12px rgba(42,27,12,.35);font-size:13px;font-weight:600;color:${INK};filter:blur(2px);opacity:.75;animation:stFloat 7s ease-in-out infinite}
   .st-chip.c0{left:2%;top:14%}.st-chip.c1{right:0;top:22%;animation-delay:-2s}.st-chip.c2{left:-4%;top:44%;animation-delay:-4s}
   .st-chip.c3{right:-2%;top:52%;animation-delay:-1s}.st-chip.c4{left:4%;top:74%;animation-delay:-5s}.st-chip.c5{right:4%;top:80%;animation-delay:-3s}
   @keyframes stFloat{50%{transform:translateY(-9px)}}
 
-  /* road: the work order rides down into it and lights each stop in turn */
-  .rd{position:relative;margin-top:8px}
-  .rd-grid{position:relative;z-index:2;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 22px}
-  .rd-stop{position:relative}
-  .rd-node{display:block;width:18px;height:18px;margin:0 0 24px 2px;border-radius:50%;background:#fff;border:3px solid #D9C9A8;transition:background .4s ease,border-color .4s ease,transform .4s ease}
-  .rd-stop.on .rd-node{border-color:${PRIMARY};background:${PRIMARY}}
-  .rd-stop.now .rd-node{transform:scale(1.35)}
-  .rd-txt{display:block;transition:opacity .4s ease}
-  .rd-txt em{display:block;margin-bottom:6px;font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:600;letter-spacing:.06em;color:#B8AA92;transition:color .4s ease}
-  .rd-stop.on .rd-txt em{color:${PRIMARY}}
-  .rd-txt b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:16px;font-weight:600;line-height:1.3;color:${DEEP};margin-bottom:8px;text-wrap:balance}
-  .rd-txt span{display:block;font-size:14.5px;line-height:1.55;color:${MUTED}}
-  .rd-stop:not(.on) .rd-txt{opacity:.5}
-  .rd-road{position:absolute;z-index:1;left:11px;right:0;top:10.5px;height:0;border-top:3px dashed #D9C9A8}
-  .rd-road i{position:absolute;left:0;top:-3px;height:3px;width:var(--fx,0);background:${PRIMARY}}
-
-  /* the work order */
-  .fo{position:absolute;left:0;top:0;z-index:30;pointer-events:none;will-change:transform}
-  .fo-card{display:flex;align-items:center;gap:10px;padding:8px 20px 8px 8px;border-radius:999px;background:#fff;box-shadow:0 20px 44px -14px rgba(42,27,12,.55),0 0 0 1px ${LINE};opacity:0;animation:foIn .7s .9s cubic-bezier(.2,.8,.2,1) forwards}
-  .fo-card i{display:grid;place-items:center;width:34px;height:34px;flex-shrink:0;border-radius:50%;background:${PRIMARY};color:#fff}
-  .fo-card i svg{width:18px;height:18px}
-  .fo-card small{display:block;font-size:11px;line-height:1.2;letter-spacing:.05em;color:${NEUTRAL}}
-  .fo-card b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;line-height:1.3;color:${DEEP};white-space:nowrap}
-  @keyframes foIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
-  @media (max-width:900px){.fo-card{padding:7px}.fo-card span{display:none}}
-  @media (prefers-reduced-motion:reduce){.fo{display:none}}
-
-  /* work types */
-  .wp-h{--h3-size:28px;margin:96px 0 24px!important;letter-spacing:-.01em}
-  .wp{border-radius:32px;background:${PAPER};box-shadow:inset 0 0 0 1px ${LINE};padding:30px 32px 36px}
-  .wp-tabs{display:flex;flex-wrap:wrap;gap:8px}
-  .wp-tab{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1.5px solid ${LINE};background:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:600;color:${MUTED};cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
-  .wp-tab svg{width:17px;height:17px}
-  .wp-tab:hover{border-color:${DEEP};color:${DEEP}}
-  .wp-tab.on{background:${DEEP};border-color:${DEEP};color:#fff}
-  .wp-stage{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:56px;align-items:center;margin-top:36px;min-height:170px}
-  .wp-info b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:22px;color:${DEEP}}
-  .wp-info p{margin:8px 0 16px;font-size:15.5px;line-height:1.55;color:${MUTED}}
-  .wp-pills{display:flex;flex-wrap:wrap;gap:6px}
-  .wp-pills em{padding:4px 11px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE};font-style:normal;font-size:12.5px;font-weight:600;color:${MUTED}}
-  .wp-track{position:relative;display:flex;align-items:flex-start;padding-top:62px}
-  .wp-tok{position:absolute;top:0;z-index:3;transform:translateX(-50%);transition:left .85s cubic-bezier(.65,0,.35,1)}
-  .wp-card{position:relative;display:flex;align-items:center;gap:7px;padding:7px 12px 7px 9px;border-radius:12px;background:#fff;box-shadow:0 12px 26px -10px rgba(42,27,12,.45),0 0 0 1px ${LINE};color:${PRIMARY};white-space:nowrap}
-  .wp-card svg{width:16px;height:16px}
-  .wp-card b{font-size:12.5px;color:${DEEP}}
-  .wp-card i{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#168A4A;color:#fff}
-  .wp-card i svg{width:11px;height:11px}
-  .wp-card::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;margin-left:-6px;background:#fff;transform:rotate(45deg);box-shadow:3px 3px 4px -2px rgba(42,27,12,.2)}
-  .wp-n{position:relative;flex:1 1 0;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
-  .wp-n::before{content:"";position:absolute;top:11px;right:50%;width:100%;height:3px;border-radius:2px;background:#E6D9BD;transition:background .5s ease}
-  .wp-n:first-of-type::before{display:none}
-  .wp-n.done::before{background:${PRIMARY}}
-  .wp-n i{position:relative;z-index:1;display:grid;place-items:center;width:25px;height:25px;border-radius:50%;background:#fff;border:3px solid #D9C9A8;color:#fff;transition:background .4s ease,border-color .4s ease,transform .4s ease}
-  .wp-n i svg{width:12px;height:12px}
-  .wp-n.done i{background:${PRIMARY};border-color:${PRIMARY}}
-  .wp-n.cur i{transform:scale(1.18)}
-  .wp-n b{margin-top:12px;padding:0 4px;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;font-weight:600;line-height:1.3;color:${NEUTRAL};transition:color .3s ease}
-  .wp-n.done b{color:${DEEP}}
+  /* five work types */
+  .wt-h{--h3-size:28px;margin:72px 0 26px!important;letter-spacing:-.01em}
+  .wt{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:stretch}
+  .wt-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+  .wt-list li{flex:1;border-top:1px solid ${LINE}}
+  .wt-list li:last-child{border-bottom:1px solid ${LINE}}
+  .wt-list button{display:flex;gap:16px;align-items:flex-start;width:100%;height:100%;padding:18px 4px;border:0;background:none;text-align:left;cursor:pointer;font:inherit;color:inherit}
+  .wt-list i{display:grid;place-items:center;flex-shrink:0;width:42px;height:42px;border-radius:13px;background:${PAPER};color:#B8AA92;box-shadow:inset 0 0 0 1px ${LINE};transition:background .3s ease,color .3s ease}
+  .wt-list i svg{width:21px;height:21px}
+  .wt-list b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:21px;font-weight:600;letter-spacing:-.01em;color:#B8AA92;transition:color .3s ease}
+  .wt-list small{display:block;max-height:0;overflow:hidden;font-size:15px;line-height:1.55;color:${MUTED};opacity:0;transition:max-height .45s ease,opacity .35s ease,margin .35s ease}
+  .wt-list button:hover b{color:#7C6A52}
+  .wt-list li.on b{color:${DEEP}}
+  .wt-list li.on i{background:${PRIMARY};color:#fff;box-shadow:none}
+  .wt-list li.on small{max-height:70px;margin-top:5px;opacity:1}
+  .wt-pic{position:relative;min-height:420px;border-radius:28px;overflow:hidden;background:#2A1B0C;box-shadow:0 34px 70px -36px rgba(42,27,12,.55)}
+  .wt-pic>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s ease}
+  .wt-pic>img.on{opacity:1;transform:none}
+  .wt-pic::after{content:"";position:absolute;inset:auto 0 0 0;height:46%;background:linear-gradient(180deg,rgba(42,27,12,0),rgba(42,27,12,.55));pointer-events:none}
+  .wt-path{position:absolute;z-index:2;left:18px;right:18px;bottom:18px;padding:14px 18px;border-radius:18px;background:rgba(255,255,255,.96);box-shadow:0 18px 40px -18px rgba(42,27,12,.6)}
+  .wt-path ol{list-style:none;display:flex;margin:0;padding:0}
+  .wt-path li{position:relative;flex:1 1 0;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding-right:6px;min-width:0;font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:600;line-height:1.25;color:${DEEP};animation:wtIn .5s calc(var(--d,0ms)) cubic-bezier(.2,.7,.2,1) both}
+  .wt-path li i{position:relative;z-index:1;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:${PRIMARY};color:#fff;font-style:normal;font-size:12px}
+  .wt-path li:not(:last-child)::before{content:"";position:absolute;left:28px;right:4px;top:11px;height:2px;border-radius:1px;background:#E5D3B2}
+  @keyframes wtIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .lc-close{margin:44px auto 0;max-width:64ch;text-align:center;font-family:var(--font-display),system-ui,sans-serif;font-size:19px;line-height:1.5;color:${DEEP};text-wrap:balance}
 
-  @media (max-width:1180px){
-    .st-in{padding:0 40px}
-    .rd-grid{gap:0 14px}.rd-txt span{font-size:14px}
-    .wp-stage{gap:36px}
-  }
+  @media (prefers-reduced-motion:reduce){.st-step,.wt-path li{animation:none}.st-token,.st-rail i{transition:none}}
+  @media (max-width:1180px){.st-in{padding:0 40px;gap:32px}.wt{gap:36px}}
   @media (max-width:980px){
     .st-sec{height:auto;padding-bottom:24px}
     .st-stick{position:static;height:auto;min-height:0;max-height:none}
-    .st-in{height:auto;grid-template-columns:1fr;gap:12px;padding:56px 28px 48px}
-    .st-scene{height:auto;min-height:480px}
+    .st-in{height:auto;grid-template-columns:1fr;gap:28px;padding:56px 28px 48px}
+    .st-step,.st-dots{display:none}
+    .st-all{display:grid;gap:16px}
+    .st-all li{display:flex;gap:14px;align-items:flex-start;padding-top:14px;border-top:1px solid rgba(180,83,9,.22)}
+    .st-all em{font-style:normal;font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:600;letter-spacing:.06em;color:${PRIMARY};padding-top:2px}
+    .st-all b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;color:${DEEP};margin-bottom:3px}
+    .st-all p{margin:0;font-size:14.5px;line-height:1.55;color:${MUTED}}
+    .st-scene{height:auto;min-height:520px}
     .st-chip.c2{left:0}.st-chip.c3{right:0}
-  }
-  @media (max-width:900px){
-    .rd-grid{grid-template-columns:1fr;gap:34px 0;padding-left:44px}
-    .rd-node{position:absolute;left:-44px;top:2px;margin:0}
-    .rd-road{left:7.5px;right:auto;top:11px;bottom:70px;height:auto;border-top:0;border-left:3px dashed #D9C9A8}
-    .rd-road i{left:-3px;top:0;width:3px;height:var(--fy,0)}
-    .wp-stage{grid-template-columns:1fr;gap:28px}
-    .wp-h{margin-top:72px!important;--h3-size:24px}
+    .wt{grid-template-columns:1fr;gap:26px}
+    .wt-pic{min-height:360px}
+    .wt-h{margin-top:56px!important;--h3-size:24px}
   }
   @media (max-width:640px){
-    .st-in{border-radius:28px;padding:44px 20px 36px}.st-sec{padding:0 12px 12px}.st-p p{font-size:17px}
-    .wp{padding:20px 16px 26px;border-radius:24px}
-    .wp-tab{padding:9px 14px;font-size:14px}
-    .wp-n b{font-size:12px;padding:0 1px}
-    .wp-card{padding:6px 10px 6px 8px}
+    .st-in{border-radius:28px;padding:44px 20px 36px}.st-sec{padding:0 12px 12px}
+    .wt-path{left:10px;right:10px;bottom:10px;padding:10px 12px}
+    .wt-path li{font-size:11px;gap:5px}
+    .wt-path li i{width:20px;height:20px;font-size:11px}
+    .wt-path li:not(:last-child)::before{left:23px;top:9px}
     .lc-close{font-size:17px}
   }
 `;
