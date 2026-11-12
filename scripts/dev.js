@@ -49,10 +49,11 @@ function gitHead() {
 const head = gitHead();
 let previous = "";
 try { previous = fs.readFileSync(stamp, "utf8"); } catch {}
-if (head && previous !== head) {
-  console.log("[dev] commit changed since last run, clearing .next cache");
-  fs.rmSync(nextDir, { recursive: true, force: true });
-}
+// Always start from a clean cache. A leftover Turbopack cache has made every /products/* route 404
+// after `npm run build`, new route folders or a second dev server, so a few extra seconds on start is cheaper.
+if (head && previous !== head) console.log("[dev] commit changed since last run, clearing .next cache");
+else console.log("[dev] clearing .next cache for a clean start");
+fs.rmSync(nextDir, { recursive: true, force: true });
 fs.mkdirSync(nextDir, { recursive: true });
 if (head) fs.writeFileSync(stamp, head);
 

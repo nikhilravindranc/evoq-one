@@ -180,16 +180,16 @@
   "socialHover": "#E11D48"
  },
  "sync": {
-  "headerBg": "#ECFDF5",
+  "headerBg": "#F7FEE7",
   "logoWhite": false,
-  "navBg": "#10b981",
-  "navFg": "#FFFFFF",
-  "ctaBg": "#10B981",
-  "ctaFg": "#ffffff",
+  "navBg": "#A3E635",
+  "navFg": "#1A2E05",
+  "ctaBg": "#A3E635",
+  "ctaFg": "#1A2E05",
   "loginFg": "#000000",
-  "footerBg": "#064E3B",
+  "footerBg": "#0B1220",
   "footerLight": false,
-  "socialHover": "#059669"
+  "socialHover": "#4D7C0F"
  },
  "sync-features": {
   "headerBg": "#ECFDF5",
