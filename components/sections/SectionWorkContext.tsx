@@ -1,151 +1,171 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useReducedMotion, type MotionValue } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { Eyebrow } from "./shared";
-import { EviTile } from "@/components/shared/EviTile";
+import { AppIcon } from "./SolutionApps";
+import type { AppKey } from "./solutionsData";
 
-/* "AI agent context" -- the kinds of context EVI can bring together for an agent.
-   A tall wrapper holds a sticky stage; one scroll value (0 -> 1) plays the story:
-   three main context types arrive, smaller ones gather around EVI, EVI considers
-   them together while , and a proposed next step comes out
-   with its approval state. Below 861px the stage is not pinned and the cards stack.
+/* "AI agent context", after Monday's "Work in context". A tall wrapper holds a sticky stage, and one scroll value
+   (0 to 1) plays the story: EVI starts as a line drawing with the kinds of context spread around her; as you scroll
+   the cards move in behind her shoulders and she fills with colour; then the step the agent proposes comes out.
+   Every card follows the same sample job (ticket 4821, a unit not cooling) so the context reads as one case.
+   Below 861px, and with reduced motion, the section shows the finished state without pinning. */
 
-   The cards are TYPES of context, not a claim that every agent reads every type:
-   what an agent actually uses depends on how it is configured and permitted. */
+const W = 1200;
+const H = 560;
+const EVI = { x: 423, y: 36, w: 354, h: 520 }; // the half body, cut off by the bottom of the stage
 
-const W = 1200;       // canvas size the layout is drawn in; scaled to fit
-const H = 480;
-const CX = 600;       // character centre
-const CY = 250;
-
-type Card = {
-  key: string; x: number; y: number; w: number; h: number;
-  /** scroll progress at which the card starts to appear */
-  at: number;
-  /** "in": context EVI considers; "out": the step the agent proposes */
-  dir: "in" | "out";
-  size: "main" | "mini" | "out";
+type Ctx = {
+  key: string; label: string; apps: (AppKey | "ctrl")[];
+  x: number; y: number; w: number; // where the card starts, spread around EVI
+  ex: number; ey: number; // the centre it ends at, behind EVI
   body: ReactNode;
 };
 
-const Glyph = ({ d }: { d: string }) => (
-  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d={d} /></svg>
+const CHAR = "/characters";
+const Av = ({ who }: { who: string }) => (
+  // eslint-disable-next-line @next/next/no-img-element
+  <img className="wc2-av" src={`${CHAR}/${who}.webp`} alt="" />
 );
-const ICON: Record<string, string> = {
-  task: "M5 2.5h6v2H5zM4 3.5H3v10h10v-10h-1M5.5 8.5l1.7 1.7L10.8 6.6",
-  records: "M2 3.5h12v9H2zM2 7h12M6.5 3.5v9",
-  documents: "M4 1.8h5l3 3v9.4H4zM9 1.8v3h3M6 8h4M6 10.5h4",
-  activity: "M1.8 8h3l2-4.5 3 9 2-4.5h2.4",
-  operations: "M2.5 4h11v9.5h-11zM2.5 7h11M5.5 2.5v3M10.5 2.5v3",
-  rules: "M4.5 7V5a3.5 3.5 0 017 0v2M3.5 7h9v6.5h-9z",
-  outcome: "M8 1.8l1.8 3.7 4 .6-2.9 2.8.7 4L8 11l-3.6 1.9.7-4L2.2 6.1l4-.6z",
-};
+const Doc = () => (
+  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 1.8h5l3 3v9.4H4zM9 1.8v3h3" /></svg>
+);
+const Row = ({ lead, t, s, end }: { lead?: ReactNode; t: string; s?: string; end?: ReactNode }) => (
+  <div className="wc2-row">
+    {lead}
+    <span className="wc2-row-t"><b>{t}</b>{s && <em>{s}</em>}</span>
+    {end}
+  </div>
+);
+const Dot = ({ c }: { c: string }) => <i className="wc2-dot" style={{ background: c }} />;
 
-function Main({ k, label, title, text, chips }: { k: string; label: string; title: string; text: string; chips: [string, string?][] }) {
-  return (
+const CTX: Ctx[] = [
+  { key: "task", label: "Task details", apps: ["desk"], x: 50, y: 0, w: 250, ex: 418, ey: 120, body: (
     <>
-      <div className="wc-card-h"><span className="wc-ic"><Glyph d={ICON[k]} /></span><span className="wc-k">{label}</span></div>
-      <p className="wc-title">{title}</p>
-      <p className="wc-desc">{text}</p>
-      <div className="wc-chiprow">{chips.map(([c, tone]) => <span key={c} className={tone ? `wc-chip ${tone}` : "wc-chip"}>{c}</span>)}</div>
+      <Row t="Ticket 4821" s="Unit not cooling at Unit 4B" />
+      <div className="wc2-chips"><span className="warn">High priority</span><span>Opened today</span></div>
     </>
-  );
-}
-
-function Mini({ k, label, text }: { k: string; label: string; text: string }) {
-  return (
-    <div className="wc-mini-in">
-      <span className="wc-ic"><Glyph d={ICON[k]} /></span>
-      <span className="wc-t"><b>{label}</b><em>{text}</em></span>
-    </div>
-  );
-}
-
-const CARDS: Card[] = [
-  { key: "task", x: 30, y: 10, w: 300, h: 168, at: 0.02, dir: "in", size: "main", body: (
-    <Main k="task" label="Task details" title="Prepare the next step"
-      text="Review the request, the expected outcome and what needs to happen next."
-      chips={[["Priority: High", "warn"], ["Action required"]]} />
   ) },
-  { key: "records", x: 0, y: 250, w: 300, h: 168, at: 0.12, dir: "in", size: "main", body: (
-    <Main k="records" label="Relevant records" title="Understand the full picture"
-      text="Related people, accounts, records and current statuses that affect the task."
-      chips={[["Current details"], ["Related records"]]} />
-  ) },
-  { key: "documents", x: 870, y: 10, w: 300, h: 168, at: 0.2, dir: "in", size: "main", body: (
-    <Main k="documents" label="Documents and instructions" title="Follow the right guidance"
-      text="Relevant documents, internal procedures, policies and instructions."
-      chips={[["Reference material"], ["Guidelines"]]} />
-  ) },
-  { key: "activity", x: 326, y: 26, w: 236, h: 76, at: 0.3, dir: "in", size: "mini", body: (
-    <Mini k="activity" label="Activity and history" text="Recent updates, notes and previous actions" />
-  ) },
-  { key: "operations", x: 630, y: 26, w: 234, h: 76, at: 0.36, dir: "in", size: "mini", body: (
-    <Mini k="operations" label="Operational requirements" text="Dates, availability, quantities and dependencies" />
-  ) },
-  { key: "rules", x: 310, y: 396, w: 236, h: 76, at: 0.42, dir: "in", size: "mini", body: (
-    <Mini k="rules" label="Rules and approvals" text="Permissions and actions that need approval" />
-  ) },
-  { key: "outcome", x: 870, y: 232, w: 300, h: 214, at: 0.66, dir: "out", size: "out", body: (
+  { key: "records", label: "Relevant records", apps: ["crm"], x: 0, y: 196, w: 262, ex: 392, ey: 290, body: (
     <>
-      <div className="wc-card-h">
-        <span className="wc-ic out"><Glyph d={ICON.outcome} /></span>
-        <span className="wc-k">Proposed next step</span>
-        <span className="wc-pill await">Approval required</span>
-      </div>
-      <p className="wc-desc">Prepared from the context available to this agent, within its configured permissions.</p>
-      <ul className="wc-checks">
-        <li>Task and expected outcome understood</li>
-        <li>Records, guidance and activity considered</li>
-        <li>Rules applied, approval requested</li>
-      </ul>
-      <div className="wc-actions"><span className="ghost">Review</span><span className="primary">Approve</span></div>
+      <Row lead={<span className="wc2-ini">N</span>} t="Northgate Holdings" s="Customer since 2021" />
+      <Row lead={<span className="wc2-ini">S</span>} t="Service contract" s="Gold, 4 hour response" />
+    </>
+  ) },
+  { key: "activity", label: "Activity and history", apps: ["crm", "desk"], x: 120, y: 392, w: 260, ex: 430, ey: 448, body: (
+    <>
+      <Row lead={<Av who="mia" />} t="Customer called twice" s="Today, 9:40" />
+      <Row lead={<Av who="sam" />} t="Filter replaced" s="Last visit, Oct 2" />
+    </>
+  ) },
+  { key: "documents", label: "Documents and instructions", apps: [], x: 900, y: 0, w: 250, ex: 782, ey: 120, body: (
+    <>
+      <Row lead={<span className="wc2-doc"><Doc /></span>} t="Cooling repair procedure" />
+      <Row lead={<span className="wc2-doc"><Doc /></span>} t="Warranty terms" />
+      <Row lead={<span className="wc2-doc"><Doc /></span>} t="Site access notes" />
+    </>
+  ) },
+  { key: "operations", label: "Operational requirements", apps: ["serviceops", "inventory"], x: 896, y: 196, w: 304, ex: 808, ey: 290, body: (
+    <>
+      <Row lead={<Av who="sam" />} t="Sam is free" s="Friday, 10:00" end={<Dot c="#1FA971" />} />
+      <Row lead={<span className="wc2-ini">V</span>} t="Compressor valve" s="3 in stock" end={<Dot c="#1FA971" />} />
+    </>
+  ) },
+  { key: "rules", label: "Rules and approvals", apps: ["ctrl"], x: 820, y: 392, w: 260, ex: 770, ey: 448, body: (
+    <>
+      <Row t="Approval mode" end={<span className="wc2-mode">Ask first</span>} />
+      <Row t="Can book jobs" end={<span className="wc2-ok">Allowed</span>} />
     </>
   ) },
 ];
 
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 const seg = (v: number, a: number, b: number) => clamp01((v - a) / (b - a));
-const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
-const tOf = (v: number, c: Card) => easeOut(seg(v, c.at, c.at + (c.size === "mini" ? 0.16 : 0.24)));
-// EVI considers the gathered context together, before the proposal appears
-const THINK = [0.5, 0.64] as const;
+const inOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-function BurstCard({ c, p }: { c: Card; p: MotionValue<number> }) {
-  const dx = CX - (c.x + c.w / 2);
-  const dy = CY - (c.y + c.h / 2);
-  const x = useTransform(p, (v) => dx * (1 - tOf(v, c)));
-  const y = useTransform(p, (v) => dy * (1 - tOf(v, c)));
-  const scale = useTransform(p, (v) => 0.1 + 0.9 * tOf(v, c));
-  const opacity = useTransform(p, (v) => seg(v, c.at, c.at + 0.1));
+/* The beats along the scroll. */
+const GATHER = [0.08, 0.56] as const; // cards move in, EVI fills with colour
+const OUT = [0.66, 0.8] as const; // the proposed step comes out
+const STATUS = ["Reviewing the task", "Bringing context together", "Preparing a recommendation", "Ready for review"];
+const beatOf = (v: number) => (v < GATHER[0] + 0.04 ? 0 : v < GATHER[1] ? 1 : v < OUT[0] ? 2 : 3);
+
+function AppTag({ a }: { a: AppKey | "ctrl" }) {
+  if (a === "ctrl") {
+    return (
+      <span className="wc2-app">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/symbol-color.png" alt="" width={14} height={14} />EVOQ CTRL
+      </span>
+    );
+  }
+  const name = { crm: "CRM", desk: "Desk", serviceops: "ServiceOps", inventory: "Inventory" }[a as string] ?? a;
+  return <span className="wc2-app"><AppIcon app={a} size={14} />{name}</span>;
+}
+
+function CtxCard({ c }: { c: Ctx }) {
   return (
-    <motion.div className="wc-pos" style={{ left: c.x, top: c.y, width: c.w, height: c.h, x, y, scale, opacity }}>
-      <div className={`wc-card ${c.size}`}>{c.body}</div>
+    <div className="wc2-card">
+      <div className="wc2-card-h">
+        <b>{c.label}</b>
+        {c.apps.map((a) => <AppTag key={a} a={a} />)}
+      </div>
+      <div className="wc2-prev">{c.body}</div>
+    </div>
+  );
+}
+
+function Moving({ c, i, p }: { c: Ctx; i: number; p: MotionValue<number> }) {
+  const m = (v: number) => inOut(seg(v, GATHER[0] + i * 0.035, GATHER[1] - 0.12 + i * 0.02));
+  const dx = c.ex - (c.x + c.w / 2);
+  const dy = c.ey - (c.y + 70);
+  const x = useTransform(p, (v) => dx * m(v));
+  const y = useTransform(p, (v) => dy * m(v));
+  const scale = useTransform(p, (v) => 1 - 0.42 * m(v));
+  return (
+    <motion.div className="wc2-pos" style={{ left: c.x, top: c.y, width: c.w, x, y, scale }}>
+      <CtxCard c={c} />
     </motion.div>
   );
 }
 
-const STATUS = ["Reviewing the task", "Bringing context together", "Preparing a recommendation", "Ready for review"];
+const Outcome = () => (
+  <div className="wc-card out">
+    <div className="wc-card-h">
+      <span className="wc-ic out">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M8 1.8l1.8 3.7 4 .6-2.9 2.8.7 4L8 11l-3.6 1.9.7-4L2.2 6.1l4-.6z" /></svg>
+      </span>
+      <span className="wc-k">Proposed next step</span>
+      <span className="wc-pill ready">Ready for review</span>
+    </div>
+    <p className="wc-desc">Book Sam for Friday at 10:00, reserve a compressor valve and send Northgate the visit time.</p>
+    <ul className="wc-checks">
+      <li>Ticket, records and history read</li>
+      <li>Procedure and warranty checked</li>
+      <li>Approval mode applied: ask first</li>
+    </ul>
+    <div className="wc-actions"><span className="ghost">Review</span><span className="primary">Approve</span></div>
+  </div>
+);
 
 export function SectionWorkContext() {
   const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
+  const holder = useRef<HTMLDivElement>(null);
+  const reduce = !!useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const still = useMotionValue(1);
   const p = reduce ? still : scrollYProgress;
 
-  const [mobile, setMobile] = useState(false);
+  const [flat, setFlat] = useState(false);
   const [scale, setScale] = useState(1);
   const [beat, setBeat] = useState(reduce ? 3 : 0);
-  const holder = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 860px)");
     const fit = () => {
-      setMobile(mq.matches);
+      setFlat(mq.matches);
       const w = (holder.current?.clientWidth ?? W + 80) - 80;
-      const hAvail = window.innerHeight - 290;
+      const hAvail = window.innerHeight - 250;
       setScale(Math.max(0.5, Math.min(1, w / W, hAvail / H)));
     };
     fit();
@@ -154,13 +174,14 @@ export function SectionWorkContext() {
     return () => { mq.removeEventListener("change", fit); window.removeEventListener("resize", fit); };
   }, []);
 
-  // EVI responds while it considers the gathered context
-  const charScale = useTransform(p, (v) => 1 + 0.06 * seg(v, THINK[0], THINK[0] + 0.05) * (1 - seg(v, THINK[1], THINK[1] + 0.05)));
-  const onScroll = (v: number) => {
-    const b = v < 0.12 ? 0 : v < THINK[0] ? 1 : v < THINK[1] + 0.04 ? 2 : 3;
-    setBeat((o) => (o === b ? o : b));
-  };
-  useEffect(() => p.on("change", onScroll), [p]);
+  useEffect(() => p.on("change", (v) => setBeat((o) => (beatOf(v) === o ? o : beatOf(v)))), [p]);
+
+  // the colour rises over the line drawing from the bottom, with a soft edge
+  const fill = useTransform(p, (v) => seg(v, GATHER[0] + 0.04, GATHER[1]) * 130);
+  const mask = useMotionTemplate`linear-gradient(to top, #000 calc(${fill}% - 30%), transparent ${fill}%)`;
+  const glow = useTransform(p, (v) => seg(v, GATHER[1] - 0.12, GATHER[1] + 0.06));
+  const outOpacity = useTransform(p, (v) => seg(v, OUT[0], OUT[1]));
+  const outX = useTransform(p, (v) => 40 * (1 - inOut(seg(v, OUT[0], OUT[1]))));
 
   const head = (
     <div className="wc-head">
@@ -174,54 +195,54 @@ export function SectionWorkContext() {
       </div>
     </div>
   );
-  const note = <p className="wc-note">The context each agent uses depends on how it is configured and what it is permitted to access.</p>;
 
-  if (mobile) {
-    const mains = CARDS.filter((c) => c.size === "main");
-    const minis = CARDS.filter((c) => c.size === "mini");
-    const out = CARDS.find((c) => c.dir === "out")!;
+  if (flat) {
     const reveal = { initial: { opacity: 0, y: 16 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: "-40px" }, transition: { duration: 0.4 } };
     return (
       <section className="s-wc s-wc-flat" ref={ref}>
         <div className="wc-inner">
           {head}
-          <div className="wc-flat-grid">
-            {mains.map((c) => <motion.div key={c.key} className="wc-card main" {...reveal}>{c.body}</motion.div>)}
-          </div>
-          <div className="wc-flat-minis">
-            {minis.map((c) => <motion.div key={c.key} className="wc-card mini" {...reveal}>{c.body}</motion.div>)}
-          </div>
-          <div className="wc-flat-char">
+          <div className="wc2-flat-char">
+            <span className="wc2-glow" style={{ opacity: 1 }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <EviTile pose="idle" style={{ width: 96 }} />
+            <img src={`${CHAR}/evi-half.webp`} alt="EVI" />
+            <span className="wc-state b3">{STATUS[3]}</span>
           </div>
-          <motion.div className="wc-card out" {...reveal}>{out.body}</motion.div>
-          {note}
+          <div className="wc2-flat-grid">
+            {CTX.map((c) => <motion.div key={c.key} {...reveal}><CtxCard c={c} /></motion.div>)}
+          </div>
+          <motion.div className="wc2-flat-out" {...reveal}><Outcome /></motion.div>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="s-wc" ref={ref}>
+    <section className={`s-wc s-wc2${reduce ? " still" : ""}`} ref={ref}>
       <div className="wc-stage">
         <div className="wc-inner" ref={holder}>
           {head}
           <div className="wc-canvas-wrap" style={{ width: W * scale, height: H * scale }}>
             <div className="wc-canvas" style={{ width: W, height: H, transform: `scale(${scale})` }}>
-              <motion.div className="wc-char" style={{ left: CX - 110, top: CY - 120, scale: charScale }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <EviTile pose="idle" className="evi-tile" style={{ width: 200, marginTop: 10 }} />
-                <span className={`wc-state b${beat}`} aria-live="polite">
-                  {beat < 3 && <i className="wc-state-dot" />}
-                  {STATUS[beat]}
-                </span>
-              </motion.div>
+              {CTX.map((c, i) => <Moving key={c.key} c={c} i={i} p={p} />)}
 
-              {CARDS.map((c) => <BurstCard key={c.key} c={c} p={p} />)}
+              <div className="wc2-char" style={{ left: EVI.x, top: EVI.y, width: EVI.w, height: EVI.h }}>
+                <motion.span className="wc2-glow" style={{ opacity: glow }} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wc2-img" src={`${CHAR}/evi-half-sketch.webp`} alt="" />
+                { }
+                <motion.img className="wc2-img" src={`${CHAR}/evi-half.webp`} alt="EVI" style={{ maskImage: mask, WebkitMaskImage: mask }} />
+              </div>
+              <span className={`wc-state wc2-state b${beat}`} aria-live="polite">
+                {beat < 3 && <i className="wc-state-dot" />}
+                {STATUS[beat]}
+              </span>
+
+              <motion.div className="wc2-out" style={{ opacity: outOpacity, x: outX }}>
+                <Outcome />
+              </motion.div>
             </div>
           </div>
-          {note}
         </div>
       </div>
     </section>
