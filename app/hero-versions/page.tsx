@@ -6,6 +6,7 @@ import { OverviewCastPhotoStory } from "@/components/hero/OverviewCastPhotoStory
 import { OverviewStackStory } from "@/components/hero/OverviewStackStory";
 import { OverviewTreeStory } from "@/components/hero/OverviewTreeStory";
 import { OverviewStory } from "@/components/hero/OverviewStory";
+import { ContextRevealDemos } from "@/components/sections/ContextRevealDemos";
 
 /* Internal page: every version of the home hero overview visual tried so far, side by side, in order.
    Not linked anywhere and excluded from search engines. Each version lives in its own file in components/hero;
@@ -93,7 +94,7 @@ export default function HeroVersionsPage() {
         <p style={{ margin: 0, fontSize: 12, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", color: "#6D5BFF" }}>Internal</p>
         <h1 style={{ margin: "6px 0 8px", fontSize: 32, fontWeight: 700, letterSpacing: "-.02em", fontFamily: "var(--font-display), system-ui, sans-serif" }}>Hero overview versions</h1>
         <p style={{ margin: 0, maxWidth: 680, fontSize: 15, lineHeight: 1.6, color: "#4B5563" }}>
-          Every version of the home hero overview visual tried so far, in the order they were made. Each one is playing live, with its own file in <code>components/hero</code>.
+          Every version of the home hero overview visual tried so far, in the order they were made. Below them, the alternatives for how EVI comes into view in the AI agent context section. Each one is playing live, with its own file in <code>components/hero</code>.
         </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 560px), 1fr))", gap: 28, marginTop: 36 }}>
@@ -116,6 +117,12 @@ export default function HeroVersionsPage() {
             </section>
           ))}
         </div>
+
+        <h2 id="agent-context" style={{ margin: "64px 0 8px", fontSize: 26, fontWeight: 700, letterSpacing: "-.02em", fontFamily: "var(--font-display), system-ui, sans-serif" }}>AI agent context section: ways to bring EVI into view</h2>
+        <p style={{ margin: 0, maxWidth: 720, fontSize: 15, lineHeight: 1.6, color: "#4B5563" }}>
+          The same section with a different way for EVI to come into view as the context is gathered. The cards, the layout, the proposed step and the new character are identical in all of them. Each one loops on its own; on the home page it follows your scroll.
+        </p>
+        <ContextRevealDemos />
       </div>
     </main>
   );
