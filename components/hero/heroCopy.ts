@@ -49,7 +49,7 @@ export const HERO_COPY: Record<HeroView, { label: string; lead?: string; headlin
    Dwell times in milliseconds; each story runs about 9 seconds. */
 export const TOUR: HeroView[] = ["overview", "growth", "operations", "people", "finance", "platform", "ai"];
 export const DWELL_MS: Record<HeroView, number> = {
-  overview: 12000, // arrival, then the spotlight visits all six
+  overview: 19800, // one loop of the overview: the cast, then the board filling app by app (about 19.75 seconds)
   growth: 12500,
   operations: 12500,
   people: 12500,
