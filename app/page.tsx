@@ -1,7 +1,6 @@
 import { HeroSection } from "@/components/hero/HeroSection";
 import { SectionPlatform } from "@/components/sections/SectionPlatform";
 import { SectionSolutions } from "@/components/sections/SectionSolutions";
-import { SectionAI } from "@/components/sections/SectionAI";
 import { SectionWorkContext } from "@/components/sections/SectionWorkContext";
 import { SectionIntegrations } from "@/components/sections/SectionIntegrations";
 import { SectionWalkthroughs } from "@/components/sections/SectionWalkthroughs";
@@ -18,9 +17,8 @@ export default function Home() {
     <main className="min-h-screen bg-white">
       <HeroSection />
       <SectionPlatform />
-      <SectionAI />
-      <SectionSolutions />
       <SectionWorkContext />
+      <SectionSolutions />
       <SectionIntegrations />
       <SectionWalkthroughs />
       <SectionCTA />
