@@ -12,7 +12,7 @@ import { V2_BASE, V2Demo, V2Shell } from "./V2Shell";
    P so they can be swapped in one place; app screens are captures of the seeded demo workspace. */
 
 export const APP = "/serviceops/app";
-const AG = "/serviceops/agents";
+const AG = "/serviceops/v2/agents";
 
 export const P = {
   tech: "/solutions/field-service.jpg",
@@ -20,18 +20,28 @@ export const P = {
   panel: "/industries/v2/fs-detail-hd.jpg",
   contractor: "/solutions/construction.jpg",
   plant: "/industries/v2/mf-main-hd.jpg",
-  supervisor: "/industries/v2/mf-circle-hd.jpg",
+  supervisor: "/team/ops-left.jpg",
   parts: "/industries/v2/rt-main-hd.jpg",
   field: "/serviceops/v2/technician.jpg",
   manager: "/industries/v2/ps-detail-hd.jpg",
   dispatcher: "/industries/v2/ps-main2-hd.jpg",
   coordinator: "/industries/v2/mo-detail-hd.jpg",
   admin: "/industries/v2/ps-circle-hd.jpg",
-  cust1: "/industries/v2/fs-circle-hd.jpg",
+  cust1: "/team/ai-person.jpg",
   cust2: "/industries/v2/rt-circle-hd.jpg",
   cust3: "/industries/v2/mo-circle-hd.jpg",
   cust4: "/industries/v2/hc-detail-hd.jpg",
   cust5: "/industries/v2/hc-circle-hd.jpg",
+  billing: "/team/growth-right.jpg",
+  warehouse: "/site/images/unsplash-a31568cf72c2.jpg",
+  owner: "/team/ops-sync.jpg",
+  estimator: "/team/growth-left.jpg",
+  account: "/team/people-center2.jpg",
+  front: "/solutions/hospitality.jpg",
+  meeting: "/finance/team.jpg",
+  team: "/industries/v2/mo-team-hd.jpg",
+  mech: "/industries/v2/fs-main-hd.jpg",
+  install: "/serviceops/v2/install.jpg",
 };
 
 export const Label = ({ children }: { children: ReactNode }) => <span className="v2-label">{children}</span>;
@@ -71,17 +81,24 @@ function useAuto(n: number, ms: number) {
 type Person = { img: string; n: string; r: string; c: string; pos?: string };
 const COL_A: Person[] = [
   { img: P.tech, n: "Daniel Mensah", r: "Field technician", c: "Greenfield Facilities", pos: "28% 40%" },
-  { img: P.manager, n: "Priya Shah", r: "Service manager", c: "Summit Facilities", pos: "50% 30%" },
+  { img: P.manager, n: "Yuki Tanaka", r: "Service manager", c: "Summit Facilities", pos: "50% 30%" },
   { img: P.contractor, n: "Ana Souza", r: "Installation contractor", c: "Cedar Build Co.", pos: "50% 25%" },
   { img: P.plant, n: "Meera Iyer", r: "Maintenance technician", c: "Pinnacle Plants", pos: "55% 35%" },
-  { img: P.cust1, n: "Margaret Hill", r: "Facility manager", c: "Lakeview Hotel", pos: "60% 35%" },
+  { img: P.cust1, n: "Margaret Hill", r: "Facility manager", c: "Lakeview Hotel", pos: "35% 30%" },
 ];
 const COL_B: Person[] = [
   { img: P.dispatcher, n: "Nia Brooks", r: "Dispatcher", c: "Metro Building Services", pos: "35% 40%" },
   { img: P.electric, n: "Jake Turner", r: "Electrician", c: "Brightline Electric", pos: "35% 50%" },
-  { img: P.parts, n: "Lena Park", r: "Parts and inventory", c: "Northgate Supply", pos: "40% 35%" },
+  { img: P.parts, n: "Lena Ortega", r: "Parts and inventory", c: "Northgate Supply", pos: "40% 35%" },
   { img: P.coordinator, n: "Marcus Bell", r: "Service coordinator", c: "Oakwood Services", pos: "45% 40%" },
-  { img: P.supervisor, n: "Sam Okoro", r: "Site supervisor", c: "Harbor Mechanical", pos: "50% 30%" },
+  { img: P.supervisor, n: "Sameer Khan", r: "Site supervisor", c: "Harbor Mechanical", pos: "50% 22%" },
+];
+const COL_C: Person[] = [
+  { img: P.billing, n: "Imani Cole", r: "Billing coordinator", c: "Summit Facilities", pos: "50% 22%" },
+  { img: P.warehouse, n: "Arjun Nair", r: "Warehouse lead", c: "Northgate Supply", pos: "50% 30%" },
+  { img: P.account, n: "Sophie Laurent", r: "Account manager", c: "Oakwood Services", pos: "25% 22%" },
+  { img: P.owner, n: "Omar Aziz", r: "Owner", c: "Aziz Cooling and Heating", pos: "50% 25%" },
+  { img: P.estimator, n: "Tom Hale", r: "Estimator", c: "Brightline Electric", pos: "50% 25%" },
 ];
 
 function PersonCard({ p }: { p: Person }) {
@@ -94,7 +111,7 @@ function PersonCard({ p }: { p: Person }) {
 }
 
 function Hero() {
-  const colC: Person[] = [COL_B[2], COL_A[4], COL_B[0], COL_A[1], COL_B[4]];
+  const colC = COL_C;
   return (
     <section className="hr-out">
       <div className="hr">
@@ -185,7 +202,7 @@ export function AdminWorkflow() {
 
 const ROLES: { r: string; t: string; d: string; opens: string[]; shot?: string; alt?: string; view?: "admin"; person: { img: string; n: string; c: string; pos: string } }[] = [
   {
-    person: { img: P.manager, n: "Priya Shah", c: "Service manager, Summit Facilities", pos: "50% 28%" }, r: "Service managers", t: "Keep the whole operation in view.",
+    person: { img: P.manager, n: "Yuki Tanaka", c: "Service manager, Summit Facilities", pos: "50% 28%" }, r: "Service managers", t: "Keep the whole operation in view.",
     d: "See what is waiting, what is approved and what is overdue. Review profitability by job, customer, trade, work type, technician or service plan, and read the weekly manager report.",
     opens: ["Insights", "Profitability", "Billing"], shot: "billing.png", alt: "Billing in ServiceOps: ready to invoice, in progress, outstanding, overdue and collected",
   },
@@ -280,7 +297,7 @@ export function Screen({ n }: { n: number }) {
   if (n === 2) return (
     <>
       <div className="ps-top"><b>Work record</b><small>WO-2026-00410</small></div>
-      <div className="ps-photos"><img src={P.panel} alt="" /><img src={P.electric} alt="" /><span>+ Photo</span></div>
+      <div className="ps-photos"><img src={P.install} alt="" /><img src={P.electric} alt="" /><span>+ Photo</span></div>
       <div className="ps-rows"><span><small>Parts used</small><b>Filter set, 2</b></span><span><small>Time on site</small><b>1 h 40 min</b></span><span><small>Notes</small><b>Belt worn, replace next visit</b></span></div>
       <span className="ps-cta">Get customer sign-off</span>
     </>
@@ -310,7 +327,7 @@ function Field() {
     <section className="v2-sec v2-out">
       <div className="v2-in fd" ref={ref}>
         <div className="fd-vis" data-rv>
-          <div className="fd-photo"><img src={P.tech} alt="A technician on site" /></div>
+          <div className="fd-photo"><img src={P.panel} alt="A technician at work on an electrical panel" /></div>
           <div className="fd-phone">
             <i className="fd-notch" aria-hidden />
             <div className="fd-scr" key={i}><Screen n={i} /></div>
@@ -425,7 +442,7 @@ function Delight() {
 const STAGES: { t: string; s: string; d: string; photo: string; pos: string; shot?: string; alt?: string; chips?: string[] }[] = [
   { t: "Capture the work", s: "Record customer requests, requirements, sites and equipment details.", d: "Bring customer requests into a central inbox. Review the details, identify what needs attention and convert accepted requests into work orders.", photo: P.dispatcher, pos: "35% 40%", shot: "requests-list.png", alt: "The Requests list with requests from the web form, customer portal, online booking, email and phone" },
   { t: "Plan the service", s: "Apply the relevant work type, workflow, estimate and approval process.", d: "Configure separate processes for Installation, Service, Maintenance, Repair and Inspection, with their own stages, conditions and internal approval rules. Create estimates from your catalog and share a private link for the customer to approve or decline.", photo: P.contractor, pos: "50% 25%", shot: "work-orders.png", alt: "Work orders with their work type and trade", chips: ["Installation", "Service", "Repair", "Maintenance", "Inspection"] },
-  { t: "Coordinate the visit", s: "Schedule technicians, review workloads and prepare the resources needed for the job.", d: "View the dispatch queue, technician workload, schedules and locations. Review ranked technician recommendations and proposed daily assignments before applying them.", photo: P.tech, pos: "28% 40%" },
+  { t: "Coordinate the visit", s: "Schedule technicians, review workloads and prepare the resources needed for the job.", d: "View the dispatch queue, technician workload, schedules and locations. Review ranked technician recommendations and proposed daily assignments before applying them.", photo: P.mech, pos: "70% 40%" },
   { t: "Deliver and record", s: "Complete the visit, follow the checklist, record parts and time, and capture the outcome.", d: "Each open job shows its status and next step, so the office can see which visits are booked, which are in progress and which need a decision.", photo: P.electric, pos: "40% 50%", shot: "customer-detail.png", alt: "A customer record with open work orders, their status and next step" },
   { t: "Continue the relationship", s: "Maintain customer and asset records, follow up on outstanding work and plan future maintenance.", d: "Gold and Silver service plans show maintenance due over the next 30, 60 or 90 days, and raise the work orders for it.", photo: P.plant, pos: "55% 40%", shot: "plans.png", alt: "Service plans with maintenance due in the next 30 days" },
 ];
@@ -543,7 +560,7 @@ export function Closing({ flush = false }: { flush?: boolean }) {
           </div>
         </div>
         <div className="cta-ui" aria-hidden>
-          <div className="cta-photo"><img src={P.tech} alt="" style={{ objectPosition: "30% 40%" }} /></div>
+          <div className="cta-photo"><img src={P.team} alt="" style={{ objectPosition: "45% 40%" }} /></div>
           <div className="cta-wo">
             <div className="cta-wo-h"><b>WO-2026-00410</b><small>HVAC maintenance</small></div>
             {["Request received", "Estimate approved", "Technician assigned", "Visit completed"].map((s, n) => (

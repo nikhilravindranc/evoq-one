@@ -217,7 +217,7 @@ export function ServiceOpsV2Pricing() {
           <div className="pr-top" data-rv>
             <div>
               <Label>Subscription plans</Label>
-              <h2 className="v2-h2">Choose your plan</h2>
+              <h2 className="v2-h2">Choose your billing option</h2>
             </div>
             <div className="pr-ctl">
               <div className="pr-seg sm" role="group" aria-label="Billing option">
@@ -227,11 +227,10 @@ export function ServiceOpsV2Pricing() {
               <Region cur={cur} set={setCur} />
             </div>
           </div>
-          <p className="pr-opt" data-rv>
-            {annual
-              ? "Annual commitment: save 10% with a 12-month commitment and pay the discounted amount monthly. No upfront annual payment is required."
-              : "Monthly subscription: pay month to month at the listed price. Choose the annual option to save 10%."}
-          </p>
+          <ul className="pr-opts" data-rv>
+            <li className={!annual ? "on" : ""}><b>Monthly subscription:</b> Pay month to month at the listed price.</li>
+            <li className={annual ? "on" : ""}><b>Annual commitment:</b> Save 10% with a 12-month commitment and pay the discounted amount monthly. No upfront annual payment is required.</li>
+          </ul>
           <ul className="pr-grid">{PLANS.filter((p) => !p.ent).map((p) => <PlanCard key={p.n} p={p} cur={cur} annual={annual} />)}</ul>
           <EnterpriseBand p={PLANS[4]} />
           <p className="pr-fine">Annual prices reflect a 10% discount, rounded to the nearest whole currency unit. The annual option requires a 12-month commitment, with monthly payments at the discounted rate. Applicable taxes are additional. Enterprise capabilities are subject to agreed scope, provider configuration, availability and contractual terms.</p>
@@ -267,34 +266,15 @@ export function ServiceOpsV2Pricing() {
                       ))}
                     </Fragment>
                   ))}
-                  {more && (
-                    <>
-                      <tr className="cm-g"><th scope="colgroup" colSpan={6}>Additional usage <span className="pu-cur">{cur === "IN" ? "India, INR" : "International, USD"}</span></th></tr>
-                      {EXTRA.map(([a, inr, usd]) => (
-                        <tr key={a}>
-                          <th scope="row">{a}</th>
-                          <td colSpan={4} className="cm-add"><b>{cur === "IN" ? inr : usd}</b> per month, the same rate on Standard, Growth, Professional and Scale</td>
-                          <td className="ent"><span className="cm-t">Agreed separately</span></td>
-                        </tr>
-                      ))}
-                    </>
-                  )}
                 </tbody>
               </table>
             </div>
             <div className="cm-more">
               <button type="button" aria-expanded={more} onClick={() => setMore(!more)}>
-                {more ? "View less" : "View all features and additional usage"}<i aria-hidden />
+                {more ? "View less" : "View all features"}<i aria-hidden />
               </button>
             </div>
           </div>
-          {more && (
-            <div className="cm-how" data-rv>
-              <h3>How additional usage works</h3>
-              <ul>{EXTRA_HOW.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
-              <p>Additional capacity is billed monthly and applies to all published subscription plans. Multiple units can be purchased. Enterprise rates are agreed separately. Unused additional capacity does not automatically roll over to the next billing cycle.</p>
-            </div>
-          )}
           <p className="pr-fine">All core capabilities are subject to the applicable plan allowances and service terms. AI functionality depends on supported provider configuration. AI consumption may be subject to separate usage charges. Enterprise entitlements are subject to agreed scope, availability and provider configuration.</p>
           <div className="cm-need" data-rv>
             <div><b>Need a different job volume or deployment arrangement?</b><span>Contact our team to discuss a custom ServiceOps subscription.</span></div>
@@ -329,8 +309,38 @@ export function ServiceOpsV2Pricing() {
         </div>
       </section>
 
+      {/* additional usage */}
+      <section className="v2-sec v2-out v2-grey" id="usage">
+        <div className="v2-in">
+          <div className="tr-head" data-rv>
+            <div>
+              <Label>Additional usage</Label>
+              <h2 className="v2-h2">Need more capacity without changing your subscription?</h2>
+            </div>
+            <p>Add usage allowances at consistent rates across Standard, Growth, Professional and Scale.</p>
+          </div>
+          <div className="au" data-rv>
+            {([["Additional capacity: India", 1], ["Additional capacity: International", 2]] as const).map(([h, col]) => (
+              <div key={h} className="au-t">
+                <h3>{h}</h3>
+                <table>
+                  <thead><tr><th scope="col">Additional allowance</th><th scope="col">Monthly price</th></tr></thead>
+                  <tbody>{EXTRA.map((r) => <tr key={r[0]}><th scope="row">{r[0]}</th><td>{r[col]}</td></tr>)}</tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+          <p className="pr-fine">Additional capacity is billed monthly and applies to all published subscription plans. Multiple units can be purchased. Enterprise rates are agreed separately.</p>
+          <div className="cm-how" data-rv>
+            <h3>How additional usage works</h3>
+            <ul>{EXTRA_HOW.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
+            <p>Unused additional capacity does not automatically roll over to the next billing cycle.</p>
+          </div>
+        </div>
+      </section>
+
       {/* implementation and enterprise */}
-      <section className="v2-sec v2-out v2-grey" id="services">
+      <section className="v2-sec v2-out" id="services">
         <div className="v2-in ps">
           <div className="ps-box" data-rv>
             <Label>Implementation and custom services</Label>
@@ -413,7 +423,19 @@ const css = `
   /* plans */
   .pr-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:14px}
   .pr-ctl{display:flex;flex-wrap:wrap;gap:10px}
-  .pr-opt{margin:0 0 28px;max-width:80ch;font-size:15px;line-height:1.55;color:${BODY}}
+  .pr-opts{list-style:none;margin:0 0 28px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pr-opts li{padding:14px 18px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE};font-size:14.5px;line-height:1.55;color:${BODY};transition:box-shadow .2s ease,background .2s ease}
+  .pr-opts li b{color:${INK}}
+  .pr-opts li.on{background:${AMBER_SOFT};box-shadow:inset 0 0 0 1.5px ${AMBER}}
+  .au{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .au-t{padding:26px 28px;border-radius:20px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE}}
+  .au-t h3{--h3-size:20px;margin-bottom:12px!important}
+  .au-t table{width:100%;border-collapse:collapse;font-size:15px}
+  .au-t th,.au-t td{padding:13px 0;border-top:1px solid ${LINE};text-align:left}
+  .au-t thead th{border-top:0;padding-top:0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:${MUTED}}
+  .au-t tbody th{font-weight:500;color:${INK};padding-right:16px}
+  .au-t td,.au-t thead th:last-child{text-align:right}
+  .au-t td{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;font-weight:600;color:${INK}}
   .pr-top .v2-label{margin-bottom:14px}
   .pr-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:stretch}
   .pr-card{display:flex;flex-direction:column;padding:28px 26px 26px;border-radius:20px;background:${G1};box-shadow:inset 0 0 0 1px ${LINE}}
@@ -456,7 +478,6 @@ const css = `
   .cm-n{color:#B9B1A6}
   .cm-t{font-weight:600}
   .cm td.ent .cm-t{color:#7A4A07}
-  .pu-cur{margin-left:10px;padding:3px 10px;border-radius:999px;background:${G2};font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:${INK}}
   .cm-box{position:relative}
   .cm-box:not(.open) .cm-wrap{padding-bottom:64px}
   .cm-box:not(.open)::after{content:"";position:absolute;left:1px;right:1px;bottom:56px;height:120px;border-radius:0 0 0 0;background:linear-gradient(180deg,rgba(255,255,255,0),#fff 85%);pointer-events:none}
@@ -467,8 +488,6 @@ const css = `
   .cm-more button:hover{background:#000}
   .cm-more button i{width:9px;height:9px;margin-top:-4px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .25s ease}
   .cm-more button[aria-expanded=true] i{margin-top:3px;transform:rotate(-135deg)}
-  .cm-add{text-align:center!important;font-size:14.5px;color:${BODY}}
-  .cm-add b{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;color:${INK}}
   .cm-how{margin-top:28px;padding:28px 32px;border-radius:20px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE}}
   .cm-how h3{--h3-size:24px;margin-bottom:16px!important}
   .cm-how ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 40px}
@@ -537,6 +556,7 @@ const css = `
     .ph-copy{padding:56px 0 36px}
     .pr-ent{grid-template-columns:1fr;gap:28px}
     .cm-how ul{grid-template-columns:1fr}
+    .pr-opts,.au{grid-template-columns:1fr}
     .pc{grid-template-columns:repeat(2,minmax(0,1fr))}
     .ps,.pf{grid-template-columns:1fr;gap:32px}
     .pf-head{position:static}

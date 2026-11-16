@@ -86,9 +86,9 @@ const css = `
   .v2-root button:focus-visible,.v2-root a:focus-visible{outline:2px solid ${AMBER_DEEP};outline-offset:2px}
   .v2-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
 
-  .v2-hd{position:relative;background:#fff}
+  .v2-hd{display:contents}
   .v2-top{position:relative;z-index:60}
-  .v2-bar{padding:0 20px;border-bottom:1px solid ${LINE};border-top:1px solid ${LINE}}
+  .v2-bar{position:sticky;top:0;z-index:55;padding:0 20px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid ${LINE};border-top:1px solid ${LINE}}
   .v2-bar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:28px;min-height:54px}
   .v2-brand{display:flex;align-items:center;flex-shrink:0}.v2-brand img{display:block;height:28px;width:auto}
   .v2-menu{display:flex;gap:4px}
