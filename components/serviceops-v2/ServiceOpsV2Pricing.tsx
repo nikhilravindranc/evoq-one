@@ -1,10 +1,11 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { Fragment, useState, type ReactNode } from "react";
+import Link from "next/link";
+import { Fragment, useRef, useState } from "react";
 import { useRegion } from "@/components/shared/RegionContext";
 import { Ic } from "../serviceops/icons";
-import { AMBER, AMBER_DEEP, AMBER_SOFT, BODY, G1, G2, INK, LINE, MUTED } from "./palette";
+import { AMBER, AMBER_DEEP, AMBER_HOVER, AMBER_SOFT, BODY, G1, G2, INK, LINE, MUTED } from "./palette";
 import { V2Demo, V2Shell } from "./V2Shell";
 import { homeCss, Label } from "./ServiceOpsV2";
 
@@ -56,16 +57,6 @@ const COMPARE: { t: string; rows: [string, string[]][] }[] = [
   ] },
 ];
 
-const COVERS: { t: string; ic: ReactNode; items: string[] }[] = [
-  { t: "Service requests and work orders", ic: Ic.inbox, items: ["Service request inbox and pipeline", "Work order creation and management", "Estimates and customer approval", "Work-type-specific workflows and approval steps", "Installation, Service, Maintenance, Repair and Inspection work types", "Job history, attachments and follow-up for unsuccessful visits"] },
-  { t: "Scheduling and dispatch", ic: Ic.calendar, items: ["Dispatch queue and scheduling", "Technician workload visibility", "Technician ranking with assignment explanations", "Map and timeline views", "Optimize the Day assignment recommendations", "Review and apply proposed assignments before they are booked"] },
-  { t: "Technician mobile operations", ic: Ic.checklist, items: ["Technician mobile application", "Job details and service checklists", "Photos, notes and service documentation", "Parts usage and requests", "Timesheets and trip sheets", "Customer sign-off", "Offline data synchronization", "Optional location sharing"] },
-  { t: "Customers, assets and maintenance", ic: Ic.users, items: ["Customer records and service history", "Asset records, warranties and service history", "Service plans and maintenance scheduling", "Products, parts and services catalog", "Inventory and van stock visibility", "Parts requests and returns"] },
-  { t: "Job costing and billing", ic: Ic.receipt, items: ["Job costing and profitability information", "Estimates and invoices", "Payment links and payment recording", "Service and parts costing"] },
-  { t: "Reports and administration", ic: Ic.chart, items: ["Operational reports and dashboards", "CSV import and report export", "Role-based permissions", "Custom fields", "Configurable dashboards", "Automation rules and notifications", "Operational alerts and activity history"] },
-  { t: "EVI and AI assistance", ic: Ic.spark, items: ["EVI assistant access", "Dispatch, Intake, Collections, Quote Follow-up, Risk Flags and Coaching AI helpers", "AI-generated drafts, recommendations and suggested actions for human review"] },
-];
-
 const EXTRA: [string, string, string][] = [
   ["100 jobs", "₹3,000", "$35"],
   ["1 user/technician account", "₹800", "$10"],
@@ -82,10 +73,6 @@ const EXTRA_HOW = [
   "Additional charges require customer approval or an agreed billing arrangement.",
   "If additional capacity is needed consistently, EVOQ may recommend moving to a higher plan.",
 ];
-
-const SERVICES = ["Initial system configuration", "Work types, approval rules and workflow setup", "Technician and user-role configuration", "SLA and notification configuration", "Data migration and import assistance", "Custom dashboards and reports", "Third-party integrations", "Payment gateway integration", "Custom technician payout calculations", "Multi-city operational configuration", "Admin training and onboarding"];
-
-const ENT = ["Phone and SMS receptionist", "Remote video expert", "Scheduled daily agent execution", "Review import and automatic posting", "Custom usage allowances", "Custom integrations and reporting", "Agreed support and service commitments"];
 
 const FAQ: [string, string][] = [
   ["What is included in each ServiceOps plan?", "Every published plan includes the core ServiceOps capabilities covering service requests, work orders, estimates, scheduling, dispatch, technician operations, customers, assets, inventory, job costing, billing, reporting and administration. Plan limits determine the included capacity."],
@@ -120,41 +107,59 @@ function Region({ cur, set }: { cur: Cur; set: (c: Cur) => void }) {
 }
 
 function PlanCard({ p, cur, annual }: { p: Plan; cur: Cur; annual: boolean }) {
-  const price = p.p![cur];
+  const price = p.p?.[cur];
   return (
-    <li className="pr-card">
+    <li className={`pr-card${p.ent ? " ent" : ""}`}>
       <h3>{p.n}</h3>
       <small className="pr-jobs">{p.jobs} jobs/month</small>
       <p className="pr-d">{p.d}</p>
-      <div className="pr-price">
-        <b>{money(cur, price[annual ? 1 : 0])}</b>
-        <span>per month{annual && <s>{money(cur, price[0])}</s>}</span>
-        <em>{annual ? "12-month commitment, billed monthly" : "Month to month"}</em>
-      </div>
-      <V2Demo location={`pricing_${p.n.toLowerCase()}`} title="Get started" className="v2-btn primary pr-btn">Get Started</V2Demo>
+      {price ? (
+        <div className="pr-price">
+          <b>{money(cur, price[annual ? 1 : 0])}</b>
+          <span>per month{annual && <s>{money(cur, price[0])}</s>}</span>
+          <em>{annual ? "12-month commitment, billed monthly" : "Month to month"}</em>
+        </div>
+      ) : (
+        <div className="pr-price"><b>Custom</b><span>Priced for your operation</span><em>Commercial terms agreed with you</em></div>
+      )}
+      {p.ent
+        ? <V2Demo location="pricing_enterprise_plan" title="Talk to an expert" className="v2-btn dark pr-btn">Talk to an Expert</V2Demo>
+        : <V2Demo location={`pricing_${p.n.toLowerCase()}`} title="Get started" className="v2-btn primary pr-btn">Get Started</V2Demo>}
       <ul className="pr-f">{p.f.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
     </li>
   );
 }
 
-function EnterpriseBand({ p }: { p: Plan }) {
+/* the plans sit in one row: four show, and the arrows bring Enterprise (and back) into view */
+function PlanRail({ cur, annual }: { cur: Cur; annual: boolean }) {
+  const rail = useRef<HTMLUListElement>(null);
+  const [edge, setEdge] = useState({ start: true, end: false });
+  const onScroll = () => {
+    const el = rail.current;
+    if (!el) return;
+    const start = el.scrollLeft < 6, end = el.scrollLeft + el.clientWidth >= el.scrollWidth - 6;
+    setEdge((e) => (e.start === start && e.end === end ? e : { start, end }));
+  };
+  const go = (d: 1 | -1) => {
+    const el = rail.current;
+    if (!el) return;
+    const card = el.querySelector("li");
+    el.scrollBy({ left: d * ((card?.clientWidth ?? 280) + 18), behavior: "smooth" });
+  };
   return (
-    <div className="pr-ent">
-      <div className="pr-ent-l">
-        <h3>{p.n}</h3>
-        <small className="pr-jobs">{p.jobs} jobs/month</small>
-        <p className="pr-d">{p.d}</p>
-        <div className="pr-price"><b>Custom</b><em>Commercial terms agreed with you</em></div>
-        <V2Demo location="pricing_enterprise_plan" title="Talk to an expert" className="v2-btn primary pr-btn">Talk to an Expert</V2Demo>
-      </div>
-      <ul className="pr-f">{p.f.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
+    <div className="pr-rail">
+      <button type="button" className="pr-arrow l" aria-label="Previous plans" onClick={() => go(-1)} disabled={edge.start}><span style={{ transform: "rotate(180deg)" }}>{Ic.arrow}</span></button>
+      <ul className="pr-grid" ref={rail} onScroll={onScroll} tabIndex={0} aria-label="Subscription plans, scroll sideways for more">
+        {PLANS.map((p) => <PlanCard key={p.n} p={p} cur={cur} annual={annual} />)}
+      </ul>
+      <button type="button" className="pr-arrow r" aria-label="Next plans" onClick={() => go(1)} disabled={edge.end}>{Ic.arrow}</button>
     </div>
   );
 }
 
 function PricingClosing() {
   return (
-    <section className="v2-out cta-out flush">
+    <section className="v2-out cta-out">
       <div className="v2-in cta" data-rv>
         <div className="cta-copy">
           <h2 className="cta-h"><span>Find the right capacity</span> <span>for your service operation.</span></h2>
@@ -231,9 +236,12 @@ export function ServiceOpsV2Pricing() {
             <li className={!annual ? "on" : ""}><b>Monthly subscription:</b> Pay month to month at the listed price.</li>
             <li className={annual ? "on" : ""}><b>Annual commitment:</b> Save 10% with a 12-month commitment and pay the discounted amount monthly. No upfront annual payment is required.</li>
           </ul>
-          <ul className="pr-grid">{PLANS.filter((p) => !p.ent).map((p) => <PlanCard key={p.n} p={p} cur={cur} annual={annual} />)}</ul>
-          <EnterpriseBand p={PLANS[4]} />
+          <PlanRail cur={cur} annual={annual} />
           <p className="pr-fine">Annual prices reflect a 10% discount, rounded to the nearest whole currency unit. The annual option requires a 12-month commitment, with monthly payments at the discounted rate. Applicable taxes are additional. Enterprise capabilities are subject to agreed scope, provider configuration, availability and contractual terms.</p>
+          <div className="pr-links">
+            <Link href="/implementation">View implementation and onboarding details →</Link>
+            <a href="#compare" onClick={(e) => { e.preventDefault(); document.getElementById("compare")?.scrollIntoView({ behavior: "smooth" }); }}>See full comparison →</a>
+          </div>
         </div>
       </section>
 
@@ -283,34 +291,8 @@ export function ServiceOpsV2Pricing() {
         </div>
       </section>
 
-      {/* what every plan covers */}
-      <section className="v2-sec v2-out" id="covers">
-        <div className="v2-in">
-          <div className="tr-head" data-rv>
-            <div>
-              <Label>What is included</Label>
-              <h2 className="v2-h2">Every plan covers the service lifecycle</h2>
-            </div>
-            <p>ServiceOps includes the core tools required to manage service requests, work orders, field visits, equipment and operational performance.</p>
-          </div>
-          <ul className="pc">
-            {COVERS.map((c, i) => (
-              <li key={c.t} data-rv style={{ ["--hs-d" as string]: `${(i % 4) * 60}ms` }}>
-                <i>{c.ic}</i>
-                <h3>{c.t}</h3>
-                <ul>{c.items.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
-              </li>
-            ))}
-            <li className="pc-photo" aria-hidden>
-              <img src="/industries/v2/fs-detail-hd.jpg" alt="" style={{ objectPosition: "40% 35%" }} />
-            </li>
-          </ul>
-          <p className="pr-fine wide">AI functionality depends on the availability and configuration of supported AI providers. AI-generated outputs and proposed actions require appropriate review and approval. AI consumption and any applicable provider charges are governed by the applicable usage terms.</p>
-        </div>
-      </section>
-
       {/* additional usage */}
-      <section className="v2-sec v2-out v2-grey" id="usage">
+      <section className="v2-sec v2-out" id="usage">
         <div className="v2-in">
           <div className="tr-head" data-rv>
             <div>
@@ -320,49 +302,28 @@ export function ServiceOpsV2Pricing() {
             <p>Add usage allowances at consistent rates across Standard, Growth, Professional and Scale.</p>
           </div>
           <div className="au" data-rv>
-            {([["Additional capacity: India", 1], ["Additional capacity: International", 2]] as const).map(([h, col]) => (
-              <div key={h} className="au-t">
-                <h3>{h}</h3>
-                <table>
-                  <thead><tr><th scope="col">Additional allowance</th><th scope="col">Monthly price</th></tr></thead>
-                  <tbody>{EXTRA.map((r) => <tr key={r[0]}><th scope="row">{r[0]}</th><td>{r[col]}</td></tr>)}</tbody>
-                </table>
+            <div className="au-t">
+              <div className="au-h">
+                <h3>{cur === "IN" ? "Additional capacity: India" : "Additional capacity: International"}</h3>
+                <Region cur={cur} set={setCur} />
               </div>
-            ))}
+              <table>
+                <thead><tr><th scope="col">Additional allowance</th><th scope="col">Monthly price</th></tr></thead>
+                <tbody>{EXTRA.map((r) => <tr key={r[0]}><th scope="row">{r[0]}</th><td>{cur === "IN" ? r[1] : r[2]}</td></tr>)}</tbody>
+              </table>
+            </div>
+            <div className="cm-how">
+              <h3>How additional usage works</h3>
+              <ul>{EXTRA_HOW.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
+              <p>Unused additional capacity does not automatically roll over to the next billing cycle.</p>
+            </div>
           </div>
           <p className="pr-fine">Additional capacity is billed monthly and applies to all published subscription plans. Multiple units can be purchased. Enterprise rates are agreed separately.</p>
-          <div className="cm-how" data-rv>
-            <h3>How additional usage works</h3>
-            <ul>{EXTRA_HOW.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
-            <p>Unused additional capacity does not automatically roll over to the next billing cycle.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* implementation and enterprise */}
-      <section className="v2-sec v2-out" id="services">
-        <div className="v2-in ps">
-          <div className="ps-box" data-rv>
-            <Label>Implementation and custom services</Label>
-            <h2 className="v2-h2">Quoted for your deployment</h2>
-            <p>Your ServiceOps subscription covers the application and the included plan capabilities. Implementation and customer-specific services are quoted separately.</p>
-            <p>Depending on the deployment requirements, services may include:</p>
-            <ul>{SERVICES.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
-            <small>The implementation quotation will define the agreed scope, deliverables, timeline and charges before work begins.</small>
-          </div>
-          <div className="ps-box ent" data-rv>
-            <Label>Enterprise capabilities</Label>
-            <h2 className="v2-h2">Built around your requirements</h2>
-            <p>Enterprise agreements can include additional capabilities and deployment arrangements based on the customer&apos;s requirements.</p>
-            <ul>{ENT.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
-            <small>These capabilities require scope confirmation and applicable provider configuration. Their availability, usage limits, third-party charges and activation timelines will be documented in the Enterprise agreement.</small>
-            <V2Demo location="pricing_enterprise" title="Talk to an expert" className="v2-btn dark">Talk to an Expert</V2Demo>
-          </div>
         </div>
       </section>
 
       {/* faq */}
-      <section className="v2-sec v2-out" id="faq">
+      <section className="v2-sec v2-out v2-grey" id="faq">
         <div className="v2-in pf">
           <div className="pf-head" data-rv>
             <Label>Questions</Label>
@@ -427,9 +388,13 @@ const css = `
   .pr-opts li{padding:14px 18px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE};font-size:14.5px;line-height:1.55;color:${BODY};transition:box-shadow .2s ease,background .2s ease}
   .pr-opts li b{color:${INK}}
   .pr-opts li.on{background:${AMBER_SOFT};box-shadow:inset 0 0 0 1.5px ${AMBER}}
-  .au{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .au{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:18px;align-items:start}
+  .au-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .au-h h3{margin:0!important}
+  .au .cm-how{margin-top:0}
+  .au .cm-how ul{grid-template-columns:1fr}
   .au-t{padding:26px 28px;border-radius:20px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE}}
-  .au-t h3{--h3-size:20px;margin-bottom:12px!important}
+  .au-t h3{--h3-size:20px}
   .au-t table{width:100%;border-collapse:collapse;font-size:15px}
   .au-t th,.au-t td{padding:13px 0;border-top:1px solid ${LINE};text-align:left}
   .au-t thead th{border-top:0;padding-top:0;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:${MUTED}}
@@ -437,7 +402,28 @@ const css = `
   .au-t td,.au-t thead th:last-child{text-align:right}
   .au-t td{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;font-weight:600;color:${INK}}
   .pr-top .v2-label{margin-bottom:14px}
-  .pr-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:stretch}
+  .pr-rail{position:relative}
+  .pr-grid{list-style:none;margin:0;padding:6px 2px 10px;display:flex;gap:18px;align-items:stretch;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .pr-grid::-webkit-scrollbar{display:none}
+  .pr-grid>.pr-card{flex:0 0 calc((100% - 58px) / 4);scroll-snap-align:start}
+  .pr-card.ent{background:${INK};box-shadow:none}
+  .pr-card.ent h3,.pr-card.ent .pr-price b{color:#fff}
+  .pr-card.ent .pr-jobs{color:${AMBER}}
+  .pr-card.ent .pr-d,.pr-card.ent .pr-price span,.pr-card.ent .pr-price em{color:#CFC8BE}
+  .pr-card.ent .pr-price{border-top-color:rgba(255,255,255,.16)}
+  .pr-card.ent .pr-f li{color:#E8E2D9}
+  .pr-card.ent .pr-tick{background:rgba(245,165,36,.2);color:${AMBER}}
+  .pr-card .v2-btn.dark{background:${AMBER};color:${INK}}
+  .pr-card .v2-btn.dark:hover{background:${AMBER_HOVER}}
+  .pr-arrow{position:absolute;top:50%;z-index:3;display:grid;place-items:center;width:46px;height:46px;margin-top:-23px;padding:0;border:0;border-radius:50%;background:#fff;color:${INK};box-shadow:0 12px 28px -10px rgba(32,26,20,.55),0 0 0 1px ${LINE};cursor:pointer;transition:opacity .2s ease,transform .15s ease}
+  .pr-arrow span{display:grid;place-items:center}
+  .pr-arrow svg{width:20px;height:20px}
+  .pr-arrow.l{left:-22px}.pr-arrow.r{right:-22px}
+  .pr-arrow:hover:not(:disabled){transform:scale(1.06)}
+  .pr-arrow:disabled{opacity:0;pointer-events:none}
+  .pr-links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px;margin-top:16px}
+  .pr-links a{font-size:15px;font-weight:500;color:${AMBER_DEEP};text-decoration:none}
+  .pr-links a:hover{text-decoration:underline}
   .pr-card{display:flex;flex-direction:column;padding:28px 26px 26px;border-radius:20px;background:${G1};box-shadow:inset 0 0 0 1px ${LINE}}
   .pr-card h3{--h3-size:24px;line-height:1.15}
   .pr-jobs{margin:4px 0 0;font-size:13.5px;font-weight:600;color:${AMBER_DEEP}}
@@ -499,32 +485,10 @@ const css = `
   .cm-need span{font-size:15.5px;color:${BODY}}
 
   /* what is included */
-  .pc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-  .pc>li{padding:22px 22px 24px;border-radius:18px;background:${G1};box-shadow:inset 0 0 0 1px ${LINE}}
-  .pc>li>i{display:grid;place-items:center;width:42px;height:42px;margin-bottom:16px;border-radius:12px;background:${AMBER_SOFT};color:${AMBER_DEEP}}
-  .pc>li>i svg{width:21px;height:21px}
-  .pc h3{--h3-size:18px;line-height:1.25;margin-bottom:12px!important}
-  .pc ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-  .pc ul li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:${BODY}}
-  .pc>li.pc-photo{padding:0;overflow:hidden;box-shadow:none;background:${G2}}
-  .pc-photo img{width:100%;height:100%;min-height:240px;object-fit:cover}
 
   /* additional usage */
 
   /* implementation and enterprise */
-  .ps{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
-  .ps-box{display:flex;flex-direction:column;align-items:flex-start;padding:36px;border-radius:24px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE}}
-  .ps-box.ent{background:${AMBER};box-shadow:none}
-  .ps-box.ent .v2-label{color:#5A2E07}
-  .ps-box .v2-label{margin-bottom:14px}
-  .ps-box p{margin:14px 0 0;font-size:16.5px;line-height:1.6;color:${BODY}}
-  .ps-box.ent p{color:#33291d}
-  .ps-box ul{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;width:100%}
-  .ps-box li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:${INK}}
-  .ps-box.ent .pr-tick{background:rgba(255,255,255,.55);color:${INK}}
-  .ps-box small{margin-top:auto;padding-top:22px;font-size:13.5px;line-height:1.6;color:${MUTED}}
-  .ps-box.ent small{color:#4B3A22}
-  .ps-box .v2-btn{margin-top:22px}
 
   /* faq */
   .pf{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:64px;align-items:start}
@@ -547,9 +511,8 @@ const css = `
   .cta-st em{margin-left:auto;font-style:normal;font-size:13px;color:${MUTED}}
 
   @media (max-width:1280px){
-    .pr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .pr-grid>.pr-card{flex-basis:calc((100% - 36px) / 3)}
     .pr-d{min-height:0}
-    .pc{grid-template-columns:repeat(3,minmax(0,1fr))}
   }
   @media (max-width:980px){
     .ph{grid-template-columns:1fr;gap:0;padding:0 20px 48px;min-height:0}
@@ -557,19 +520,20 @@ const css = `
     .pr-ent{grid-template-columns:1fr;gap:28px}
     .cm-how ul{grid-template-columns:1fr}
     .pr-opts,.au{grid-template-columns:1fr}
-    .pc{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .ps,.pf{grid-template-columns:1fr;gap:32px}
+    .pr-grid>.pr-card{flex-basis:calc((100% - 18px) / 2)}
+    .pf{grid-template-columns:1fr;gap:32px}
     .pf-head{position:static}
   }
   @media (max-width:640px){
     .ph{padding:0 16px 40px}
     .ph-vis{height:auto}.ph-photo{position:relative;width:100%;height:240px;border-radius:20px}.ph-card{position:relative;left:auto;bottom:auto;margin:-36px 14px 0}
     .pr-ctl{width:100%}.pr-seg{display:flex;width:100%}.pr-seg button{flex:1;justify-content:center;padding:0 8px;font-size:13.5px}
-    .pr-grid,.pc{grid-template-columns:1fr}
+
     .pr-ent{padding:24px 20px}.pr-ent .pr-f{grid-template-columns:1fr}
     .cm-need{padding:20px}.cm-how{padding:22px 20px}
-    .pc>li.pc-photo{display:none}
-    .ps-box{padding:24px 20px}.ps-box ul{grid-template-columns:1fr}
-    .pf-item button{font-size:16.5px}
+    .pr-grid>.pr-card{flex-basis:84%}
+    .pr-arrow{width:40px;height:40px;margin-top:-20px}.pr-arrow.l{left:4px}.pr-arrow.r{right:4px}
+    .pr-links{flex-direction:column}
+        .pf-item button{font-size:16.5px}
   }
 `;

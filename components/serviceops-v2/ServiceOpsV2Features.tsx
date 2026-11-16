@@ -40,6 +40,7 @@ const ROLE_CARDS: { key: string; title: string; d: string; opens: string }[] = [
 /* wording for this page only, the catalogue itself is shared with the first version of the page */
 const AREA_TEXT: Record<string, { k?: string; title?: string }> = {
   setup: { k: "Settings", title: "Admin settings." },
+  money: { k: "Billing" },
   ai: { title: "EVI answers. Agents flag. A person decides." },
   look: { k: "Workspace", title: "Make it yours. Find things fast." },
 };
