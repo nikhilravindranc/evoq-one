@@ -44,8 +44,43 @@ const CRM_LIKE_INTL: Pkg[] = [
   { name: "Growth", price: "$3,999", users: "Up to 50", hours: "80 Hours", timeline: "2 Weeks", recommendedFor: "Mid-sized organizations" },
   { name: "Enterprise", price: "Custom Pricing", users: "50+", hours: "160+ Hours", timeline: "Custom Project Timeline", recommendedFor: "Large organizations" },
 ];
-const SERVICEOPS_INDIA: Pkg[] = CRM_LIKE_INDIA.slice(1);
-const SERVICEOPS_INTL: Pkg[] = CRM_LIKE_INTL;
+/* ServiceOps is quoted per deployment (see the ServiceOps pricing page): one column, the same in India and internationally,
+ * and the services below are the ones a quotation can include, each "as required". */
+const SERVICEOPS_QUOTED: Pkg[] = [
+  { name: "Your quotation", price: "Quoted separately", users: "", hours: "Agreed before work begins", timeline: "Set in the quotation", recommendedFor: "Every ServiceOps plan, Standard to Enterprise" },
+];
+type PlanRow = { label: string; value: (pkg: Pkg) => string; emphasize?: boolean };
+const SERVICEOPS_ROWS: PlanRow[] = [
+  { label: "Price", value: (pkg) => pkg.price, emphasize: true },
+  { label: "Scope and effort", value: (pkg) => pkg.hours },
+  { label: "Estimated Timeline", value: (pkg) => pkg.timeline },
+  { label: "Applies to", value: (pkg) => pkg.recommendedFor },
+];
+const AR = ["As required"];
+const SERVICEOPS_SCOPE: ScopeCategory[] = [
+  { name: "Project Planning", note: "The quotation sets the scope, deliverables, timeline and charges before work begins" },
+  {
+    name: "{product} Configuration",
+    rows: [
+      { activity: "Initial system configuration", values: AR },
+      { activity: "Work types, approval rules and workflow setup", values: AR },
+      { activity: "Technician and user-role configuration", values: AR },
+      { activity: "SLA and notification configuration", values: AR },
+      { activity: "Multi-city operational configuration", values: AR },
+    ],
+  },
+  { name: "Data Migration", rows: [{ activity: "Data migration and import assistance", values: AR }] },
+  { name: "Reports & Dashboards", rows: [{ activity: "Custom dashboards and reports", values: AR }] },
+  {
+    name: "Integrations",
+    rows: [
+      { activity: "Third-party integrations", values: AR },
+      { activity: "Payment gateway integration", values: AR },
+    ],
+  },
+  { name: "Custom Development", rows: [{ activity: "Custom technician payout calculations", values: AR }] },
+  { name: "Training", rows: [{ activity: "Admin training and onboarding", values: AR }] },
+];
 
 /* Most categories break down per-service; a couple of US-market categories
  * ("Project Planning", "Organization Setup") are identical across every
@@ -232,19 +267,13 @@ const ONGOING_SUPPORT: Record<"india" | "international", { rate: string; idealFo
   },
 };
 
-function sliceCategory(cat: ScopeCategory, drop: number): ScopeCategory {
-  if (cat.note !== undefined) return cat;
-  return { ...cat, rows: cat.rows.map((r) => ({ ...r, values: r.values.slice(drop) })) };
-}
-const SERVICEOPS_SCOPE_CATEGORIES_INDIA: ScopeCategory[] = CRM_LIKE_SCOPE_CATEGORIES_INDIA.map((cat) => sliceCategory(cat, 1));
-const SERVICEOPS_SCOPE_CATEGORIES_INTL: ScopeCategory[] = CRM_LIKE_SCOPE_CATEGORIES_INTL;
-
-const PRODUCTS = [
+type Product = { key: string; label: string; india: Pkg[]; international: Pkg[]; scopeCategoriesIndia: ScopeCategory[]; scopeCategoriesIntl: ScopeCategory[]; planRows?: PlanRow[] };
+const PRODUCTS: Product[] = [
   { key: "crm", label: "CRM", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
   { key: "desk", label: "Desk", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
   { key: "hrms", label: "HRMS", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
   { key: "skillberry", label: "Skillberry", india: CRM_LIKE_INDIA, international: CRM_LIKE_INTL, scopeCategoriesIndia: CRM_LIKE_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: CRM_LIKE_SCOPE_CATEGORIES_INTL },
-  { key: "serviceops", label: "ServiceOps", india: SERVICEOPS_INDIA, international: SERVICEOPS_INTL, scopeCategoriesIndia: SERVICEOPS_SCOPE_CATEGORIES_INDIA, scopeCategoriesIntl: SERVICEOPS_SCOPE_CATEGORIES_INTL },
+  { key: "serviceops", label: "ServiceOps", india: SERVICEOPS_QUOTED, international: SERVICEOPS_QUOTED, scopeCategoriesIndia: SERVICEOPS_SCOPE, scopeCategoriesIntl: SERVICEOPS_SCOPE, planRows: SERVICEOPS_ROWS },
 ];
 
 /* ── Why-section illustrations ──
@@ -828,6 +857,7 @@ const TIER_ACCENT: Record<string, Accent> = {
   Growth: { bg: PASTEL.slate, ink: "#4747E0", faint: "#F4F6FA" },
   Premium: { bg: PASTEL.lavender, ink: VIOLET_INK, faint: "#F8F5FD" },
   Enterprise: { bg: PASTEL.peach, ink: AMBER_INK, faint: "#FDF8EF" },
+  "Your quotation": { bg: PASTEL.lavender, ink: VIOLET_INK, faint: "#F8F5FD" },
 };
 const NEUTRAL_ACCENT: Accent = { bg: PASTEL.slate, ink: "var(--interactive)", faint: "#F4F6FA" };
 const tierAccent = (name: string): Accent => TIER_ACCENT[name] ?? NEUTRAL_ACCENT;
@@ -839,7 +869,7 @@ const CATEGORY_TINT: Accent = { bg: "var(--soft)", ink: "var(--interactive)", fa
 
 /* Pricing, folded into the table itself as a final row-group instead of a
  * separate card strip — reuses the same tier columns as the scope rows. */
-const PLAN_ROWS: { label: string; value: (pkg: Pkg) => string; emphasize?: boolean }[] = [
+const PLAN_ROWS: PlanRow[] = [
   { label: "Price", value: (pkg) => pkg.price, emphasize: true },
   { label: "Recommended Users", value: (pkg) => pkg.users },
   { label: "Implementation Effort", value: (pkg) => pkg.hours },
@@ -951,6 +981,7 @@ const CATEGORY_PATHS: Record<string, React.ReactNode> = {
       <path d="M7.6 15.6 5.4 21l4.6-2M16.4 15.6 18.6 21 14 19" />
     </>
   ),
+  "Custom Development": <path d="M8.4 7.2 3.6 12l4.8 4.8M15.6 7.2l4.8 4.8-4.8 4.8M13.4 4.6l-2.8 14.8" />,
   "Post-Launch Support": (
     <>
       <path d="M12 21.5s-7.6-4.4-7.6-10.4a4.6 4.6 0 0 1 7.6-3.5 4.6 4.6 0 0 1 7.6 3.5c0 6-7.6 10.4-7.6 10.4z" />
@@ -998,6 +1029,7 @@ export function ImplementationPage() {
   const visibleCategories = showAllScope ? scopeCategories : scopeCategories.slice(0, 3);
   const hiddenCount = scopeCategories.length - visibleCategories.length;
   const support = ONGOING_SUPPORT[region];
+  const planRows = product.planRows ?? PLAN_ROWS;
 
   return (
     <div className="why-evoq-page">
@@ -1152,11 +1184,11 @@ export function ImplementationPage() {
                   {/* Pricing & plan details — always visible at the top, same tier columns as the scope rows below.
                       Roomier padding + a tinted background across the whole group so it reads as a deliberate
                       highlight rather than a cramped row squeezed against the scope table. */}
-                  {PLAN_ROWS.map((row, ri) => (
+                  {planRows.map((row, ri) => (
                     <tr key={row.label} style={{ background: CATEGORY_TINT.faint, borderTop: ri === 0 ? "none" : `1px solid ${PASTEL.lavender}` }}>
                       {ri === 0 && (
                         <td
-                          rowSpan={PLAN_ROWS.length}
+                          rowSpan={planRows.length}
                           style={{
                             verticalAlign: "middle",
                             padding: "22px 20px",
