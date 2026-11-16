@@ -4,13 +4,13 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
 import {
-  ArrowLeftRight, ArrowRight, Check, ChevronDown, CircleAlert, FlaskConical, Lightbulb, ListChecks, Plug,
-  History, ShieldCheck, Shuffle, Sparkles, User, Workflow, X, type LucideIcon,
+  ArrowLeftRight, ArrowRight, Check, ChevronDown, CircleAlert, Lightbulb, ListChecks, Plug,
+  ShieldCheck, Sparkles, User, X, type LucideIcon,
 } from "lucide-react";
 import { GLYPHS } from "./glyphs";
 import { APP, C, IMAGE_MARKS, IMG, SYNC_BASE } from "./data";
 import { Demo, Mark, SyncMark, SyncShell } from "./Shell";
-import { visCss } from "./Visuals";
+import { VisBuilder, VisConnections, VisMapping, VisMonitoring, VisReports, VisSettings, visCss } from "./Visuals";
 
 /* EVOQ Sync v1 home, nine sections: hero, the problem, how it works, integration scenarios, monitoring, data mapping
    and workflow automation, EVI and the Sync Agent, application compatibility, final call to action. Records, IDs and
@@ -146,7 +146,7 @@ function Hero() {
           <h1 data-rv="1">Get your systems to <span className="hx-hl">agree.</span></h1>
           <p data-rv="2">EVOQ Sync keeps your CRM, ERP, accounting and eCommerce applications in step. It explains integration errors in plain English and prepares corrective actions for your review. You approve them. Nothing changes without you.</p>
           <div className="sx-ctas" data-rv="3">
-            <Demo location="hero">Book a Walkthrough</Demo>
+            <Demo location="hero">Get started</Demo>
             <Link href={`${SYNC_BASE}/features`} className="sx-btn secondary">Explore Features<ArrowRight aria-hidden /></Link>
           </div>
           <div className="hx-works" data-rv="4">
@@ -173,7 +173,7 @@ function Problem() {
       <div className="sx-in">
         <div className="sx-head c pb-head">
           <Label>The problem</Label>
-          <h2 data-rv>It is 8:40 on Monday. The order is in Shopify. It is not in NetSuite.</h2>
+          <h2 data-rv>It is 8:40 on Monday. <span className="t2">The order is in Shopify. It is not in NetSuite.</span></h2>
         </div>
         <div className="fc-seg" data-rv="1">
           <p className="fc-seg-bad">This is where integration problems become operational problems.</p>
@@ -234,7 +234,7 @@ function HowItWorks() {
       <div className="sx-in">
         <div className="sx-head c">
           <Label>How it works</Label>
-          <h2 data-rv>From application connections to active integrations.</h2>
+          <h2 data-rv>From application connections <span className="t2">to active integrations.</span></h2>
           <p data-rv="1">Set up an integration through a guided process. Choose the applications, select the data to synchronize, define how fields should correspond and test the result before activation.</p>
         </div>
         <ol className="fw">
@@ -275,9 +275,6 @@ function HowItWorks() {
             </div>
           </li>
         </ol>
-        <div className="fw-cta" data-rv>
-          <Link href={`${SYNC_BASE}/features#integrations`} className="bt-btn">Explore Integration Features<ArrowRight aria-hidden /></Link>
-        </div>
       </div>
     </section>
   );
@@ -304,7 +301,7 @@ function Scenarios() {
       <div className="sx-in">
         <div className="sx-head c">
           <Label>Integration scenarios</Label>
-          <h2 data-rv>Make the information agree across your applications.</h2>
+          <h2 data-rv>Make the information agree <span className="t2">across your applications.</span></h2>
           <p data-rv="1">Different systems hold different parts of an operational process. EVOQ Sync moves the relevant information between them according to the rules you define.</p>
         </div>
         <div className="sg" ref={ref}>
@@ -353,147 +350,160 @@ function Scenarios() {
   );
 }
 
-/* ---------- 5 monitoring, data mapping and workflow automation, as one light bento ---------- */
-const SEE = [
-  "Status, duration and record counts",
-  "Step by step path",
-  "Application responses and logs",
-  "Likely cause, marked as an inference",
-  "Retry eligibility",
-];
-const FEATURES: { icon: LucideIcon; t: string }[] = [
-  { icon: Shuffle, t: "Data Mapping" },
-  { icon: Sparkles, t: "Data Transformation" },
-  { icon: ArrowLeftRight, t: "Synchronization Direction" },
-  { icon: Workflow, t: "Visual Workflow Builder" },
-  { icon: FlaskConical, t: "Test Before Activation" },
+/* ---------- 5 product tour: the main areas of the app, each linking to the features page ---------- */
+const TOUR: { id: string; t: string; d: string; vis: () => ReactNode }[] = [
+  { id: "connections", t: "Connections", d: "Authorize each application once and reuse the connection across integrations.", vis: VisConnections },
+  { id: "mapping", t: "Data mapping", d: "Pair fields, apply transformations and preview a record before anything runs.", vis: VisMapping },
+  { id: "builder", t: "Workflow Builder", d: "Arrange the steps on a visual canvas and test them on sample data.", vis: VisBuilder },
+  { id: "monitoring", t: "Monitoring", d: "See what failed, the likely cause and a suggested next step.", vis: VisMonitoring },
+  { id: "reports", t: "Reports", d: "Review volume, reliability and performance over time.", vis: VisReports },
+  { id: "security", t: "Controls and settings", d: "Roles, security settings and what the Sync Agent may do.", vis: VisSettings },
 ];
 
-function Operate() {
+function Tour() {
+  const { i, pick, ref } = useAuto(TOUR.length, 7000);
+  const V = TOUR[i].vis;
   return (
-    <section className="sx-sec sx-out sx-grey" id="monitoring">
-      <div className="sx-in">
-        <div className="og">
-          <article className="og-c og-a" data-rv>
-            <Label>Monitoring and troubleshooting</Label>
-            <h2>Every error, translated.</h2>
-            <p className="og-lead">An integration failure should tell you more than a code and a timestamp.</p>
-            <div className="ex" aria-hidden>
-              <div className="ex-hd"><b>Execution EX-20493</b><span className="bt-chip warn">Partial failure</span></div>
-              <div className="ex-stats">
-                <div><small>Duration</small><b>2.4 s</b></div>
-                <div><small>Records</small><b>12</b></div>
-                <div><small>Failed</small><b className="bad">1</b></div>
-              </div>
-              <ol className="ex-path">
-                <li className="ok"><span><Check /></span>Trigger</li>
-                <li className="ok"><span><Check /></span>Validate</li>
-                <li className="err"><span><X /></span>Create order</li>
-                <li><span /></li>
-              </ol>
-            </div>
-          </article>
-
-          <article className="og-c og-b" data-rv="1">
-            <h3>Instead of starting with a support ticket, start with an explanation.</h3>
-            <ul className="og-pills">{SEE.map((x) => <li key={x}><Check aria-hidden />{x}</li>)}</ul>
-            <Link href={`${SYNC_BASE}/features#monitoring`} className="sx-btn secondary sm">Explore Monitoring Features<ArrowRight aria-hidden /></Link>
-          </article>
-
-          <article className="og-c og-d sx-dark" id="mapping" data-rv>
-            <Label>Data mapping and workflow automation</Label>
-            <h2>Define how information moves and what happens along the way.</h2>
-            <ul className="og-feat">
-              {FEATURES.map((f) => { const I = f.icon; return <li key={f.t}><span><I aria-hidden /></span>{f.t}</li>; })}
-            </ul>
-          </article>
-
-          <article className="og-c og-map" data-rv="1">
-            <h3>Data Mapping</h3>
-            <p>Pair fields across applications, validate required fields and preview sample records before execution.</p>
-            <div className="mpv" aria-hidden>
-              <div className="mpv-hd"><Mark id="shopify" size={22} /><ArrowRight /><Mark id="netsuite" size={22} /><span className="bt-chip">One way</span></div>
-              <div className="mpv-r"><b>Order total</b><ArrowRight /><b>amount</b><span className="bt-chip ok">Valid</span></div>
-              <div className="mpv-r"><b>Customer email</b><ArrowRight /><b>email</b><span className="bt-chip ok">Valid</span></div>
-              <div className="mpv-r"><b>Order date</b><ArrowRight /><b>tranDate</b><span className="bt-chip">Date format</span></div>
-            </div>
-          </article>
+    <section className="sx-sec sx-out sx-grey" id="tour">
+      <div className="sx-in tr" ref={ref}>
+        <div className="tr-list">
+          <Label>Inside EVOQ Sync</Label>
+          <h2 data-rv>Everything an integration needs, <span className="t2">in one app.</span></h2>
+          <ul role="tablist" aria-label="Areas of EVOQ Sync">
+            {TOUR.map((x, k) => (
+              <li key={x.id} className={k === i ? "on" : undefined}>
+                <button type="button" role="tab" aria-selected={k === i} onClick={() => pick(k)}>{x.t}<ChevronDown aria-hidden /></button>
+                <div className="tr-more"><div>
+                  <p>{x.d}</p>
+                  <Link href={`${SYNC_BASE}/features#${x.id}`}>See it in Features<ArrowRight aria-hidden /></Link>
+                </div></div>
+              </li>
+            ))}
+          </ul>
+          <Link href={`${SYNC_BASE}/features`} className="bt-btn">Explore all features<ArrowRight aria-hidden /></Link>
+        </div>
+        <div className="tr-stage" aria-hidden>
+          <div className="tr-win">
+            <div className="bt-dots"><i /><i /><i /></div>
+            <div className="tr-vis" key={i}><V /></div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------- 7 EVI and the Sync Agent: one real example from the app, in three steps ---------- */
-function EviAgent() {
+/* ---------- 7 EVI and the Sync Agent: one app window that steps through ask, review, approve ---------- */
+const EV_STEPS = [
+  { t: "Ask EVI", d: "EVI reads the screen you are on and explains the failure: what happened, the likely cause and a suggested fix." },
+  { t: "Review the proposal", d: "The Sync Agent prepares the fix with the facts it saw, what it infers, the before and after, and the risk." },
+  { t: "Approve or reject", d: "Your decision is recorded in History with your name and the time." },
+];
+const CAPS = ["Integration Setup", "Integration Management", "Mapping", "Transformation", "Monitoring", "Error Diagnosis", "Optimization"];
+const WF = [["Trigger", "ok"], ["Retrieve record", "ok"], ["Validate required fields", "err"], ["Map fields", "skip"]];
+
+function EviPanel() {
   return (
-    <section className="sx-sec sx-out sx-dark ev-sec" id="evi">
-      <div className="sx-in">
+    <>
+      <div className="es-hd"><img src={`${IMG}/characters/evi-head.webp`} alt="" /><div><b>EVI</b><small>Looking at: Execution EX-20491</small></div></div>
+      <p className="es-me">Diagnose with EVI</p>
+      <div className="es-ans">
+        <h5>What happened <i>observed</i></h5>
+        <p>3 of 12 records failed at the step “Validate required fields”.</p>
+        <h5>Likely cause <i className="inf">my inference</i></h5>
+        <p>Accounts created before March have no tax ID, and the destination requires it for EMEA customers.</p>
+        <h5>Suggested fix</h5>
+        <p>A conditional skip for accounts without a tax ID.</p>
+      </div>
+      <span className="es-pill">Prepare proposal</span>
+    </>
+  );
+}
+
+function Proposal() {
+  return (
+    <>
+      <div className="es-hd"><img src={`${IMG}/characters/sync-head.webp`} alt="" /><div><b>Sync Agent</b><small>Error Diagnosis · Change active mapping</small></div></div>
+      <b className="es-t">Make “Tax ID” optional for non-EMEA accounts</b>
+      <div className="es-row"><small>Observed</small><span>All 3 failing accounts are outside EMEA.</span></div>
+      <div className="es-row"><small>Inferred</small><span>Mapping v7 had no conditional rule. Not confirmed.</span></div>
+      <div className="es-row"><small>Change</small>
+        <div className="es-ba"><span className="b"><em>Before</em>Required: name, tax_id, country</span><span className="a"><em>After</em>tax_id required only when country is in EMEA</span></div>
+      </div>
+      <div className="es-row"><small>Risk</small><span><i className="es-risk">Low</i> Configuration change only. No records are modified.</span></div>
+      <div className="es-btns"><span>Reject</span><span className="pri">Approve Proposal</span></div>
+    </>
+  );
+}
+
+function Decision() {
+  return (
+    <>
+      <div className="es-hd"><span className="es-you"><User /></span><div><b>You</b><small>Approvals</small></div></div>
+      <div className="es-done"><span><Check /></span><div><b>Decision recorded</b><small>Make “Tax ID” optional for non-EMEA accounts</small></div></div>
+      <div className="es-hist">
+        <small>History</small>
+        <div><i className="ok" /><div><b>Make “Tax ID” optional for non-EMEA accounts</b><span>Sync Agent · Error Diagnosis · Approved by you</span></div></div>
+        <div><i /><div><b>Retry 2 failed records in EX-20463</b><span>Sync Agent · Integration Management · Pending approval</span></div></div>
+      </div>
+    </>
+  );
+}
+
+function EviAgent() {
+  const { i, pick, ref } = useAuto(EV_STEPS.length, 7500);
+  return (
+    <section className="sx-sec sx-out sx-dark es-sec" id="evi">
+      <div className="sx-in" ref={ref}>
         <div className="sx-head c">
           <Label>EVI and Sync Agent</Label>
-          <h2 data-rv>You ask. It prepares. You decide.</h2>
-          <p data-rv="1">EVI is the assistant available across EVOQ applications. In EVOQ Sync, it works with the Sync Agent, a specialist for integration setup, mapping, monitoring and optimization.</p>
+          <h2 data-rv>EVI explains the failure. <span className="t2">The Sync Agent prepares the fix.</span></h2>
+          <p data-rv="1">EVI is the assistant across EVOQ applications. In EVOQ Sync it reads the screen you are on and works with the Sync Agent, a specialist for integration setup, mapping, monitoring and optimization. Each proposal waits for your approval.</p>
         </div>
 
-        <div className="ev3-ex" data-rv>
-          <span className="ev3-tag">Example</span>
-          <Mark id="hubspot" size={22} /><ArrowRight aria-hidden /><Mark id="netsuite" size={22} />
-          <b>HubSpot accounts to NetSuite customers</b>
-          <small>Execution EX-20491 · 3 of 12 records failed</small>
+        <div className="es" data-rv="1">
+          <div className="es-left">
+            <div className="es-ex">
+              <span className="es-tag">Example</span>
+              <div className="es-ex-m"><Mark id="hubspot" size={22} /><ArrowRight aria-hidden /><Mark id="netsuite" size={22} /></div>
+              <p><b>HubSpot accounts to NetSuite customers</b><small>Execution EX-20491 · 3 of 12 records failed</small></p>
+            </div>
+            <ol className="es-steps" role="tablist" aria-label="From a failure to a decision">
+              {EV_STEPS.map((s, k) => (
+                <li key={s.t} className={k === i ? "on" : undefined}>
+                  <button type="button" role="tab" aria-selected={k === i} onClick={() => pick(k)}>
+                    <span className="es-n">{k + 1}</span>
+                    <span className="es-tx"><b>{s.t}</b><span>{s.d}</span></span>
+                  </button>
+                  <i className="es-bar"><u key={`${i}-${k}`} /></i>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="es-win" aria-hidden>
+            <div className="es-top"><div className="bt-dots"><i /><i /><i /></div><span>Monitoring › Executions › EX-20491</span></div>
+            <div className="es-page">
+              <div className="es-ph"><b>EX-20491</b><span className="bt-chip warn">Partial failure</span></div>
+              <small className="es-sub">HubSpot accounts → NetSuite customers · Record updated · 18 s</small>
+              <ol className="es-path">
+                {WF.map(([n, s]) => <li key={n} className={s}><span>{s === "ok" ? <Check /> : s === "err" ? <X /> : null}</span>{n}</li>)}
+              </ol>
+              <code className="es-code">Required field &quot;taxRegistrationNumber&quot; is empty</code>
+              <div className="es-cause"><b>Likely cause</b><span>Accounts created before March have no tax ID.</span></div>
+            </div>
+            <div className="es-panel" key={i}>
+              {i === 0 && <EviPanel />}
+              {i === 1 && <Proposal />}
+              {i === 2 && <Decision />}
+            </div>
+          </div>
         </div>
 
-        <ol className="ev3">
-          <li className="ev3-s" data-rv>
-            <span className="ev3-k">You ask</span>
-            <div className="ev3-card" aria-hidden>
-              <div className="ev3-hd"><img src={`${IMG}/characters/evi-head.webp`} alt="" /><div><b>EVI</b><small>Looking at: Execution EX-20491</small></div></div>
-              <p className="ev3-me">Diagnose with EVI</p>
-              <div className="ev3-evi">
-                <h5>What happened <i>observed</i></h5>
-                <p>3 of 12 records failed at the step “Validate required fields”.</p>
-                <h5>Likely cause <i className="inf">my inference</i></h5>
-                <p>Accounts created before March have no tax ID, and the destination requires it for EMEA customers.</p>
-                <h5>Suggested fix</h5>
-                <p>A conditional skip for accounts without a tax ID.</p>
-              </div>
-              <span className="ev3-pill">Prepare proposal</span>
-            </div>
-            <p><b>EVI</b> An assistant that has read the page. It uses the current screen as context to explain the situation and guide you to the relevant action.</p>
-          </li>
-
-          <li className="ev3-ar" aria-hidden><ArrowRight /></li>
-
-          <li className="ev3-s" data-rv="1">
-            <span className="ev3-k">It prepares</span>
-            <div className="ev3-card" aria-hidden>
-              <div className="ev3-hd"><img src={`${IMG}/characters/sync-head.webp`} alt="" /><div><b>Sync Agent</b><small>Error Diagnosis · Change active mapping</small></div></div>
-              <b className="ev3-t">Make “Tax ID” optional for non-EMEA accounts</b>
-              <div className="ev3-row"><small>Observed</small><span>All 3 failing accounts are outside EMEA.</span></div>
-              <div className="ev3-row"><small>Inferred</small><span>Mapping v7 had no conditional rule. Not confirmed.</span></div>
-              <div className="ev3-row"><small>Change</small>
-                <div className="ev3-ba"><span className="b"><em>Before</em>Required: name, tax_id, country</span><span className="a"><em>After</em>tax_id required only when country is in EMEA</span></div>
-              </div>
-              <div className="ev3-row"><small>Risk</small><span><i className="ev3-risk">Low</i> Configuration change only. No records are modified.</span></div>
-            </div>
-            <p><b>Sync Agent</b> A specialist for integration work. Every proposal shows the facts, the likely inference, the before and after, and the risk.</p>
-          </li>
-
-          <li className="ev3-ar" aria-hidden><ArrowRight /></li>
-
-          <li className="ev3-s" data-rv="2">
-            <span className="ev3-k">You decide</span>
-            <div className="ev3-card" aria-hidden>
-              <div className="ev3-hd"><span className="ev3-you"><User /></span><div><b>You</b><small>Approvals</small></div></div>
-              <b className="ev3-t">Make “Tax ID” optional for non-EMEA accounts</b>
-              <small className="ev3-sub"><i className="ev3-pend">Pending approval</i>Sync Agent · Error Diagnosis</small>
-              <div className="ev3-btns"><span className="ev3-btn">Reject</span><span className="ev3-btn pri">Approve Proposal</span></div>
-              <div className="ev3-rec"><History />Every decision is recorded in History, with the person and the time.</div>
-            </div>
-            <p><b>You</b> Approve or reject the proposal. The decision is recorded.</p>
-          </li>
-        </ol>
-
-        <p className="ev-close" data-rv>Your integrations remain under your control. The agent prepares the work. You decide what happens next.</p>
+        <div className="es-caps" data-rv="2">
+          <small>Sync Agent capabilities, each with its own switch</small>
+          <ul>{CAPS.map((c) => <li key={c}><span>{c}</span><span className="sx-switch on"><i /></span></li>)}</ul>
+        </div>
       </div>
     </section>
   );
@@ -553,45 +563,45 @@ function Apps() {
             </ul>
           ))}
         </div>
-        <div className="ap-api" data-rv>
-          <span className="ap-api-i"><Plug aria-hidden /></span>
-          <p>For systems outside the catalog, configure a <b>Custom REST API Connection</b> with its base URL, authentication details and test call.</p>
-          <Demo location="apps">Book a Walkthrough</Demo>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 9 final call to action: a centered band with floating application tiles ---------- */
+export function CtaBand({ lead, accent, text, primary = "Get started", secondary }: { lead: string; accent: string; text: string; primary?: string; secondary?: { label: string; href: string } }) {
+  return (
+    <section className="sx-out cb-out">
+      <div className="sx-in">
+        <div className="cb" data-rv>
+          <div className="cb-tile t1" aria-hidden><Mark id="shopify" size={44} /></div>
+          <div className="cb-tile t2" aria-hidden><Mark id="hubspot" size={44} /></div>
+          <div className="cb-tile t3" aria-hidden><Mark id="netsuite" size={44} /></div>
+          <div className="cb-tile t4" aria-hidden><Mark id="quickbooks" size={44} /></div>
+          <div className="cb-copy">
+            <h2>{lead} <span>{accent}</span></h2>
+            <p>{text}</p>
+            <div className="sx-ctas">
+              <Demo location="closing" className="sx-btn lime">{primary}</Demo>
+              {secondary && <Link href={secondary.href} className="sx-btn ghost-dark">{secondary.label}</Link>}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ---------- 9 final call to action ---------- */
 function Final() {
   return (
-    <section className="sx-out sx-close-out">
-      <div className="sx-in">
-        <div className="sx-close" data-rv>
-          <div className="sx-close-copy">
-            <h2>Make your applications agree.</h2>
-            <p>See how EVOQ Sync handles an integration, explains a failed execution and prepares a corrective action for your approval.</p>
-            <div className="sx-ctas">
-              <Demo location="closing" className="sx-btn lime">Book a Walkthrough</Demo>
-              <Link href={`${SYNC_BASE}/features`} className="sx-btn ghost-dark">Explore Features</Link>
-            </div>
-          </div>
-          <div className="sx-close-art" aria-hidden>
-            <div className="sx-close-pair"><Mark id="shopify" size={52} /><i /><SyncMark size={58} bg={C.action} /><i /><Mark id="netsuite" size={52} /></div>
-            <div className="sx-close-card">
-              <span className="sx-dot ok" />
-              <div><b>Shopify orders to NetSuite sales orders</b><small>Order #1042 retried and created in NetSuite.</small></div>
-              <span className="sx-switch on"><i /></span>
-            </div>
-            <img src="/sync-v1/characters/sync-pose-5.webp" alt="" className="sx-close-agent" />
-          </div>
-        </div>
-      </div>
-    </section>
+    <CtaBand
+      lead="Make your applications"
+      accent="agree."
+      text="See how EVOQ Sync handles an integration, explains a failed execution and prepares a corrective action for your approval."
+      secondary={{ label: "Explore Features", href: `${SYNC_BASE}/features` }}
+    />
   );
 }
-
 
 /* ---------- FAQ ---------- */
 export const FAQ: [string, string][] = [
@@ -631,8 +641,8 @@ export function SyncV1() {
       <Hero />
       <Problem />
       <HowItWorks />
+      <Tour />
       <Scenarios />
-      <Operate />
       <EviAgent />
       <Apps />
       <Final />
@@ -666,13 +676,44 @@ export const sharedCss = `
   @media (max-width:860px){.fq{grid-template-columns:1fr;gap:28px}}
 `;
 
+export const ctaCss = `
+  /* closing call to action */
+  .cb-out{padding-top:88px;padding-bottom:88px}
+  .cb{position:relative;display:flex;justify-content:center;padding:104px 40px;border-radius:32px;background:radial-gradient(700px 360px at 50% 0%,rgba(168,85,247,.5),transparent 70%),radial-gradient(520px 300px at 50% 120%,rgba(163,230,53,.18),transparent 70%),${C.depth};overflow:hidden;isolation:isolate}
+  .cb::before{content:"";position:absolute;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.14) 1px,transparent 1.5px);background-size:26px 26px;-webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%)}
+  .cb-copy{position:relative;z-index:2;max-width:640px;text-align:center}
+  .cb h2{color:#fff;text-wrap:balance}
+  .cb h2 span{color:${C.lime}}
+  .cb p{margin:20px auto 0;max-width:52ch;font-size:18px;line-height:1.55;color:#D9CCF0;text-wrap:balance}
+  .cb .sx-ctas{justify-content:center;margin-top:32px}
+  .cb-tile{position:absolute;display:flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:24px;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),0 24px 44px -20px rgba(0,0,0,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);animation:cbFloat 7s ease-in-out infinite}
+  .cb-tile.t1{left:7%;top:16%}
+  .cb-tile.t2{left:13%;bottom:14%;animation-delay:-2.5s}
+  .cb-tile.t3{right:7%;top:20%;animation-delay:-1.2s}
+  .cb-tile.t4{right:14%;bottom:12%;animation-delay:-4s}
+  @keyframes cbFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+  @media (prefers-reduced-motion:reduce){.cb-tile{animation:none}}
+  @media (max-width:980px){
+    .cb{padding:72px 28px}
+    .cb-tile{width:64px;height:64px;border-radius:18px}
+    .cb-tile.t1{left:3%}.cb-tile.t2{left:5%}.cb-tile.t3{right:3%}.cb-tile.t4{right:5%}
+  }
+  @media (max-width:640px){
+    .cb-out{padding-top:56px;padding-bottom:56px}
+    .cb{padding:56px 22px}
+    .cb p{font-size:16.5px}
+    .cb-tile{display:none}
+  }
+
+`;
+
 const css = `
   ${sharedCss}
   /* hero */
   .hx{padding-top:56px;padding-bottom:72px;background:radial-gradient(900px 480px at 80% 10%,${C.tint},rgba(255,255,255,0) 70%),#fff;overflow:hidden}
   .hx-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
   .hx-eyebrow{display:inline-flex;align-items:center;gap:10px;padding:7px 14px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px ${C.soft};font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.08em;color:${C.primary}}
-  .hx h1{margin-top:22px!important;--h1-size:60px}
+  .hx h1{margin-top:22px!important;}
   .hx-hl{position:relative;color:${C.primary};white-space:nowrap}
   .hx-hl::after{content:"";position:absolute;left:2%;right:4%;bottom:.02em;height:.16em;border-radius:999px;background:${C.lime};z-index:-1}
   .hx h1{position:relative;z-index:0}
@@ -779,8 +820,9 @@ const css = `
   .fc-card em{justify-self:start;margin-top:5px;padding:5px 11px;border-radius:9px;background:${C.primary};color:#fff;font-style:normal;font-size:12.5px;font-weight:600}
   .fc>p{margin:16px 0 0;font-size:15px;line-height:1.55;color:${C.body}}
   .fc>p b{font-weight:600;color:${C.ink}}
-  .pb-points{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:14px 40px;margin:44px 0 0;padding:28px 0 0;border-top:1px solid ${C.line}}
-  .pb-points li{display:flex;align-items:center;gap:10px;font-size:15px;line-height:1.4;color:${C.ink}}
+  .pb-points{list-style:none;display:grid;grid-template-columns:repeat(3,auto);justify-content:space-between;gap:14px 16px;margin:44px 0 0;padding:28px 0 0;border-top:1px solid ${C.line}}
+  .pb-points li{display:flex;align-items:center;gap:9px;font-size:14px;line-height:1.4;color:${C.ink};white-space:nowrap}
+  @media (max-width:1240px){.pb-points li{white-space:normal}}
   .pb-points li>span{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:${C.tint};color:${C.primary};flex-shrink:0}
   .pb-points li>span svg{width:16px;height:16px}
 
@@ -801,7 +843,7 @@ const css = `
     .fl-st{flex-direction:column;gap:6px}
     .ch-body{height:230px}
     .pb-head{margin-bottom:26px}
-    .pb-points{flex-direction:column;align-items:flex-start;margin-top:36px}
+    .pb-points{grid-template-columns:1fr;justify-content:start;margin-top:36px}
   }
   @media (max-width:560px){
     .fc-grid{grid-template-columns:1fr}
@@ -829,7 +871,6 @@ const css = `
   .fw-live{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:${C.lime};color:${C.limeInk};font-size:13px;font-weight:700}
   .fw-live svg{width:15px;height:15px}
   .fw-s:last-child .fw-line{margin-right:14px}
-  .fw-s h3{--h3-size:22px}
   .fw-s p{margin:10px 0 0;font-size:15.5px;line-height:1.6;color:${C.body};max-width:38ch}
   .fw-card{margin-top:auto;padding:14px;border-radius:18px;background:${C.g1};display:grid;gap:8px}
   .fw-s p+.fw-card{margin-top:26px}
@@ -845,7 +886,6 @@ const css = `
   .fw-dir svg{width:14px;height:14px;color:${C.primary}}
   .fw-tick{display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:${C.ok};color:#fff;flex-shrink:0}
   .fw-tick svg{width:12px;height:12px}
-  .fw-cta{display:flex;justify-content:center;margin-top:44px}
 
   /* scenarios: one after the other on a soft gradient */
   .sg-sec{background:linear-gradient(180deg,#fff 0,#E6ECFF 14%,#E8DBFB 55%,#FADDEC 90%,#fff 100%)}
@@ -870,7 +910,7 @@ const css = `
   .sg-c:not(.on) .sg-full{position:absolute;left:0;top:0;opacity:0;pointer-events:none;transition:opacity .15s ease}
   .sg-copy{display:flex;flex-direction:column;align-items:flex-start;padding:34px 12px 34px 34px}
   .sg-cat{padding:4px 12px;border-radius:999px;background:${C.tint};color:${C.primary};font-size:12.5px;font-weight:700;letter-spacing:.03em}
-  .sg-copy h3{--h3-size:30px;margin-top:18px!important}
+  .sg-copy h3{margin-top:18px!important}
   .sg-copy p{margin:12px 0 0;font-size:15.5px;line-height:1.6;color:${C.body}}
   .sg-vis{display:flex;align-items:stretch;padding:14px}
   .sg-win{flex:1;display:grid;align-content:center;gap:8px;padding:16px;border-radius:18px;background:linear-gradient(160deg,#F5F0FF,#FDEFF6);box-shadow:inset 0 0 0 1px ${C.soft}}
@@ -908,111 +948,150 @@ const css = `
     .sg-r{grid-template-columns:.9fr 1fr 1fr}
   }
 
-  /* monitoring and mapping, one light bento */
-  .og{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-  .og-c{position:relative;display:flex;flex-direction:column;padding:34px;border-radius:26px;background:#fff;box-shadow:inset 0 0 0 1px ${C.line};overflow:hidden}
-  .og-a{grid-column:span 7}
-  .og-b{grid-column:span 5;justify-content:space-between;gap:22px}
-  .og-d{grid-column:span 5}
-  .og-map{grid-column:span 7}
-  .og-c .sx-label{margin-bottom:14px}
-  .og-c h2{--h2-size:34px}
-  .og-c h3{--h3-size:22px;line-height:1.3!important}
-  .og-c>p{margin:10px 0 0;font-size:15.5px;line-height:1.6;color:${C.body};max-width:52ch}
-  .og-c>p.og-lead{margin-top:14px;font-size:17.5px;color:${C.ink}}
-  .og-b .sx-btn{align-self:flex-start}
-  .og-pills{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-  .og-pills li{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;background:${C.g1};box-shadow:inset 0 0 0 1px ${C.line};font-size:13.5px;font-weight:500;color:${C.ink}}
-  .og-pills svg{width:14px;height:14px;color:${C.ok}}
-  .og-d{background:${C.depth};box-shadow:none}
-  .og-feat{list-style:none;margin:auto 0 0;padding:28px 0 0;display:grid;gap:4px}
-  .og-feat li{display:flex;align-items:center;gap:14px;padding:10px 0;font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;font-weight:500;color:#fff}
-  .og-feat li+li{border-top:1px solid rgba(255,255,255,.12)}
-  .og-feat li>span{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.1);color:${C.lime};flex-shrink:0}
-  .og-feat li>span svg{width:17px;height:17px}
-  .bt-chip.warn{background:#FEF3C7;color:#92400E}
+  /* headings: two tones, a little larger */
+  .sx-head h2 .t2,.tr-list h2 .t2{color:#8E8C96}
+  .sx-dark .sx-head h2 .t2{color:#A99BC9}
 
-  .ex{margin-top:auto;padding:16px;border-radius:18px;background:${C.g1};display:grid;gap:12px}
-  .og-lead+.ex{margin-top:auto}
-  .og-a>p.og-lead{margin-bottom:28px}
-  .ex-hd{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .ex-hd b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;color:${C.ink}}
-  .ex-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .ex-stats>div{padding:12px 14px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1px ${C.line}}
-  .ex-stats small{display:block;font-size:12px;color:${C.muted}}
-  .ex-stats b{font-family:var(--font-display),system-ui,sans-serif;font-size:22px;color:${C.ink}}
-  .ex-stats b.bad{color:${C.err}}
-  .ex-path{list-style:none;margin:0;padding:4px 2px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-  .ex-path li{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:${C.ink};text-align:center}
-  .ex-path li:not(:last-child)::after{content:"";position:absolute;top:13px;left:calc(50% + 18px);right:calc(-50% + 18px);height:2px;background:#DDD8E5}
-  .ex-path li.ok:not(:last-child)::after{background:${C.ok};opacity:.5}
-  .ex-path li>span{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#DDD8E5;color:#fff}
-  .ex-path li.ok>span{background:${C.ok}}
-  .ex-path li.err>span{background:${C.err};box-shadow:0 0 0 5px rgba(220,38,38,.15)}
-  .ex-path li>span svg{width:14px;height:14px}
+  /* product tour */
+  .tr{display:grid;grid-template-columns:.78fr 1.22fr;gap:56px;align-items:center}
+  .tr-list .sx-label{margin-bottom:14px}
+  .tr-list ul{list-style:none;margin:30px 0 28px;padding:0;border-top:1px solid ${C.line}}
+  .tr-list li{border-bottom:1px solid ${C.line}}
+  .tr-list li>button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:18px 2px;border:0;background:none;font-family:var(--font-display),system-ui,sans-serif;font-size:19px;font-weight:600;color:${C.muted};text-align:left;cursor:pointer;transition:color .2s ease}
+  .tr-list li>button:hover,.tr-list li.on>button{color:${C.ink}}
+  .tr-list li>button svg{width:18px;height:18px;flex-shrink:0;transition:transform .25s ease}
+  .tr-list li.on>button svg{transform:rotate(180deg)}
+  .tr-more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+  .tr-list li.on .tr-more{grid-template-rows:1fr}
+  .tr-more>div{overflow:hidden}
+  .tr-more p{margin:0 0 10px;font-size:15.5px;line-height:1.6;color:${C.body}}
+  .tr-more a{display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;font-size:15px;font-weight:600;color:${C.primary};text-decoration:none}
+  .tr-more a:hover{text-decoration:underline}
+  .tr-more a svg{width:15px;height:15px}
+  .tr-stage{padding:32px;border-radius:30px;background:linear-gradient(135deg,#E6ECFF 0,#E8DBFB 55%,#FADDEC 100%)}
+  .tr-win{position:relative;height:470px;border-radius:18px;background:#fff;box-shadow:0 36px 70px -34px rgba(46,16,101,.55),0 0 0 1px rgba(255,255,255,.85);overflow:hidden}
+  .tr-win .bt-dots{padding:14px 16px 0;margin:0}
+  .tr-win::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff);pointer-events:none}
+  .tr-vis{padding:12px 16px 0;animation:trIn .4s ease both}
+  .tr-vis .vz{box-shadow:none;border-radius:12px}
+  @keyframes trIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.tr-vis{animation:none}.tr-more{transition:none}}
+  @media (max-width:980px){
+    .tr{grid-template-columns:1fr;gap:34px}
+  }
+  @media (max-width:640px){
+    .tr-stage{padding:14px;border-radius:22px}
+    .tr-win{height:420px}
+  }
 
-  .og-map>p{max-width:56ch}
-  .mpv{margin-top:auto;padding:16px;border-radius:18px;background:${C.g1};display:grid;gap:8px}
-  .og-map>p{margin-bottom:26px}
-  .mpv-hd{display:flex;align-items:center;gap:8px;padding:0 2px 4px}
-  .mpv-hd svg{width:16px;height:16px;color:${C.primary}}
-  .mpv-hd .bt-chip{margin-left:auto}
-  .mpv-r{display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1px ${C.line}}
-  .mpv-r b{font-size:14px;font-weight:600;color:${C.ink}}
-  .mpv-r svg{width:15px;height:15px;color:${C.muted}}
+  /* evi and the sync agent: one app window, three steps */
+  .es-sec{position:relative;overflow:hidden;background:radial-gradient(900px 480px at 80% 8%,rgba(168,85,247,.38),transparent 70%),radial-gradient(700px 420px at 5% 95%,rgba(163,230,53,.12),transparent 70%),${C.depth}}
+  .es{display:grid;grid-template-columns:.78fr 1.22fr;gap:44px;align-items:center;margin-top:30px}
+  .es-ex{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px 10px 10px;border-radius:16px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+  .es-tag{padding:4px 12px;border-radius:999px;background:${C.lime};color:${C.limeInk};font-size:12.5px;font-weight:700}
+  .es-ex-m{display:flex;align-items:center;gap:6px}
+  .es-ex-m svg{width:15px;height:15px;color:${C.lime}}
+  .es-ex p{margin:0;flex:1;min-width:180px}
+  .es-ex b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;color:#fff}
+  .es-ex small{font-size:12.5px;color:#CDBEE8}
+  .es-steps{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:6px}
+  .es-steps li{position:relative;border-radius:18px;transition:background .25s ease}
+  .es-steps li.on{background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+  .es-steps button{display:flex;gap:16px;width:100%;padding:18px 20px;border:0;background:none;text-align:left;cursor:pointer;color:#fff}
+  .es-n{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);font-family:var(--font-display),system-ui,sans-serif;font-size:14px;font-weight:700;color:#CDBEE8;flex-shrink:0;transition:background .25s ease,color .25s ease}
+  .es-steps li.on .es-n{background:${C.lime};color:${C.limeInk}}
+  .es-tx{display:grid;gap:6px}
+  .es-tx b{font-family:var(--font-display),system-ui,sans-serif;font-size:19px;font-weight:600;color:#B7A8D6;transition:color .25s ease}
+  .es-steps li.on .es-tx b{color:#fff}
+  .es-tx>span{display:none;font-size:15px;line-height:1.55;color:#CDBEE8}
+  .es-steps li.on .es-tx>span{display:block}
+  .es-bar{position:absolute;left:20px;right:20px;bottom:0;height:2px;border-radius:2px;background:transparent;overflow:hidden}
+  .es-steps li.on .es-bar{background:rgba(255,255,255,.12)}
+  .es-bar u{display:block;height:100%;width:0;background:${C.lime}}
+  .es-steps li.on .es-bar u{animation:esBar 7.5s linear forwards}
+  @keyframes esBar{to{width:100%}}
 
-  /* evi and the sync agent, one real example */
-  .ev-sec{position:relative;overflow:hidden}
-  .ev3-ex{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;width:fit-content;max-width:100%;margin:34px auto 0;padding:8px 18px 8px 8px;border-radius:999px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
-  .ev3-ex svg{width:16px;height:16px;color:${C.lime}}
-  .ev3-ex b{font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;color:#fff}
-  .ev3-ex small{font-size:13px;color:#CDBEE8}
-  .ev3-tag{padding:4px 12px;border-radius:999px;background:${C.lime};color:${C.limeInk};font-size:12.5px;font-weight:700}
-  .ev3{list-style:none;margin:30px 0 0;padding:0;display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;align-items:stretch}
-  .ev3-s{display:flex;flex-direction:column;gap:14px;min-width:0}
-  .ev3-k{align-self:flex-start;padding:4px 12px;border-radius:999px;background:rgba(163,230,53,.16);color:${C.lime};font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:700}
-  .ev3-card{flex:1;display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:22px;background:#fff;color:${C.ink};box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
-  .ev3-s>p{margin:0;font-size:14.5px;line-height:1.55;color:#CDBEE8}
-  .ev3-s>p b{margin-right:6px;color:#fff;font-family:var(--font-display),system-ui,sans-serif}
-  .ev3-ar{align-self:center;justify-self:center;display:flex;align-items:center;justify-content:center;width:34px;height:34px;margin-top:-60px;border-radius:50%;background:${C.lime};color:${C.limeInk}}
-  .ev3-ar svg{width:17px;height:17px}
-  .ev3-hd{display:flex;align-items:center;gap:10px;padding-bottom:6px;border-bottom:1px solid ${C.line}}
-  .ev3-hd img{width:34px;height:34px;border-radius:50%;background:${C.tint};flex-shrink:0}
-  .ev3-hd b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:15px;line-height:1.2}
-  .ev3-hd small{display:block;font-size:12px;color:${C.muted}}
-  .ev3-you{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:${C.lime};color:${C.limeInk};flex-shrink:0}
-  .ev3-you svg{width:17px;height:17px}
-  .ev3-me{align-self:flex-end;margin:0;padding:8px 14px;border-radius:16px 16px 5px 16px;background:${C.g1};box-shadow:inset 0 0 0 1px ${C.line};font-size:13px;font-weight:500;color:${C.ink}}
-  .ev3-evi h5{display:flex;align-items:center;gap:8px;margin:10px 0 2px;font-family:var(--font-display),system-ui,sans-serif;font-size:13px;font-weight:700;color:${C.ink}}
-  .ev3-evi h5:first-child{margin-top:0}
-  .ev3-evi h5 i{padding:1px 8px;border-radius:999px;background:${C.tint};color:${C.primary};font-style:normal;font-size:11px;font-weight:600}
-  .ev3-evi h5 i.inf{background:#EFF6FF;color:#1D4ED8}
-  .ev3-evi p{margin:0;font-size:13px;line-height:1.5;color:${C.body}}
-  .ev3-pill{align-self:flex-start;margin-top:auto;padding:7px 13px;border-radius:10px;background:${C.tint};color:${C.primary};font-size:13px;font-weight:600}
-  .ev3-t{font-family:var(--font-display),system-ui,sans-serif;font-size:16px;line-height:1.3;color:${C.ink}}
-  .ev3-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:${C.muted};margin-top:-4px}
-  .ev3-pend{padding:2px 9px;border-radius:999px;background:#FEF3C7;color:#92400E;font-style:normal;font-size:11.5px;font-weight:700}
-  .ev3-row{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:9px 0 0;border-top:1px solid ${C.line};font-size:13px;line-height:1.45;color:${C.ink}}
-  .ev3-row small{font-size:12px;font-weight:600;color:${C.muted}}
-  .ev3-ba{display:grid;gap:6px}
-  .ev3-ba span{display:block;padding:7px 10px;border-radius:10px;font-size:12.5px;line-height:1.4}
-  .ev3-ba span em{display:block;font-style:normal;font-size:11px;font-weight:700;opacity:.7}
-  .ev3-ba .b{background:#FEF2F2;box-shadow:inset 0 0 0 1px #FECACA;color:#7F1D1D}
-  .ev3-ba .a{background:#F0FDF4;box-shadow:inset 0 0 0 1px #BBF7D0;color:#14532D}
-  .ev3-risk{display:inline-block;margin-right:4px;padding:1px 9px;border-radius:999px;background:#DCFCE7;color:#166534;font-style:normal;font-size:12px;font-weight:700}
-  .ev3-btns{display:flex;gap:8px;margin-top:6px}
-  .ev3-btn{flex:1;text-align:center;padding:10px 12px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px ${C.line};font-size:13.5px;font-weight:600;color:${C.ink}}
-  .ev3-btn.pri{background:${C.primary};box-shadow:none;color:#fff}
-  .ev3-rec{display:flex;align-items:flex-start;gap:8px;margin-top:auto;padding:11px 12px;border-radius:12px;background:${C.surface};box-shadow:inset 0 0 0 1px ${C.soft};font-size:12.5px;line-height:1.45;color:${C.body}}
-  .ev3-rec svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;color:${C.primary}}
-  .ev-close{max-width:760px;margin:48px auto 0;text-align:center;text-wrap:balance;font-family:var(--font-display),system-ui,sans-serif;font-size:20px;font-weight:600;line-height:1.45;color:#fff}
+  .es-win{position:relative;height:540px;border-radius:22px;background:#fff;box-shadow:0 50px 90px -40px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.2);overflow:hidden}
+  .es-top{display:flex;align-items:center;gap:16px;padding:12px 16px;border-bottom:1px solid ${C.line};background:#FAF9FC;font-size:12.5px;color:${C.muted}}
+  .es-top .bt-dots{margin:0}
+  .es-page{padding:18px 20px;width:56%;display:grid;gap:12px;align-content:start}
+  .es-ph{display:flex;align-items:center;gap:10px}
+  .es-ph b{font-family:var(--font-display),system-ui,sans-serif;font-size:20px;color:${C.ink}}
+  .es-sub{margin-top:-6px;font-size:12px;color:${C.muted}}
+  .es-path{list-style:none;margin:0;padding:12px 8px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;border-radius:14px;background:${C.g1}}
+  .es-path li{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:11px;font-weight:500;line-height:1.25;color:${C.ink}}
+  .es-path li:not(:last-child)::after{content:"";position:absolute;top:12px;left:calc(50% + 14px);right:calc(-50% + 14px);height:2px;background:#DDD8E5}
+  .es-path li>span{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#DDD8E5;color:#fff}
+  .es-path li.ok>span{background:${C.ok}}
+  .es-path li.err>span{background:${C.err};box-shadow:0 0 0 4px rgba(220,38,38,.15)}
+  .es-path li>span svg{width:12px;height:12px}
+  .es-code{display:block;padding:10px 12px;border-radius:10px;background:#120B24;color:#FECACA;font-size:11.5px;white-space:pre-wrap}
+  .es-cause{display:grid;gap:3px;padding:12px;border-radius:12px;background:${C.g1};font-size:12px;color:${C.body}}
+  .es-cause b{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:${C.muted}}
+  .es-panel{position:absolute;top:47px;right:0;bottom:0;width:48%;display:flex;flex-direction:column;gap:10px;padding:16px;background:#fff;border-left:1px solid ${C.line};box-shadow:-24px 0 40px -28px rgba(46,16,101,.45);animation:esIn .45s cubic-bezier(.2,.8,.2,1) both;overflow:hidden}
+  @keyframes esIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  .es-hd{display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid ${C.line}}
+  .es-hd img{width:34px;height:34px;border-radius:50%;background:${C.tint};flex-shrink:0}
+  .es-hd b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;line-height:1.2;color:${C.ink}}
+  .es-hd small{display:block;font-size:11.5px;color:${C.muted}}
+  .es-you{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:${C.lime};color:${C.limeInk};flex-shrink:0}
+  .es-you svg{width:17px;height:17px}
+  .es-me{align-self:flex-end;margin:0;padding:7px 13px;border-radius:15px 15px 4px 15px;background:${C.g1};box-shadow:inset 0 0 0 1px ${C.line};font-size:12.5px;font-weight:500;color:${C.ink}}
+  .es-ans h5{display:flex;align-items:center;gap:7px;margin:9px 0 2px;font-family:var(--font-display),system-ui,sans-serif;font-size:12.5px;font-weight:700;color:${C.ink}}
+  .es-ans h5:first-child{margin-top:0}
+  .es-ans h5 i{padding:1px 8px;border-radius:999px;background:${C.tint};color:${C.primary};font-style:normal;font-size:10.5px;font-weight:600}
+  .es-ans h5 i.inf{background:#EFF6FF;color:#1D4ED8}
+  .es-ans p{margin:0;font-size:12.5px;line-height:1.5;color:${C.body}}
+  .es-pill{align-self:flex-start;margin-top:auto;padding:7px 13px;border-radius:9px;background:${C.tint};color:${C.primary};font-size:12.5px;font-weight:600}
+  .es-t{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;line-height:1.3;color:${C.ink}}
+  .es-row{display:grid;grid-template-columns:58px 1fr;gap:8px;padding-top:8px;border-top:1px solid ${C.line};font-size:12px;line-height:1.45;color:${C.ink}}
+  .es-row small{font-size:11px;font-weight:600;color:${C.muted}}
+  .es-ba{display:grid;gap:5px}
+  .es-ba span{display:block;padding:6px 9px;border-radius:9px;font-size:11.5px;line-height:1.4}
+  .es-ba span em{display:block;font-style:normal;font-size:10px;font-weight:700;opacity:.7}
+  .es-ba .b{background:#FEF2F2;box-shadow:inset 0 0 0 1px #FECACA;color:#7F1D1D}
+  .es-ba .a{background:#F0FDF4;box-shadow:inset 0 0 0 1px #BBF7D0;color:#14532D}
+  .es-risk{display:inline-block;margin-right:4px;padding:1px 8px;border-radius:999px;background:#DCFCE7;color:#166534;font-style:normal;font-size:11px;font-weight:700}
+  .es-btns{display:flex;gap:7px;margin-top:auto}
+  .es-btns span{flex:1;text-align:center;padding:9px 8px;border-radius:9px;background:#fff;box-shadow:inset 0 0 0 1px ${C.line};font-size:12.5px;font-weight:600;color:${C.ink}}
+  .es-btns span.pri{background:${C.primary};box-shadow:none;color:#fff}
+  .es-done{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;background:#F0FDF4;box-shadow:inset 0 0 0 1px #BBF7D0}
+  .es-done>span{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:${C.ok};color:#fff;flex-shrink:0}
+  .es-done>span svg{width:17px;height:17px}
+  .es-done b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;color:#14532D}
+  .es-done small{display:block;font-size:12px;line-height:1.4;color:#166534}
+  .es-hist{display:grid;gap:8px}
+  .es-hist>small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${C.muted}}
+  .es-hist>div{display:flex;gap:10px;padding:10px 12px;border-radius:12px;background:${C.g1}}
+  .es-hist i{width:9px;height:9px;margin-top:5px;border-radius:50%;background:${C.warn};flex-shrink:0}
+  .es-hist i.ok{background:${C.ok}}
+  .es-hist b{display:block;font-size:12.5px;line-height:1.35;color:${C.ink}}
+  .es-hist span{display:block;margin-top:2px;font-size:11.5px;color:${C.muted}}
+
+  .es-caps{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:34px;padding-top:24px;border-top:1px solid rgba(255,255,255,.14)}
+  .es-caps>small{font-size:13px;font-weight:600;color:#CDBEE8}
+  .es-caps ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .es-caps li{display:flex;align-items:center;gap:10px;padding:7px 8px 7px 14px;border-radius:999px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);font-size:13px;font-weight:600;color:#fff}
+  .es-caps .sx-switch{width:32px;height:19px}
+  .es-caps .sx-switch i{top:2.5px;left:2.5px;width:14px;height:14px}
+  .es-caps .sx-switch.on i{transform:translateX(13px)}
+  .es-caps .sx-switch.on{background:${C.lime}}
+  @media (prefers-reduced-motion:reduce){.es-panel{animation:none}.es-steps li.on .es-bar u{animation:none;width:100%}}
+  @media (max-width:980px){
+    .es{grid-template-columns:1fr;gap:28px}
+    .es-win{height:auto;min-height:0}
+    .es-page{display:none}
+    .es-panel{position:relative;top:auto;width:auto;border-left:0;box-shadow:none;min-height:360px}
+  }
+
+${ctaCss}
 
   /* apps: staggered frosted tiles */
   .ap-sec{background:#ECECEF;overflow:hidden}
   .ap-head{max-width:760px}
   .ap-lab{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;color:${C.ink}}
   .ap-lab::before{content:"";width:14px;height:2px;border-radius:2px;background:${C.primary}}
-  .ap-head h2{--h2-size:50px;margin-top:22px!important;line-height:1.08!important;color:${C.ink}}
+  .ap-head h2{margin-top:22px!important;line-height:1.08!important;color:${C.ink}}
   .ap-head h2 span{color:#8E8C96}
   .ap-head p{margin:26px 0 0;max-width:54ch;font-size:16px;line-height:1.65;color:#77747F}
   .ap-field{--t:88px;--gap:14px;display:flex;align-items:flex-start;justify-content:center;gap:var(--gap);margin-top:30px;min-height:calc(var(--t) * 5.1);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}
@@ -1024,43 +1103,24 @@ const css = `
   .ap-t.empty::before{display:none}
   .ap-t:not(.empty):hover{transform:translateY(-4px) scale(1.04);animation-play-state:paused}
   @keyframes apFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  .ap-api{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:34px;padding-top:26px;border-top:1px solid rgba(46,16,101,.12)}
-  .ap-api p{flex:1;min-width:260px;margin:0;font-size:15px;line-height:1.55;color:#5B5870}
-  .ap-api p b{color:${C.ink};font-weight:600}
-  .ap-api-i{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:11px;background:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 6px 14px -8px rgba(40,30,70,.4);color:${C.primary};flex-shrink:0}
-  .ap-api-i svg{width:18px;height:18px}
   @media (prefers-reduced-motion:reduce){.ap-t{animation:none}}
   @media (max-width:900px){
-    .ap-head h2{--h2-size:40px}
     .ap-field{--t:min(84px,calc((100vw - 48px - 8*12px) / 9));--gap:12px}
     .ap-col:nth-child(n+10){display:none}
   }
   @media (max-width:640px){
-    .ap-head h2{--h2-size:32px}
     .ap-field{--t:calc((100vw - 32px - 6*10px) / 7);--gap:10px}
     .ap-col:nth-child(n+8){display:none}
-    .ap-api{flex-direction:column;align-items:flex-start}
   }
 
-  @media (max-width:1100px){
-    .hx h1{--h1-size:50px}
-  }
   @media (max-width:980px){
     .hx-grid{grid-template-columns:1fr}
   }
   @media (max-width:760px){
     .hx{padding-top:48px;padding-bottom:56px}
-    .hx h1{--h1-size:40px}
     .hx-copy>p{font-size:17px}
-    .ap-api{flex-direction:column;align-items:flex-start}
-  }
-  @media (max-width:480px){
-    .hx h1{--h1-size:36px}
   }
 
-  @media (max-width:980px){
-    .og-a,.og-b,.og-d,.og-map{grid-column:1 / -1}
-  }
   @media (max-width:860px){
     .fw{grid-template-columns:1fr;gap:34px}
     .fw-s{display:grid;grid-template-columns:52px 1fr;column-gap:18px}
@@ -1068,19 +1128,6 @@ const css = `
     .fw-line{flex:1;width:2px;height:auto;min-height:24px;margin:10px 0 -34px;background:repeating-linear-gradient(180deg,${C.action} 0 6px,transparent 6px 12px);animation:none}
     .fw-s:last-child .fw-line{display:none}
     .fw-live{display:none}
-    .fw-cta{margin-top:34px}
-  }
-  @media (max-width:560px){
-    .og-c{padding:24px;border-radius:22px}
-    .og-c h2{--h2-size:28px}
   }
   @media (prefers-reduced-motion:reduce){.fw-line{animation:none}}
-
-  @media (max-width:980px){
-    .ev3{grid-template-columns:1fr;gap:10px}
-    .ev3-ar{margin:0;transform:rotate(90deg)}
-  }
-  @media (max-width:560px){
-    .ev-close{font-size:18px}
-  }
 `;

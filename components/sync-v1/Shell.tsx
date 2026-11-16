@@ -18,7 +18,7 @@ type PageKey = "overview" | "features" | "pricing";
 const DemoCtx = createContext<(location: string, title?: string) => void>(() => {});
 export const useDemo = () => useContext(DemoCtx);
 
-export function Demo({ location, title, className = "sx-btn primary", children = "Book a walkthrough" }: { location: string; title?: string; className?: string; children?: ReactNode }) {
+export function Demo({ location, title, className = "sx-btn primary", children = "Get started" }: { location: string; title?: string; className?: string; children?: ReactNode }) {
   const open = useDemo();
   return <button type="button" className={className} onClick={() => open(location, title)}>{children}</button>;
 }
@@ -61,7 +61,7 @@ function ProductBar({ page }: { page: PageKey }) {
         <nav className="sx-menu" aria-label="EVOQ Sync">
           {items.map(([k, l, h]) => <Link key={k} href={h} className={page === k ? "on" : undefined} aria-current={page === k ? "page" : undefined}>{l}</Link>)}
         </nav>
-        <Demo location="product_bar" className="sx-btn primary sm sx-bar-cta">Book a walkthrough</Demo>
+        <Demo location="product_bar" className="sx-btn primary sm sx-bar-cta">Get started</Demo>
       </div>
     </div>
   );
@@ -69,7 +69,7 @@ function ProductBar({ page }: { page: PageKey }) {
 
 export function SyncShell({ children, page = "overview" }: { children: ReactNode; page?: PageKey }) {
   const [from, setFrom] = useState<{ loc: string; title: string } | null>(null);
-  const open = useCallback((location: string, title = "Book a walkthrough") => {
+  const open = useCallback((location: string, title = "Get started") => {
     track("click_demo_cta", { location, page: `sync_v1_${page}` });
     setFrom({ loc: location, title });
   }, [page]);
@@ -85,14 +85,14 @@ export function SyncShell({ children, page = "overview" }: { children: ReactNode
         </header>
         <main>{children}</main>
         <Footer background={C.depth} socialHover={C.primary} />
-        <GetStartedModal isOpen={from !== null} onClose={() => setFrom(null)} title={from?.title ?? "Book a walkthrough"} source={`sync_v1_${from?.loc ?? "demo"}`} />
+        <GetStartedModal isOpen={from !== null} onClose={() => setFrom(null)} title={from?.title ?? "Get started"} source={`sync_v1_${from?.loc ?? "demo"}`} />
       </div>
     </DemoCtx.Provider>
   );
 }
 
 /* closing band, shared by all three pages */
-export function Closing({ title = "Your systems have been disagreeing for long enough.", text = "Bring the two systems that disagree most. We will set up the integration with you on a walkthrough, using your own fields." }: { title?: string; text?: string }) {
+export function Closing({ character = true, title = "Your systems have been disagreeing for long enough.", text = "Bring the two systems that disagree most. We will set up the integration with you on a walkthrough, using your own fields." }: { character?: boolean; title?: string; text?: string }) {
   return (
     <section className="sx-out sx-close-out">
       <div className="sx-in">
@@ -101,7 +101,7 @@ export function Closing({ title = "Your systems have been disagreeing for long e
             <h2>{title}</h2>
             <p>{text}</p>
             <div className="sx-ctas">
-              <Demo location="closing" className="sx-btn lime">Book a walkthrough</Demo>
+              <Demo location="closing" className="sx-btn lime">Get started</Demo>
               <Link href={`${SYNC_BASE}/pricing`} className="sx-btn ghost-dark">See how pricing works</Link>
             </div>
           </div>
@@ -112,7 +112,7 @@ export function Closing({ title = "Your systems have been disagreeing for long e
               <div><b>Shopify orders to NetSuite sales orders</b><small>Test passed on sample data. Ready to switch on.</small></div>
               <span className="sx-switch on"><i /></span>
             </div>
-            <img src="/sync-v1/characters/sync-pose-5.webp" alt="" className="sx-close-agent" />
+            {character && <img src="/sync-v1/characters/sync-pose-5.webp" alt="" className="sx-close-agent" />}
           </div>
         </div>
       </div>
@@ -180,7 +180,7 @@ const baseCss = `
   .sx-close-out{padding-top:24px;padding-bottom:104px}
   .sx-close{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:64px;border-radius:28px;background:${C.depth};overflow:hidden;isolation:isolate}
   .sx-close::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(600px 320px at 90% 0%,rgba(168,85,247,.45),transparent 70%),radial-gradient(420px 260px at 0% 100%,rgba(163,230,53,.12),transparent 70%)}
-  .sx-close h2{--h2-size:38px;color:#fff}
+  .sx-close h2{color:#fff}
   .sx-close p{margin:16px 0 0;font-size:18px;color:#D9CCF0;max-width:46ch}
   .sx-close-art{position:relative;min-height:300px}
   .sx-close-pair{display:flex;align-items:center;justify-content:center;gap:0;margin-top:10px}
@@ -207,7 +207,6 @@ const baseCss = `
     .sx-menu a.on::after{bottom:-13px;left:10px;right:10px}
     .sx-bar-cta{display:none}
     .sx-close-out{padding-bottom:68px}
-    .sx-close h2{--h2-size:28px}
     .sx-close p{font-size:16.5px}
   }
 `;
