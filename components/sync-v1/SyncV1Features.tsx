@@ -146,7 +146,7 @@ function Hero() {
         <div className="fh">
           <div className="ft-hero-copy">
             <span className="fh-tag" data-rv><Sparkles aria-hidden />Features</span>
-            <h1 data-rv="1">See how your <span className="t2">integrations work.</span></h1>
+            <h1 data-rv="1">Connect your applications, <span className="t2">sync their data and fix failures.</span></h1>
             <p data-rv="2">Configure application connections, define data synchronization rules, create workflows and monitor every execution. EVOQ Sync gives you visibility into the process, from the first connection to the latest run.</p>
           </div>
           <div className="fh-stage" data-rv="2" aria-hidden>
@@ -185,7 +185,7 @@ function Hero() {
 function Connections() {
   return (
     <Block
-      n="01" id="connections" tag="Application connections" lead="Start with the applications" rest="you already use."
+      n="01" id="connections" tag="Application connections" lead="Connect your applications" rest="to EVOQ Sync."
       use="Lets EVOQ Sync sign in to your applications, so every integration can reuse the same saved login." eg="Connect Shopify and NetSuite a single time, then use them in as many integrations as you need."
       stage="s1"
       intro={<><p>Select applications from the EVOQ Sync catalog and authorize the connections required for your integrations.</p><p className="m">Each saved connection represents an authorized application login that can be used when configuring integrations.</p></>}
@@ -228,7 +228,7 @@ const WAYS: { icon: LucideIcon; t: string }[] = [
 function Integrations() {
   return (
     <Block
-      n="02" id="integrations" tag="Integration configuration and management" lead="Define what moves" rest="between applications."
+      n="02" id="integrations" tag="Integration configuration and management" lead="Choose which data syncs" rest="and in which direction."
       use="Decides which information moves between two applications, in which direction and under which rules." eg="Send new Shopify orders to NetSuite as sales orders."
       tone="sx-grey" stage="s2"
       intro={<><p>An integration specifies the applications involved, the data being synchronized, the direction of movement and the rules that govern the process.</p><p className="m">Use the guided configuration process to establish these details before activation.</p></>}
@@ -265,7 +265,7 @@ function Integrations() {
 function Mapping() {
   return (
     <Block
-      n="03" id="mapping" tag="Data mapping and transformation" lead="Make different data structures" rest="work together."
+      n="03" id="mapping" tag="Data mapping and transformation" lead="Decide which field goes where," rest="and how its value changes."
       use="Makes sure each value lands in the right field, in the format the destination expects." eg="A customer Tax ID in Shopify is saved as taxRegistrationNumber in NetSuite, with the spaces removed."
       stage="s3"
       intro={<p>Your CRM and ERP may describe the same information differently. Data mapping defines how fields correspond, while transformation rules prepare values for the destination application.</p>}
@@ -316,7 +316,7 @@ const FLOW: [string, string, LucideIcon][] = [
 function Builder() {
   return (
     <Block
-      n="04" id="builder" tag="Visual workflow builder" lead="See every step" rest="in the integration."
+      n="04" id="builder" tag="Visual workflow builder" lead="Build and test the steps of a sync" rest="on a visual canvas."
       use="Shows the steps an integration follows and lets you change them without writing code." eg="Add a validation step before an order is created in NetSuite."
       tone="sx-grey" stage="s1"
       intro={<p>Create and edit integration workflows on a visual canvas. Arrange the steps, define their settings and test how information moves through the workflow.</p>}
@@ -352,7 +352,7 @@ function Builder() {
 function Executions() {
   return (
     <Block
-      n="05" id="executions" tag="Integration execution and management" lead="Know what ran" rest="and what needs attention."
+      n="05" id="executions" tag="Integration execution and management" lead="See which syncs worked" rest="and which need attention."
       use="Tells you whether each run worked, how long it took and how many records it handled." eg="Open a run to see which records went through and which did not."
       stage="s2"
       intro={<p>Review the status of your integrations and inspect individual executions to understand how each run progressed.</p>}
@@ -380,7 +380,7 @@ function Executions() {
 function Monitoring() {
   return (
     <Block
-      n="06" id="monitoring" tag="Integration monitoring and troubleshooting" lead="Find the failure." rest="Understand the reason. Review the next step."
+      n="06" id="monitoring" tag="Integration monitoring and troubleshooting" lead="Find out why a sync failed" rest="and what to do next."
       use="Explains why a run failed and what to do next, so you do not have to read raw logs." eg="A required tax ID is missing. EVOQ Sync names the cause and suggests a fix for your review."
       tone="sx-dark" stage="s4" dark
       intro={<p>Monitoring brings execution activity, errors and connection alerts into view. When a run fails, inspect the details instead of relying on an error code alone.</p>}
@@ -427,7 +427,7 @@ const BARS: [number, number][] = [[46, 4], [58, 3], [52, 6], [66, 2], [60, 4], [
 function Reports() {
   return (
     <Block
-      n="07" id="reports" tag="Reports and analytics" lead="Understand integration activity" rest="over time."
+      n="07" id="reports" tag="Reports and analytics" lead="See how your syncs perform" rest="over time."
       use="Shows how your integrations perform over time, so you can spot what needs attention." eg="See which integration fails most often, and when."
       stage="s3"
       intro={<p>Use reports to review integration volume, reliability, performance and application health.</p>}
@@ -461,7 +461,7 @@ const AGENT_GROUPS: [string, string[]][] = [
 function Agents() {
   return (
     <Block
-      n="08" id="evi" tag="EVI and Sync Agent" lead="AI assistance" rest="with approval at the centre."
+      n="08" id="evi" tag="EVI and Sync Agent" lead="Ask EVI for help." rest="Review what the Sync Agent proposes."
       use="Helps you understand a problem and prepares a fix. Nothing changes until you approve it." eg="Ask EVI why an order failed. The Sync Agent proposes a change and waits for your decision."
       tone="sx-grey" stage="s1"
       intro={<p>EVI helps you understand the integration screen you are working on. The Sync Agent prepares proposals for specialist integration tasks.</p>}
@@ -511,7 +511,7 @@ const SECURITY: { icon: LucideIcon; t: string }[] = [
 function Security() {
   return (
     <Block
-      n="09" id="security" tag="Security, access and governance" lead="Keep access" rest="and decisions accountable."
+      n="09" id="security" tag="Security, access and governance" lead="Control who can do what" rest="and keep a record of decisions."
       use="Controls who can view and change integrations, and keeps a record of decisions." eg="Decide who can edit an integration and who can only view it."
       stage="s2"
       intro={<p>EVOQ Sync includes administrative controls for managing access, security settings and agent permissions.</p>}
@@ -539,8 +539,8 @@ export function SyncV1Features(): ReactNode {
       <Agents />
       <Security />
       <CtaBand
-        lead="See the features"
-        accent="in action."
+        lead="Start syncing"
+        accent="your applications."
         text="Explore how EVOQ Sync handles application connections, data mapping, workflow configuration and integration monitoring."
       />
     </SyncShell>
@@ -553,7 +553,7 @@ const css = `
   .fh{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
   .fh-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px ${C.soft};font-size:13px;font-weight:700;color:${C.primary}}
   .fh-tag svg{width:14px;height:14px}
-  .ft-hero h1{margin-top:22px!important;max-width:14ch}
+  .ft-hero h1{margin-top:22px!important;max-width:18ch}
   .ft-hero h1 .t2{color:#8E8C96}
   .ft-hero-copy>p{max-width:50ch;margin:22px 0 0;font-size:18px;line-height:1.62}
   .fh-stage{position:relative;height:540px;border-radius:32px;background:radial-gradient(520px 300px at 85% 0,rgba(168,85,247,.5),transparent 70%),radial-gradient(420px 260px at 0 100%,rgba(163,230,53,.16),transparent 70%),${C.depth};overflow:hidden;isolation:isolate}

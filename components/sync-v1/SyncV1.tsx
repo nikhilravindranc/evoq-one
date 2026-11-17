@@ -143,7 +143,7 @@ function Hero() {
       <div className="sx-in hx-grid">
         <div className="hx-copy">
           <span className="hx-eyebrow" data-rv>NO-CODE INTEGRATION PLATFORM</span>
-          <h1 data-rv="1">Get your systems to <span className="hx-hl">agree.</span></h1>
+          <h1 data-rv="1">Keep your orders, customers and invoices <span className="hx-hl">moving</span> between applications.</h1>
           <p data-rv="2">EVOQ Sync keeps your CRM, ERP, accounting and eCommerce applications in step. It explains integration errors in plain English and prepares corrective actions for your review. You approve them. Nothing changes without you.</p>
           <div className="sx-ctas" data-rv="3">
             <Demo location="hero">Get started</Demo>
@@ -160,7 +160,7 @@ function Hero() {
   );
 }
 
-/* ---------- 2 the problem: the 8:40 Monday moment, shown as four steps, then what changes ---------- */
+/* ---------- 2 the problem: the order that never arrived, shown as four steps, then what changes ---------- */
 const POINTS: { icon: LucideIcon; t: string }[] = [
   { icon: ListChecks, t: "Know which records were synchronized and which failed." },
   { icon: Lightbulb, t: "Understand the reason behind an execution error." },
@@ -173,7 +173,7 @@ function Problem() {
       <div className="sx-in">
         <div className="sx-head c pb-head">
           <Label>The problem</Label>
-          <h2 data-rv>It is 8:40 on Monday. <span className="t2">The order is in Shopify. It is not in NetSuite.</span></h2>
+          <h2 data-rv>A customer paid on Shopify. <span className="t2">The sales order never reached NetSuite.</span></h2>
         </div>
         <div className="fc-seg" data-rv="1">
           <p className="fc-seg-bad">This is where integration problems become operational problems.</p>
@@ -234,8 +234,8 @@ function HowItWorks() {
       <div className="sx-in">
         <div className="sx-head c">
           <Label>How it works</Label>
-          <h2 data-rv>From application connections <span className="t2">to active integrations.</span></h2>
-          <p data-rv="1">Set up an integration through a guided process. Choose the applications, select the data to synchronize, define how fields should correspond and test the result before activation.</p>
+          <h2 data-rv>Create an application sync <span className="t2">in three steps.</span></h2>
+          <p data-rv="1">Create the sync through a guided process. Choose the applications, select the data to synchronize, define how fields should correspond and test the result before activation.</p>
         </div>
         <ol className="fw">
           <li className="fw-s" data-rv>
@@ -301,7 +301,7 @@ function Scenarios() {
       <div className="sx-in">
         <div className="sx-head c">
           <Label>Integration scenarios</Label>
-          <h2 data-rv>Make the information agree <span className="t2">across your applications.</span></h2>
+          <h2 data-rv>Customers, orders, invoices and stock <span className="t2">synced between your applications.</span></h2>
           <p data-rv="1">Different systems hold different parts of an operational process. EVOQ Sync moves the relevant information between them according to the rules you define.</p>
         </div>
         <div className="sg" ref={ref}>
@@ -368,7 +368,7 @@ function Tour() {
       <div className="sx-in tr" ref={ref}>
         <div className="tr-list">
           <Label>Inside EVOQ Sync</Label>
-          <h2 data-rv>Everything an integration needs, <span className="t2">in one app.</span></h2>
+          <h2 data-rv>Connect apps, map data <span className="t2">and monitor every sync.</span></h2>
           <ul role="tablist" aria-label="Areas of EVOQ Sync">
             {TOUR.map((x, k) => (
               <li key={x.id} className={k === i ? "on" : undefined}>
@@ -457,7 +457,7 @@ function EviAgent() {
       <div className="sx-in" ref={ref}>
         <div className="sx-head c">
           <Label>EVI and Sync Agent</Label>
-          <h2 data-rv>EVI explains the failure. <span className="t2">The Sync Agent prepares the fix.</span></h2>
+          <h2 data-rv>Ask EVI why a sync failed. <span className="t2">Decide on the fix the Sync Agent proposes.</span></h2>
           <p data-rv="1">EVI is the assistant across EVOQ applications. In EVOQ Sync it reads the screen you are on and works with the Sync Agent, a specialist for integration setup, mapping, monitoring and optimization. Each proposal waits for your approval.</p>
         </div>
 
@@ -553,8 +553,8 @@ function Apps() {
       <div className="sx-in">
         <div className="ap-head">
           <span className="ap-lab">Application compatibility</span>
-          <h2 data-rv>The applications you use.<br /><span>The connections you need.</span></h2>
-          <p data-rv="1">EVOQ Sync includes a catalog of applications across CRM, ERP, accounting, eCommerce, inventory, marketing and productivity categories.</p>
+          <h2 data-rv>Data lands in the right field,<br /><span>in each application you connect.</span></h2>
+          <p data-rv="1">EVOQ Sync supports the CRM, ERP, accounting, eCommerce, inventory, marketing and productivity applications your team uses. Each application has its own objects, fields and sign in method, and EVOQ Sync maps them so customers, orders, invoices and stock arrive correctly in the destination.</p>
         </div>
         <div className="ap-field" data-rv="1">
           {FIELD.map((c, k) => (
@@ -595,8 +595,8 @@ export function CtaBand({ lead, accent, text, primary = "Get started", secondary
 function Final() {
   return (
     <CtaBand
-      lead="Make your applications"
-      accent="agree."
+      lead="Create your first"
+      accent="integration."
       text="See how EVOQ Sync handles an integration, explains a failed execution and prepares a corrective action for your approval."
       secondary={{ label: "Explore Features", href: `${SYNC_BASE}/features` }}
     />
