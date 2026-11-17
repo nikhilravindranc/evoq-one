@@ -438,7 +438,7 @@ function Reports() {
           {REPORTS.map((r, k) => { const I = r.icon; return <li key={r.t} className={k === 0 ? "on" : undefined}><I />{r.t}</li>; })}
         </ul>
         <div className="ft-chart">
-          {BARS.map(([ok, bad], k) => <span key={k}><i className="b" style={{ height: `${bad}%` }} /><i style={{ height: `${ok}%` }} /></span>)}
+          {BARS.map(([ok, bad], k) => <span key={k} style={{ ["--i" as string]: k }}><i className="b" style={{ height: `${bad}%` }} /><i style={{ height: `${ok}%` }} /></span>)}
         </div>
         <div className="ft-chart-key"><span><i />Succeeded</span><span><i className="b" />Failed</span><span className="ft-pill sm"><Download aria-hidden />Export CSV</span></div>
       </div>
@@ -779,6 +779,131 @@ const css = `
   .ft-review-btns{display:flex;gap:10px}
   .ft-review-btns span{padding:11px 20px;border-radius:11px;background:#fff;color:${C.ink};font-size:14.5px;font-weight:600}
   .ft-review-btns span.pri{background:${C.lime};color:${C.limeInk}}
+
+  /* motion: every visual plays when its stage scrolls into view, in the order the content describes */
+  @keyframes ftUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes ftPop{0%{opacity:0;transform:scale(.55)}70%{opacity:1;transform:scale(1.1)}100%{opacity:1;transform:none}}
+  @keyframes ftGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @keyframes ftLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @keyframes ftDash{to{background-position:8px 0}}
+  @keyframes ftNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+  @keyframes ftShake{0%,100%{transform:none}20%,60%{transform:translateX(-3px)}40%,80%{transform:translateX(3px)}}
+  @keyframes ftPulse{0%,100%{box-shadow:0 0 0 0 rgba(126,34,206,.0)}50%{box-shadow:0 0 0 6px rgba(126,34,206,.22)}}
+  @keyframes ftPulseR{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}50%{box-shadow:0 0 0 6px rgba(220,38,38,.22)}}
+  @keyframes ftNode{0%,16%,100%{box-shadow:0 0 0 1px ${C.line},0 14px 26px -16px rgba(46,16,101,.45)}5%,11%{box-shadow:0 0 0 2px ${C.action},0 0 0 8px rgba(168,85,247,.2),0 14px 26px -16px rgba(46,16,101,.45)}}
+
+  /* cards: each row arrives in turn */
+  .fb-stage.hs-in .ft-card>*{animation:ftUp .55s cubic-bezier(.2,.7,.2,1) both}
+  .fb-stage.hs-in .ft-card>*:nth-child(1){animation-delay:0ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(2){animation-delay:110ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(3){animation-delay:220ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(4){animation-delay:330ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(5){animation-delay:440ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(6){animation-delay:550ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(7){animation-delay:660ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(8){animation-delay:770ms}
+  .fb-stage.hs-in .ft-card>*:nth-child(9){animation-delay:880ms}
+  .fb-stage.hs-in .ft-row .ft-chip,.fb-stage.hs-in .ft-ex .ft-chip,.fb-stage.hs-in .ft-map .ft-chip{animation:ftPop .45s both;animation-delay:.7s}
+  .fb-stage.hs-in .ft-chip.bad{animation:ftPop .45s both .9s,ftPulseR 2.4s ease-in-out 1.6s infinite}
+  .fb-stage.hs-in .ft-chip.warn{animation:ftPop .45s both .9s}
+  .fb-stage.hs-in .ft-ex .ft-chip.p{animation:ftPop .45s both .8s,ftPulse 2s ease-in-out 1.5s infinite}
+  .fb-stage.hs-in .ft-map svg{animation:ftNudge 1.8s ease-in-out 1.3s infinite}
+
+  /* integrations: the setup steps tick off one by one */
+  .fb-stage.hs-in .ft-ways li{animation:ftPop .5s both}
+  .fb-stage.hs-in .ft-ways li:nth-child(1){animation-delay:300ms}
+  .fb-stage.hs-in .ft-ways li:nth-child(2){animation-delay:440ms}
+  .fb-stage.hs-in .ft-ways li:nth-child(3){animation-delay:580ms}
+  .fb-stage.hs-in .ft-steps li>span{animation:ftPop .45s both}
+  .fb-stage.hs-in .ft-steps li>span:nth-child(1){animation-delay:900ms}
+  .fb-stage.hs-in .ft-steps li>span:nth-child(2){animation-delay:1160ms}
+  .fb-stage.hs-in .ft-steps li>span:nth-child(3){animation-delay:1420ms}
+  .fb-stage.hs-in .ft-steps li>span:nth-child(4){animation-delay:1680ms}
+  .fb-stage.hs-in .ft-steps li>span:nth-child(5){animation-delay:1940ms}
+  .fb-stage.hs-in .ft-steps li>span:nth-child(6){animation-delay:2200ms}
+  .fb-stage.hs-in .ft-steps li::after{transform-origin:left;animation:ftLine .4s ease both}
+  .fb-stage.hs-in .ft-steps li::after:nth-child(1){animation-delay:1000ms}
+  .fb-stage.hs-in .ft-steps li::after:nth-child(2){animation-delay:1260ms}
+  .fb-stage.hs-in .ft-steps li::after:nth-child(3){animation-delay:1520ms}
+  .fb-stage.hs-in .ft-steps li::after:nth-child(4){animation-delay:1780ms}
+  .fb-stage.hs-in .ft-steps li::after:nth-child(5){animation-delay:2040ms}
+  .fb-stage.hs-in .ft-steps li::after:nth-child(6){animation-delay:2300ms}
+  .fb-stage.hs-in .ft-steps li.now>span{animation:ftPop .45s both 1.9s,ftPulse 2s ease-in-out 2.6s infinite}
+
+  /* workflow: the steps appear, then a highlight travels along them */
+  .fb-stage.hs-in .ft-flow li{animation:ftUp .55s cubic-bezier(.2,.7,.2,1) both,ftNode 6.5s ease-in-out infinite}
+  .fb-stage.hs-in .ft-flow li:nth-child(1){animation-delay:0ms,1400ms}
+  .fb-stage.hs-in .ft-flow li:nth-child(2){animation-delay:180ms,2700ms}
+  .fb-stage.hs-in .ft-flow li:nth-child(3){animation-delay:360ms,4000ms}
+  .fb-stage.hs-in .ft-flow li:nth-child(4){animation-delay:540ms,5300ms}
+  .fb-stage.hs-in .ft-flow li:nth-child(5){animation-delay:720ms,6600ms}
+  .fb-stage.hs-in .ft-flow li:not(:last-child)::after{animation:ftDash .6s linear infinite}
+  .fb-stage.hs-in .ft-legend span{animation:ftUp .5s both}
+  .fb-stage.hs-in .ft-legend span:nth-child(1){animation-delay:1070ms}
+  .fb-stage.hs-in .ft-legend span:nth-child(2){animation-delay:1140ms}
+  .fb-stage.hs-in .ft-legend span:nth-child(3){animation-delay:1210ms}
+  .fb-stage.hs-in .ft-legend span:nth-child(4){animation-delay:1280ms}
+  .fb-stage.hs-in .ft-legend span:nth-child(5){animation-delay:1350ms}
+  .fb-stage.hs-in .ft-legend span:nth-child(6){animation-delay:1420ms}
+  .fb-stage.hs-in .ft-legend span:nth-child(7){animation-delay:1490ms}
+  .fb-stage.hs-in .ft-legend span:nth-child(8){animation-delay:1560ms}
+
+  /* monitoring: the run ticks through, fails, then the cause and the fix appear */
+  .fb-stage.hs-in .ft-card.light .ft-path li>span{animation:ftPop .45s both}
+  .fb-stage.hs-in .ft-card.light .ft-path li:nth-child(1)>span{animation-delay:.5s}
+  .fb-stage.hs-in .ft-card.light .ft-path li:nth-child(2)>span{animation-delay:1s}
+  .fb-stage.hs-in .ft-card.light .ft-path li:nth-child(3)>span{animation:ftPop .45s both 1.5s,ftShake .5s ease 2s,ftPulseR 2.4s ease-in-out 2.6s infinite}
+  .fb-stage.hs-in .ft-card.light .ft-path li:nth-child(4)>span{animation-delay:1.7s}
+  .fb-stage.hs-in .ft-card.light .ft-path li::after{transform-origin:left;animation:ftLine .4s ease both}
+  .fb-stage.hs-in .ft-card.light .ft-path li:nth-child(1)::after{animation-delay:.7s}
+  .fb-stage.hs-in .ft-card.light .ft-path li:nth-child(2)::after{animation-delay:1.2s}
+  .fb-stage.hs-in .ft-card.light .ft-path li:nth-child(3)::after{animation-delay:1.7s}
+  .fb-stage.hs-in .ft-card.light>.ft-code{animation-delay:2.1s}
+  .fb-stage.hs-in .ft-card.light>.ft-find{animation-delay:2.5s}
+  .fb-stage.hs-in .ft-card.light>.ft-find.act{animation-delay:3s}
+
+  /* reports: bars rise one after another */
+  .fb-stage.hs-in .ft-chart i{transform-origin:bottom;animation:ftGrow .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * 60ms + 350ms)}
+  .fb-stage.hs-in .ft-tabs li{animation:ftUp .45s both}
+  .fb-stage.hs-in .ft-tabs li:nth-child(1){animation-delay:150ms}
+  .fb-stage.hs-in .ft-tabs li:nth-child(2){animation-delay:220ms}
+  .fb-stage.hs-in .ft-tabs li:nth-child(3){animation-delay:290ms}
+  .fb-stage.hs-in .ft-tabs li:nth-child(4){animation-delay:360ms}
+  .fb-stage.hs-in .ft-tabs li:nth-child(5){animation-delay:430ms}
+  .fb-stage.hs-in .ft-tabs li:nth-child(6){animation-delay:500ms}
+
+  /* EVI and Sync Agent: EVI, the agent, then the review step */
+  .fb-stage.hs-in .ft-b{animation:ftUp .6s cubic-bezier(.2,.7,.2,1) both}
+  .fb-stage.hs-in .ft-b-evi{animation-delay:.05s}
+  .fb-stage.hs-in .ft-b-agent{animation-delay:.3s}
+  .fb-stage.hs-in .ft-b-review{animation-delay:.6s}
+  .fb-stage.hs-in .ft-groups span,.fb-stage.hs-in .ft-review-chips span{animation:ftPop .4s both}
+  .fb-stage.hs-in .ft-review-chips span:nth-child(1){animation-delay:1120ms}
+  .fb-stage.hs-in .ft-review-chips span:nth-child(2){animation-delay:1240ms}
+  .fb-stage.hs-in .ft-review-chips span:nth-child(3){animation-delay:1360ms}
+  .fb-stage.hs-in .ft-review-chips span:nth-child(4){animation-delay:1480ms}
+  .fb-stage.hs-in .ft-review-chips span:nth-child(5){animation-delay:1600ms}
+  .fb-stage.hs-in .ft-review-btns span.pri{animation:ftPulse 2.2s ease-in-out 2.2s infinite}
+  .fb-stage.hs-in .ft-groups>div:nth-child(1) span{animation-delay:.7s}
+  .fb-stage.hs-in .ft-groups>div:nth-child(2) span{animation-delay:.85s}
+  .fb-stage.hs-in .ft-groups>div:nth-child(3) span{animation-delay:1s}
+  .fb-stage.hs-in .ft-groups>div:nth-child(4) span{animation-delay:1.15s}
+
+  /* security: controls appear in turn */
+  .fb-stage.hs-in .ft-tiles li{animation:ftPop .45s both}
+  .fb-stage.hs-in .ft-tiles li:nth-child(1){animation-delay:230ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(2){animation-delay:310ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(3){animation-delay:390ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(4){animation-delay:470ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(5){animation-delay:550ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(6){animation-delay:630ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(7){animation-delay:710ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(8){animation-delay:790ms}
+  .fb-stage.hs-in .ft-tiles li:nth-child(9){animation-delay:870ms}
+
+  @media (prefers-reduced-motion:reduce){
+    .fb-stage.hs-in *,.fb-stage.hs-in *::after{animation:none!important}
+  }
 
   ${ctaCss}
 

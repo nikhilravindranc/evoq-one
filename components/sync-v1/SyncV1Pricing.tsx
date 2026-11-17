@@ -231,24 +231,18 @@ const css = `
   .cf-facts dd{margin:4px 0 0;font-size:14.5px;line-height:1.5;color:${C.ink}}
   .cf-facts dd svg{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;color:${C.primary}}
 
-  .cf-price{background:${C.depth};box-shadow:none;color:#D9CCF0}
-  .cf-price .cf-t{color:#fff}
-  .cf-price .cf-ph small{color:#B9A8D8}
-  .cf-price .cf-empty{background:rgba(255,255,255,.07);color:#D9CCF0}
-  .cf-price .cf-empty>span{background:rgba(255,255,255,.1);box-shadow:none;color:${C.lime}}
-  .cf-quote{display:grid;gap:10px;justify-items:start;padding:18px;border-radius:18px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+  .cf-quote{display:grid;gap:10px;justify-items:start;padding:18px;border-radius:18px;background:${C.surface};box-shadow:inset 0 0 0 1px ${C.soft}}
   .cf-qpair{display:flex;align-items:center;gap:10px}
-  .cf-qpair span{display:flex;color:${C.lime}}
+  .cf-qpair span{display:flex;color:${C.primary}}
   .cf-qpair svg{width:18px;height:18px}
-  .cf-quote b{font-family:var(--font-display),system-ui,sans-serif;font-size:18px;line-height:1.3;color:#fff}
-  .cf-quote p{margin:0;font-size:14.5px;line-height:1.55;color:#D9CCF0}
-  .cf-hl small{display:block;margin-bottom:10px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${C.lime}}
+  .cf-quote b{font-family:var(--font-display),system-ui,sans-serif;font-size:18px;line-height:1.3;color:${C.ink}}
+  .cf-quote p{margin:0;font-size:14.5px;line-height:1.55;color:${C.body}}
+  .cf-hl small{display:block;margin-bottom:10px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${C.muted}}
   .cf-hl ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-  .cf-hl li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:#fff}
-  .cf-hl li span{display:flex;align-items:center;justify-content:center;width:20px;height:20px;margin-top:1px;border-radius:50%;background:rgba(163,230,53,.18);color:${C.lime};flex-shrink:0}
+  .cf-hl li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:${C.ink}}
+  .cf-hl li span{display:flex;align-items:center;justify-content:center;width:20px;height:20px;margin-top:1px;border-radius:50%;background:${C.tint};color:${C.primary};flex-shrink:0}
   .cf-hl li span svg{width:12px;height:12px}
-  .sx-btn.cf-cta{width:100%;margin-top:auto;background:${C.lime};color:${C.limeInk};box-shadow:none}
-  .sx-btn.cf-cta:hover:not(:disabled){background:#B5EF4F}
+  .sx-btn.cf-cta{width:100%;margin-top:auto}
   .sx-btn.cf-cta:disabled{opacity:.45;cursor:not-allowed}
 
   @media (max-width:1180px){

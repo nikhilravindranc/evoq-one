@@ -61,7 +61,6 @@ function ProductBar({ page }: { page: PageKey }) {
         <nav className="sx-menu" aria-label="EVOQ Sync">
           {items.map(([k, l, h]) => <Link key={k} href={h} className={page === k ? "on" : undefined} aria-current={page === k ? "page" : undefined}>{l}</Link>)}
         </nav>
-        <Demo location="product_bar" className="sx-btn primary sm sx-bar-cta">Get started</Demo>
       </div>
     </div>
   );
@@ -80,7 +79,7 @@ export function SyncShell({ children, page = "overview" }: { children: ReactNode
         <style>{baseCss}</style>
         <HsMotion />
         <header className="sx-hd">
-          <div className="sx-top"><Topbar light darkCTA={false} theme={{ navBg: C.primary, navFg: "#FFFFFF", ctaBg: C.lime, ctaFg: C.limeInk, loginFg: C.ink }} /></div>
+          <div className="sx-top"><Topbar light darkCTA={false} theme={{ navBg: C.primary, navFg: "#FFFFFF", ctaBg: C.primary, ctaFg: "#FFFFFF", loginFg: C.ink }} /></div>
           <ProductBar page={page} />
         </header>
         <main>{children}</main>
@@ -175,7 +174,6 @@ const baseCss = `
   .sx-menu a:hover{color:${C.ink};background:${C.g1}}
   .sx-menu a.on{color:${C.ink};font-weight:600}
   .sx-menu a.on::after{content:"";position:absolute;left:14px;right:14px;bottom:-16px;height:2.5px;border-radius:2px;background:${C.primary}}
-  .sx-bar-cta{margin-left:auto}
 
   .sx-close-out{padding-top:24px;padding-bottom:104px}
   .sx-close{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:64px;border-radius:28px;background:${C.depth};overflow:hidden;isolation:isolate}
@@ -205,7 +203,6 @@ const baseCss = `
     .sx-bar-in{gap:12px;min-height:52px}
     .sx-menu a{padding:8px 10px}
     .sx-menu a.on::after{bottom:-13px;left:10px;right:10px}
-    .sx-bar-cta{display:none}
     .sx-close-out{padding-bottom:68px}
     .sx-close p{font-size:16.5px}
   }
