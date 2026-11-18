@@ -146,7 +146,7 @@ function Hero() {
         <div className="fh">
           <div className="ft-hero-copy">
             <span className="fh-tag" data-rv><Sparkles aria-hidden />Features</span>
-            <h1 data-rv="1">Connect your applications, <span className="t2">sync their data and fix failures.</span></h1>
+            <h1 data-rv="1">Connect your applications <span className="t2">and sync their data.</span></h1>
             <p data-rv="2">Configure application connections, define data synchronization rules, create workflows and monitor every execution. EVOQ Sync gives you visibility into the process, from the first connection to the latest run.</p>
           </div>
           <div className="fh-stage" data-rv="2" aria-hidden>
@@ -185,10 +185,10 @@ function Hero() {
 function Connections() {
   return (
     <Block
-      n="01" id="connections" tag="Application connections" lead="Connect your applications" rest="to EVOQ Sync."
+      n="01" id="connections" tag="Application connections" lead="Connect the applications" rest="you want to sync."
       use="Lets EVOQ Sync sign in to your applications, so every integration can reuse the same saved login." eg="Connect Shopify and NetSuite a single time, then use them in as many integrations as you need."
       stage="s1"
-      intro={<><p>Select applications from the EVOQ Sync catalog and authorize the connections required for your integrations.</p><p className="m">Each saved connection represents an authorized application login that can be used when configuring integrations.</p></>}
+      intro={<><p>Select applications from the EVOQ Sync catalog, or connect any other application through its API with a Custom REST API Connection. Authorize each connection and reuse it across your integrations.</p><p className="m">Each saved connection represents an authorized application login that can be used when configuring integrations.</p></>}
       caps={[
         "Browse and search the application catalog.",
         "Configure and authorize application connections.",
@@ -265,7 +265,7 @@ function Integrations() {
 function Mapping() {
   return (
     <Block
-      n="03" id="mapping" tag="Data mapping and transformation" lead="Decide which field goes where," rest="and how its value changes."
+      n="03" id="mapping" tag="Data mapping and transformation" lead="Map fields between your applications" rest="and format their values."
       use="Makes sure each value lands in the right field, in the format the destination expects." eg="A customer Tax ID in Shopify is saved as taxRegistrationNumber in NetSuite, with the spaces removed."
       stage="s3"
       intro={<p>Your CRM and ERP may describe the same information differently. Data mapping defines how fields correspond, while transformation rules prepare values for the destination application.</p>}
@@ -511,7 +511,7 @@ const SECURITY: { icon: LucideIcon; t: string }[] = [
 function Security() {
   return (
     <Block
-      n="09" id="security" tag="Security, access and governance" lead="Control who can do what" rest="and keep a record of decisions."
+      n="09" id="security" tag="Security, access and governance" lead="Manage access to EVOQ Sync" rest="and keep an audit history."
       use="Controls who can view and change integrations, and keeps a record of decisions." eg="Decide who can edit an integration and who can only view it."
       stage="s2"
       intro={<p>EVOQ Sync includes administrative controls for managing access, security settings and agent permissions.</p>}

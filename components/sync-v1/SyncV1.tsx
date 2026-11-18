@@ -143,7 +143,7 @@ function Hero() {
       <div className="sx-in hx-grid">
         <div className="hx-copy">
           <span className="hx-eyebrow" data-rv>NO-CODE INTEGRATION PLATFORM</span>
-          <h1 data-rv="1">Keep your orders, customers and invoices <span className="hx-hl">moving</span> between applications.</h1>
+          <h1 data-rv="1"><span className="hx-hl">Sync</span> your orders, customers and invoices between applications.</h1>
           <p data-rv="2">EVOQ Sync keeps your CRM, ERP, accounting and eCommerce applications in step. It explains integration errors in plain English and prepares corrective actions for your review. You approve them. Nothing changes without you.</p>
           <div className="sx-ctas" data-rv="3">
             <Demo location="hero">Get started</Demo>
@@ -234,7 +234,7 @@ function HowItWorks() {
       <div className="sx-in">
         <div className="sx-head c">
           <Label>How it works</Label>
-          <h2 data-rv>Create an application sync <span className="t2">in three steps.</span></h2>
+          <h2 data-rv>Create a sync between your applications, <span className="t2">step by step.</span></h2>
           <p data-rv="1">Create the sync through a guided process. Choose the applications, select the data to synchronize, define how fields should correspond and test the result before activation.</p>
         </div>
         <ol className="fw">
@@ -368,7 +368,7 @@ function Tour() {
       <div className="sx-in tr" ref={ref}>
         <div className="tr-list">
           <Label>Inside EVOQ Sync</Label>
-          <h2 data-rv>Connect apps, map data <span className="t2">and monitor every sync.</span></h2>
+          <h2 data-rv>Create, test and monitor <span className="t2">syncs between your applications.</span></h2>
           <ul role="tablist" aria-label="Areas of EVOQ Sync">
             {TOUR.map((x, k) => (
               <li key={x.id} className={k === i ? "on" : undefined}>
@@ -553,7 +553,7 @@ function Apps() {
       <div className="sx-in">
         <div className="ap-head">
           <span className="ap-lab">Application compatibility</span>
-          <h2 data-rv>Data lands in the right field,<br /><span>in each application you connect.</span></h2>
+          <h2 data-rv>Data arrives in the format<br /><span>each application expects.</span></h2>
           <p data-rv="1">EVOQ Sync supports the CRM, ERP, accounting, eCommerce, inventory, marketing and productivity applications your team uses. Each application has its own objects, fields and sign in method, and EVOQ Sync maps them so customers, orders, invoices and stock arrive correctly in the destination.</p>
         </div>
         <div className="ap-field" data-rv="1">
