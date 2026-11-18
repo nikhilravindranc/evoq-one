@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { track } from "@/lib/track";
+import { trackLead } from "@/lib/track";
 
 const PRODUCTS = [
   "CRM",
@@ -239,7 +239,7 @@ export function GetStartedModal({
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                track("lead_submitted", { form: "get_started", title, source });
+                trackLead("get_started", { source: `${source}:${title}`, product: selectedProducts.filter((x) => x !== "Others").join(",") || undefined });
                 setSubmitted(true);
               }}
             >

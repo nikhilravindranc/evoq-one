@@ -5,7 +5,7 @@ import { Topbar } from "@/components/hero/Topbar";
 import { BookingsNav } from "../BookingsNav";
 import { Footer } from "@/components/sections/Footer";
 import { HsMotion } from "@/components/hospitality/HsMotion";
-import { track } from "@/lib/track";
+import { track, trackLead } from "@/lib/track";
 import { I } from "../theme";
 import { FX_CSS, NightField } from "./fx";
 import { BG, DEEP, ERR, INK, LINE, MUTED, NEUTRAL, OK, PRIMARY, PRIMARY_HOVER, ACCENT, SAND, HERO_GRADIENT, HERO_VIGNETTE, HERO_SCRIM, GRAIN } from "./palette";
@@ -55,7 +55,7 @@ function DemoForm({ location, onDone }: { location: string; onDone: () => void }
     if (f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) next.email = "Enter a valid work email address.";
     setErrors(next);
     if (Object.keys(next).length) return;
-    track("submit_demo_form", { location, page: "space_and_room", org_type: f.type, locations: f.locations, spaces: f.spaces });
+    trackLead("space_and_room_demo", { source: location, product: "space_and_room", org_type: f.type });
     setDone(true);
   };
   if (done)

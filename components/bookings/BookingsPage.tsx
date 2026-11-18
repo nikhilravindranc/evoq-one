@@ -11,7 +11,7 @@ import { BookingsNav } from "./BookingsNav";
 import { BookingSteps } from "./BookingSteps";
 import { FloorPlan } from "./FloorPlan";
 import { BG, DEEP, ERR, GRADIENT, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAGE_HOVER, SAND, TERRA, U } from "./theme";
-import { track, trackCta } from "@/lib/track";
+import { trackCta, trackLead } from "@/lib/track";
 
 /* EVOQ Bookings landing page. Follows the EVOQ Bookings visual design system:
    one colour per role (Sage primary, Terracotta secondary, Sand decoration), light surfaces,
@@ -177,7 +177,7 @@ function EnquiryForm({ category, setCategory }: { category: string; setCategory:
     if (v.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) next.email = "Enter a valid work email address.";
     setErrors(next);
     if (Object.keys(next).length) return;
-    track("lead_submitted", { source: "bookings_page", category: v.category, industry: v.industry });
+    trackLead("bookings_enquiry", { source: "bookings_page", product: v.category, industry: v.industry });
     setDone(true);
   };
 

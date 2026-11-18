@@ -5,7 +5,7 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { BookingsNav } from "../BookingsNav";
 import { HsMotion } from "@/components/hospitality/HsMotion";
-import { track } from "@/lib/track";
+import { track, trackLead } from "@/lib/track";
 import { I } from "../theme";
 import { BAND, BG, DEEP, ERR, INK, LINE, MIST, MIST_SOFT, MUTED, NEUTRAL, OK, PRIMARY, PRIMARY_HOVER, SAND } from "./palette";
 
@@ -55,7 +55,7 @@ function StartForm({ location, onDone }: { location: string; onDone: () => void 
     if (f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) next.email = "Enter a valid work email address.";
     setErrors(next);
     if (Object.keys(next).length) return;
-    track("submit_get_started_form", { location, page: "appointments", org_type: f.type, locations: f.locations, providers: f.providers });
+    trackLead("appointments_get_started", { source: location, product: "appointments", org_type: f.type });
     setDone(true);
   };
   if (done)

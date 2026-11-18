@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Chevron, EvoqMonogram } from "./icons";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
+import { trackCta } from "@/lib/track";
 import { useRegion } from "@/components/shared/RegionContext";
 import { AIMark, AIBadge } from "@/components/ai/AIMark";
 
@@ -628,7 +629,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
 
         <button
           type="button"
-          onClick={() => setShowGetStarted(true)}
+          onClick={() => { trackCta("get_started", "header"); setShowGetStarted(true); }}
           style={theme ? { background: theme.ctaBg, color: theme.ctaFg } : ctaColor ? { background: ctaColor } : undefined}
           className={`inline-flex cursor-pointer items-center gap-3 rounded-full border-0 py-3 pl-[22px] pr-3.5 text-sm font-semibold transition-all hover:-translate-y-px ${
             theme

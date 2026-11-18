@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties } from "react";
+import { trackLead } from "@/lib/track";
 
 const G = "#1F2933";
 const SL = "#64748B";
@@ -63,7 +64,7 @@ export function EnquiryModal({
             <p style={{ margin: 0, fontSize: 14.5, color: SL, lineHeight: 1.6 }}>A manufacturing specialist from EVOQ will get in touch shortly to understand your operation.</p>
           </div>
         ) : (
-          <form onSubmit={(e) => { e.preventDefault(); setDone(true); }}>
+          <form onSubmit={(e) => { e.preventDefault(); trackLead("enquiry_modal", { source: eyebrow, industry: seg || undefined }); setDone(true); }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: accentSoft, marginBottom: 6 }}>{eyebrow}</div>
             <h2 style={{ margin: "0 0 6px", fontSize: 25, fontWeight: 700, color: G, letterSpacing: "-.01em" }}>Connect with an expert</h2>
             <p style={{ margin: 0, fontSize: 14, color: SL, lineHeight: 1.55 }}>Tell us about your products and operation. We will show how EVOQ fits.</p>

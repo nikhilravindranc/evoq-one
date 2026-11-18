@@ -403,6 +403,15 @@ export function initBilling() {
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var modal = form.closest("[data-modal]");
+        // Same event as lib/track.ts trackLead(): one enquiry, no personal data. The submit event only fires once the
+        // browser's required-field checks have passed.
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "lead_submitted",
+          form: "billing_" + (modal.getAttribute("data-modal") || "form"),
+          source: "billing",
+          page_path: window.location.pathname,
+        });
         $$('[data-view="form"]', modal).forEach(function (v) {
           v.hidden = true;
         });
