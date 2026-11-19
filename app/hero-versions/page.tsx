@@ -3,6 +3,7 @@ import { OverviewOriginalStory } from "@/components/hero/OverviewOriginalStory";
 import { OverviewBoardStory } from "@/components/hero/OverviewBoardStory";
 import { OverviewCastStory } from "@/components/hero/OverviewCastStory";
 import { OverviewCastPhotoStory } from "@/components/hero/OverviewCastPhotoStory";
+import { OverviewCastCharactersStory } from "@/components/hero/OverviewCastCharactersStory";
 import { OverviewStackStory } from "@/components/hero/OverviewStackStory";
 import { OverviewTreeStory } from "@/components/hero/OverviewTreeStory";
 import { OverviewStory } from "@/components/hero/OverviewStory";
@@ -10,7 +11,7 @@ import { ContextRevealDemos } from "@/components/sections/ContextRevealDemos";
 
 /* Internal page: every version of the home hero overview visual tried so far, side by side, in order.
    Not linked anywhere and excluded from search engines. Each version lives in its own file in components/hero;
-   the home page uses OverviewCastPhotoStory (version 9). */
+   the home page uses OverviewCastCharactersStory (version 10). */
 export const metadata = {
   title: "Hero overview versions",
   robots: { index: false, follow: false },
@@ -80,10 +81,16 @@ const VERSIONS: Version[] = [
     visual: <OverviewCastPhotoStory photo="/characters/dana-photo-asian.webp" />,
   },
   {
-    n: 9, name: "Cast cards with the supplied photo", file: "OverviewCastPhotoStory.tsx", tag: "On the home page now",
+    n: 9, name: "Cast cards with the supplied photo", file: "OverviewCastPhotoStory.tsx", tag: "Was on the home page",
     idea: "The same as versions 7 and 8 with the photo you supplied for the manager: a smiling woman at a laptop. Same slower loop.",
-    feedback: "Chosen for the home page hero. Cropped to the card shape from the attached image.",
+    feedback: "Was on the home page until version 10 replaced it. Cropped to the card shape from the attached image.",
     visual: <OverviewCastPhotoStory />,
+  },
+  {
+    n: 10, name: "Real photo manager with 3D character agents", file: "OverviewCastCharactersStory.tsx", tag: "On the home page now",
+    idea: "Version 9 with the four agent cards drawn from the 3D agent set, each with the role it has in the agent sheet: the Quote Follow-up Agent drafts follow ups in CRM, the Intake Agent qualifies a new request in Desk, the Dispatch Agent schedules a job in ServiceOps and the Collections Agent drafts payment reminders in Billing. The manager in the center is the real photo, with the frosted prompt inside her card. The board and the approval are unchanged.",
+    feedback: "Chosen for the home page hero. Characters and roles follow the attached agent sheet. Characters from that sheet not used here: Risk Flags and the second row (Coaching, AI Receptionist, Field AI, Job Costing, Review Replies), plus EVI, Sync, Bookings and Integration.",
+    visual: <OverviewCastCharactersStory />,
   },
 ];
 

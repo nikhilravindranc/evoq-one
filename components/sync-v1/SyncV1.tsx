@@ -423,7 +423,7 @@ function EviPanel() {
 function Proposal() {
   return (
     <>
-      <div className="es-hd"><img src={`${IMG}/characters/sync-head.webp`} alt="" /><div><b>Sync Agent</b><small>Error Diagnosis · Change active mapping</small></div></div>
+      <div className="es-hd"><img src={`/characters/agents/sync.webp`} alt="" /><div><b>Sync Agent</b><small>Error Diagnosis · Change active mapping</small></div></div>
       <b className="es-t">Make “Tax ID” optional for non-EMEA accounts</b>
       <div className="es-row"><small>Observed</small><span>All 3 failing accounts are outside EMEA.</span></div>
       <div className="es-row"><small>Inferred</small><span>Mapping v7 had no conditional rule. Not confirmed.</span></div>

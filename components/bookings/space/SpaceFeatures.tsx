@@ -110,7 +110,7 @@ const GROUPS: Group[] = [
 
 type Who = { img: string; name: string };
 const EVI = (img: string): Who => ({ img: `/characters/evi-face-${img}.png`, name: "EVI" });
-const KAI: Who = { img: "/characters/kai-face.png", name: "Kai, Operations agent" };
+const KAI: Who = { img: "/characters/agents/bookings.webp", name: "Bookings Agent" };
 type Ai = { who: Who; t: string; helps: string; uses: string; approval: string; demo: ReactNode; status?: Status };
 const AI: Ai[] = [
   {
@@ -238,7 +238,7 @@ export function SpaceFeatures() {
               <p className="sr-lead">Assistants help visitors and operators find information and prepare work. Any change to a reservation that an agent prepares waits for explicit human approval.</p>
               <div className="sf-cast">
                 <div><span className="sf-tile big"><img src="/characters/evi-face-idle.png" alt="" width={72} height={72} loading="lazy" /></span><span><b>EVI</b><small>The assistant. Answers from your bookings and helps visitors and your team.</small></span></div>
-                <div><span className="sf-tile big"><img src="/characters/kai-face.png" alt="" width={72} height={72} loading="lazy" /></span><span><b>Kai</b><small>The Operations agent. Prepares changes, and a person approves them.</small></span></div>
+                <div><span className="sf-tile big"><img src="/characters/agents/bookings.webp" alt="" width={72} height={72} loading="lazy" /></span><span><b>Bookings Agent</b><small>Manages appointments, visits and schedules. Prepares changes, and a person approves them.</small></span></div>
               </div>
               <div className="sf-states">
                 {STATES.map((s) => <div key={s.k} className={`sf-state ${s.c}`}><b>{s.k}</b><span>{s.d}</span></div>)}

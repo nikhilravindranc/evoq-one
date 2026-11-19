@@ -8,13 +8,13 @@ import { SPACE_IMG } from "./ui";
 
 /* AI assistants: three steps on the left, one conversation on the right that moves from a visitor asking,
    to the team asking, to an agent preparing a change that a person approves. Only two characters appear:
-   EVI where an assistant answers and Kai where an agent prepares. The scenes take turns once, then wait. */
+   EVI where an assistant answers and the Bookings Agent where an agent prepares. The scenes take turns once, then wait. */
 
 const VIEWS = ["Visitor asks", "Team asks", "Agent prepares"] as const;
 const STEPS = [
   ["Ask", "Visitors and your team describe what they need, the way they would tell a colleague."],
   ["Get matches", "EVI answers from your spaces, rules and bookings."],
-  ["Approve", "Kai prepares a change with its impact. A person approves it before anything moves."],
+  ["Approve", "The Bookings Agent prepares a change with its impact. A person approves it before anything moves."],
 ];
 const DWELL = 7000;
 
@@ -37,7 +37,7 @@ export function SpaceAi() {
         <div className="ai-copy" data-rv="0">
           <span className="sr-label">AI assistants</span>
           <h2 className="sr-h2" style={{ marginTop: 14 }}>Booking help that asks before it acts.</h2>
-          <p className="sr-lead">EVI answers from your bookings, and Kai prepares changes for your team to review. Nothing moves until a person approves it.</p>
+          <p className="sr-lead">EVI answers from your bookings, and the Bookings Agent prepares changes for your team to review. Nothing moves until a person approves it.</p>
           <ol className="ai-steps">
             {STEPS.map(([t, d], i) => (
               <li key={t}><b>{i + 1}</b><span><em>{t}</em>{d}</span></li>
@@ -90,10 +90,10 @@ export function SpaceAi() {
             {v === 2 && (
               <>
                 <div className="ai-bot">
-                  <div><span className="ai-who"><img src="/characters/evi-face-idle.png" alt="" width={24} height={24} />EVI</span><p className="ai-say">Hall A is blocked on Friday morning, so I asked Kai to prepare a move for the vendor workshop.</p></div>
+                  <div><span className="ai-who"><img src="/characters/evi-face-idle.png" alt="" width={24} height={24} />EVI</span><p className="ai-say">Hall A is blocked on Friday morning, so I asked the Bookings Agent to prepare a move for the vendor workshop.</p></div>
                 </div>
                 <div className="ai-prep">
-                  <div className="ai-prep-h"><img src="/characters/kai-face.png" alt="Kai" width={26} height={26} /><span>Kai · prepared for review</span><em className={`sr-badge ${decision === "approved" ? "ok" : decision === "rejected" ? "off" : "warn"}`}>{decision === "approved" ? "Approved" : decision === "rejected" ? "Rejected" : "Waiting"}</em></div>
+                  <div className="ai-prep-h"><img src="/characters/agents/bookings.webp" alt="Bookings Agent" width={26} height={26} /><span>Bookings Agent · prepared for review</span><em className={`sr-badge ${decision === "approved" ? "ok" : decision === "rejected" ? "off" : "warn"}`}>{decision === "approved" ? "Approved" : decision === "rejected" ? "Rejected" : "Waiting"}</em></div>
                   <b>Move the vendor workshop to Training Room 2</b>
                   <dl>
                     <div><dt>When</dt><dd>Friday, 09:00 to 11:00</dd></div>

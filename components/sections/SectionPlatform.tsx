@@ -672,15 +672,15 @@ function ArtAi() {
         </div>
         <div style={{ fontSize: 11, color: "#1F2430", display: "flex", alignItems: "center", gap: 7 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/team/agent-tasks.png" alt="" style={face("", 26)} />
+          <img src="/characters/agents/quote.webp" alt="" style={face("", 26)} />
           Agent assigned <Check color={p.primary} />
         </div>
       </div>
       <span className="pf-art-chip" style={{ left: 30, bottom: 28 }}>
         <span style={{ display: "inline-flex" }}>
-          {["tasks", "calendar", "report"].map((n, i) => (
+          {["quote", "dispatch", "collections"].map((n, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={n} src={`/team/agent-${n}.png`} alt="" style={{ ...face("", 24), marginLeft: i ? -8 : 0 }} />
+            <img key={n} src={`/characters/agents/${n}.webp`} alt="" style={{ ...face("", 24), marginLeft: i ? -8 : 0 }} />
           ))}
         </span>
         AI agents at work

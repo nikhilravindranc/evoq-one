@@ -5,7 +5,7 @@ import { ProductBadge } from "@/components/shared/ProductBadge";
 import { AgentTile, Beat, CHAR, Cursor, GhostButton, PersonAvatar, Pointer, PrimaryButton, Stage, Tick, card, ease, label, typed, useStoryClock } from "./story/kit";
 
 /* People: a week plan. Sam asks EVI to set up a new hire's first week; EVI passes it to
-   Sana (Onboarding agent), who fills Monday to Friday across HRMS, Skillberry and Projects.
+   the Coaching Agent, who fills Monday to Friday across HRMS, Skillberry and Projects.
    Nothing is published to the new hire until Sam approves. */
 
 const REQUEST = "Set up Priya's first week.";
@@ -81,10 +81,10 @@ export function PeopleStory() {
 
       {/* The agent */}
       <Beat on={at("plan")} style={{ marginTop: "2.4cqw", display: "flex", alignItems: "center", gap: "2.6cqw", ...card, padding: "2.2cqw 2.6cqw" }}>
-        <AgentTile srcs={[`${CHAR}/sana.webp`]} size="14cqw" glow={building} />
+        <AgentTile srcs={[`${CHAR}/agents/coaching.webp`]} size="14cqw" glow={building} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
-            <span style={{ ...label, color: "#3A3AC9" }}>Sana · Onboarding agent</span>
+            <span style={{ ...label, color: "#3A3AC9" }}>Coaching Agent</span>
             <span style={{ fontSize: "clamp(8.5px, 1.9cqw, 10px)", color: "rgba(31,36,48,0.55)" }}>passed on by EVI</span>
           </div>
           <div style={{ position: "relative", marginTop: "1.4cqw", height: "clamp(22px, 5.6cqw, 28px)" }}>

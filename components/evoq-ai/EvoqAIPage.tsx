@@ -695,10 +695,10 @@ function CrossSystemDiagram() {
         <div className="w-full rounded-[22px] p-5" style={SOFT_CARD}>
           <div className="flex items-start gap-3">
             <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[26%]" style={{ background: "#E9E4FF", boxShadow: "0 0 0 2px #8F7BFF" }}>
-              <Image src="/characters/rohan.webp" alt="" fill sizes="48px" className="object-cover" />
+              <Image src="/characters/agents/collections.webp" alt="" fill sizes="48px" className="object-cover" />
             </span>
             <div>
-              <p className="text-[15px] font-extrabold" style={{ color: "#0B1230" }}>Finance agent</p>
+              <p className="text-[15px] font-extrabold" style={{ color: "#0B1230" }}>Collections Agent</p>
               <p className="mt-1 text-[12px] leading-[1.5]" style={{ color: C.muted }}>Reviews the information, prepares follow-up actions, and completes the task.</p>
             </div>
           </div>

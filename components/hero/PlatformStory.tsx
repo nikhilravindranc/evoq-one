@@ -5,7 +5,7 @@ import { ProductBadge } from "@/components/shared/ProductBadge";
 import { AgentTile, Beat, CHAR, Cursor, GhostButton, PersonAvatar, Pointer, PrimaryButton, Stage, Tick, card, ease, label, typed, useStoryClock } from "./story/kit";
 
 /* Platform: a connection map. Sync raises an alert that 12 orders did not reach Inventory;
-   Mia asks why. The red link shows where it broke, Leo (Sync agent) finds the cause and
+   Mia asks why. The red link shows where it broke, the Sync Agent finds the cause and
    proposes a fix, and after Mia approves the link turns green. One record still needs a
    person, which is said plainly. */
 
@@ -110,9 +110,9 @@ export function PlatformStory() {
 
       {/* The agent */}
       <Beat on={at("hand")} style={{ ...card, marginTop: "2.4cqw", padding: "2.2cqw 2.6cqw", display: "flex", alignItems: "center", gap: "2.6cqw" }}>
-        <AgentTile srcs={[`${CHAR}/leo.webp`]} size="14cqw" glow={at("hand") && !at("ready")} />
+        <AgentTile srcs={[`${CHAR}/agents/sync.webp`]} size="14cqw" glow={at("hand") && !at("ready")} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <span style={{ ...label, color: "#3A3AC9" }}>Leo · Sync agent</span>
+          <span style={{ ...label, color: "#3A3AC9" }}>Sync Agent</span>
           <p style={{ margin: "1.2cqw 0 0", minHeight: "2.6em", fontSize: "clamp(9.5px, 2.2cqw, 11.5px)", lineHeight: 1.35, color: "#1F2430" }}>
             {at("approve") ? (at("done") ? "Retried 12 records. 1 has no stock location and needs a person." : "Retrying the 12 records…") : at("cause") ? "Cause: no stock location on 12 orders. Map them to the main warehouse and retry." : "Checking the failed records…"}
           </p>

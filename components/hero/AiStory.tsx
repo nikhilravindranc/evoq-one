@@ -88,8 +88,8 @@ export function AiStory() {
               Draft a check-in
             </span>
             <span style={{ padding: "0 3cqw 0 1.2cqw", height: "clamp(24px, 6cqw, 30px)", display: "inline-flex", alignItems: "center", gap: "1.6cqw", borderRadius: 999, background: "#fff", boxShadow: "0 8px 18px -10px rgba(16,20,50,0.5), 0 0 0 1px rgba(71,71,224,0.2)", fontSize: "clamp(9.5px, 2.2cqw, 11.5px)", fontWeight: 600, color: "#3A3AC9", whiteSpace: "nowrap" }}>
-              <PersonAvatar src={`${CHAR}/ava.webp`} size="clamp(18px, 4.6cqw, 22px)" style={{ borderRadius: "30%", boxShadow: "0 0 0 1.5px #8F7BFF" }} />
-              Hand to Ava
+              <PersonAvatar src={`${CHAR}/agents/quote.webp`} size="clamp(18px, 4.6cqw, 22px)" style={{ borderRadius: "30%", boxShadow: "0 0 0 1.5px #8F7BFF" }} />
+              Hand to Quote Follow-up Agent
             </span>
           </Beat>
         </div>

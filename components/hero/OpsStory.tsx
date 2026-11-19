@@ -5,7 +5,7 @@ import { ProductBadge } from "@/components/shared/ProductBadge";
 import { AgentTile, Beat, CHAR, Cursor, GhostButton, PersonAvatar, Pointer, PrimaryButton, Stage, Tick, card, ease, label, typed, useStoryClock } from "./story/kit";
 
 /* Operations: a vertical thread. Mia asks, EVI gathers context from the applications,
-   Kai (Dispatch agent) prepares the job, and nothing happens until Mia approves. */
+   the Dispatch Agent prepares the job, and nothing happens until Mia approves. */
 
 const REQUEST = "Why is ticket #4821 still open? Get the AC repair scheduled.";
 const AT = { send: 2.1, desk: 2.9, ops: 3.6, hand: 4.5, prepared: 5.5, approve: 6.9, done: 7.6 };
@@ -75,7 +75,7 @@ export function OpsStory() {
             EVI · AI assistant
             <span style={{ fontWeight: 600, color: "rgba(31,36,48,0.55)", display: "inline-flex", alignItems: "center", gap: 5 }}>
               {gathering && <i style={{ width: 6, height: 6, borderRadius: "50%", background: "#4747E0", animation: "wcPulse 1.1s ease-in-out infinite" }} />}
-              {at("done") ? "Done" : at("hand") ? "Passed to Kai" : at("send") ? "Checking Desk and ServiceOps" : "Listening"}
+              {at("done") ? "Done" : at("hand") ? "Passed to Dispatch Agent" : at("send") ? "Checking Desk and ServiceOps" : "Listening"}
             </span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "1.2cqw", marginTop: "1.6cqw", minHeight: "calc(2 * 1.3em + 1.2cqw)" }}>
@@ -103,11 +103,11 @@ export function OpsStory() {
       {/* 3. Prepare, then wait for approval */}
       <Beat on={at("hand")} style={{ display: "flex", alignItems: "center", gap: "3cqw" }}>
         <div style={{ width: "24cqw", display: "flex", justifyContent: "center" }}>
-          <AgentTile srcs={[`${CHAR}/kai.webp`]} size="19cqw" />
+          <AgentTile srcs={[`${CHAR}/agents/dispatch.webp`]} size="19cqw" />
         </div>
         <div style={{ ...card, flex: 1, padding: "2.2cqw 2.6cqw" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-            <span style={{ ...label, color: "#3A3AC9" }}>Kai · Dispatch agent</span>
+            <span style={{ ...label, color: "#3A3AC9" }}>Dispatch Agent</span>
             <span
               style={{
                 fontSize: "clamp(8.5px, 1.9cqw, 10px)", fontWeight: 700, padding: "2px 7px", borderRadius: 999, whiteSpace: "nowrap",

@@ -472,7 +472,7 @@ function Agents() {
           <p>Ask questions about the current integration, execution, mapping or error. EVI uses screen context to explain what it has inspected and guide you towards the relevant action.</p>
         </article>
         <article className="ft-b ft-b-agent">
-          <div className="ft-who"><img src={`${IMG}/characters/sync-head.webp`} alt="" /><div><b>Sync Agent</b><small>Integration specialist</small></div></div>
+          <div className="ft-who"><img src={`/characters/agents/sync.webp`} alt="" /><div><b>Sync Agent</b><small>Integration specialist</small></div></div>
           <p>The Sync Agent works across seven capabilities grouped into four areas:</p>
           <div className="ft-groups">
             {AGENT_GROUPS.map(([g, items]) => (

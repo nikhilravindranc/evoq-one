@@ -5,8 +5,8 @@ import { ProductBadge } from "@/components/shared/ProductBadge";
 import { AgentTile, Beat, CHAR, Cursor, GhostButton, PersonAvatar, Pointer, PrimaryButton, Stage, Tick, card, ease, label, typed, useStoryClock } from "./story/kit";
 
 /* Finance: a ledger. Dana asks EVI which invoices are overdue; the total counts up and the
-   four invoices appear, EVI notes two items below reorder level in Inventory, and Rohan
-   (Collections agent) drafts a reminder for each. They go out only after Dana approves. */
+   four invoices appear, EVI notes two items below reorder level in Inventory, and the Collections Agent
+   drafts a reminder for each. They go out only after Dana approves. */
 
 const REQUEST = "Which invoices are overdue?";
 const AT = { send: 1.9, ledger: 2.3, row: 2.5, rowStep: 0.28, stock: 3.9, hand: 4.4, draft: 4.8, ready: 6.1, approve: 7.3, sent: 7.45, done: 8.4 };
@@ -91,9 +91,9 @@ export function FinanceStory() {
 
       {/* The agent */}
       <Beat on={at("hand")} style={{ ...card, marginTop: "2cqw", padding: "1.8cqw 2.6cqw", display: "flex", alignItems: "center", gap: "2.6cqw" }}>
-        <AgentTile srcs={[`${CHAR}/rohan.webp`]} size="13cqw" glow={at("hand") && !at("ready")} />
+        <AgentTile srcs={[`${CHAR}/agents/collections.webp`]} size="13cqw" glow={at("hand") && !at("ready")} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <span style={{ ...label, color: "#3A3AC9" }}>Rohan · Collections agent</span>
+          <span style={{ ...label, color: "#3A3AC9" }}>Collections Agent</span>
           <div style={{ position: "relative", marginTop: "1.4cqw", height: "clamp(22px, 5.6cqw, 28px)" }}>
             <motion.span animate={{ opacity: at("hand") && !at("ready") ? 1 : 0 }} transition={{ duration: 0.3 }} style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", fontSize: "clamp(9.5px, 2.2cqw, 11.5px)", color: "rgba(31,36,48,0.7)" }}>
               Drafting a reminder for each invoice…

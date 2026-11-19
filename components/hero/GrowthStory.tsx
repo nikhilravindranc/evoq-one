@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { AgentTile, Beat, CHAR, Cursor, GhostButton, PersonAvatar, Pointer, PrimaryButton, Spinner, Stage, Tick, card, ease, label, typed, useStoryClock } from "./story/kit";
 
 /* Growth: a deals board. Marcus asks EVI to follow up on this week's open deals; EVI
-   finds three, Ava (Follow-up agent) drafts an email for each, and the cards move across
+   finds three, the Quote Follow-up Agent drafts an email for each, and the cards move across
    the board as the drafts are written and, after Marcus approves them all, sent. */
 
 const REQUEST = "Follow up on this week's open deals.";
@@ -98,10 +98,10 @@ export function GrowthStory() {
 
       {/* The agent */}
       <Beat on={at("hand")} style={{ ...card, marginTop: "2.6cqw", padding: "2.2cqw 2.6cqw", display: "flex", alignItems: "center", gap: "2.6cqw" }}>
-        <AgentTile srcs={[`${CHAR}/ava.webp`]} size="14cqw" />
+        <AgentTile srcs={[`${CHAR}/agents/quote.webp`]} size="14cqw" />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-            <span style={{ ...label, color: "#3A3AC9" }}>Ava · Follow-up agent</span>
+            <span style={{ ...label, color: "#3A3AC9" }}>Quote Follow-up Agent</span>
             <span style={{ fontSize: "clamp(8.5px, 1.9cqw, 10px)", fontWeight: 700, padding: "2px 7px", borderRadius: 999, whiteSpace: "nowrap", color: at("done") ? "#167A43" : at("ready") ? "#B45309" : "#4747E0", background: at("done") ? "rgba(34,160,90,0.14)" : at("ready") ? "rgba(245,158,11,0.16)" : "rgba(71,71,224,0.12)" }}>
               {at("done") ? "Completed" : at("approve") ? "Sending" : at("ready") ? "Awaiting approval" : "Drafting"}
             </span>

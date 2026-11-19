@@ -13,7 +13,7 @@ import { PeopleStory } from "./PeopleStory";
 import { FinanceStory } from "./FinanceStory";
 import { PlatformStory } from "./PlatformStory";
 import { AiStory } from "./AiStory";
-import { OverviewCastPhotoStory } from "./OverviewCastPhotoStory";
+import { OverviewCastCharactersStory } from "./OverviewCastCharactersStory";
 import { HERO_COPY, TOUR, DWELL_MS, type HeroTab, type HeroView } from "./heroCopy";
 import { track } from "@/lib/track";
 
@@ -1517,7 +1517,7 @@ export function HeroSection() {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   style={{ width: "100%" }}
                 >
-                  {view === "overview" ? <OverviewCastPhotoStory />
+                  {view === "overview" ? <OverviewCastCharactersStory />
                     : view === "growth" ? <GrowthStory />
                     : view === "operations" ? <OpsStory />
                     : view === "people" ? <PeopleStory />
