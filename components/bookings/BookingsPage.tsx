@@ -8,7 +8,6 @@ import { HsMotion } from "@/components/hospitality/HsMotion";
 import { ProductBadge } from "@/components/shared/ProductBadge";
 import { BookingCategories, CATEGORIES } from "./BookingCategories";
 import { BookingsNav } from "./BookingsNav";
-import { BookingSteps } from "./BookingSteps";
 import { FloorPlan } from "./FloorPlan";
 import { BG, DEEP, ERR, GRADIENT, I, INK, LINE, MUTED, NEUTRAL, OK, SAGE, SAGE_HOVER, SAND, TERRA, U } from "./theme";
 import { trackCta, trackLead } from "@/lib/track";
@@ -701,10 +700,7 @@ export function BookingsPage() {
         {/* 03 booking categories: cards, each with one action */}
         <BookingCategories onDiscuss={(o, k) => toEnquiry(o, `bookings_category_${k}`)} />
 
-        {/* 04 how booking works: all four workflows at once */}
-        <BookingSteps />
-
-        {/* 05 for organizations */}
+        {/* 04 for organizations */}
         <Wrap className="bk-sec bk-org" id="for-organizations">
           <div className="bk-org-head" data-rv="0">
             <div>

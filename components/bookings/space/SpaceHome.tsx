@@ -6,14 +6,13 @@ import { BG, LINE, MUTED } from "./palette";
 import { NightField, Horizon, Skyline } from "./fx";
 import { DemoButton, SR_BASE, SpaceShell } from "./SpaceShell";
 import { SpaceAi } from "./SpaceAi";
-import { SpaceChallenge } from "./SpaceChallenge";
 import { SpaceHow } from "./SpaceHow";
 import { SpaceRules } from "./SpaceRules";
-import { SpaceSolution, SpaceWhy } from "./SpaceStory";
+import { SpaceWhy } from "./SpaceStory";
 import { SpaceTryIt } from "./SpaceTryIt";
 import { SPACE_IMG } from "./ui";
 
-/* Space & Room Reservations, Home. The order: the problem, the solution, why choose it, how it works,
+/* Space & Room Reservations, Home. The order: why choose it (the problems and the single system), how it works,
    the rules that keep it fair (with several locations as a tab), who uses it, the AI assistants and then
    the demo request. The full capability list lives on Features, so nothing here sends visitors away. */
 
@@ -49,20 +48,16 @@ export function SpaceHome() {
     >
       <style>{css}</style>
 
-      {/* 2. the challenge, a picture for each problem */}
-      <SpaceChallenge />
-
-      {/* 3. the solution and 4. why choose it */}
-      <SpaceSolution />
+      {/* 2. why choose it: the problems of booking by email and the single system that replaces them */}
       <SpaceWhy />
 
-      {/* 5. how it works */}
+      {/* 3. how it works */}
       <SpaceHow />
 
-      {/* 6. rules, with several locations as a tab */}
+      {/* 4. rules, with several locations as a tab */}
       <SpaceRules />
 
-      {/* 7. who it's for */}
+      {/* 5. who it's for */}
       <section className="sr-out sr-sec sh-who" id="who-its-for">
         <div className="sr-in">
           <div className="sr-head" data-rv="0">
