@@ -56,18 +56,21 @@ const STILL = 3.2; // reduced motion: the cast, with the request written
 function useLoopClock() {
   const reduce = !!useReducedMotion();
   const [t, setT] = useState(reduce ? STILL : 0);
+  const [again, setAgain] = useState(false); // true from the second loop on
   useEffect(() => {
     if (reduce) return;
     const start = performance.now();
     let raf = 0;
     const tick = () => {
-      setT(Math.floor((((performance.now() - start) / 1000) % LOOP) * 20) / 20);
+      const s = (performance.now() - start) / 1000;
+      setT(Math.floor((s % LOOP) * 20) / 20);
+      setAgain(s >= LOOP);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [reduce]);
-  return { t, reduce };
+  return { t, reduce, again };
 }
 
 /* Stage geometry, in cqw. */
@@ -140,7 +143,7 @@ function Chip({ on, top, tile, name, working, done, finished }: { on: boolean; t
 }
 
 export function OverviewCastCharactersStory() {
-  const { t, reduce } = useLoopClock();
+  const { t, reduce, again } = useLoopClock();
   const at = (s: number) => t >= s;
   const cast = !at(AT.board) || at(AT.out);
   const board = at(AT.board) && !at(AT.out);
@@ -163,10 +166,10 @@ export function OverviewCastCharactersStory() {
           transition={{ duration: 0.55, ease }}
           style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
         >
-          <AgentCard r={ROWS[0]} on={cast && at(0.35)} lit={sent && at(AT.send + 0.1) && cast} from={48} style={{ left: "4cqw", top: "13cqw", rotate: "-3deg" }} />
-          <AgentCard r={ROWS[2]} on={cast && at(0.5)} lit={sent && at(AT.send + 0.3) && cast} from={48} style={{ left: "5cqw", top: "42cqw", rotate: "2deg" }} />
-          <AgentCard r={ROWS[1]} on={cast && at(0.42)} lit={sent && at(AT.send + 0.2) && cast} from={-48} style={{ right: "4cqw", top: "13cqw", rotate: "3deg" }} />
-          <AgentCard r={ROWS[3]} on={cast && at(0.58)} lit={sent && at(AT.send + 0.4) && cast} from={-48} style={{ right: "5cqw", top: "42cqw", rotate: "-2deg" }} />
+          <AgentCard r={ROWS[0]} on={cast && (again || at(0.35))} lit={sent && at(AT.send + 0.1) && cast} from={48} style={{ left: "4cqw", top: "13cqw", rotate: "-3deg" }} />
+          <AgentCard r={ROWS[2]} on={cast && (again || at(0.5))} lit={sent && at(AT.send + 0.3) && cast} from={48} style={{ left: "5cqw", top: "42cqw", rotate: "2deg" }} />
+          <AgentCard r={ROWS[1]} on={cast && (again || at(0.42))} lit={sent && at(AT.send + 0.2) && cast} from={-48} style={{ right: "4cqw", top: "13cqw", rotate: "3deg" }} />
+          <AgentCard r={ROWS[3]} on={cast && (again || at(0.58))} lit={sent && at(AT.send + 0.4) && cast} from={-48} style={{ right: "5cqw", top: "42cqw", rotate: "-2deg" }} />
 
           {/* Dana, in front, with the prompt inside her card */}
           <motion.div
