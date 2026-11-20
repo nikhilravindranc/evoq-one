@@ -38,6 +38,13 @@ const nextConfig: NextConfig = {
       ["/products/bookings/space-and-room-reservations/features", "/products/bookings/spaces/features"],
       ["/products/bookings/space-and-room-reservations/pricing", "/products/bookings/spaces/pricing"],
       ["/products/bookings/appointment-scheduling", "/products/bookings/appointments"],
+      // ServiceOps v2 and Sync v1 became the main pages
+      ["/products/serviceops-v2", "/products/serviceops"],
+      ["/products/serviceops-v2/features", "/products/serviceops/features"],
+      ["/products/serviceops-v2/pricing", "/products/serviceops/pricing"],
+      ["/products/sync-v1", "/products/sync"],
+      ["/products/sync-v1/features", "/products/sync/features"],
+      ["/products/sync-v1/pricing", "/products/sync/pricing"],
     ];
     return moved.map(([source, destination]) => ({ source, destination, permanent: true }));
   },

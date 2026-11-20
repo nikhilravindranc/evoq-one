@@ -12,7 +12,7 @@ import { AMBER, AMBER_DEEP, AMBER_HOVER, BODY, FOOT, G1, INK, LINE, MUTED } from
 
 /* Shell for the ServiceOps v2 pages: the EVOQ top bar, a quiet product bar, the demo form and the base styles. */
 
-export const V2_BASE = "/products/serviceops-v2";
+export const V2_BASE = "/products/serviceops";
 
 const DemoCtx = createContext<(location: string, title?: string) => void>(() => {});
 export const useV2Demo = () => useContext(DemoCtx);

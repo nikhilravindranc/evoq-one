@@ -1,7 +1,7 @@
 /* EVOQ Sync v1: palette, the 32 app catalog and shared copy data. App facts (objects, sign in methods, events) are
    taken from the Sync app's own catalog (src/data.js) so the site and the product say the same thing. */
 
-export const SYNC_BASE = "/products/sync-v1";
+export const SYNC_BASE = "/products/sync";
 export const IMG = "/sync-v1";
 
 /* Grape, with lime as a small signal */
