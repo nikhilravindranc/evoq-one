@@ -67,8 +67,8 @@ export function OpsStory() {
 
       {/* 2. Gather */}
       <div style={{ display: "flex", alignItems: "center", gap: "3cqw" }}>
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.55, delay: 0.15, ease }} style={{ width: "24cqw", display: "flex", justifyContent: "center" }}>
-          <AgentTile srcs={[`${CHAR}/evi.webp`, `${CHAR}/evi-working.webp`, `${CHAR}/evi-done.webp`]} pose={eviPose} size="22cqw" glow={gathering} />
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.55, delay: 0.15, ease }} style={{ width: "15cqw", display: "flex", justifyContent: "center" }}>
+          <AgentTile srcs={[`${CHAR}/evi.webp`, `${CHAR}/evi-working.webp`, `${CHAR}/evi-done.webp`]} pose={eviPose} size="13cqw" glow={gathering} />
         </motion.div>
         <div style={{ ...card, flex: 1, padding: "2.2cqw 2.6cqw" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", ...label, color: "#3A3AC9" }}>
@@ -102,8 +102,8 @@ export function OpsStory() {
 
       {/* 3. Prepare, then wait for approval */}
       <Beat on={at("hand")} style={{ display: "flex", alignItems: "center", gap: "3cqw" }}>
-        <div style={{ width: "24cqw", display: "flex", justifyContent: "center" }}>
-          <AgentTile srcs={[`${CHAR}/agents/dispatch.webp`]} size="19cqw" />
+        <div style={{ width: "15cqw", display: "flex", justifyContent: "center" }}>
+          <AgentTile srcs={[`${CHAR}/agents/dispatch.webp`]} size="13cqw" />
         </div>
         <div style={{ ...card, flex: 1, padding: "2.2cqw 2.6cqw" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>

@@ -25,10 +25,10 @@ export function AiStory() {
 
   return (
     <Stage>
-      <div style={{ display: "grid", gridTemplateColumns: "30cqw 1fr", gap: "3cqw", alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "15cqw 1fr", gap: "3cqw", alignItems: "start" }}>
         {/* EVI leads */}
         <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease }} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2cqw", paddingTop: "10cqw" }}>
-          <AgentTile srcs={[`${CHAR}/evi.webp`, `${CHAR}/evi-working.webp`, `${CHAR}/evi-done.webp`]} pose={pose} size="30cqw" glow={thinking} />
+          <AgentTile srcs={[`${CHAR}/evi.webp`, `${CHAR}/evi-working.webp`, `${CHAR}/evi-done.webp`]} pose={pose} size="13cqw" glow={thinking} />
           <span style={{ ...label, color: "#fff", textShadow: "0 1px 8px rgba(20,16,80,0.4)", textAlign: "center", lineHeight: 1.2 }}>
             EVI
             <span style={{ display: "block", fontWeight: 600, opacity: 0.8, fontSize: "clamp(8.5px, 1.9cqw, 10px)" }}>AI assistant</span>

@@ -1,6 +1,5 @@
 "use client";
 
-import { EviTile } from "@/components/shared/EviTile";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, motion, useInView, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
@@ -391,7 +390,7 @@ const INDUSTRIES: {
     title: "Turn patient and practice information into action.",
     desc: "Review patient, appointment, treatment, and follow-up information to identify what needs attention and prepare the next step.",
     cta: "Explore healthcare", href: "/solutions/healthcare", icon: StethoscopeIcon, fg: "#5C5CFF", bg: "#ECE9FF",
-    main: "/industries/v2/hc-main-hd.jpg", mainPos: "50% 20%", circle: "/industries/v2/hc-circle-hd.jpg", circlePos: "40% 30%", detail: "/industries/v2/hc-detail-hd.jpg", detailPos: "50% 30%",
+    main: "/industries/v2/hc-main-hd.jpg", mainPos: "50% 20%", circle: "/team/people-skillberry.jpg", circlePos: "50% 18%", detail: "/industries/v2/hc-detail-hd.jpg", detailPos: "50% 30%",
     cards: [
       { icon: DocIcon, title: "Patient summary", desc: "Recent visits, treatments and upcoming appointments", fg: "#5C5CFF", bg: "#ECE9FF" },
       { icon: CalendarIcon, title: "Follow-up needed", desc: "3 patients require attention this week", fg: "#F26A21", bg: "#FFEBDD" },
@@ -677,9 +676,9 @@ function CrossSystemDiagram() {
       </div>
 
       <div className="flex w-full flex-col items-center lg:w-[270px] lg:shrink-0">
-        <div className="relative w-full rounded-[22px] px-5 pb-5 pt-14 text-center" style={{ ...SOFT_CARD, minHeight: 2 * (hub - 36), marginTop: 36 }}>
-          <span className="absolute -top-10 left-1/2 h-[88px] w-[88px] -translate-x-1/2 overflow-hidden rounded-[26%]" style={{ background: "#E9E4FF", boxShadow: "0 0 0 2.5px #8F7BFF, 0 0 0 6px rgba(143,123,255,0.25), 0 16px 30px -10px rgba(92,92,255,0.5)" }}>
-            <Image src="/characters/evi.webp" alt="EVI" fill sizes="88px" className="object-cover" />
+        <div className="relative w-full rounded-[22px] p-5 text-center" style={{ ...SOFT_CARD, minHeight: 2 * (hub - 36), marginTop: 36 }}>
+          <span className="mx-auto flex h-10 w-10 overflow-hidden rounded-full" style={{ background: "#E9E4FF" }}>
+            <Image src="/characters/evi.webp" alt="EVI" width={80} height={80} className="h-10 w-10 object-cover" />
           </span>
           <h4 className="mt-3 text-[20px] font-extrabold" style={{ color: "#0B1230" }}>EVI</h4>
           <p className="mx-auto mt-1 max-w-[210px] text-[13px] leading-[1.5]" style={{ color: C.muted }}>Finds information across your systems and prepares the next step.</p>
@@ -694,8 +693,8 @@ function CrossSystemDiagram() {
         <svg width="14" height="30" viewBox="0 0 14 30" fill="none" stroke={C.primary} strokeWidth="1.4" aria-hidden="true" className="my-1"><path d="M7 0v26" strokeDasharray="3 3" /><path d="m3 22 4 5 4-5" /></svg>
         <div className="w-full rounded-[22px] p-5" style={SOFT_CARD}>
           <div className="flex items-start gap-3">
-            <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[26%]" style={{ background: "#E9E4FF", boxShadow: "0 0 0 2px #8F7BFF" }}>
-              <Image src="/characters/agents/collections.webp" alt="" fill sizes="48px" className="object-cover" />
+            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full" style={{ background: "#E9E4FF" }}>
+              <Image src="/characters/agents/collections.webp" alt="" fill sizes="40px" className="object-cover" />
             </span>
             <div>
               <p className="text-[15px] font-extrabold" style={{ color: "#0B1230" }}>Collections Agent</p>
@@ -864,10 +863,7 @@ export function EvoqAIPage() {
             <div className="mt-20 grid gap-14 lg:mt-24 lg:grid-cols-[1.05fr_1fr] lg:items-start lg:gap-10">
               {/* EVI: character and conversation, no window chrome */}
               <motion.div {...reveal(0.1, 34, -30)} className="relative z-10">
-                <div className="grid items-end gap-5 sm:grid-cols-[210px_1fr]">
-                  <div className="pointer-events-none hidden sm:block">
-                    <EviTile pose="working" className="w-full" />
-                  </div>
+                <div className="grid items-end gap-5">
                   <div className="flex flex-col gap-4">
                     <motion.div className="flex justify-end" initial={{ opacity: 0, y: 14, scale: 0.97 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={VP} transition={{ duration: 0.5, delay: 0.7, ease: EASE }}>
                       <p className="rounded-[20px] rounded-br-[6px] px-5 py-3 text-[14.5px] font-semibold text-white" style={{ background: "#5648F0", boxShadow: "0 16px 34px -16px rgba(86,72,240,0.9)" }}>
