@@ -6,7 +6,7 @@ import { track } from "@/lib/track";
 import { I } from "../theme";
 import { BG, DEEP, LINE, MUTED, NEUTRAL, PRIMARY, ACCENT } from "./palette";
 import { NightField, Horizon, Skyline } from "./fx";
-import { DemoButton, SR_BASE, SpaceShell } from "./SpaceShell";
+import { DemoButton, SpaceShell } from "./SpaceShell";
 import { BookingFlowUI, CalendarUI, CatalogueUI, CheckInUI, ReportsUI, ReservationUI, SettingsUI } from "./ui";
 
 /* Space & Room Reservations, Features: the full capability catalogue, grouped as in the microsite
@@ -271,7 +271,7 @@ export function SpaceFeatures() {
         <div className="sr-close-band" data-rv="0">
           <h2 className="sr-h2">See these features with your own spaces and rules.</h2>
           <p className="sr-lead">We will set up the demo around the locations, spaces and approval rules you describe.</p>
-          <div className="sr-ctas"><DemoButton location="space_features_close" className="sr-btn light" /><a href={`${SR_BASE}/pricing`} className="sr-btn outline-light">View pricing</a></div>
+          <div className="sr-ctas"><DemoButton location="space_features_close" className="sr-btn light" /><DemoButton location="space_features_pricing" kind="pricing" className="sr-btn outline-light" /></div>
         </div>
       </section>
     </SpaceShell>

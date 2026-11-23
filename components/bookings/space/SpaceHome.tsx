@@ -4,7 +4,7 @@
 import { I, U } from "../theme";
 import { BG, LINE, MUTED } from "./palette";
 import { NightField, Horizon, Skyline } from "./fx";
-import { DemoButton, SR_BASE, SpaceShell } from "./SpaceShell";
+import { DemoButton, SpaceShell } from "./SpaceShell";
 import { SpaceAi } from "./SpaceAi";
 import { SpaceHow } from "./SpaceHow";
 import { SpaceRules } from "./SpaceRules";
@@ -92,7 +92,7 @@ export function SpaceHome() {
           <p className="sr-lead">Tell us how many sites and spaces you manage, and we will tailor the demo.</p>
           <div className="sr-ctas">
             <DemoButton location="space_home_close" className="sr-btn light" />
-            <a href={`${SR_BASE}/pricing`} className="sr-btn outline-light">View pricing</a>
+            <DemoButton location="space_home_pricing" kind="pricing" className="sr-btn outline-light" />
           </div>
         </div>
       </section>

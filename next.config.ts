@@ -32,11 +32,12 @@ const nextConfig: NextConfig = {
       // the microsite plan's proposed paths
       ["/products/bookings/space-booking", "/products/bookings/spaces"],
       ["/products/bookings/space-booking/features", "/products/bookings/spaces/features"],
-      ["/products/bookings/space-booking/pricing", "/products/bookings/spaces/pricing"],
+      ["/products/bookings/space-booking/pricing", "/products/bookings/spaces"],
       // earlier long names of the Spaces and Appointments pages
       ["/products/bookings/space-and-room-reservations", "/products/bookings/spaces"],
       ["/products/bookings/space-and-room-reservations/features", "/products/bookings/spaces/features"],
-      ["/products/bookings/space-and-room-reservations/pricing", "/products/bookings/spaces/pricing"],
+      ["/products/bookings/space-and-room-reservations/pricing", "/products/bookings/spaces"],
+      ["/products/bookings/spaces/pricing", "/products/bookings/spaces"],
       ["/products/bookings/appointment-scheduling", "/products/bookings/appointments"],
       // ServiceOps v2 and Sync v1 became the main pages
       ["/products/serviceops-v2", "/products/serviceops"],

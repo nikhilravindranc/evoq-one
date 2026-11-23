@@ -95,7 +95,8 @@ export function BookingsNav({ product, page = "home", tone = "light" }: { produc
       : [
           { key: "home", name: "Overview", href: p.base, on: page === "home" },
           { key: "features", name: "Features", href: `${p.base}/features`, on: page === "features" },
-          { key: "pricing", name: "Pricing", href: `${p.base}/pricing`, on: page === "pricing" },
+          // Spaces has no pricing page: pricing is requested through the form
+          ...(product === "spaces" ? [] : [{ key: "pricing", name: "Pricing", href: `${p.base}/pricing`, on: page === "pricing" }]),
         ];
   return (
     <div className={`bn bn-${tone}`} style={{ ["--tone" as string]: p.tone }}>

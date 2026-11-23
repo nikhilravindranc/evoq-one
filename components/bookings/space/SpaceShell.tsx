@@ -15,19 +15,20 @@ import { BG, DEEP, ERR, INK, LINE, MUTED, NEUTRAL, OK, PRIMARY, PRIMARY_HOVER, A
    the shared styles. The microsite keeps the EVOQ Bookings identity; it is a category, not a brand. */
 
 export const SR_BASE = "/products/bookings/spaces";
-export type SrPage = "home" | "features" | "pricing";
+export type SrPage = "home" | "features";
 const NAV: { k: SrPage; label: string; href: string }[] = [
   { k: "home", label: "Overview", href: SR_BASE },
   { k: "features", label: "Features", href: `${SR_BASE}/features` },
-  { k: "pricing", label: "Pricing", href: `${SR_BASE}/pricing` },
 ];
 
-const DemoCtx = createContext<(location: string) => void>(() => {});
+/* the pop-up form is the same for both: a demo, or pricing for the visitor's locations and spaces */
+export type AskKind = "demo" | "pricing";
+const DemoCtx = createContext<(location: string, kind?: AskKind) => void>(() => {});
 export const useDemo = () => useContext(DemoCtx);
 
-export function DemoButton({ location, className = "sr-btn primary", children = "Request a demo" }: { location: string; className?: string; children?: ReactNode }) {
+export function DemoButton({ location, className = "sr-btn primary", children, kind = "demo" }: { location: string; className?: string; children?: ReactNode; kind?: AskKind }) {
   const open = useDemo();
-  return <button type="button" className={className} onClick={() => open(location)}>{children}</button>;
+  return <button type="button" className={className} onClick={() => open(location, kind)}>{children ?? (kind === "pricing" ? "Request pricing" : "Request a demo")}</button>;
 }
 
 /* ---------- demo request form (fields from the microsite plan) ---------- */
@@ -38,7 +39,7 @@ type Fields = { name: string; email: string; org: string; role: string; type: st
 const EMPTY: Fields = { name: "", email: "", org: "", role: "", type: "", locations: "", spaces: "", need: "", time: "" };
 const REQUIRED: (keyof Fields)[] = ["name", "email", "org", "role", "type", "locations", "spaces", "need"];
 
-function DemoForm({ location, onDone }: { location: string; onDone: () => void }) {
+function DemoForm({ location, kind, onDone }: { location: string; kind: AskKind; onDone: () => void }) {
   const [f, setF] = useState<Fields>(EMPTY);
   const [errors, setErrors] = useState<Partial<Record<keyof Fields, string>>>({});
   const [done, setDone] = useState(false);
@@ -55,7 +56,7 @@ function DemoForm({ location, onDone }: { location: string; onDone: () => void }
     if (f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) next.email = "Enter a valid work email address.";
     setErrors(next);
     if (Object.keys(next).length) return;
-    trackLead("space_and_room_demo", { source: location, product: "space_and_room", org_type: f.type });
+    trackLead(kind === "pricing" ? "space_and_room_pricing" : "space_and_room_demo", { source: location, product: "space_and_room", org_type: f.type });
     setDone(true);
   };
   if (done)
@@ -63,7 +64,7 @@ function DemoForm({ location, onDone }: { location: string; onDone: () => void }
       <div className="sr-form-done" role="status">
         <span className="sr-tick">{I.check}</span>
         <h3>Thank you, your request is in.</h3>
-        <p>Our team will contact you to arrange a demo of Space &amp; Room Reservations for your organization.</p>
+        <p>{kind === "pricing" ? "Our team will come back with pricing for your locations and spaces." : "Our team will contact you to arrange a demo of Space & Room Reservations for your organization."}</p>
         <button type="button" className="sr-btn primary" onClick={onDone}>Close</button>
       </div>
     );
@@ -89,12 +90,12 @@ function DemoForm({ location, onDone }: { location: string; onDone: () => void }
         {field("time", "Preferred contact time", <input {...a("time")} placeholder="For example, weekday mornings" />, true)}
         <div className="sr-span">{field("need", "Main requirement", <textarea {...a("need")} rows={3} placeholder="What do people book today, and what would you like to change?" />)}</div>
       </div>
-      <button type="submit" className="sr-btn primary">Request a demo</button>
+      <button type="submit" className="sr-btn primary">{kind === "pricing" ? "Request pricing" : "Request a demo"}</button>
     </form>
   );
 }
 
-function DemoModal({ location, onClose }: { location: string | null; onClose: () => void }) {
+function DemoModal({ location, kind, onClose }: { location: string | null; kind: AskKind; onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!location) return;
@@ -110,10 +111,10 @@ function DemoModal({ location, onClose }: { location: string | null; onClose: ()
     <div className="sr-modal" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div ref={box} className="sr-modal-box" role="dialog" aria-modal="true" aria-labelledby="sr-modal-title">
         <button type="button" className="sr-modal-x" onClick={onClose} aria-label="Close">×</button>
-        <span className="sr-label">Request a demo</span>
-        <h2 id="sr-modal-title" className="sr-modal-title">See Space &amp; Room Reservations with your own spaces in mind.</h2>
-        <p className="sr-modal-sub">Tell us about your locations and what people book. We will tailor the demo to it.</p>
-        <DemoForm location={location} onDone={onClose} />
+        <span className="sr-label">{kind === "pricing" ? "Request pricing" : "Request a demo"}</span>
+        <h2 id="sr-modal-title" className="sr-modal-title">{kind === "pricing" ? "Get pricing for your locations and spaces." : "See Space & Room Reservations with your own spaces in mind."}</h2>
+        <p className="sr-modal-sub">{kind === "pricing" ? "Tell us about your setup and what people book. We will come back with pricing." : "Tell us about your locations and what people book. We will tailor the demo to it."}</p>
+        <DemoForm location={location} kind={kind} onDone={onClose} />
       </div>
     </div>
   );
@@ -160,13 +161,15 @@ function StickyBar({ page }: { page: SrPage }) {
 
 export function SpaceShell({ page, hero, full, heroImg, children }: { page: SrPage; hero: ReactNode; full?: boolean; heroImg?: string; children: ReactNode }) {
   const [demoFrom, setDemoFrom] = useState<string | null>(null);
-  const open = useCallback((location: string) => {
-    track("click_demo_cta", { location, page: "space_and_room" });
+  const [kind, setKind] = useState<AskKind>("demo");
+  const open = useCallback((location: string, k: AskKind = "demo") => {
+    track(k === "pricing" ? "click_pricing_cta" : "click_demo_cta", { location, page: "space_and_room" });
+    setKind(k);
     setDemoFrom(location);
   }, []);
   const close = useCallback(() => setDemoFrom(null), []);
   useEffect(() => {
-    track(page === "features" ? "view_features_page" : page === "pricing" ? "view_pricing_page" : "view_space_home", { page: "space_and_room" });
+    track(page === "features" ? "view_features_page" : "view_space_home", { page: "space_and_room" });
   }, [page]);
   return (
     <DemoCtx.Provider value={open}>
@@ -192,7 +195,7 @@ export function SpaceShell({ page, hero, full, heroImg, children }: { page: SrPa
         <StickyBar page={page} />
         <main>{children}</main>
         <Footer background="#1A0F0A" />
-        <DemoModal location={demoFrom} onClose={close} />
+        <DemoModal location={demoFrom} kind={kind} onClose={close} />
       </div>
     </DemoCtx.Provider>
   );
