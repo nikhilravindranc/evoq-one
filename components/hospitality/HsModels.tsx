@@ -18,7 +18,7 @@ const U = (id: string, w = 1200) => `https://images.unsplash.com/photo-${id}?aut
 const I = (f: string) => `/billing/images/${f}`;
 const ICON: Record<string, string> = {
   CRM: I("crm-menu-icn.png"), ServiceOps: I("serviceops-icon.svg"), Projects: I("evoq-projects-menu-icn.png"), HRMS: I("hrms-menu-icn-new.png"),
-  Skillberry: I("Skillberry-menu-icn.png"), Desk: I("desk-menu-icn.png"), Billing: I("billing-menu-icn.png"), Inventory: I("inventory-menu-icn.png"), Campaigns: I("campaigns-menu-icn.png"),
+  Skillberry: I("Skillberry-menu-icn.png"), Bookings: "/logos/bookings-icon.svg", Desk: I("desk-menu-icn.png"), Billing: I("billing-menu-icn.png"), Inventory: I("inventory-menu-icn.png"), Campaigns: I("campaigns-menu-icn.png"),
 };
 
 type Model = {
@@ -26,6 +26,8 @@ type Model = {
   collage: [string, string]; note: [string, string];
   tag: string; blurb: string; show: string[];
   title: string; intro: string[]; points: [string, string][]; products: string[];
+  /* when a model has cards, its panel shows them as a grid in place of the strip, the points and the product row */
+  cards?: { t: string; d: string; products: string[] }[];
 };
 
 const MODELS: Model[] = [
@@ -34,19 +36,22 @@ const MODELS: Model[] = [
     tag: "Guests see the stay. Your team manages the details.", show: ["Enquiries", "Requests", "Internal work", "Financial records"],
     blurb: "Guest stays, requests and follow-up",
     collage: [U("1759038085950-1234ca8f5fed"), U("1758448755981-954afbf60ff7")], note: ["Reservation confirmed", "Special requirements noted for arrival"],
-    summary: "Guest enquiries, appointment-based services and follow-up recorded around each stay.",
-    title: "Reservations, requests and follow-up around every stay.",
-    intro: [
-      "Enquiries answered before arrival, requests handled during the stay, follow-up sent after checkout. Each task has an owner.",
-      "Works alongside hotel property management and reservation systems.",
+    summary: "Guest records, requests, upkeep, bookings and follow-up for hotels and resorts. Works alongside your property management and reservation system.",
+    title: "Everything around the stay, in one place.",
+    intro: [],
+    points: [],
+    products: ["CRM", "Bookings", "Projects", "Desk", "ServiceOps", "Inventory", "Billing", "HRMS", "Skillberry", "Campaigns", "Surveys", "Loyalty"],
+    cards: [
+      { t: "Guest relationships", d: "One record for every guest, with preferences, past stays and notes. Enquiries get a follow-up owner so none are forgotten.", products: ["CRM"] },
+      { t: "Spaces and bookable services", d: "Meeting rooms, event spaces and spa slots booked with your rules and approvals, with availability visible to staff.", products: ["Bookings"] },
+      { t: "Events and groups", d: "Weddings, conferences and group stays planned as projects, with tasks, owners, the space booked and the invoice in one place.", products: ["Projects", "Bookings", "Billing"] },
+      { t: "Guest requests", d: "Requests from calls, email and chat land in one queue, get an owner and a due time, and are tracked until they are done.", products: ["Desk"] },
+      { t: "Property upkeep", d: "Room issues become scheduled work orders. Equipment records show warranty and next service, and preventive plans keep maintenance ahead.", products: ["ServiceOps"] },
+      { t: "Stock and supplies", d: "Linen, amenities and minibar items counted, with reorder levels and purchasing so the stores do not run short.", products: ["Inventory"] },
+      { t: "Billing and accounts", d: "Invoices for events, groups and corporate accounts, with payments recorded against them and overdue invoices followed up.", products: ["Billing"] },
+      { t: "Team and training", d: "Employee records in one place, including seasonal staff, with training assigned and tracked so new staff start the same way.", products: ["HRMS", "Skillberry"] },
+      { t: "Guest engagement", d: "Feedback requested after checkout, offers for return stays and loyalty for repeat guests.", products: ["Campaigns", "Surveys", "Loyalty"] },
     ],
-    points: [
-      ["Guest relationships", "Guest details and enquiries recorded, with follow-up visible to staff."],
-      ["Service coordination", "Service requests logged, assigned and tracked to completion."],
-      ["Billing administration", "Invoices and payments recorded."],
-      ["Guest engagement", "Feedback collected and return-stay communication sent."],
-    ],
-    products: ["CRM", "Desk", "ServiceOps", "Billing", "Campaigns", "Surveys", "Loyalty"],
   },
   {
     key: "restaurants", name: "Restaurants & cafés", img: U("1555396273-367ea4eb4db5", 1400),
@@ -98,6 +103,15 @@ const LABEL_TEXT: Record<string, string> = {
   "Stock records": "Product and inventory information.",
 };
 
+function Mark({ a }: { a: string }) {
+  return ICON[a] ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={ICON[a]} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain" }} />
+  ) : (
+    <span style={{ width: 20, height: 20, borderRadius: "50%", background: SAGE, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: FOREST }}>{a[0]}</span>
+  );
+}
+
 export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
   const [sel, setSel] = useState(0);
   const m = MODELS[sel];
@@ -134,11 +148,19 @@ export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
         .hm-step > span:not(.hm-node){font-size:12.5px;line-height:1.5;color:${MUTE}}
         .hm-node{position:absolute;left:14px;top:-14px;width:28px;height:28px;border-radius:50%;background:${FOREST};color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px #fff}
         .hm-next{position:absolute;right:-30px;top:50%;margin-top:-13px;background:#fff;border-radius:50%}
+        .hm-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+        .hm-card{display:flex;flex-direction:column;gap:10px;padding:22px 22px 20px;border-radius:18px;background:${CREAM};border:1px solid ${BEIGE};transition:transform .3s ease,box-shadow .3s ease,background .3s ease}
+        .hm-card:hover{transform:translateY(-4px);background:#fff;box-shadow:0 26px 44px -30px rgba(6,78,59,.5)}
+        .hm-card h4{margin:0;font-family:${SERIF};font-weight:400;font-size:21px;line-height:1.2;color:${FOREST}}
+        .hm-card p{margin:0;font-size:14.5px;line-height:1.65;color:${MUTE}}
+        .hm-marks{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+        .hm-marks span{display:inline-flex;align-items:center;gap:7px;padding:4px 11px 4px 5px;border-radius:999px;background:#fff;border:1px solid ${BEIGE};font-size:12px;font-weight:600;color:${FOREST}}
+        .hm-card:hover .hm-marks span{background:${CREAM}}
         .hm-pts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 20px}
-        @media (max-width:1000px){.hm-top{grid-template-columns:1fr;gap:28px}.hm-photo-lg{height:280px}}
+        @media (max-width:1000px){.hm-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.hm-top{grid-template-columns:1fr;gap:28px}.hm-photo-lg{height:280px}}
         @media (max-width:900px){.hm-flow{grid-template-columns:1fr!important;gap:30px}.hm-next{right:auto;left:50%;margin-left:-13px;top:auto;bottom:-29px;margin-top:0;transform:rotate(90deg)}}
-        @media (max-width:760px){.hm-grid{grid-template-columns:1fr;gap:6px}.hm-arch{height:200px}.hm-pts{grid-template-columns:1fr}.hm-panel{padding:28px 22px!important}}
-        @media (prefers-reduced-motion:reduce){.hm-panel{animation:none}.hm-photo,.hm-pick,.hm-tick{transition:none}}
+        @media (max-width:760px){.hm-cards{grid-template-columns:1fr}.hm-grid{grid-template-columns:1fr;gap:6px}.hm-arch{height:200px}.hm-pts{grid-template-columns:1fr}.hm-panel{padding:28px 22px!important}}
+        @media (prefers-reduced-motion:reduce){.hm-panel{animation:none}.hm-photo,.hm-pick,.hm-tick,.hm-card{transition:none}}
       `}</style>
       <div className="hs-wrap">
         <div style={{ textAlign: "center", maxWidth: 740, margin: "0 auto 44px" }} data-rv="0">
@@ -180,49 +202,65 @@ export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
             </div>
           </div>
 
-          <div style={{ margin: "40px 0 0" }}>
-            <p style={{ margin: "0 0 14px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OLIVE }}>What your team manages behind the scenes</p>
-            <ol className="hm-flow" style={{ gridTemplateColumns: `repeat(${m.show.length}, minmax(0, 1fr))` }}>
-              {m.show.map((t, i) => (
-                <li key={t} className="hm-step">
-                  <span className="hm-node">{i + 1}</span>
-                  <b>{t}</b>
-                  <span>{LABEL_TEXT[t]}</span>
-                  {i < m.show.length - 1 && (
-                    <svg className="hm-next" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={BOTANICAL} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          <div className="hm-pts" style={{ marginTop: 28 }}>
-            {m.points.map(([h, d]) => (
-              <div key={h} style={{ background: CREAM, borderRadius: 16, padding: "18px 20px" }}>
-                <div style={{ fontFamily: SERIF, fontSize: 19, color: FOREST }}>{h}</div>
-                <p style={{ margin: "6px 0 0", fontSize: 14.5, lineHeight: 1.65, color: MUTE }}>{d}</p>
+          {m.cards ? (
+            <>
+              <div className="hm-cards" style={{ marginTop: 36 }}>
+                {m.cards.map((c) => (
+                  <div key={c.t} className="hm-card">
+                    <h4>{c.t}</h4>
+                    <p>{c.d}</p>
+                    <div className="hm-marks">{c.products.map((a) => <span key={a}><Mark a={a} />{a}</span>)}</div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div style={{ marginTop: 32, paddingTop: 22, borderTop: `1px solid ${BEIGE}`, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: OLIVE, marginRight: 6 }}>Relevant products</span>
-            {m.products.map((a) => (
-              <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 13px 5px 6px", borderRadius: 999, background: CREAM, border: `1px solid ${BEIGE}`, fontSize: 12.5, fontWeight: 600, color: FOREST }}>
-                {ICON[a] ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={ICON[a]} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain" }} />
-                ) : (
-                  <span style={{ width: 20, height: 20, borderRadius: "50%", background: SAGE, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: FOREST }}>{a[0]}</span>
-                )}
-                {a}
-              </span>
-            ))}
-            <a href="#" data-enquiry="" data-enquiry-segment={m.name} className="hs-btn" style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 10, padding: "13px 24px", borderRadius: 999, fontSize: 14, fontWeight: 600, textDecoration: "none", background: FOREST, color: "#fff" }}>
-              Talk to an expert
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-            </a>
-          </div>
+            </>
+          ) : (
+            <>
+          <div style={{ margin: "40px 0 0" }}>
+              <p style={{ margin: "0 0 14px", fontSize: 11.5, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: OLIVE }}>What your team manages behind the scenes</p>
+              <ol className="hm-flow" style={{ gridTemplateColumns: `repeat(${m.show.length}, minmax(0, 1fr))` }}>
+                {m.show.map((t, i) => (
+                  <li key={t} className="hm-step">
+                    <span className="hm-node">{i + 1}</span>
+                    <b>{t}</b>
+                    <span>{LABEL_TEXT[t]}</span>
+                    {i < m.show.length - 1 && (
+                      <svg className="hm-next" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={BOTANICAL} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </div>
+  
+            <div className="hm-pts" style={{ marginTop: 28 }}>
+              {m.points.map(([h, d]) => (
+                <div key={h} style={{ background: CREAM, borderRadius: 16, padding: "18px 20px" }}>
+                  <div style={{ fontFamily: SERIF, fontSize: 19, color: FOREST }}>{h}</div>
+                  <p style={{ margin: "6px 0 0", fontSize: 14.5, lineHeight: 1.65, color: MUTE }}>{d}</p>
+                </div>
+              ))}
+            </div>
+  
+            <div style={{ marginTop: 32, paddingTop: 22, borderTop: `1px solid ${BEIGE}`, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: OLIVE, marginRight: 6 }}>Relevant products</span>
+              {m.products.map((a) => (
+                <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 13px 5px 6px", borderRadius: 999, background: CREAM, border: `1px solid ${BEIGE}`, fontSize: 12.5, fontWeight: 600, color: FOREST }}>
+                  {ICON[a] ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={ICON[a]} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain" }} />
+                  ) : (
+                    <span style={{ width: 20, height: 20, borderRadius: "50%", background: SAGE, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: FOREST }}>{a[0]}</span>
+                  )}
+                  {a}
+                </span>
+              ))}
+              <a href="#" data-enquiry="" data-enquiry-segment={m.name} className="hs-btn" style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 10, padding: "13px 24px", borderRadius: 999, fontSize: 14, fontWeight: 600, textDecoration: "none", background: FOREST, color: "#fff" }}>
+                Talk to an expert
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </a>
+            </div>
+              </>
+          )}
         </div>
       </div>
     </section>
