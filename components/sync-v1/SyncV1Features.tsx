@@ -271,7 +271,7 @@ const FEATURES: Feature[] = [
     what: <p>Review the status of your integrations and inspect individual executions to understand how each run progressed.</p>,
     use: "Tells you whether each run worked, how long it took and how many records it handled.",
     demo: [
-      { to: ".ft-ex.head", tag: "Every run in one place", hold: 2000, fx: 0.4 },
+      { to: ".ft-ex.head", tag: "Every run listed", hold: 2000, fx: 0.4 },
       { to: ".ft-ex:nth-child(4) .ft-chip", tag: "A run finishes", hold: 2400, auto: true },
       { to: ".ft-ex:nth-child(5)", tag: "Open a run to see why", hold: 2600, click: true, fx: 0.6 },
     ],

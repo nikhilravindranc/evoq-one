@@ -261,7 +261,7 @@ export const GUIDES: Record<string, { page: ReactNode; demo: Act[]; bare?: boole
   work: {
     page: <Work />,
     demo: [
-      { to: ".wk .r1", tag: "Every ask in one inbox", hold: 2400, fx: 0.3 },
+      { to: ".wk .r1", tag: "Every ask lands in the inbox", hold: 2400, fx: 0.3 },
       { to: ".wk-conv", tag: "Turn it into a work order", hold: 2700, click: true },
       { to: ".wk-sched", tag: "See what needs scheduling", hold: 2300, fx: 0.5 },
       { to: ".wk-new .wk-st", tag: "Assign and schedule", hold: 2800, click: true, fx: 0.4 },
@@ -270,7 +270,7 @@ export const GUIDES: Record<string, { page: ReactNode; demo: Act[]; bare?: boole
   field: {
     page: <Field />,
     demo: [
-      { to: ".fd-steps", tag: "Every step of the job in one line", hold: 2300, fx: 0.5 },
+      { to: ".fd-steps", tag: "Every step of the job, in order", hold: 2300, fx: 0.5 },
       { to: ".fd-tech", tag: "Who is on site, and when they arrived", hold: 2400, fx: 0.4 },
       { to: ".fd-s3", tag: "Checklist done on the spot", hold: 2500, click: true, fx: 0.3 },
       { to: ".fd-s4", tag: "Sign-off from the customer", hold: 2700, click: true, fx: 0.3 },
@@ -280,7 +280,7 @@ export const GUIDES: Record<string, { page: ReactNode; demo: Act[]; bare?: boole
     page: <Records />,
     demo: [
       { to: ".rc-filters", tag: "Find any customer fast", hold: 2300, fx: 0.4 },
-      { to: ".rc-bal", tag: "See what each one owes", hold: 2400, fx: 0.4 },
+      { to: ".rc-bal", tag: "See what each customer owes", hold: 2400, fx: 0.4 },
       { to: ".rc-row", tag: "Open the full record", hold: 2600, click: true, fx: 0.3 },
       { to: ".rc-stats", tag: "Work, assets and balance together", hold: 2700, fx: 0.5 },
     ],
@@ -289,7 +289,7 @@ export const GUIDES: Record<string, { page: ReactNode; demo: Act[]; bare?: boole
     page: <Money />,
     demo: [
       { to: ".mn-ready", tag: "Finished work, ready to invoice", hold: 2400, fx: 0.4 },
-      { to: ".mn-inv", tag: "Invoice it in one click", hold: 2800, click: true, fx: 0.4 },
+      { to: ".mn-inv", tag: "Invoice with a click", hold: 2800, click: true, fx: 0.4 },
       { to: ".mn-over", tag: "See what is overdue", hold: 2600, fx: 0.4 },
     ],
   },
@@ -324,16 +324,16 @@ export const GUIDES: Record<string, { page: ReactNode; demo: Act[]; bare?: boole
     page: <Look />,
     demo: [
       { to: ".lk-themes", tag: "Pick your brand colour", hold: 2300, fx: 0.5 },
-      { to: ".lk-t2", tag: "One click, your colours", hold: 2700, click: true },
+      { to: ".lk-t2", tag: "Switch to your brand colour", hold: 2700, click: true },
       { to: ".lk-l3", tag: "Choose a layout", hold: 2700, click: true },
     ],
   },
   setup: {
     page: <Setup />,
     demo: [
-      { to: ".su-menu", tag: "Every setting in one place", hold: 2400, fx: 0.5, fy: 0.3 },
+      { to: ".su-menu", tag: "Every setting is in Settings", hold: 2400, fx: 0.5, fy: 0.3 },
       { to: ".su-users", tag: "Add your people", hold: 2500, click: true, fx: 0.4 },
-      { to: ".su-role", tag: "Give each one a role", hold: 2700, click: true },
+      { to: ".su-role", tag: "Give each person a role", hold: 2700, click: true },
     ],
   },
 };

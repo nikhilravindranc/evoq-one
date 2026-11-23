@@ -233,7 +233,7 @@ const LINE: Record<string, string> = {
 const PHOTO = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1400&q=75`;
 
 const SOLUTIONS: { t: string; d: string; apps: string[]; img: string; vis: () => ReactNode }[] = [
-  { t: "Enquiries and customer relationships", d: "Every enquiry, account and opportunity in one place, with a follow-up owner, so no buyer or distributor request goes cold. Product news and offers go out to distributors and past customers.", apps: ["CRM", "Campaigns"], img: PHOTO("1532634902-bbce41c89ef6"), vis: VisCrm },
+  { t: "Enquiries and customer relationships", d: "Every enquiry, account and opportunity recorded with a follow-up owner, so no buyer or distributor request goes cold. Product news and offers go out to distributors and past customers.", apps: ["CRM", "Campaigns"], img: PHOTO("1532634902-bbce41c89ef6"), vis: VisCrm },
   { t: "Configuration and quotes", d: "Sales chooses options, dimensions and materials against what the buyer needs, sees the result, and sends a quote that matches the configuration and its price.", apps: ["ConfigX"], img: PHOTO("1740209475472-aa7d280f7452"), vis: () => <ConfigXWindow /> },
   { t: "Orders and invoicing", d: "The agreed quote becomes an order, and invoices and payments are recorded against it.", apps: ["CRM", "Billing"], img: PHOTO("1738966523829-5d3c195abce3"), vis: VisOrders },
   { t: "Production and delivery", d: "Preparation, production and delivery tasks with owners and dates, tracked against the delivery commitment.", apps: ["Projects"], img: PHOTO("1764185800646-f75f7e16e465"), vis: VisProjects },

@@ -53,7 +53,7 @@ export const AREAS: Area[] = [
     items: [
       { n: "Customers", d: "Contacts, sites, work, assets, balance and status, with filters." },
       { n: "Log a call", d: "Notes or a voice note transcript become a summary, decisions and follow-up tasks that you confirm.", s: "demo" },
-      { n: "Partners", d: "Sales, service and project partners in one place, each with its own workflow. Filter by kind and status, and see territory, rating and performance." },
+      { n: "Partners", d: "Sales, service and project partners together, each with its own workflow. Filter by kind and status, and see territory, rating and performance." },
       { n: "Partner approval", d: "A partner applies or is added, goes through review and is approved. A suspended partner stops receiving work." },
       { n: "Agreements and certifications", d: "Keep each partner's agreements and certifications, and see which ones expire in the next 60 days." },
       { n: "Partner contacts and territory", d: "Contacts and branches, the territory each partner covers, and the products and services it supports." },

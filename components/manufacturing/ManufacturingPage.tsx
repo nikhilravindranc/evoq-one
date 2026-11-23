@@ -1,43 +1,21 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
 import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { MfMotion } from "./MfMotion";
 import { EnquiryModal } from "./EnquiryModal";
 import { ManufacturingSolutions } from "./ManufacturingSolutions";
+import { ManufacturingSegments } from "./ManufacturingSegments";
 import { HeroVisual } from "./HeroVisual";
 
 const G = "#1F2933";
 const ST = "#475569";
 const SL = "#64748B";
-const LS = "#94A3B8";
 const CG = "#CBD5E1";
 const PG = "#F1F5F9";
 const BL = "#2563EB";
 const PB = "#DBEAFE";
 const TX = "#111827";
-
-const U = (id: string, w = 1400) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
-const IMG = {
-  hero: U("1717386255773-1e3037c81788", 1600),
-  motor: U("1736161999520-0a20fa297a89", 900),
-  floor: U("1764185800646-f75f7e16e465", 1800),
-  warehouse: U("1644079446600-219068676743", 1800),
-  delivery: U("1683252162057-07215f03d1ad", 1400),
-  manager: U("1532634902-bbce41c89ef6", 900),
-  technician: U("1581094487600-9d2381d4eeef", 900),
-  coordinator: U("1766066014237-00645c74e9c6", 900),
-  robots: U("1647427060118-4911c9821b82", 800),
-  excavator: U("1649807533255-bbc9c9fb7d77", 800),
-  kitchen: U("1742192757416-27d69a5d5029", 800),
-  profiles: U("1738966523829-5d3c195abce3", 800),
-  cleanroom: U("1748000970909-845f4aa144d2", 800),
-  cnc: U("1740209475472-aa7d280f7452", 800),
-  plant: U("1717386255767-52643970d483", 1800),
-  factoryMan: U("1598299803204-b73796f43289", 1800),
-  truck: U("1543510425-1eccdf3ae819", 1400),
-  techTablet: U("1778074762033-c6595907684d", 1400),
-};
 
 const ICONS: Record<string, ReactNode> = {
   factory: <><path d="M3 21V10l6 3V10l6 3V5h4v16z" /><path d="M7 17h2M12 17h2M17 17h1" /></>,
@@ -63,8 +41,6 @@ function Ic({ n, s = 20, c = ST, w = 1.7 }: { n: string; s?: number; c?: string;
   return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{ICONS[n]}</svg>;
 }
 
-const photoStyle = (src: string, extra: CSSProperties = {}): CSSProperties => ({ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center", ...extra });
-
 function Eyebrow({ children, light = false }: { children: ReactNode; light?: boolean }) {
   return <p style={{ margin: "0 0 14px", fontSize: 11, fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase", color: light ? "#CBD5E1" : SL }}>{children}</p>;
 }
@@ -73,28 +49,6 @@ function Btn({ children, dark = true, href = "#", enquiry = false }: { children:
     <a href={enquiry ? "#" : href} {...(enquiry ? { "data-enquiry": "" } : {})} className="mf-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "13px 22px", borderRadius: 8, fontSize: 13.5, fontWeight: 600, textDecoration: "none", background: dark ? G : "#fff", color: dark ? "#fff" : G, border: dark ? `1px solid ${G}` : `1px solid ${CG}` }}>{children}</a>
   );
 }
-function Card({ style, children, cls }: { style?: CSSProperties; children: ReactNode; cls?: string }) {
-  return <div className={cls} style={{ background: "#fff", borderRadius: 12, border: `1px solid ${CG}`, boxShadow: "0 24px 50px -28px rgba(31,41,51,.45)", ...style }}>{children}</div>;
-}
-function Sec({ bg = "#fff", children, id, grid = false, pad = "88px 0" }: { bg?: string; children: ReactNode; id?: string; grid?: boolean; pad?: string }) {
-  return (
-    <section id={id} style={{ background: bg, padding: pad, position: "relative", overflow: "hidden", backgroundImage: grid ? `linear-gradient(${CG}40 1px, transparent 1px), linear-gradient(90deg, ${CG}40 1px, transparent 1px)` : undefined, backgroundSize: grid ? "40px 40px" : undefined }}>
-      <div className="mf-wrap">{children}</div>
-    </section>
-  );
-}
-function Chip({ icon, title, sub, style }: { icon?: string; title: string; sub?: string; style?: CSSProperties }) {
-  return (
-    <div className="mf-float" style={{ position: "absolute", background: "#fff", borderRadius: 10, border: `1px solid ${CG}`, boxShadow: "0 18px 36px -20px rgba(31,41,51,.55)", padding: "8px 12px", display: "flex", alignItems: "center", gap: 9, ...style }}>
-      {icon && <span style={{ width: 28, height: 28, borderRadius: 7, background: PG, display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Ic n={icon} s={15} /></span>}
-      <span style={{ fontSize: 11.5, fontWeight: 700, color: G, lineHeight: 1.25 }}>{title}{sub && <span style={{ display: "block", fontSize: 10, fontWeight: 500, color: SL }}>{sub}</span>}</span>
-    </div>
-  );
-}
-function Dots({ ok = true }: { ok?: boolean }) {
-  return <span style={{ width: 6, height: 6, borderRadius: "50%", background: ok ? BL : LS, display: "inline-block" }} />;
-}
-
 /* ------------------------------------------------------------------ 1. Hero */
 function Hero() {
   return (
@@ -117,47 +71,6 @@ function Hero() {
         </div>
       </div>
     </section>
-  );
-}
-
-/* ------------------------------------------------------------------ 7. Segments */
-function Segments() {
-  const segs: [string, string, string][] = [
-    ["Industrial manufacturing", "Enquiries, quotes and service history for industrial products.", IMG.robots],
-    ["Equipment manufacturers", "Configured equipment, customer projects and ongoing service visits.", IMG.excavator],
-    ["Furniture & modular products", "Configurable product sales, enquiries and orders.", IMG.kitchen],
-    ["Building products", "Enquiries, product options, commercial records and fulfilment.", IMG.profiles],
-    ["Medical devices", "Customer accounts, orders and post-sale service for devices.", IMG.cleanroom],
-    ["Other configurable products", "Configuration, quoting and order handling for other configurable products.", IMG.cnc],
-  ];
-  const corner = (pos: CSSProperties): CSSProperties => ({ position: "absolute", width: 14, height: 14, borderColor: "rgba(255,255,255,.85)", borderStyle: "solid", borderWidth: 0, ...pos });
-  return (
-    <Sec bg="#fff" id="segments" pad="84px 0 88px">
-      <div className="mf-split2" style={{ alignItems: "end", marginBottom: 38 }}>
-        <div>
-          <Eyebrow>Manufacturing segments</Eyebrow>
-          <h2 className="mf-h2">Each type of manufacturer starts with different products.</h2>
-        </div>
-        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.7, color: ST, maxWidth: "56ch" }}>Configuration, order handling, delivery and after-sale support differ by product type. Choose the type closest to yours.</p>
-      </div>
-      <div className="mf-g3" style={{ gap: 22 }}>
-        {segs.map(([t, d, img], i) => (
-          <div key={t} className="mf-seg" style={{ borderRadius: 14, overflow: "hidden", border: `1px solid ${CG}`, background: "#fff", display: "flex", flexDirection: "column" }}>
-            <div style={{ position: "relative", aspectRatio: "16 / 10", overflow: "hidden" }}>
-              <div className="mf-seg-img" style={{ position: "absolute", inset: 0, ...photoStyle(img) }} />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(15,23,42,.28), rgba(15,23,42,0) 40%)" }} />
-              <span style={corner({ left: 12, top: 12, borderTopWidth: 1.5, borderLeftWidth: 1.5 })} />
-              <span style={corner({ right: 12, bottom: 12, borderBottomWidth: 1.5, borderRightWidth: 1.5 })} />
-              <span style={{ position: "absolute", left: 32, top: 12, fontSize: 10.5, fontWeight: 600, letterSpacing: ".18em", color: "#fff", textShadow: "0 1px 6px rgba(15,23,42,.6)" }}>0{i + 1}</span>
-            </div>
-            <div style={{ padding: "18px 20px 22px" }}>
-              <h4 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: G, letterSpacing: "-.005em" }}>{t}</h4>
-              <p style={{ margin: "8px 0 0", fontSize: 13.5, lineHeight: 1.65, color: ST }}>{d}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </Sec>
   );
 }
 
@@ -234,7 +147,7 @@ export function ManufacturingPage() {
         <Hero />
       </HeroShell>
       <ManufacturingSolutions />
-      <Segments />
+      <ManufacturingSegments />
       <Cta />
       <Footer background={G} />
     </div>

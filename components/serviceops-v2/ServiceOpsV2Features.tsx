@@ -197,7 +197,7 @@ export function ServiceOpsV2Features() {
           <div className="tr-head" data-rv>
             <div>
               <Label>Roles</Label>
-              <h2 className="v2-h2">Who can open what.</h2>
+              <h2 className="v2-h2">Each role opens its own screens.</h2>
             </div>
             <p>An administrator sets each person&apos;s role. Each person sees the screens their role includes, and the server enforces it.</p>
           </div>
