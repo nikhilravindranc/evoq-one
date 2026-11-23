@@ -18,7 +18,7 @@ const U = (id: string, w = 1200) => `https://images.unsplash.com/photo-${id}?aut
 const I = (f: string) => `/billing/images/${f}`;
 const ICON: Record<string, string> = {
   CRM: I("crm-menu-icn.png"), ServiceOps: I("serviceops-icon.svg"), Projects: I("evoq-projects-menu-icn.png"), HRMS: I("hrms-menu-icn-new.png"),
-  Skillberry: I("Skillberry-menu-icn.png"), Bookings: "/logos/bookings-icon.svg", Desk: I("desk-menu-icn.png"), Billing: I("billing-menu-icn.png"), Inventory: I("inventory-menu-icn.png"), Campaigns: I("campaigns-menu-icn.png"),
+  Skillberry: I("Skillberry-menu-icn.png"), Bookings: "/logos/bookings-icon.svg", POS: "/logos/pos-icon.svg", Sync: I("sync-menu-icn.png"), ConfigX: I("ConfigX-menu-icn.png"), Desk: I("desk-menu-icn.png"), Billing: I("billing-menu-icn.png"), Inventory: I("inventory-menu-icn.png"), Campaigns: I("campaigns-menu-icn.png"),
 };
 
 type Model = {
@@ -28,6 +28,7 @@ type Model = {
   title: string; intro: string[]; points: [string, string][]; products: string[];
   /* when a model has cards, its panel shows them as a grid in place of the strip, the points and the product row */
   cards?: { t: string; d: string; products: string[] }[];
+  band?: { t: string; d: string; products: string[] };
 };
 
 const MODELS: Model[] = [
@@ -43,55 +44,65 @@ const MODELS: Model[] = [
     products: ["CRM", "Bookings", "Projects", "Desk", "ServiceOps", "Inventory", "Billing", "HRMS", "Skillberry", "Campaigns", "Surveys", "Loyalty"],
     cards: [
       { t: "Guest relationships", d: "A record for every guest, with preferences, past stays and notes. Enquiries get a follow-up owner so none are forgotten.", products: ["CRM"] },
-      { t: "Spaces and bookable services", d: "Meeting rooms, event spaces and spa slots booked with your rules and approvals, with availability visible to staff.", products: ["Bookings"] },
-      { t: "Events and groups", d: "Weddings, conferences and group stays planned as projects, with tasks, owners, the space booked and the invoice kept together.", products: ["Projects", "Bookings", "Billing"] },
+      { t: "Space & appointment bookings", d: "Meeting rooms and event spaces reserved with your rules and approvals, and spa or tour appointments booked into open slots, with availability visible to staff.", products: ["Bookings"] },
+      { t: "Events & groups", d: "Weddings, conferences and group stays planned as projects, with tasks, owners, the space booked and the invoice kept together.", products: ["Projects", "Bookings", "Billing"] },
       { t: "Guest requests", d: "Requests from calls, email and chat land in a shared queue, get an owner and a due time, and are tracked until they are done.", products: ["Desk"] },
       { t: "Property upkeep", d: "Room issues become scheduled work orders. Equipment records show warranty and next service, and preventive plans keep maintenance ahead.", products: ["ServiceOps"] },
-      { t: "Stock and supplies", d: "Linen, amenities and minibar items counted, with reorder levels and purchasing so the stores do not run short.", products: ["Inventory"] },
-      { t: "Billing and accounts", d: "Invoices for events, groups and corporate accounts, with payments recorded against them and overdue invoices followed up.", products: ["Billing"] },
-      { t: "Team and training", d: "Employee records for permanent and seasonal staff, with training assigned and tracked so new staff start the same way.", products: ["HRMS", "Skillberry"] },
+      { t: "Stock & supplies", d: "Linen, amenities and minibar items counted, with reorder levels and purchasing so the stores do not run short.", products: ["Inventory"] },
+      { t: "Billing & accounts", d: "Invoices for events, groups and corporate accounts, with payments recorded against them and overdue invoices followed up.", products: ["Billing"] },
+      { t: "Team & training", d: "Employee records for permanent and seasonal staff, with training assigned and tracked so new staff start the same way.", products: ["HRMS", "Skillberry"] },
       { t: "Guest engagement", d: "Feedback requested after checkout, offers for return stays and loyalty for repeat guests.", products: ["Campaigns", "Surveys", "Loyalty"] },
+      /* Add when Bookings Stays ships: { t: "Stays", d: "...", products: ["Bookings"] } */
     ],
+    band: { t: "Connected to your property management system", d: "EVOQ apps and your property management and reservation systems kept in step, where supported integrations exist.", products: ["Sync"] },
   },
   {
     key: "restaurants", name: "Restaurants & cafés", img: U("1555396273-367ea4eb4db5", 1400),
     tag: "Customers see the meal. Your team manages everything around it.", show: ["Enquiries", "Internal work", "Financial records", "Stock records"],
     blurb: "Customers, stock and daily operations",
     collage: [U("1555396273-367ea4eb4db5"), U("1566670829023-5badae05aa7d")], note: ["Table request noted", "Dietary requirements recorded for the visit"],
-    summary: "Customer records, feedback, billing and stock. Table management and point of sale stay in your restaurant systems.",
-    title: "Customer records, stock and billing for daily service.",
-    intro: [
-      "Behind every service: regular-customer records, stock counts, invoices, staff records and guest feedback.",
-      "Works alongside restaurant and point-of-sale systems.",
+    summary: "Customer records, point of sale, stock, billing and follow-up for restaurants and cafés. Table management stays in your restaurant systems.",
+    title: "Everything around the meal, from first visit to regular guest.",
+    intro: [],
+    points: [],
+    products: ["CRM", "POS", "Bookings", "Projects", "Desk", "Inventory", "ServiceOps", "Billing", "HRMS", "Skillberry", "Campaigns", "Surveys", "Loyalty"],
+    cards: [
+      { t: "Customer relationships", d: "A record for every regular, with preferences and visit notes, so follow-up brings guests back.", products: ["CRM"] },
+      { t: "Point of sale", d: "Orders and payments taken at the counter or the table, with the day's sales recorded alongside your stock and billing.", products: ["POS"] },
+      { t: "Private dining & events", d: "Private rooms and event spaces booked with your rules and approvals, with tasks and owners for each event.", products: ["Bookings", "Projects"] },
+      { t: "Customer requests", d: "Enquiries, complaints and special requests land in a shared queue, get an owner and are tracked until they are done.", products: ["Desk"] },
+      { t: "Stock & ingredients", d: "Ingredients, packaging and supplies counted, with reorder levels and purchasing so the kitchen does not run short.", products: ["Inventory"] },
+      { t: "Kitchen equipment upkeep", d: "Equipment records show warranty and next service, and breakdowns become scheduled work orders.", products: ["ServiceOps"] },
+      { t: "Billing & accounts", d: "Invoices and payments recorded for catering, corporate accounts and other applicable transactions.", products: ["Billing"] },
+      { t: "Team & training", d: "Employee records for permanent and seasonal staff, with training assigned and tracked.", products: ["HRMS", "Skillberry"] },
+      { t: "Customer engagement", d: "Feedback collected after a visit, with campaigns and loyalty offers to bring guests back.", products: ["Campaigns", "Surveys", "Loyalty"] },
     ],
-    points: [
-      ["Customer relationships", "Regular-customer records and follow-up to bring guests back."],
-      ["Inventory administration", "Product and stock records kept up to date."],
-      ["Billing administration", "Invoices and payments recorded for applicable transactions."],
-      ["Staff administration", "Employee records and training."],
-      ["Customer engagement", "Feedback collected, campaigns and loyalty offers sent."],
-    ],
-    products: ["CRM", "Inventory", "Billing", "HRMS", "Skillberry", "Campaigns", "Surveys", "Loyalty"],
+    band: { t: "Connected to your systems", d: "EVOQ apps and your accounting and other restaurant systems kept in step, where supported integrations exist.", products: ["Sync"] },
   },
   {
     key: "travel", name: "Travel & tour operators", img: U("1607068891828-f16297950a66", 1400),
     tag: "Travellers see the trip. Your team manages the enquiries and follow-up behind it.", show: ["Enquiries", "Requests", "Internal work", "Financial records"],
     blurb: "Enquiries, requirements and follow-up",
     collage: [U("1607068891828-f16297950a66"), U("1578894381163-e72c17f2d45f")], note: ["Enquiry logged", "Trip requirements recorded for follow-up"],
-    summary: "Enquiries, requirements and follow-up recorded through trip planning. Itineraries, ticketing and supplier inventory stay in your travel systems.",
-    title: "Travel enquiries tracked from first contact to post-trip follow-up.",
-    intro: [
-      "One trip can mean several conversations and changing requirements. Each conversation and open task is recorded against the traveller.",
-      "Works alongside travel booking and itinerary systems.",
+    summary: "Enquiries, bookings, trip preparation and follow-up for travel and tour operators. Itineraries, ticketing and supplier inventory stay in your travel systems.",
+    title: "Everything around the trip, from first enquiry to the next booking.",
+    intro: [],
+    points: [],
+    products: ["CRM", "Bookings", "Projects", "Desk", "Billing", "HRMS", "Skillberry", "Campaigns", "Surveys", "Loyalty", "ConfigX", "ServiceOps", "Sync"],
+    cards: [
+      { t: "Enquiry management", d: "Every enquiry recorded with the traveller's details and a follow-up owner, so no request goes unanswered.", products: ["CRM"] },
+      { t: "Traveller records", d: "Preferences, past trips and requirements kept with each traveller, ready for the next enquiry.", products: ["CRM"] },
+      { t: "Consultation bookings", d: "Planning calls and meetings with travel advisers booked into open slots, with availability visible to staff.", products: ["Bookings"] },
+      { t: "Trip preparation", d: "Preparation tasks for each trip assigned with owners and dates, and tracked until departure.", products: ["Projects"] },
+      { t: "Group tours & events", d: "Group departures and events planned with tasks, owners and the meeting space booked.", products: ["Projects", "Bookings"] },
+      { t: "Traveller support", d: "Questions and changes before and during a trip land in a shared queue and are tracked until resolved.", products: ["Desk"] },
+      { t: "Billing & accounts", d: "Invoices and payments recorded for bookings and group accounts, with overdue invoices followed up.", products: ["Billing"] },
+      { t: "Team & guide training", d: "Employee records for staff and tour guides, with training assigned and tracked.", products: ["HRMS", "Skillberry"] },
+      { t: "Trip packages & quotes", d: "Packages built from options such as accommodation, activities and extras, priced as the traveller chooses, and turned into a quote that matches the selection.", products: ["ConfigX"] },
+      { t: "Agents & suppliers", d: "Agents, suppliers and partners recorded with their territory and services, approved before they receive work, with agreements and certifications tracked and expiry dates flagged.", products: ["ServiceOps"] },
+      { t: "Post-trip engagement", d: "Feedback requested after the trip, with offers for the next one and loyalty for repeat travellers.", products: ["Campaigns", "Surveys", "Loyalty"] },
     ],
-    points: [
-      ["Enquiry management", "Enquiries and traveller details recorded, follow-up visible."],
-      ["Customer coordination", "Communication history kept for the whole relationship."],
-      ["Internal task management", "Trip preparation tasks assigned and tracked."],
-      ["Billing administration", "Invoices and payments recorded."],
-      ["Post-trip engagement", "Post-trip feedback collected, relationships kept for future enquiries."],
-    ],
-    products: ["CRM", "Projects", "Desk", "Billing", "Campaigns", "Surveys", "Loyalty"],
+    band: { t: "Connected to your booking and itinerary systems", d: "EVOQ apps and your booking and itinerary systems kept in step, where supported integrations exist.", products: ["Sync"] },
   },
 ];
 
@@ -148,8 +159,14 @@ export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
         .hm-step > span:not(.hm-node){font-size:12.5px;line-height:1.5;color:${MUTE}}
         .hm-node{position:absolute;left:14px;top:-14px;width:28px;height:28px;border-radius:50%;background:${FOREST};color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px #fff}
         .hm-next{position:absolute;right:-30px;top:50%;margin-top:-13px;background:#fff;border-radius:50%}
-        .hm-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-        .hm-card{display:flex;flex-direction:column;gap:10px;padding:22px 22px 20px;border-radius:18px;background:${CREAM};border:1px solid ${BEIGE};transition:transform .3s ease,box-shadow .3s ease,background .3s ease}
+        .hm-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+        .hm-card{grid-column:span 2;display:flex;flex-direction:column;gap:10px;padding:22px 22px 20px;border-radius:18px;background:${CREAM};border:1px solid ${BEIGE};transition:transform .3s ease,box-shadow .3s ease,background .3s ease}
+        .hm-card:last-child:nth-child(3n+1){grid-column:span 6}
+        .hm-card:last-child:nth-child(3n+2),.hm-card:nth-last-child(2):nth-child(3n+1){grid-column:span 3}
+        .hm-band{display:flex;align-items:center;gap:22px;margin-top:16px;padding:22px 26px;border-radius:18px;background:#fff;border:1px solid ${BEIGE};box-shadow:0 22px 40px -32px rgba(6,78,59,.5)}
+        .hm-band h4{margin:0;font-family:${SERIF};font-weight:400;font-size:21px;line-height:1.2;color:${FOREST}}
+        .hm-band p{margin:6px 0 0;font-size:14.5px;line-height:1.65;color:${MUTE}}
+        .hm-band .hm-marks{margin:0;padding:0;flex:0 0 auto}
         .hm-card:hover{transform:translateY(-4px);background:#fff;box-shadow:0 26px 44px -30px rgba(6,78,59,.5)}
         .hm-card h4{margin:0;font-family:${SERIF};font-weight:400;font-size:21px;line-height:1.2;color:${FOREST}}
         .hm-card p{margin:0;font-size:14.5px;line-height:1.65;color:${MUTE}}
@@ -157,9 +174,9 @@ export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
         .hm-marks span{display:inline-flex;align-items:center;gap:7px;padding:4px 11px 4px 5px;border-radius:999px;background:#fff;border:1px solid ${BEIGE};font-size:12px;font-weight:600;color:${FOREST}}
         .hm-card:hover .hm-marks span{background:${CREAM}}
         .hm-pts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 20px}
-        @media (max-width:1000px){.hm-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.hm-top{grid-template-columns:1fr;gap:28px}.hm-photo-lg{height:280px}}
+        @media (max-width:1000px){.hm-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.hm-card,.hm-card:last-child:nth-child(3n+2),.hm-card:nth-last-child(2):nth-child(3n+1){grid-column:auto}.hm-card:last-child:nth-child(odd){grid-column:1 / -1}.hm-band{flex-direction:column;align-items:flex-start;gap:12px}.hm-top{grid-template-columns:1fr;gap:28px}.hm-photo-lg{height:280px}}
         @media (max-width:900px){.hm-flow{grid-template-columns:1fr!important;gap:30px}.hm-next{right:auto;left:50%;margin-left:-13px;top:auto;bottom:-29px;margin-top:0;transform:rotate(90deg)}}
-        @media (max-width:760px){.hm-cards{grid-template-columns:1fr}.hm-grid{grid-template-columns:1fr;gap:6px}.hm-arch{height:200px}.hm-pts{grid-template-columns:1fr}.hm-panel{padding:28px 22px!important}}
+        @media (max-width:760px){.hm-cards{grid-template-columns:1fr}.hm-card:last-child:nth-child(odd){grid-column:auto}.hm-grid{grid-template-columns:1fr;gap:6px}.hm-arch{height:200px}.hm-pts{grid-template-columns:1fr}.hm-panel{padding:28px 22px!important}}
         @media (prefers-reduced-motion:reduce){.hm-panel{animation:none}.hm-photo,.hm-pick,.hm-tick,.hm-card{transition:none}}
       `}</style>
       <div className="hs-wrap">
@@ -213,6 +230,15 @@ export function HsModels({ eyebrow }: { eyebrow: ReactNode }) {
                   </div>
                 ))}
               </div>
+              {m.band && (
+                <div className="hm-band">
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h4>{m.band.t}</h4>
+                    <p>{m.band.d}</p>
+                  </div>
+                  <div className="hm-marks">{m.band.products.map((a) => <span key={a}><Mark a={a} />{a}</span>)}</div>
+                </div>
+              )}
             </>
           ) : (
             <>
