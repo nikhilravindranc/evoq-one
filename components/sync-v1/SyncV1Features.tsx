@@ -365,9 +365,11 @@ function useReduced() {
 const IDLE = { i: -1, p: 0, x: 0, y: 0, flip: false };
 
 /* plays the acts one after another and loops; i is the act, p turns 1 when its click lands */
-function useDemo(acts: Act[], active: boolean, paused: boolean, page: RefObject<HTMLDivElement | null>) {
+function useDemo(acts: Act[], active: boolean, paused: boolean, page: RefObject<HTMLDivElement | null>, onEnd?: () => void) {
   const reduce = useReduced();
   const [d, setD] = useState(IDLE);
+  const end = useRef(onEnd);
+  useEffect(() => { end.current = onEnd; });
 
   useEffect(() => {
     if (!active || paused || reduce) return;
@@ -385,7 +387,8 @@ function useDemo(acts: Act[], active: boolean, paused: boolean, page: RefObject<
       if (acts[i].click || acts[i].auto) at(() => setD((s) => ({ ...s, p: 1 })), 950);
       if (i + 1 < acts.length) at(() => go(i + 1), acts[i].hold);
       else {
-        at(() => setD(IDLE), acts[i].hold);
+        // when the tour is running, the next feature takes over; otherwise the same demo plays again
+        at(() => { setD(IDLE); end.current?.(); }, acts[i].hold);
         at(() => go(0), acts[i].hold + 1300);
       }
     };
@@ -401,11 +404,11 @@ function useDemo(acts: Act[], active: boolean, paused: boolean, page: RefObject<
 }
 
 /* the app window: a screen of the app, and a cursor using it */
-function Win({ f, active }: { f: Feature; active: boolean }) {
+function Win({ f, active, onEnd }: { f: Feature; active: boolean; onEnd?: () => void }) {
   const [paused, setPaused] = useState(false);
   const page = useRef<HTMLDivElement>(null);
   const reduce = useReduced();
-  const d = useDemo(f.demo, active, paused, page);
+  const d = useDemo(f.demo, active, paused, page, onEnd);
 
   return (
     <div className="fm-win" id={`fm-${f.id}`} role="tabpanel" aria-labelledby={`fmb-${f.id}`} hidden={!active}>
@@ -446,11 +449,18 @@ function Explorer() {
   // a link to another feature (a changed address hash) wins over the last click
   const id = hash !== sel?.hash && FEATURES.some((f) => f.id === hash) ? hash : sel?.id ?? FEATURES[0].id;
 
+  // the features take turns on their own until someone picks one; then the visitor is in control
+  const [tour, setTour] = useState(true);
+  const next = () => {
+    const k = FEATURES.findIndex((f) => f.id === id);
+    setSel({ id: FEATURES[(k + 1) % FEATURES.length].id, hash });
+  };
   const go = (nid: string) => {
     window.history.replaceState(null, "", `#${nid}`);
     setSel({ id: nid, hash: nid });
+    setTour(false);
   };
-  const win = (f: Feature) => <Win key={f.id} f={f} active={f.id === id} />;
+  const win = (f: Feature) => <Win key={f.id} f={f} active={f.id === id} onEnd={tour && !mobile && f.id === id ? next : undefined} />;
 
   return (
     <section className="sx-sec sx-out fm-sec" id="features-explorer">
