@@ -339,7 +339,7 @@ export const GUIDES: Record<string, { page: ReactNode; demo: Act[]; bare?: boole
 };
 
 /* a window with the app's top bar; the cursor only plays while the window is on screen, and stops when it is hovered */
-export function AppGuide({ id }: { id: string }) {
+export function AppGuide({ id, onEnd }: { id: string; onEnd?: () => void }) {
   const g = GUIDES[id];
   const root = useRef<HTMLDivElement>(null);
   const page = useRef<HTMLDivElement>(null);
@@ -352,7 +352,7 @@ export function AppGuide({ id }: { id: string }) {
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  const d = useDemo(g.demo, seen, paused, page);
+  const d = useDemo(g.demo, seen, paused, page, onEnd);
   return (
     <div className="ag-win" ref={root}>
       <div className="ag-bar"><div className="ag-dots"><i /><i /><i /></div><span>{g.label ?? "EVOQ ServiceOps"}</span></div>
@@ -391,7 +391,7 @@ export const guideCss = `
   .fz-area{min-width:0}
   .ag-win,.ag,.wk,.st-s,.su-pane{min-width:0}
   .ag-tr>*{min-width:0}
-  .ag-win{border-radius:24px;background:#fff;box-shadow:0 40px 80px -44px rgba(32,26,20,.55),0 0 0 1px ${LINE};overflow:hidden;margin-bottom:32px}
+  .ag-win{border-radius:24px;background:#fff;box-shadow:0 40px 80px -44px rgba(32,26,20,.55),0 0 0 1px ${LINE};overflow:hidden;margin-bottom:20px}
   .ag-bar{display:flex;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid ${LINE};background:#FAF8F5;font-size:12.5px;color:${MUTED}}
   .ag-dots{display:flex;gap:6px}.ag-dots i{width:10px;height:10px;border-radius:50%;background:#E4DED5}
   .ag-dots i:nth-child(1){background:#F26D5B}.ag-dots i:nth-child(2){background:#F5B83D}.ag-dots i:nth-child(3){background:#58C26B}
@@ -620,6 +620,8 @@ export const guideCss = `
     .ag-sync,.ag-ic{display:none}
     .ag-hd p{display:none}
     .ag-hd{flex-wrap:wrap}
+    .ag-stats{grid-template-columns:1fr 1fr}
+    .fd-tabs,.mn-tabs{flex-wrap:wrap;gap:6px 14px}
     .ag-tr.r4{grid-template-columns:2fr 1fr 1fr}.ag-tr.r4>:nth-child(1),.ag-tr.r4>:nth-child(3),.ag-tr.r4>:nth-child(4){display:none}
     .ag-tr.r5{grid-template-columns:1fr 2fr 1fr}.ag-tr.r5>:nth-child(3),.ag-tr.r5>:nth-child(5){display:none}
     .ag-tr.r6{grid-template-columns:2fr 1fr 1fr}.ag-tr.r6>:nth-child(2),.ag-tr.r6>:nth-child(3){display:none}

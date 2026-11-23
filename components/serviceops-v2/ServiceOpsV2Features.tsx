@@ -1,15 +1,15 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { AREAS, ROLES, type F } from "./featuresData";
-import { AMBER, AMBER_DEEP, BODY, G1, G2, INK, LINE, MUTED } from "./palette";
+import { AMBER_DEEP, BODY, G1, G2, INK, LINE, MUTED } from "./palette";
 import { V2Demo, V2Shell } from "./V2Shell";
 import { AppGuide, GUIDES, guideCss } from "./AppGuide";
 import { Closing, homeCss, Label, P } from "./ServiceOpsV2";
 
-/* ServiceOps v2, Features. The catalogue lives in featuresData:
-   real photos with the matching app screen over each area. People and companies are sample data. */
+/* ServiceOps v2, Features. The catalogue lives in featuresData. The catalogue section shows one area at a time: an app window
+   with a cursor demo, the five main features, and the rest on request. People and companies are sample data. */
 
 /* features that are not built yet are left off this page: it lists what the app does today */
 const shown = (items: F[]) => items.filter((f) => f.s !== "planned");
@@ -50,34 +50,115 @@ function Row({ f }: { f: F }) {
   );
 }
 
-const TOC = [...AREAS.map((a, n) => ({ id: a.id, k: AREA_TEXT[a.id]?.k ?? a.k, n: String(n + 1).padStart(2, "0") }))];
+/* the five features most people look for in each area; the rest open under them */
+const TOP: Record<string, string[]> = {
+  work: ["Requests inbox", "Work orders", "Estimates", "Dispatch", "Jobs"],
+  field: ["Technician app", "Required checklist steps", "Customer sign-off options", "Problem buttons", "Works offline"],
+  records: ["Customers", "Partners", "Assets", "Inventory", "Catalog"],
+  money: ["Billing", "Customer payment link", "Insights and Reports", "Profitability", "Job costing tab"],
+  ai: ["EVI assistant", "Agents", "AI hub", "Approve, dismiss and Ask why", "Privacy protections"],
+  customers: ["Online booking page", "Estimate approval link", "Payment link", "Review page", "Customer portal"],
+  automation: ["Automation rules", "Run now with a dry run", "Events", "Bell inbox", "Delivery log"],
+  look: ["Layouts", "Colour themes and banner", "Customize Home page", "Global search", "Custom fields"],
+  setup: ["Roles and permissions", "Users and invites", "Settings", "Activity log", "Integrations"],
+};
 
-/* the area in view on the right is the one lit on the left */
-function Toc() {
-  const [on, setOn] = useState(TOC[0].id);
-  useEffect(() => {
-    const els = TOC.map((t) => document.getElementById(t.id)).filter((e): e is HTMLElement => !!e);
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const line = window.innerHeight * 0.38;
-      let cur = TOC[0].id;
-      for (const el of els) if (el.getBoundingClientRect().top <= line) cur = el.id;
-      setOn((p) => (p === cur ? p : cur));
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); if (raf) cancelAnimationFrame(raf); };
-  }, []);
+function useMedia(q: string) {
+  return useSyncExternalStore(
+    (cb) => { const m = window.matchMedia(q); m.addEventListener("change", cb); return () => m.removeEventListener("change", cb); },
+    () => window.matchMedia(q).matches,
+    () => false,
+  );
+}
+function useHash() {
+  return useSyncExternalStore(
+    (cb) => { window.addEventListener("hashchange", cb); return () => window.removeEventListener("hashchange", cb); },
+    () => window.location.hash.slice(1),
+    () => "",
+  );
+}
+
+/* one area at a time: the list of areas on the left, and on the right the app window, the five main features and the rest */
+function Explorer() {
+  const hash = useHash();
+  const mobile = useMedia("(max-width:899px)");
+  const reduced = useMedia("(prefers-reduced-motion: reduce)");
+  const [sel, setSel] = useState<{ id: string; hash: string } | null>(null);
+  const [tour, setTour] = useState(true);
+  const [held, setHeld] = useState(false);
+  const [all, setAll] = useState<string | null>(null);
+  // a link to another area (a changed address hash) wins over the last click
+  const id = hash !== sel?.hash && AREAS.some((a) => a.id === hash) ? hash : sel?.id ?? AREAS[0].id;
+
+  const go = (nid: string) => {
+    window.history.replaceState(null, "", `#${nid}`);
+    setSel({ id: nid, hash: nid });
+    setTour(false);
+  };
+  // the areas take turns on their own, each after its demo has played, until a visitor picks one or is reading
+  const next = () => {
+    const k = AREAS.findIndex((a) => a.id === id);
+    setSel({ id: AREAS[(k + 1) % AREAS.length].id, hash });
+  };
+  const linked = hash !== sel?.hash && AREAS.some((a) => a.id === hash);
+  const running = tour && !held && !mobile && !reduced && !linked;
+
+  const body = (a: (typeof AREAS)[number]) => {
+    const items = shown(a.items);
+    const top = (TOP[a.id] ?? []).map((n) => items.find((f) => f.n === n)).filter((f): f is F => !!f);
+    const rest = items.filter((f) => !top.includes(f));
+    const open = all === a.id;
+    return (
+      <div className="fe-body" onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
+        {GUIDES[a.id] && <AppGuide key={a.id} id={a.id} onEnd={running ? next : undefined} />}
+        <div className="fe-top">
+          {top.map((f) => (
+            <div key={f.n} className="fe-card">
+              <b>{f.n}</b>
+              <p>{f.d}{f.note && !/demo/i.test(f.note) && <span className="fz-note"> {f.note}</span>}</p>
+            </div>
+          ))}
+        </div>
+        {rest.length > 0 && (
+          <>
+            <button type="button" className="fe-more" aria-expanded={open} onClick={() => { setAll(open ? null : a.id); setTour(false); }}>
+              {open ? "Show fewer features" : `Show all ${items.length} features`}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: open ? "rotate(180deg)" : "none" }}><path d="m6 9 6 6 6-6" /></svg>
+            </button>
+            {open && <div className="fz-rows fe-rest">{rest.map((f) => <Row key={f.n} f={f} />)}</div>}
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <nav className="fz-toc" aria-label="Features by area">
-      <span className="fz-toc-k">On this page</span>
-      {TOC.map((t) => (
-        <a key={t.id} href={`#${t.id}`} className={t.id === on ? "on" : undefined} aria-current={t.id === on ? "true" : undefined}><i>{t.n}</i>{t.k}</a>
-      ))}
-    </nav>
+    <div className="fe">
+      <div>
+        <p className="fe-hint"><span>Select an area</span><span>{String(AREAS.findIndex((a) => a.id === id) + 1).padStart(2, "0")} / {String(AREAS.length).padStart(2, "0")}</span></p>
+        <ul className="fe-list" role={mobile ? undefined : "tablist"} aria-label="Features by area" aria-orientation="vertical">
+          {AREAS.map((a, n) => {
+            const on = a.id === id;
+            return (
+              <li key={a.id} id={a.id} className={`fe-item${on ? " on" : ""}`}>
+                <button type="button" role={mobile ? undefined : "tab"} aria-selected={mobile ? undefined : on} aria-expanded={mobile ? on : undefined} onClick={() => go(a.id)}>
+                  <i>{String(n + 1).padStart(2, "0")}</i><span>{AREA_TEXT[a.id]?.k ?? a.k}</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </button>
+                {on && (
+                  <div className="fe-desc">
+                    <p className="fe-t">{AREA_TEXT[a.id]?.title ?? a.title}</p>
+                    <p>{a.lead}</p>
+                    {mobile && body(a)}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      {!mobile && <div role="tabpanel" aria-label={AREA_TEXT[id]?.k ?? AREAS.find((a) => a.id === id)!.k}>{body(AREAS.find((a) => a.id === id)!)}</div>}
+    </div>
   );
 }
 
@@ -100,6 +181,13 @@ export function ServiceOpsV2Features() {
           <div className="fh-vis">
             <div className="fh-photo"><img src="/serviceops/v2/install.jpg" alt="Two technicians reviewing a job on a tablet at a site" style={{ objectPosition: "78% 45%" }} /></div>
           </div>
+        </div>
+      </section>
+
+      {/* the catalogue */}
+      <section className="v2-sec v2-out v2-grey" id="catalogue">
+        <div className="v2-in">
+          <Explorer />
         </div>
       </section>
 
@@ -129,27 +217,6 @@ export function ServiceOpsV2Features() {
         </div>
       </section>
 
-      {/* the catalogue */}
-      <section className="v2-sec v2-out v2-grey" id="catalogue">
-        <div className="v2-in fz">
-          <Toc />
-          <div className="fz-main">
-            {AREAS.map((a, n) => {
-              return (
-                <section key={a.id} id={a.id} className="fz-area" data-rv>
-                  <div className="fz-area-h">
-                    <span className="fz-num">{String(n + 1).padStart(2, "0")}</span>
-                    <div><span className="fz-k">{AREA_TEXT[a.id]?.k ?? a.k}</span><h3>{AREA_TEXT[a.id]?.title ?? a.title}</h3><p>{a.lead}</p></div>
-                  </div>
-                  {GUIDES[a.id] && <AppGuide id={a.id} />}
-                  <div className="fz-rows">{shown(a.items).map((f) => <Row key={f.n} f={f} />)}</div>
-                </section>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       <Closing />
     </V2Shell>
   );
@@ -174,7 +241,7 @@ const css = `
   .fh-kr span{display:grid;gap:3px;justify-items:start}.fh-kr small{font-size:13px;color:${MUTED}}
 
 
-  /* roles, a person on each card */
+  /* roles: pick one and see what it opens and uses */
   .fr{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
   .fr li{display:flex;flex-direction:column;padding:12px 12px 20px;border-radius:20px;background:${G1};box-shadow:inset 0 0 0 1px ${LINE}}
   .fr figure{position:relative;margin:0 0 16px;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:${G2}}
@@ -186,21 +253,38 @@ const css = `
   .fr-opens em{padding:3px 10px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE};font-style:normal;font-size:12px;font-weight:600;color:${INK}}
 
   /* the catalogue */
-  .fz{display:grid;grid-template-columns:220px minmax(0,1fr);gap:64px;align-items:start}
-  .fz-toc{position:sticky;top:84px;display:grid;gap:2px}
-  .fz-toc-k{margin-bottom:8px;font-family:var(--font-display),system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${MUTED}}
-  .fz-toc a{position:relative;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:500;color:${MUTED};text-decoration:none;transition:background .15s ease,color .15s ease}
-  .fz-toc a i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;font-style:normal;font-size:11px;font-weight:600;color:${AMBER_DEEP};transition:background .2s ease}
-  .fz-toc a:hover{background:#fff;color:${INK}}
-  .fz-toc a.on{background:#fff;color:${INK};font-weight:600;box-shadow:0 10px 24px -16px rgba(32,26,20,.45),0 0 0 1px ${LINE}}
-  .fz-toc a.on i{background:${AMBER};color:${INK}}
-  .fz-main{display:grid;gap:88px}
-  .fz-area{scroll-margin-top:84px}
-  .fz-area-h{display:grid;grid-template-columns:52px minmax(0,1fr);gap:18px;align-items:start;margin-bottom:28px}
-  .fz-num{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:${AMBER};font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:700;color:${INK}}
-  .fz-k{display:block;margin-bottom:6px;font-family:var(--font-display),system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${AMBER_DEEP}}
-  .fz-area-h h3{letter-spacing:-.015em}
-  .fz-area-h p{margin:6px 0 0;font-size:16.5px;color:${BODY}}
+  .fe{display:grid;grid-template-columns:minmax(0,.34fr) minmax(0,.66fr);gap:48px;align-items:start}
+  .fe>div:first-child{position:sticky;top:84px}
+  .fe-hint{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;padding:0 4px;font-family:var(--font-display),system-ui,sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${MUTED}}
+  .fe-list{list-style:none;margin:0;padding:0;border-bottom:1px solid #D9D3C9}
+  .fe-item{scroll-margin-top:84px;border-top:1px solid #D9D3C9}
+  .fe-item.on,.fe-item.on+.fe-item{border-top-color:transparent}
+  .fe-item>button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border-radius:14px;cursor:pointer;font-family:var(--font-display),system-ui,sans-serif;font-size:16px;font-weight:600;color:${BODY};transition:background .2s ease,color .2s ease}
+  .fe-item>button:hover{background:#fff;color:${INK}}
+  .fe-item>button:focus-visible{outline:2px solid ${AMBER_DEEP};outline-offset:2px}
+  .fe-item>button i{flex:0 0 auto;width:22px;font-style:normal;font-size:11px;font-weight:600;letter-spacing:.14em;color:${MUTED}}
+  .fe-item>button span{flex:1}
+  .fe-item>button svg{flex:0 0 auto;width:18px;height:18px;opacity:.5;transition:transform .2s ease,opacity .2s ease}
+  .fe-item>button:hover svg{opacity:1;transform:translateX(3px)}
+  .fe-item.on>button{background:#fff;color:${INK};font-weight:700;box-shadow:0 14px 30px -20px rgba(32,26,20,.5),0 0 0 1px ${LINE}}
+  .fe-item.on>button i{color:${AMBER_DEEP}}
+  .fe-item.on>button svg{opacity:1;color:${AMBER_DEEP};transform:none}
+  .fe-desc{padding:12px 16px 18px}
+  .fe-desc p{margin:0;font-size:14.5px;line-height:1.6;color:${BODY}}
+  .fe-desc .fe-t{margin-bottom:4px;font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;font-weight:600;color:${INK}}
+  .fe-body{min-width:0}
+  .fe-top{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .fe-card{padding:16px 18px;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px ${LINE}}
+  .fe-card:last-child:nth-child(odd){grid-column:1 / -1}
+  .fe-card b{display:block;font-family:var(--font-display),system-ui,sans-serif;font-size:16px;font-weight:600;color:${INK}}
+  .fe-card p{margin:5px 0 0;font-size:14px;line-height:1.55;color:${BODY}}
+  .fe-more{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:11px 18px;border-radius:12px;cursor:pointer;background:#fff;box-shadow:inset 0 0 0 1.5px ${AMBER_DEEP};font-family:var(--font-display),system-ui,sans-serif;font-size:14px;font-weight:600;color:${AMBER_DEEP};transition:background .2s ease}
+  .fe-more:hover{background:#FFF8EC}
+  .fe-more:focus-visible{outline:2px solid ${AMBER_DEEP};outline-offset:2px}
+  .fe-more svg{width:16px;height:16px;transition:transform .2s ease}
+  .fe-rest{margin-top:14px;animation:feIn .35s ease both}
+  @media (max-width:420px){.fr{grid-template-columns:1fr}}
+  @keyframes feIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .fz-rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
   .fz-row{padding:16px 0;border-top:1px solid #DDD8D0}
   .fz-row-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -208,7 +292,8 @@ const css = `
   .fz-row p{margin:4px 0 0;font-size:15px;line-height:1.55;color:${BODY}}
   .fz-note{color:${MUTED}}
 
-  @media (max-width:1180px){.fr{grid-template-columns:repeat(2,minmax(0,1fr))}.fz{grid-template-columns:minmax(0,1fr)}.fz-toc{display:none}}
+  @media (max-width:1180px){.fr{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:899px){.fe{grid-template-columns:minmax(0,1fr);gap:0}.fe>div:first-child{position:static}.fe-item .fe-body{margin-top:14px}}
   @media (max-width:980px){
     .fh{grid-template-columns:1fr;gap:0;padding:0 20px 48px;min-height:0}
     .fh-copy{padding:56px 0 36px}
@@ -218,8 +303,7 @@ const css = `
   @media (max-width:640px){
     .fh{padding:0 16px 40px}
     .fh-vis{height:auto}.fh-photo{position:relative;width:100%;height:240px}.fh-key{position:relative;left:auto;bottom:auto;width:auto;margin:-40px 12px 0}
+    .fe-top{grid-template-columns:1fr}
     .fr{grid-template-columns:1fr 1fr;gap:12px}.fr li{padding:8px 8px 16px}
-    .fz-area-h{grid-template-columns:40px minmax(0,1fr);gap:12px}.fz-num{width:40px;height:40px;border-radius:12px;font-size:14px}
   }
-  @media (max-width:420px){.fr{grid-template-columns:1fr}}
 `;
