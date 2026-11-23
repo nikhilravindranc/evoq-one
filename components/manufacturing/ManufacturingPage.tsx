@@ -2,10 +2,9 @@ import type { CSSProperties, ReactNode } from "react";
 import { Topbar } from "@/components/hero/Topbar";
 import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
-import { ConfigXWindow } from "./ConfigX";
 import { MfMotion } from "./MfMotion";
 import { EnquiryModal } from "./EnquiryModal";
-import { SolutionsTabs } from "./SolutionsTabs";
+import { ManufacturingSolutions } from "./ManufacturingSolutions";
 import { HeroVisual } from "./HeroVisual";
 
 const G = "#1F2933";
@@ -118,86 +117,6 @@ function Hero() {
         </div>
       </div>
     </section>
-  );
-}
-
-/* ------------------------------------------------------------------ 2. Lifecycle */
-/* ------------------------------------------------------------------ 2. Lifecycle */
-function Lifecycle() {
-  const steps: [string, string, string, string, string?][] = [
-    ["chat", "Enquiry", "Enquiries, accounts and opportunities recorded as they arrive.", "CRM"],
-    ["cog", "Configure", "Options and specifications defined against the customer’s requirements.", "ConfigX"],
-    ["doc", "Quote", "Quotes that match the selected configuration and price.", "ConfigX"],
-    ["cart", "Order", "Agreed quotes converted into orders.", "CRM · Finance · Billing"],
-    ["factory", "Production", "Preparation tasks assigned and tracked ahead of delivery.", "Projects"],
-    ["box", "Inventory & fulfillment", "Stock levels and supply tracked against open orders.", "Inventory", "Also informs production"],
-    ["truck", "Delivery", "Delivery activities scheduled against customer commitments.", "Projects"],
-    ["wrench", "Service", "Work orders, technician visits and support requests handled after delivery.", "ServiceOps · Desk"],
-  ];
-  return (
-    <Sec bg="#fff" pad="48px 0 80px" id="lifecycle">
-      <Eyebrow>From enquiry to service</Eyebrow>
-      <div className="mf-split2" style={{ alignItems: "end" }}>
-        <h2 className="mf-h2">A product sale involves <span style={{ color: SL, fontWeight: 400 }}>enquiries, quotes, delivery and service.</span></h2>
-        <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "58ch" }}>Enquiry, configuration, quote, order, delivery and service each produce records the next stage needs. EVOQ products carry them forward.</p>
-      </div>
-      <div className="mf-g4" style={{ marginTop: 40, rowGap: 22 }}>
-        {steps.map(([ic, t, d, app, note], i) => (
-          <div key={t} style={{ position: "relative", border: `1px solid ${CG}`, borderRadius: 14, padding: "20px 20px 18px", background: "#fff", display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span className="mf-stepic" style={{ width: 46, height: 46, borderRadius: 11, border: `1px solid ${CG}`, background: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", animationDelay: `${i * 1.05}s` }}><Ic n={ic} s={21} c={G} /></span>
-              <span style={{ fontSize: 11, color: LS, letterSpacing: ".14em", fontWeight: 600 }}>0{i + 1}</span>
-            </div>
-            <div style={{ marginTop: 16, fontSize: 16, fontWeight: 700, color: G }}>{t}</div>
-            <p style={{ margin: "7px 0 0", fontSize: 12.5, lineHeight: 1.6, color: ST }}>{d}</p>
-            {note && <span style={{ marginTop: 10, alignSelf: "flex-start", fontSize: 10.5, fontWeight: 700, color: BL, background: PB, padding: "3px 10px", borderRadius: 99, display: "inline-flex", gap: 6, alignItems: "center" }}><Ic n="sync" s={11} c={BL} w={2.2} />{note}</span>}
-            <div style={{ marginTop: "auto", paddingTop: 14 }}>
-              <span style={{ display: "inline-block", borderTop: `1px solid ${PG}`, paddingTop: 11, width: "100%", fontSize: 11, fontWeight: 700, color: SL }}>{app}</span>
-            </div>
-            {i % 4 !== 3 && <span aria-hidden="true" className="mf-arrow" style={{ position: "absolute", right: -17, top: 34, zIndex: 2, width: 22, height: 22, borderRadius: "50%", background: "#fff", border: `1px solid ${CG}`, display: "inline-flex", alignItems: "center", justifyContent: "center" }}><Ic n="arrow" s={12} c={BL} w={2.2} /></span>}
-          </div>
-        ))}
-      </div>
-      <div style={{ position: "relative", marginTop: 26 }}>
-        <div aria-hidden="true" style={{ position: "absolute", left: "6%", right: "6%", top: -14, height: 14, borderLeft: `1.5px dashed ${CG}`, borderRight: `1.5px dashed ${CG}` }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap", borderRadius: 14, border: `1px solid ${PB}`, background: `linear-gradient(90deg, ${PB}, #fff 80%)`, padding: "18px 24px" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/billing/images/sync-menu-icn.png" alt="" width={40} height={40} style={{ width: 40, height: 40, objectFit: "contain" }} />
-          <div style={{ flex: "1 1 320px" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: BL }}>Across the lifecycle</div>
-            <div style={{ marginTop: 3, fontSize: 14, color: G, fontWeight: 600 }}>Sync</div>
-          </div>
-          <p style={{ margin: 0, flex: "2 1 380px", fontSize: 13.5, lineHeight: 1.6, color: ST }}>Data shared between EVOQ products and existing systems through supported integrations.</p>
-        </div>
-      </div>
-    </Sec>
-  );
-}
-
-/* ------------------------------------------------------------------ 3. ConfigX */
-function ConfigX() {
-  const steps = [["cog", "Configure"], ["eye", "Visualize"], ["tag", "Price"], ["doc", "Quote"]];
-  return (
-    <Sec bg={PG} grid id="configx">
-      <div className="mf-split2" style={{ alignItems: "center", gap: 48 }}>
-        <div>
-          <Eyebrow>Complex product selling</Eyebrow>
-          <h2 className="mf-h2">Configure complex products <span style={{ color: LS, fontWeight: 400 }}>and prepare accurate quotes.</span></h2>
-          <p style={{ margin: "22px 0 0", fontSize: 15.5, lineHeight: 1.7, color: ST, maxWidth: "48ch" }}>Options, dimensions, materials and pricing rules vary by product. ConfigX guides the sales team through each selection, shows the result and calculates the price for the quote.</p>
-          <div style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            {steps.map(([ic, t], i) => (
-              <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 14px", borderRadius: 99, background: "#fff", border: `1px solid ${CG}`, fontSize: 13, fontWeight: 700, color: G }}><Ic n={ic} s={16} c={i === 0 ? BL : G} />{t}</span>
-                {i < 3 && <Ic n="arrow" s={15} c={LS} />}
-              </span>
-            ))}
-          </div>
-          <p style={{ margin: "20px 0 0", fontSize: 14, lineHeight: 1.65, color: SL, maxWidth: "52ch" }}>From modular furniture to industrial equipment, configuration follows the options each product offers.</p>
-          <div style={{ marginTop: 26 }}><Btn enquiry>Explore ConfigX <Ic n="arrow" s={15} c="#fff" w={2.2} /></Btn></div>
-        </div>
-        <ConfigXWindow />
-      </div>
-    </Sec>
   );
 }
 
@@ -314,9 +233,7 @@ export function ManufacturingPage() {
       <HeroShell bg={{ background: "#fff", backgroundImage: `linear-gradient(${CG}38 1px, transparent 1px), linear-gradient(90deg, ${CG}38 1px, transparent 1px)`, backgroundSize: "44px 44px" }} topbar={<Topbar darkCTA={false} light ctaColor={G} />}>
         <Hero />
       </HeroShell>
-      <Lifecycle />
-      <SolutionsTabs />
-      <ConfigX />
+      <ManufacturingSolutions />
       <Segments />
       <Cta />
       <Footer background={G} />
