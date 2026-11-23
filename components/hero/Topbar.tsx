@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Chevron, EvoqMonogram } from "./icons";
@@ -134,7 +134,7 @@ const PRODUCT_GROUPS: {
   },
   {
     title: "Platform",
-    items: [{ name: "Sync", sub: "Unify data across systems", icon: SyncGlyph, tile: "bg-[#0F9D74]", href: "/products/sync", logo: "sync-menu-icn.png" }],
+    items: [{ name: "Sync", sub: "Unify data across systems", icon: SyncGlyph, tile: "bg-[#7E22CE]", href: "/products/sync", logo: "/logos/sync-icon.svg" }],
   },
   {
     title: "AI",
@@ -238,11 +238,25 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [subOpen, setSubOpen] = useState(false);
   const [showGetStarted, setShowGetStarted] = useState(false);
+  const [menuPos, setMenuPos] = useState<{ left: number; width: number } | null>(null);
   const [regionOpen, setRegionOpen] = useState(false);
   const { region, setRegion } = useRegion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const solutionsRef = useRef<HTMLDivElement>(null);
   const regionRef = useRef<HTMLDivElement>(null);
+
+  /* Below 1024px the Products menu spans the screen (with a 12px margin) instead of hanging under its button. */
+  const placeMenu = useCallback(() => {
+    const el = wrapRef.current;
+    if (!el || window.innerWidth >= 1024) return setMenuPos(null);
+    setMenuPos({ left: 12 - el.getBoundingClientRect().left, width: window.innerWidth - 24 });
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    window.addEventListener("resize", placeMenu);
+    return () => window.removeEventListener("resize", placeMenu);
+  }, [open, placeMenu]);
 
   useEffect(() => {
     if (!open) return;
@@ -351,7 +365,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
             }`}
             aria-expanded={open}
             aria-haspopup="menu"
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => { placeMenu(); setOpen((o) => !o); }}
           >
             <span>Products</span>
             <span
@@ -365,8 +379,8 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
           {open && (
             <div
               role="menu"
-              className="absolute left-1/2 top-[calc(100%+14px)] w-[880px] max-w-[92vw] -translate-x-1/2 rounded-[24px] bg-white p-6 text-[#1F2430] shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
-              style={{ animation: "menuIn 0.15s ease forwards" }}
+              className="absolute top-[calc(100%+12px)] max-h-[calc(100vh-110px)] overflow-y-auto rounded-[20px] bg-white p-4 text-[#1F2430] sm:p-5 lg:left-1/2 lg:top-[calc(100%+14px)] lg:max-h-none lg:w-[880px] lg:max-w-[92vw] lg:-translate-x-1/2 lg:overflow-visible lg:rounded-[24px] lg:p-6 shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45),0_2px_6px_rgba(31,36,48,0.08),inset_0_0_0_1px_rgba(31,36,48,0.04)]"
+              style={{ animation: "menuIn 0.15s ease forwards", ...(menuPos ? { left: menuPos.left, width: menuPos.width } : {}) }}
             >
               <style>{`
                 @keyframes menuIn {
@@ -375,11 +389,11 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                 }
               `}</style>
               {/* Caret */}
-              <div className="absolute -top-[7px] left-1/2 h-3.5 w-3.5 -translate-x-1/2 rotate-45 rounded-sm bg-white shadow-[-1px_-1px_0_rgba(31,36,48,0.04)]" />
+              <div className="absolute -top-[7px] left-1/2 hidden h-3.5 w-3.5 lg:block -translate-x-1/2 rotate-45 rounded-sm bg-white shadow-[-1px_-1px_0_rgba(31,36,48,0.04)]" />
 
-              <div className="grid grid-cols-3 gap-x-8 gap-y-6">
+              <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-6">
                 {PRODUCT_GROUPS.map((group, i) => (
-                  <div key={group.title} className={i >= 3 ? "border-t border-[#EEF0F5] pt-6" : ""}>
+                  <div key={group.title} className={i >= 3 ? "lg:border-t lg:border-[#EEF0F5] lg:pt-6" : ""}>
                     <p className="px-2.5 pb-2 text-[13px] font-bold text-[#1F2430]">{group.title}</p>
                     <ul className="flex flex-col gap-0.5 p-0 list-none m-0">
                       {group.items.map((p) => (
@@ -393,7 +407,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                               <AIBadge size={34} />
                             ) : p.logo ? (
                               // eslint-disable-next-line @next/next/no-img-element
-                              <img src={`/site/images/${p.logo}`} alt="" width={34} height={34} className="h-[34px] w-[34px] shrink-0 rounded-[9px] object-contain" />
+                              <img src={p.logo.startsWith("/") ? p.logo : `/site/images/${p.logo}`} alt="" width={34} height={34} className="h-[34px] w-[34px] shrink-0 rounded-[9px] object-contain" />
                             ) : (
                               <span className={`flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] ${p.tile}`}>
                                 <p.icon size={17} />
@@ -401,7 +415,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
                             )}
                             <span className="flex flex-1 flex-col leading-tight">
                               <span className="text-[14px] font-semibold text-[#1F2430]">{p.name}</span>
-                              <span className="mt-px whitespace-nowrap text-[12px] font-normal text-[#5F6B7A]">{p.sub}</span>
+                              <span className="mt-px text-[12px] font-normal text-[#5F6B7A] lg:whitespace-nowrap">{p.sub}</span>
                             </span>
                           </Link>
                         </li>
