@@ -348,7 +348,7 @@ function ArtServiceOps() {
   return (
     <ArtFrame
       pk="serviceops"
-      photo={{ src: "/team/card-serviceops-v2.jpg", position: "center", filter: "saturate(0.55) brightness(0.98)" }}
+      photo={{ src: "/team/card-serviceops.jpg", position: "center", filter: "saturate(0.55) brightness(0.98)" }}
     >
       <div className="pf-float" style={{ left: 22, top: 22 }}>
         <div className="pf-float-hd">

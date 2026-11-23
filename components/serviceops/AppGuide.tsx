@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Ic } from "../serviceops/icons";
+import { Ic } from "./icons";
 import { DemoCursor, demoCursorCss, useDemo, type Act } from "../shared/appDemo";
 import { AMBER, AMBER_DEEP, AMBER_SOFT, BODY, G1, INK, LINE, MUTED } from "./palette";
 

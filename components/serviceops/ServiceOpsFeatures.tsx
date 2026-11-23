@@ -4,11 +4,11 @@
 import { useState, useSyncExternalStore } from "react";
 import { AREAS, ROLES, type F } from "./featuresData";
 import { AMBER_DEEP, BODY, G1, G2, INK, LINE, MUTED } from "./palette";
-import { V2Demo, V2Shell } from "./V2Shell";
+import { SoDemo, ServiceOpsShell } from "./ServiceOpsShell";
 import { AppGuide, GUIDES, guideCss } from "./AppGuide";
-import { Closing, homeCss, Label, P } from "./ServiceOpsV2";
+import { Closing, homeCss, Label, P } from "./ServiceOpsHome";
 
-/* ServiceOps v2, Features. The catalogue lives in featuresData. The catalogue section shows one area at a time: an app window
+/* ServiceOps, Features. The catalogue lives in featuresData. The catalogue section shows one area at a time: an app window
    with a cursor demo, the five main features, and the rest on request. People and companies are sample data. */
 
 /* features that are not built yet are left off this page: it lists what the app does today */
@@ -162,9 +162,9 @@ function Explorer() {
   );
 }
 
-export function ServiceOpsV2Features() {
+export function ServiceOpsFeatures() {
   return (
-    <V2Shell page="features">
+    <ServiceOpsShell page="features">
       <style>{homeCss}</style>
       <style>{css}</style>
       <style>{guideCss}</style>
@@ -176,7 +176,7 @@ export function ServiceOpsV2Features() {
             <Label>ServiceOps features</Label>
             <h1>From the first request to the finished job.</h1>
             <p>The features in the app today, by area. Each line says what you can do.</p>
-            <div className="v2-ctas"><V2Demo location="features_hero">Request a Demo</V2Demo></div>
+            <div className="v2-ctas"><SoDemo location="features_hero">Request a Demo</SoDemo></div>
           </div>
           <div className="fh-vis">
             <div className="fh-photo"><img src="/serviceops/v2/install.jpg" alt="Two technicians reviewing a job on a tablet at a site" style={{ objectPosition: "78% 45%" }} /></div>
@@ -218,7 +218,7 @@ export function ServiceOpsV2Features() {
       </section>
 
       <Closing />
-    </V2Shell>
+    </ServiceOpsShell>
   );
 }
 

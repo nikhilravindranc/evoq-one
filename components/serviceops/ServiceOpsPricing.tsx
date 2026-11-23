@@ -4,12 +4,12 @@
 import Link from "next/link";
 import { Fragment, useRef, useState } from "react";
 import { useRegion } from "@/components/shared/RegionContext";
-import { Ic } from "../serviceops/icons";
+import { Ic } from "./icons";
 import { AMBER, AMBER_DEEP, AMBER_HOVER, AMBER_SOFT, BODY, G1, G2, INK, LINE, MUTED } from "./palette";
-import { V2Demo, V2Shell } from "./V2Shell";
-import { homeCss, Label } from "./ServiceOpsV2";
+import { SoDemo, ServiceOpsShell } from "./ServiceOpsShell";
+import { homeCss, Label } from "./ServiceOpsHome";
 
-/* ServiceOps v2, Pricing. India (INR) and International (USD) share the site wide region choice, so the toggle here
+/* ServiceOps, Pricing. India (INR) and International (USD) share the site wide region choice, so the toggle here
    and the one in the top bar always agree. Annual prices are the monthly price less 10%, as published. */
 
 type Cur = "IN" | "INT";
@@ -123,8 +123,8 @@ function PlanCard({ p, cur, annual }: { p: Plan; cur: Cur; annual: boolean }) {
         <div className="pr-price"><b>Custom</b><span>Priced for your operation</span><em>Commercial terms agreed with you</em></div>
       )}
       {p.ent
-        ? <V2Demo location="pricing_enterprise_plan" title="Talk to an expert" className="v2-btn dark pr-btn">Talk to an Expert</V2Demo>
-        : <V2Demo location={`pricing_${p.n.toLowerCase()}`} title="Get started" className="v2-btn primary pr-btn">Get Started</V2Demo>}
+        ? <SoDemo location="pricing_enterprise_plan" title="Talk to an expert" className="v2-btn dark pr-btn">Talk to an Expert</SoDemo>
+        : <SoDemo location={`pricing_${p.n.toLowerCase()}`} title="Get started" className="v2-btn primary pr-btn">Get Started</SoDemo>}
       <ul className="pr-f">{p.f.map((x) => <li key={x}><Tick />{x}</li>)}</ul>
     </li>
   );
@@ -165,8 +165,8 @@ function PricingClosing() {
           <h2 className="cta-h"><span>Find the right capacity</span> <span>for your service operation.</span></h2>
           <p className="cta-sub">Whether you manage a small technician team or a large field service operation, choose a subscription based on your monthly workload and expand capacity as requirements change.</p>
           <div className="v2-ctas">
-            <V2Demo location="pricing_closing" title="Get started" className="v2-btn dark">Get Started</V2Demo>
-            <V2Demo location="pricing_closing_expert" title="Talk to an expert" className="v2-btn ghost">Talk to an Expert</V2Demo>
+            <SoDemo location="pricing_closing" title="Get started" className="v2-btn dark">Get Started</SoDemo>
+            <SoDemo location="pricing_closing_expert" title="Talk to an expert" className="v2-btn ghost">Talk to an Expert</SoDemo>
           </div>
         </div>
         <div className="cta-ui" aria-hidden>
@@ -183,7 +183,7 @@ function PricingClosing() {
   );
 }
 
-export function ServiceOpsV2Pricing() {
+export function ServiceOpsPricing() {
   const { region, setRegion } = useRegion();
   const cur: Cur = region === "India" ? "IN" : "INT";
   const setCur = (c: Cur) => setRegion(c === "IN" ? "India" : "USA");
@@ -192,7 +192,7 @@ export function ServiceOpsV2Pricing() {
   const [more, setMore] = useState(false);
 
   return (
-    <V2Shell page="pricing">
+    <ServiceOpsShell page="pricing">
       <style>{homeCss}</style>
       <style>{css}</style>
 
@@ -286,7 +286,7 @@ export function ServiceOpsV2Pricing() {
           <p className="pr-fine">All core capabilities are subject to the applicable plan allowances and service terms. AI functionality depends on supported provider configuration. AI consumption may be subject to separate usage charges. Enterprise entitlements are subject to agreed scope, availability and provider configuration.</p>
           <div className="cm-need" data-rv>
             <div><b>Need a different job volume or deployment arrangement?</b><span>Contact our team to discuss a custom ServiceOps subscription.</span></div>
-            <V2Demo location="pricing_compare" title="Talk to an expert" className="v2-btn dark">Talk to an Expert</V2Demo>
+            <SoDemo location="pricing_compare" title="Talk to an expert" className="v2-btn dark">Talk to an Expert</SoDemo>
           </div>
         </div>
       </section>
@@ -346,7 +346,7 @@ export function ServiceOpsV2Pricing() {
       </section>
 
       <PricingClosing />
-    </V2Shell>
+    </ServiceOpsShell>
   );
 }
 
