@@ -479,7 +479,7 @@ function Explorer() {
                   {on && (
                     <div className="fm-desc">
                       <p className="fm-t">{f.lead} <span className="t2">{f.rest}</span></p>
-                      <div className="fm-what">{f.what}<p className="fm-why"><b>Why it matters</b>{f.use}</p></div>
+                      <div className="fm-what">{f.what}{mobile && <p className="fm-why"><b>Why it matters</b>{f.use}</p>}</div>
                     </div>
                   )}
                   {mobile && win(f)}
@@ -487,7 +487,12 @@ function Explorer() {
               );
             })}
           </ul>
-          {!mobile && <div className="fm-col">{FEATURES.map(win)}</div>}
+          {!mobile && (
+            <div className="fm-col">
+              {FEATURES.map(win)}
+              <p className="fm-why fm-why-b" key={id}><b>Why it matters</b>{FEATURES.find((f) => f.id === id)?.use}</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -821,7 +826,8 @@ const css = `
 
   /* the explorer: the feature list on the left, a screen of the app on the right with its help running on its own */
   .fm-sec{padding-top:56px;padding-bottom:88px;background:#fff}
-  .fm{display:grid;grid-template-columns:380px minmax(0,1fr);gap:32px;align-items:start}
+  .fm{display:grid;grid-template-columns:380px minmax(0,1fr);gap:0;align-items:start}
+  .fm-list{padding-right:32px}
   .fm-list{list-style:none;margin:0;padding:0;position:sticky;top:24px;display:grid;gap:2px}
   .fm-g{display:block;margin:14px 0 4px 14px;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${C.muted}}
   .fm-item:first-child .fm-g{margin-top:0}
@@ -839,7 +845,8 @@ const css = `
   .fm-t .t2{color:#8E8C96}
   .fm-what p{margin:6px 0 0;font-size:14.5px;line-height:1.6;color:${C.body}}
   @keyframes fmIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-  .fm-col{min-width:0}
+  .fm-col{min-width:0;align-self:stretch;padding-left:32px;border-left:1px solid ${C.line}}
+  .fm-why-b{margin:22px 0 0;padding:12px 16px;border-radius:14px;background:${C.surface};box-shadow:inset 0 0 0 1px ${C.soft};font-size:14.5px;line-height:1.5;color:${C.ink};animation:fmIn .35s ease both}
   .fm-win{border-radius:26px;background:#fff;box-shadow:0 40px 80px -44px rgba(46,16,101,.55),0 0 0 1px ${C.line};overflow:hidden}
   .fm-bar{display:flex;align-items:center;gap:14px;padding:11px 18px;border-bottom:1px solid ${C.line};background:#FAF9FC;font-size:12.5px;color:${C.muted}}
   .fm-bar .ft-dots{margin:0}
@@ -912,6 +919,7 @@ const css = `
 
   @media (max-width:979px){
     .fm{grid-template-columns:1fr;gap:18px}
+    .fm-col{padding-left:0;border-left:0}
     .fm-list{position:static;display:flex;overflow-x:auto;gap:8px;padding:2px 2px 8px;scrollbar-width:none}
     .fm-list::-webkit-scrollbar{display:none}
     .fm-item{flex-shrink:0}
