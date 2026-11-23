@@ -56,7 +56,7 @@ export function AgentTile({ srcs, pose = 0, size, glow, style }: { srcs: string[
     <motion.div
       animate={{ boxShadow: glow ? "0 0 0 2.5px #8F7BFF, 0 0 0 6px rgba(255,255,255,0.35), 0 0 34px 6px rgba(160,140,255,0.75)" : "0 0 0 2.5px #8F7BFF, 0 0 0 6px rgba(255,255,255,0.3), 0 0 0 0 rgba(160,140,255,0)" }}
       transition={{ duration: 0.6 }}
-      style={{ position: "relative", width: size, aspectRatio: "1 / 1", borderRadius: "26%", overflow: "hidden", background: "#E9E4FF", flexShrink: 0, ...style }}
+      style={{ position: "relative", width: size, aspectRatio: "1 / 1", borderRadius: "50%", overflow: "hidden", background: "#E9E4FF", flexShrink: 0, ...style }}
     >
       {srcs.map((src, i) => (
         // eslint-disable-next-line @next/next/no-img-element
