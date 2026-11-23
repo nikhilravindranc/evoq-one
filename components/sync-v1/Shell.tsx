@@ -79,7 +79,7 @@ export function SyncShell({ children, page = "overview" }: { children: ReactNode
         <style>{baseCss}</style>
         <HsMotion />
         <header className="sx-hd">
-          <div className="sx-top"><Topbar light darkCTA={false} theme={{ navBg: C.primary, navFg: "#FFFFFF", ctaBg: C.primary, ctaFg: "#FFFFFF", loginFg: C.ink }} /></div>
+          <div className="sx-top"><Topbar light darkCTA={false} showRegion={false} mobileMenu theme={{ navBg: C.primary, navFg: "#FFFFFF", ctaBg: C.primary, ctaFg: "#FFFFFF", loginFg: C.ink }} /></div>
           <ProductBar page={page} />
         </header>
         <main>{children}</main>
@@ -164,9 +164,11 @@ const baseCss = `
   .sx-switch i{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s ease}
   .sx-switch.on{background:${C.primary}}.sx-switch.on i{transform:translateX(17px)}
 
-  .sx-hd{position:relative;background:#fff}
+  /* one lilac wash from the header through the hero; a sideways gradient is the same at any height, so the two meet without a seam */
+  .sx-hd{position:relative;background:linear-gradient(90deg,#fff,#FBF8FF 30%,#F3E8FF 65%,#E4CCFC)}
+  .sx-root main>section:first-child{background:linear-gradient(90deg,#fff,#FBF8FF 30%,#F3E8FF 65%,#E4CCFC)}
   .sx-top{position:relative;z-index:60}
-  .sx-bar{position:sticky;top:0;z-index:50;padding:0 20px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid ${C.line};border-top:1px solid ${C.line}}
+  .sx-bar{position:sticky;top:0;z-index:50;padding:0 20px;background:rgba(255,255,255,.55);backdrop-filter:blur(10px);border-bottom:1px solid ${C.line};border-top:1px solid ${C.line}}
   .sx-bar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:28px;min-height:58px}
   .sx-brand{display:flex;align-items:center;gap:10px;flex-shrink:0;text-decoration:none;font-family:var(--font-display),system-ui,sans-serif;font-size:19px;font-weight:600;color:${C.ink}}
   .sx-menu{display:flex;gap:4px}

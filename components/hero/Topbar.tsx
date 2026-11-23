@@ -105,8 +105,21 @@ const PRODUCT_GROUPS: {
     title: "Growth",
     items: [
       { name: "CRM", sub: "Sales & customer relationships", icon: UsersGlyph, tile: "bg-[#4747E0]", href: "/products/crm", logo: "crm-menu-icn.png" },
-      { name: "ConfigX", sub: "Product configuration & CPQ", icon: BoxGlyph, tile: "bg-[#4747E0]", href: "/products/configx", logo: "ConfigX-menu-icn.png" },
       { name: "Campaigns", sub: "Plan and launch marketing", icon: TrendGlyph, tile: "bg-[#7C3AED]", href: "/products/campaigns", logo: "campaigns-menu-icn.png" },
+      { name: "ConfigX", sub: "Product configuration & CPQ", icon: BoxGlyph, tile: "bg-[#4747E0]", href: "/products/configx", logo: "ConfigX-menu-icn.png" },
+    ],
+  },
+  {
+    title: "People",
+    items: [
+      { name: "HRMS", sub: "Core HR & workforce data", icon: LeafGlyph, tile: "bg-[#0F9D74]", href: "/products/hrms", logo: "hrms-menu-icn-new.png" },
+      { name: "Skillberry", sub: "Learning & talent development", icon: GrapeGlyph, tile: "bg-[#C2477F]", href: "/products/skillberry", logo: "Skillberry-menu-icn.png" },
+    ],
+  },
+  {
+    title: "AI",
+    items: [
+      { name: "AI", sub: "Assistants · Agents", icon: AIMark, tile: "bg-[#F2F2FF]", href: "/products/ai" },
     ],
   },
   {
@@ -119,13 +132,6 @@ const PRODUCT_GROUPS: {
     ],
   },
   {
-    title: "People",
-    items: [
-      { name: "HRMS", sub: "Core HR & workforce data", icon: LeafGlyph, tile: "bg-[#0F9D74]", href: "/products/hrms", logo: "hrms-menu-icn-new.png" },
-      { name: "Skillberry", sub: "Learning & talent development", icon: GrapeGlyph, tile: "bg-[#C2477F]", href: "/products/skillberry", logo: "Skillberry-menu-icn.png" },
-    ],
-  },
-  {
     title: "Finance",
     items: [
       { name: "Billing", sub: "Invoicing & revenue", icon: CardGlyph, tile: "bg-[#4747E0]", href: "/products/billing", logo: "billing-menu-icn.png" },
@@ -135,12 +141,6 @@ const PRODUCT_GROUPS: {
   {
     title: "Platform",
     items: [{ name: "Sync", sub: "Unify data across systems", icon: SyncGlyph, tile: "bg-[#7E22CE]", href: "/products/sync", logo: "/logos/sync-icon.svg" }],
-  },
-  {
-    title: "AI",
-    items: [
-      { name: "AI", sub: "Assistants · Agents", icon: AIMark, tile: "bg-[#F2F2FF]", href: "/products/ai" },
-    ],
   },
 ];
 
@@ -233,13 +233,15 @@ const ManufacturingMark = () => (
 
 export type TopbarTheme = { navBg: string; navFg: string; ctaBg: string; ctaFg: string; loginFg: string };
 
-export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor, theme }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string; theme?: TopbarTheme }) {
+export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor, theme, showRegion = true, mobileMenu = false }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string; theme?: TopbarTheme; showRegion?: boolean; mobileMenu?: boolean }) {
   const [open, setOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [subOpen, setSubOpen] = useState(false);
   const [showGetStarted, setShowGetStarted] = useState(false);
   const [menuPos, setMenuPos] = useState<{ left: number; width: number } | null>(null);
   const [regionOpen, setRegionOpen] = useState(false);
+  const [mobOpen, setMobOpen] = useState(false);
+  const [mobSec, setMobSec] = useState<"products" | "solutions" | null>(null);
   const { region, setRegion } = useRegion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const solutionsRef = useRef<HTMLDivElement>(null);
@@ -346,7 +348,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
 
       {/* Nav pill */}
       <nav
-        className={`${theme ? "tb-themed " : ""}flex items-center gap-1 rounded-full px-1.5 py-1.5 text-sm font-medium backdrop-blur-lg ${
+        className={`${theme ? "tb-themed " : ""}${mobileMenu ? "max-lg:hidden " : ""}flex items-center gap-1 rounded-full px-1.5 py-1.5 text-sm font-medium backdrop-blur-lg ${
           light
             ? "border border-[#E6EAF0] bg-white/80 text-[#1F2430]/90"
             : "border border-white/20 bg-white/14 text-white/90"
@@ -575,7 +577,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
       <div className="flex items-center gap-4">
         <Link
           href="/login"
-          className={`${theme ? "tb-login " : ""}inline-flex cursor-pointer text-sm font-semibold no-underline transition-colors ${
+          className={`${theme ? "tb-login " : ""}${mobileMenu ? "max-lg:hidden " : ""}inline-flex cursor-pointer text-sm font-semibold no-underline transition-colors ${
             light ? "text-[#1F2430]/80 hover:text-[#1F2430]" : "text-white/88 hover:text-white"
           }`}
         >
@@ -583,7 +585,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
         </Link>
 
         {/* Region selector */}
-        <div className="relative" ref={regionRef}>
+        {showRegion && <div className="relative" ref={regionRef}>
           <button
             type="button"
             onClick={() => setRegionOpen(!regionOpen)}
@@ -639,13 +641,13 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
               </button>
             </div>
           )}
-        </div>
+        </div>}
 
         <button
           type="button"
           onClick={() => { trackCta("get_started", "header"); setShowGetStarted(true); }}
           style={theme ? { background: theme.ctaBg, color: theme.ctaFg } : ctaColor ? { background: ctaColor } : undefined}
-          className={`inline-flex cursor-pointer items-center gap-3 rounded-full border-0 py-3 pl-[22px] pr-3.5 text-sm font-semibold transition-all hover:-translate-y-px ${
+          className={`${mobileMenu ? "max-lg:hidden " : ""}inline-flex cursor-pointer items-center gap-3 rounded-full border-0 py-3 pl-[22px] pr-3.5 text-sm font-semibold transition-all hover:-translate-y-px ${
             theme
               ? "shadow-[0_10px_30px_-10px_rgba(0,0,0,0.22)] hover:brightness-95"
               : ctaColor
@@ -660,9 +662,65 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
             <ArrowRight color="currentColor" />
           </span>
         </button>
+        {mobileMenu && (
+          <button
+            type="button"
+            aria-label={mobOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobOpen}
+            onClick={() => setMobOpen((o) => !o)}
+            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#E6EAF0] bg-white/70 text-[#1F2430] lg:hidden"
+            style={theme ? { background: `${theme.navBg}33`, borderColor: `${theme.navBg}55`, color: theme.loginFg } : undefined}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              {mobOpen ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+            </svg>
+          </button>
+        )}
       </div>
       </div>
       </div>
+      {mobileMenu && mobOpen && (
+        <div
+          className="absolute left-5 right-5 top-[calc(100%-6px)] z-50 max-h-[calc(100vh-110px)] overflow-y-auto rounded-[20px] p-4 text-white shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45)] sm:left-6 sm:right-6 lg:hidden"
+          style={{ background: theme?.navBg ?? "#1F2430", animation: "menuIn 0.15s ease forwards" }}
+        >
+          {(["products", "solutions"] as const).map((sec) => (
+            <div key={sec}>
+              <button
+                type="button"
+                aria-expanded={mobSec === sec}
+                onClick={() => setMobSec((s) => (s === sec ? null : sec))}
+                className="flex w-full cursor-pointer items-center justify-between border-0 bg-transparent px-2 py-3.5 text-left font-[inherit] text-[15px] font-medium text-white"
+              >
+                {sec === "products" ? "Products" : "Solutions"}
+                <span className="inline-flex transition-transform duration-200" style={{ transform: mobSec === sec ? "rotate(180deg)" : "none" }}><Chevron /></span>
+              </button>
+              {mobSec === sec && (
+                <div className="grid gap-0.5 pb-2 pl-2">
+                  {sec === "products"
+                    ? PRODUCT_GROUPS.flatMap((g) => g.items).filter((i) => i.href).map((i) => (
+                        <Link key={i.name} href={i.href as string} onClick={() => setMobOpen(false)} className="rounded-lg px-2 py-2 text-sm text-white/85 no-underline hover:bg-white/10">{i.name}</Link>
+                      ))
+                    : SOLUTIONS.map((s) => (
+                        <Link key={s.name} href={s.href} onClick={() => setMobOpen(false)} className="rounded-lg px-2 py-2 text-sm text-white/85 no-underline hover:bg-white/10">{s.name}</Link>
+                      ))}
+                </div>
+              )}
+            </div>
+          ))}
+          <Link href="/why-evoq" onClick={() => setMobOpen(false)} className="block px-2 py-3.5 text-[15px] font-medium text-white no-underline">Why EVOQ?</Link>
+          <div className="mt-2 grid gap-1 border-t border-white/20 pt-3 text-center">
+            <Link href="/login" onClick={() => setMobOpen(false)} className="py-3 text-sm font-semibold text-white no-underline">Log in</Link>
+            <button
+              type="button"
+              onClick={() => { trackCta("get_started", "header"); setMobOpen(false); setShowGetStarted(true); }}
+              className="cursor-pointer border-0 bg-transparent py-3 font-[inherit] text-sm font-semibold text-white"
+            >
+              Get Started →
+            </button>
+          </div>
+        </div>
+      )}
       <GetStartedModal isOpen={showGetStarted} onClose={() => setShowGetStarted(false)} />
     </header>
   );
