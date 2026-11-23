@@ -1,13 +1,14 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from "react";
+import { useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import {
   ArrowLeftRight, ArrowRight, Check, Code, ChartColumn, ChevronDown, Download, LayoutTemplate,
   Plug, Play, Radar, Search, ShieldCheck, Shuffle, Sparkles,
   Workflow, X, Zap, Activity, Database, GitBranch, LayoutDashboard, Plus, Settings, type LucideIcon,
 } from "lucide-react";
 import { C, IMG } from "./data";
+import { DemoCursor, demoCursorCss, useDemo, type Act } from "../shared/appDemo";
 import { Mark, SyncMark, SyncShell } from "./Shell";
 import { CtaBand, ctaCss } from "./SyncV1";
 
@@ -211,7 +212,6 @@ const SecurityVisual = () => (
 /* ---------- the nine features ---------- */
 /* Each feature is a screen of the app with a user trying it: a cursor goes from place to place, a tag of a few words
    follows it, and its clicks change the screen. */
-type Act = { to: string; tag: string; hold: number; click?: boolean; auto?: boolean; fx?: number; fy?: number };
 type Feature = {
   id: string; group: string; name: string; icon: LucideIcon; tag: string; lead: string; rest: string;
   what: ReactNode; use: string; nav: string; visual: ReactNode; demo: Act[];
@@ -354,60 +354,10 @@ function useHash() {
   );
 }
 
-function useReduced() {
-  return useSyncExternalStore(
-    (cb) => { const m = window.matchMedia("(prefers-reduced-motion: reduce)"); m.addEventListener("change", cb); return () => m.removeEventListener("change", cb); },
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    () => false,
-  );
-}
-
-const IDLE = { i: -1, p: 0, x: 0, y: 0, flip: false };
-
-/* plays the acts one after another and loops; i is the act, p turns 1 when its click lands */
-function useDemo(acts: Act[], active: boolean, paused: boolean, page: RefObject<HTMLDivElement | null>, onEnd?: () => void) {
-  const reduce = useReduced();
-  const [d, setD] = useState(IDLE);
-  const end = useRef(onEnd);
-  useEffect(() => { end.current = onEnd; });
-
-  useEffect(() => {
-    if (!active || paused || reduce) return;
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    const at = (fn: () => void, ms: number) => timers.push(setTimeout(fn, ms));
-    const go = (i: number) => {
-      const box = page.current;
-      const el = box?.querySelector<HTMLElement>(acts[i].to);
-      if (!box || !el) return;
-      const r = el.getBoundingClientRect();
-      const b = box.getBoundingClientRect();
-      const x = r.left - b.left + r.width * (acts[i].fx ?? 0.6);
-      const y = r.top - b.top + r.height * (acts[i].fy ?? 0.55);
-      setD({ i, p: 0, x, y, flip: x > b.width - 200 });
-      if (acts[i].click || acts[i].auto) at(() => setD((s) => ({ ...s, p: 1 })), 950);
-      if (i + 1 < acts.length) at(() => go(i + 1), acts[i].hold);
-      else {
-        // when the tour is running, the next feature takes over; otherwise the same demo plays again
-        at(() => { setD(IDLE); end.current?.(); }, acts[i].hold);
-        at(() => go(0), acts[i].hold + 1300);
-      }
-    };
-    at(() => go(0), 700);
-    return () => timers.forEach(clearTimeout);
-  }, [acts, active, paused, reduce, page]);
-
-  // leaving the feature puts the screen back to how it began
-  useEffect(() => () => setD(IDLE), [active]);
-
-  // reduced motion: no cursor, the screen shows where the demo ends
-  return reduce ? { ...IDLE, i: acts.length - 1, p: 1 } : d;
-}
-
 /* the app window: a screen of the app, and a cursor using it */
 function Win({ f, active, onEnd }: { f: Feature; active: boolean; onEnd?: () => void }) {
   const [paused, setPaused] = useState(false);
   const page = useRef<HTMLDivElement>(null);
-  const reduce = useReduced();
   const d = useDemo(f.demo, active, paused, page, onEnd);
 
   return (
@@ -427,13 +377,7 @@ function Win({ f, active, onEnd }: { f: Feature; active: boolean; onEnd?: () => 
           </div>
           <div ref={page} className={`app-page fb-stage${active ? " hs-in" : ""}`} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
             {f.visual}
-            {!reduce && (
-              <div className={`app-cur${d.i >= 0 ? " on" : ""}${d.flip ? " flip" : ""}`} style={{ transform: `translate(${d.x}px,${d.y}px)` }} aria-hidden>
-                <svg viewBox="0 0 20 20" fill="none"><path d="M3 2.5 15.5 8.8 9.8 10.3 8 16.2 3 2.5Z" fill="#1F2430" stroke="#fff" strokeWidth="1.2" strokeLinejoin="round" /></svg>
-                {d.i >= 0 && <span className="app-cur-tag" key={d.i}>{f.demo[d.i].tag}</span>}
-                {d.p === 1 && f.demo[d.i]?.click && <i className="app-cur-rip" key={`r${d.i}`} />}
-              </div>
-            )}
+            <DemoCursor d={d} acts={f.demo} />
           </div>
           <img className="app-evi" src={`${IMG}/characters/evi-head.webp`} alt="" aria-hidden />
         </div>
@@ -974,14 +918,7 @@ const css = `
   .app.demo .ft-card *,.app.demo .ft-canvas *{animation:none!important}
   .app.demo{height:540px}
   .app-page{position:relative}
-  .app-cur{position:absolute;left:0;top:0;z-index:6;pointer-events:none;opacity:0;transition:transform .85s cubic-bezier(.45,.05,.2,1),opacity .3s ease;will-change:transform}
-  .app-cur.on{opacity:1}
-  .app-cur svg{display:block;width:24px;height:24px;filter:drop-shadow(0 2px 3px rgba(20,14,70,.4))}
-  .app-cur-tag{position:absolute;left:20px;top:18px;padding:5px 11px;border-radius:999px;background:${C.primary};color:#fff;font:600 12.5px var(--font-sans),system-ui,sans-serif;white-space:nowrap;box-shadow:0 8px 18px -8px rgba(46,16,101,.6);animation:fmTag .3s ease both}
-  .app-cur.flip .app-cur-tag{left:auto;right:12px}
-  @keyframes fmTag{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-  .app-cur-rip{position:absolute;left:-8px;top:-8px;width:20px;height:20px;border-radius:50%;box-shadow:0 0 0 2px ${C.primary};animation:fmClick .6s ease-out both}
-  @keyframes fmClick{from{transform:scale(.4);opacity:1}to{transform:scale(2.4);opacity:0}}
+  ${demoCursorCss(C.primary, "rgba(46,16,101,.6)")}
 
   /* demo: connections, laid out like the app's application catalog */
   .cn-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}

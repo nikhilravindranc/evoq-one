@@ -1,13 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { Ic } from "./icons";
-import { DEEP, INK, LINE, MUTED, NEUTRAL, PRIMARY, TINT } from "./palette";
-import { DemoButton, SO_BASE, ServiceOpsShell } from "./ServiceOpsShell";
-
-/* ServiceOps, Features. Everything in the app today, by area, from the ServiceOps features list. Each line says what
-   you can do. Anything that is partial, planned, runs on the demo AI or needs setup says so on the line, so the page
-   is as plain about limits as it is about features. */
+/* The ServiceOps feature catalogue, by area: what the app does today, who can open what. The features page reads it. */
 
 export type Status = "partial" | "planned" | "demo" | "setup";
 export type F = { n: string; d: string; s?: Status; note?: string };
@@ -57,11 +48,16 @@ export const AREAS: Area[] = [
     ],
   },
   {
-    id: "records", k: "Records", title: "Customers, equipment and stock.",
+    id: "records", k: "Records", title: "Customers, partners, equipment and stock.",
     lead: "The records a job draws on.",
     items: [
       { n: "Customers", d: "Contacts, sites, work, assets, balance and status, with filters." },
       { n: "Log a call", d: "Notes or a voice note transcript become a summary, decisions and follow-up tasks that you confirm.", s: "demo" },
+      { n: "Partners", d: "Sales, service and project partners in one place, each with its own workflow. Filter by kind and status, and see territory, rating and performance." },
+      { n: "Partner approval", d: "A partner applies or is added, goes through review and is approved. A suspended partner stops receiving work." },
+      { n: "Agreements and certifications", d: "Keep each partner's agreements and certifications, and see which ones expire in the next 60 days." },
+      { n: "Partner contacts and territory", d: "Contacts and branches, the territory each partner covers, and the products and services it supports." },
+      { n: "Partner performance and ratings", d: "Sales partners against their target, service partners on completed on time, project partners on milestones done, and a rating out of 5." },
       { n: "Assets", d: "Equipment records with status, warranty, next service and history." },
       { n: "Inventory", d: "On hand, reserved, van stock, parts short for upcoming jobs, part requests and returns." },
       { n: "Catalog", d: "Priced services and products used on estimates, work orders and invoices." },
@@ -73,6 +69,7 @@ export const AREAS: Area[] = [
     lead: "What is ready to invoice, what is out, and what each job earned.",
     items: [
       { n: "Billing", d: "Ready to invoice, work in progress, outstanding, overdue, collected and estimates out. Invoices, credit notes and void (managers only).", note: "Some payment and accounting tasks sit in the linked EVOQ Billing product." },
+      { n: "Partner payables", d: "A Billing tab for what you owe your partners." },
       { n: "Customer message draft", d: "A friendly reminder, follow-up or apology from your own template, for you to check and send.", s: "demo" },
       { n: "Customer payment link", d: "A private page for a customer to view and pay an invoice." },
       { n: "Review link and reply draft", d: "A short page for a customer to rate a visit. Draft reply writes a public reply that you copy. It is never posted anywhere.", s: "demo" },
@@ -171,224 +168,3 @@ export const ROLES: [string, string, string][] = [
   ["Service coordinator", "Requests, customers, estimates and billing.", "Requests, Customers, Estimates"],
   ["Technician", "Own jobs, work orders, assets and timesheet.", "My jobs, Assets, Timesheets"],
 ];
-
-export const NOT_YET = [
-  "Agents that run automatically each day on the server.",
-  "A switch and a usage count for each AI helper.",
-  "Phone and SMS receptionist, and a WhatsApp and Telegram assistant.",
-  "A remote video expert.",
-  "Review import from review sites and automatic posting.",
-  "Grouped, collapsible tables and Pipeline, Gantt or Calendar views on screens other than Requests.",
-  "Email follow-up sequences with open and reply rates.",
-  "Meeting recording and notes.",
-];
-
-const all = AREAS.flatMap((a) => a.items);
-const count = { avail: all.filter((f) => !f.s || f.s === "demo" || f.s === "setup").length, partial: all.filter((f) => f.s === "partial").length, planned: all.filter((f) => f.s === "planned").length };
-
-const Chip = ({ s }: { s: Status }) => <em className={`sf-chip ${s}`}>{CHIP[s]}</em>;
-
-function Row({ f }: { f: F }) {
-  return (
-    <div className="sf-row">
-      <div className="sf-row-h"><b>{f.n}</b>{f.s && <Chip s={f.s} />}</div>
-      <p>{f.d}{f.note && <span className="sf-note"> {f.note}</span>}</p>
-    </div>
-  );
-}
-
-/* "On this page": the area that is in view on the right is the one lit on the left. */
-function Toc() {
-  const ids = [...AREAS.map((a) => a.id), "not-yet"];
-  const [on, setOn] = useState(ids[0]);
-  useEffect(() => {
-    const els = ids.map((id) => document.getElementById(id)).filter((e): e is HTMLElement => !!e);
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const line = window.innerHeight * 0.38;
-      let cur = els[0]?.id ?? ids[0];
-      for (const el of els) if (el.getBoundingClientRect().top <= line) cur = el.id;
-      setOn((p) => (p === cur ? p : cur));
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const items = [...AREAS.map((a, n) => ({ id: a.id, k: a.k, n: String(n + 1).padStart(2, "0") })), { id: "not-yet", k: "Not available yet", n: "10" }];
-  return (
-    <nav className="sf-toc" aria-label="Features by area">
-      <span className="sf-toc-k">On this page</span>
-      {items.map((it) => (
-        <a key={it.id} href={`#${it.id}`} className={it.id === on ? "on" : ""} aria-current={it.id === on ? "true" : undefined}>
-          <i>{it.n}</i>{it.k}
-        </a>
-      ))}
-    </nav>
-  );
-}
-
-export function ServiceOpsFeatures({ base = SO_BASE }: { base?: string }) {
-  return (
-    <ServiceOpsShell
-      base={base}
-      page="features"
-      hero={
-        <div className="so-hd-in sf-hero">
-          <div>
-            <span className="so-label">ServiceOps · Features</span>
-            <h1 className="sf-h1">What ServiceOps does today.</h1>
-            <p className="so-lead">The features in the app now, by area. Each line says what you can do, and anything partial or planned says so.</p>
-            <p className="sf-sub">AI features run on a built-in demo model with clearly labelled sample answers until a live AI model is connected.</p>
-            <div className="so-ctas">
-              <DemoButton location="features_hero" />
-              <a href={base} className="so-btn secondary">Explore ServiceOps</a>
-            </div>
-          </div>
-          <div className="sf-key">
-            <span className="sf-blob" aria-hidden />
-            <div className="sf-keycard">
-              <span className="sf-keyk">Status key</span>
-              <div className="sf-kr"><b>{count.avail}</b><span><em className="sf-chip ok">Available</em><small>Works today. Demo AI and Needs setup are marked on the line.</small></span></div>
-              <div className="sf-kr"><b>{count.partial}</b><span><em className="sf-chip partial">Partial</em><small>Works with a stated limit.</small></span></div>
-              <div className="sf-kr"><b>{count.planned}</b><span><em className="sf-chip planned">Planned</em><small>Not built yet.</small></span></div>
-            </div>
-          </div>
-        </div>
-      }
-    >
-      <style>{css}</style>
-
-      {/* who can open what */}
-      <section className="so-out so-sec so-white" id="roles" style={{ paddingBottom: 72 }}>
-        <div className="so-in">
-          <div className="so-head c wide" data-rv="0">
-            <span className="so-label">Roles</span>
-            <h2 className="so-h2">Who can open what.</h2>
-            <p className="so-lead">ServiceOps has five roles, set by an administrator. Each person sees the screens their role includes.</p>
-          </div>
-          <div className="sf-roles" data-rv="1">
-            {ROLES.map(([n, d, s]) => (
-              <div key={n} className="sf-role">
-                <h3>{n}</h3>
-                <p>{d}</p>
-                <small>{s}</small>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* the catalogue */}
-      <section className="so-out so-sec so-band" id="catalogue" style={{ paddingTop: 80 }}>
-        <div className="so-in sf-layout">
-          <Toc />
-          <div className="sf-main">
-            {AREAS.map((a, n) => (
-              <section key={a.id} id={a.id} className="sf-area" data-rv="0">
-                <div className="sf-area-h">
-                  <span className="sf-num">{String(n + 1).padStart(2, "0")}</span>
-                  <div><h2 className="so-h2">{a.title}</h2><p>{a.lead}</p></div>
-                </div>
-                <div className="sf-rows">{a.items.map((f) => <Row key={f.n} f={f} />)}</div>
-              </section>
-            ))}
-            <section id="not-yet" className="sf-area" data-rv="0">
-              <div className="sf-area-h">
-                <span className="sf-num">10</span>
-                <div><h2 className="so-h2">Not available yet.</h2><p>These are not built, so they are not part of what ServiceOps does today.</p></div>
-              </div>
-              <ul className="sf-not">{NOT_YET.map((t) => <li key={t}>{Ic.clock}<span>{t}</span></li>)}</ul>
-            </section>
-          </div>
-        </div>
-      </section>
-
-      {/* final call to action */}
-      <section className="so-close" style={{ paddingTop: 104 }}>
-        <div className="so-close-in" data-rv="0">
-          <span className="so-cs ring" aria-hidden /><span className="so-cs dots" aria-hidden /><span className="so-cs sun" aria-hidden />
-          <div className="so-close-c">
-            <h2 className="so-h2">See these features with your own jobs.</h2>
-            <p className="so-lead">Tell us how requests, dispatch and invoices run today, and we will walk through ServiceOps in a demo.</p>
-            <div className="so-ctas"><DemoButton location="features_close" /><a href={base} className="so-btn secondary">Explore ServiceOps</a></div>
-          </div>
-        </div>
-      </section>
-    </ServiceOpsShell>
-  );
-}
-
-const css = `
-  .sf-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:56px 0 84px}
-  .sf-h1{font-size:52px;line-height:1.06;letter-spacing:-.028em;margin:16px 0 0!important;text-wrap:balance}
-  .sf-sub{margin:14px 0 0;font-size:15.5px;line-height:1.6;color:${NEUTRAL};max-width:58ch}
-  .sf-key{position:relative;padding:40px 0 40px 34px}
-  .sf-blob{position:absolute;right:0;top:0;bottom:0;left:16%;border-radius:200px 36px 36px 36px;background:#FCE9B4}
-  .sf-keycard{position:relative;display:grid;gap:14px;max-width:440px;margin-left:auto;margin-right:8%;padding:24px;border-radius:24px;background:#fff;box-shadow:0 34px 60px -30px rgba(42,27,12,.55),0 0 0 1px rgba(42,27,12,.07)}
-  .sf-keyk{font-family:var(--font-display),system-ui,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:${PRIMARY}}
-  .sf-kr{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;align-items:center;padding-top:14px;border-top:1px solid ${LINE}}
-  .sf-kr:first-of-type{border-top:0;padding-top:0}
-  .sf-kr>b{font-family:var(--font-display),system-ui,sans-serif;font-size:36px;line-height:1;color:${DEEP}}
-  .sf-kr span{display:grid;gap:4px;justify-items:start}.sf-kr small{font-size:13px;line-height:1.45;color:${MUTED}}
-  .sf-chip{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
-  .sf-chip.ok{background:rgba(22,138,74,.12);color:#168A4A}
-  .sf-chip.partial{background:rgba(217,119,6,.16);color:#92400E}
-  .sf-chip.planned{background:rgba(124,106,82,.16);color:#5E4D38}
-  .sf-chip.demo{background:${TINT};color:#78350F}
-  .sf-chip.setup{background:rgba(194,65,12,.12);color:#C2410C}
-
-  .sf-roles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:28px}
-  .sf-role{padding-top:18px;border-top:2px solid ${DEEP};display:grid;gap:6px;align-content:start}
-  .sf-role h3{font-size:19px}
-  .sf-role p{margin:0;font-size:15px;line-height:1.5;color:${MUTED}}
-  .sf-role small{font-size:13px;font-weight:600;color:${PRIMARY}}
-
-  .sf-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:64px;align-items:start}
-  .sf-toc{position:sticky;top:84px;display:grid;gap:2px}
-  .sf-toc-k{margin-bottom:8px;font-family:var(--font-display),system-ui,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${NEUTRAL}}
-  .sf-toc a{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:500;color:${MUTED};text-decoration:none;transition:background .15s ease,color .15s ease}
-  .sf-toc a i{font-style:normal;font-size:11.5px;font-weight:700;color:${PRIMARY};min-width:18px}
-  .sf-toc a{position:relative}
-  .sf-toc a i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:transparent;transition:background .25s ease,color .25s ease}
-  .sf-toc a:hover{background:#fff;color:${DEEP}}
-  .sf-toc a.on{background:#fff;color:${DEEP};font-weight:600;box-shadow:0 10px 24px -16px rgba(42,27,12,.5),0 0 0 1px ${LINE}}
-  .sf-toc a.on i{background:${PRIMARY};color:#fff}
-  .sf-toc a.on::before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:3px;border-radius:2px;background:${PRIMARY}}
-  .sf-main{display:grid;gap:84px}
-  .sf-area{scroll-margin-top:84px}
-  .sf-area-h{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;align-items:start;margin-bottom:28px}
-  .sf-num{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:${PRIMARY};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:16px;font-weight:600}
-  .sf-area-h .so-h2{font-size:32px}
-  .sf-area-h p{margin:8px 0 0;font-size:16.5px;color:${MUTED}}
-  .sf-rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 44px}
-  .sf-row{padding:16px 0;border-top:1px solid ${LINE}}
-  .sf-row-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .sf-row b{font-family:var(--font-display),system-ui,sans-serif;font-size:16.5px;font-weight:600;color:${DEEP}}
-  .sf-row p{margin:4px 0 0;font-size:15px;line-height:1.55;color:${MUTED}}
-  .sf-note{display:inline;color:${INK};font-weight:500}
-  .sf-not{list-style:none;margin:0;padding:0;display:grid}
-  .sf-not li{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid ${LINE};font-size:15.5px;color:${INK}}
-  .sf-not li:last-child{border-bottom:1px solid ${LINE}}
-  .sf-not svg{width:17px;height:17px;color:${NEUTRAL};flex-shrink:0;margin-top:4px}
-
-  @media (max-width:1100px){.sf-roles{grid-template-columns:repeat(3,minmax(0,1fr))}.sf-layout{grid-template-columns:minmax(0,1fr)}.sf-toc{display:none}}
-  @media (max-width:980px){
-    .sf-hero{grid-template-columns:minmax(0,1fr);gap:40px;padding:36px 0 56px}.sf-h1{font-size:40px}
-    .sf-rows{grid-template-columns:minmax(0,1fr)}
-  }
-  @media (max-width:640px){
-    .sf-h1{font-size:34px}
-    .sf-key{padding:24px 0 24px 12px}.sf-keycard{margin-right:0;padding:18px}
-    .sf-roles{grid-template-columns:minmax(0,1fr)}
-    .sf-area-h{grid-template-columns:44px minmax(0,1fr);gap:14px}.sf-num{width:40px;height:40px}.sf-area-h .so-h2{font-size:25px}
-  }
-`;
-

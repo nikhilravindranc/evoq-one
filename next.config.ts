@@ -42,6 +42,7 @@ const nextConfig: NextConfig = {
       ["/products/serviceops-v2", "/products/serviceops"],
       ["/products/serviceops-v2/features", "/products/serviceops/features"],
       ["/products/serviceops-v2/pricing", "/products/serviceops/pricing"],
+      ["/products/serviceops-v1/features", "/products/serviceops/features"],
       ["/products/sync-v1", "/products/sync"],
       ["/products/sync-v1/features", "/products/sync/features"],
       ["/products/sync-v1/pricing", "/products/sync/pricing"],
