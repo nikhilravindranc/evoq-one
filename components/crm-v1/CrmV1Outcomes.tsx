@@ -4,15 +4,16 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import { BLUE, BODY, CORAL_DEEP, CORAL_TINT, INK, LINE, MINT_DEEP, MINT_TINT, MUTED, TINT, TINT_SOFT } from "./palette";
 
-/* Outcomes: the five requests a sales team makes every week, and what the CRM does with each (docs/crm-v1-new-content.md, Section B).
-   A tab list on the left, and for the selected request a card that shows the request, what the CRM takes from the records, the result and who approves. */
+/* Outcomes: the five requests a sales team makes in the CRM, and what EVI prepares for each (docs/crm-v1-new-content.md, Section B).
+   EVI is the CRM's assistant: a person asks, EVI checks the record and prepares the work, and approval follows the mode the admin sets.
+   A tab list on the left, and for the selected request an EVI panel: the request, the record EVI checks, and the prepared work. */
 
 type Tone = "blue" | "mint";
 type Outcome = {
   key: string;
   tab: string;
   say: string;
-  gathers: string[];
+  record: { title: string; fields: [string, string][] };
   does: string;
   approval: string;
   chip: string;
@@ -23,36 +24,36 @@ type Outcome = {
 const OUTCOMES: Outcome[] = [
   {
     key: "renewal", tab: "Close this renewal", say: "Close the Halo Health renewal.",
-    gathers: ["Contract value", "Renewal stage", "Last conversation", "Open tasks"],
-    does: "The CRM drafts the renewal follow up and adds a call task for the owner.",
-    approval: "The account owner reviews before anything is sent.", chip: "Waiting for approval", tone: "blue",
+    record: { title: "Halo Health, renewal", fields: [["Contract value", "₹6,00,000"], ["Renewal", "Due in 14 days"], ["Last conversation", "Call, 9 days ago"], ["Open tasks", "1"]] },
+    does: "EVI drafts the renewal follow up and adds a call task for the owner.",
+    approval: "Sent after the account owner approves, or on its own if your admin sets this job to automatic.", chip: "Waiting for approval", tone: "blue",
     tint: "#BCD3FB",
   },
   {
     key: "proposal", tab: "Chase this proposal", say: "Follow up on proposals waiting for a reply.",
-    gathers: ["Deals in the proposal stage", "Days since last activity", "Contact history"],
-    does: "The CRM drafts a follow up for each and schedules a task.",
+    record: { title: "Deals in Proposal", fields: [["Deals waiting", "3"], ["Idle for", "8 to 12 days"], ["Contact history", "Emails and calls"]] },
+    does: "EVI drafts a follow up for each and schedules a task.",
     approval: "Sent after review, or automatically if your admin sets this job to automatic.", chip: "Review or automatic", tone: "blue",
     tint: "#A9E6CE",
   },
   {
     key: "lead", tab: "Qualify this lead", say: "Qualify the leads that came in this week.",
-    gathers: ["Lead source", "Status and history", "Lead score"],
-    does: "The CRM scores each lead, assigns an owner and moves the status.",
+    record: { title: "Leads from this week", fields: [["Lead source", "Web form and import"], ["Status", "New, no contact yet"], ["History", "Pages and emails opened"]] },
+    does: "EVI scores each lead, assigns an owner and moves the status.",
     approval: "The manager confirms assignments, or lets the rules run.", chip: "Manager confirms", tone: "blue",
     tint: "#FFD2C2",
   },
   {
     key: "meeting", tab: "Prepare this meeting", say: "Prepare Thursday's call with Vertex Retail.",
-    gathers: ["Account history", "Open deals", "Notes", "Open tasks"],
-    does: "The CRM puts a short brief on the record, ready before the call.",
+    record: { title: "Vertex Retail, account", fields: [["Open deals", "2"], ["Last conversation", "3 days ago"], ["Notes", "Pricing for a second location"], ["Open tasks", "1"]] },
+    does: "EVI puts a short brief on the record, ready before the call.",
     approval: "Nothing leaves the CRM, so no approval is needed.", chip: "No approval needed", tone: "mint",
     tint: "#CFCBFA",
   },
   {
     key: "quarter", tab: "Report this quarter", say: "How does the pipeline look this quarter?",
-    gathers: ["Pipeline by stage", "Forecast", "Deals at risk"],
-    does: "The CRM answers with the figures and links each to its source report.",
+    record: { title: "Pipeline, this quarter", fields: [["By stage", "Qualification to Won"], ["Forecast", "From deal probability"], ["Deals at risk", "6"]] },
+    does: "EVI answers with the figures and links each to its source report.",
     approval: "Read only, so no approval is needed.", chip: "No approval needed", tone: "mint",
     tint: "#FFE49E",
   },
@@ -221,7 +222,7 @@ export function CrmV1Outcomes() {
       <div className="co-in">
         <div className="co-head">
           <h2 id="co-h2" className="co-h2"><span className="l">Say the outcome.</span> <span className="b">See the work.</span></h2>
-          <p>Five requests a sales team makes every week, and what the CRM does with each.</p>
+          <p>Ask EVI for the outcome. EVI checks the record and prepares the work for your approval.</p>
         </div>
 
         <div className={`co-grid${held ? " held" : ""}`} onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
@@ -250,17 +251,18 @@ export function CrmV1Outcomes() {
             <div key={`bg${o.key}`} className="co-bg" aria-hidden="true" style={{ "--tint": o.tint } as CSSProperties} />
             <div key={o.key} className="co-stage" data-fly={fly ? 1 : 0}>
               <div className="co-say" ref={sayEl}>
-                <img src="/crm-v1/priya.webp" alt="" width={36} height={36} />
-                <div><small><i className="co-step">1</i>Request from Priya</small><p>{o.say}</p></div>
+                <small><i className="co-step">1</i>Ask EVI<img className="co-evi" src="/symbol-color.png" alt="" width={16} height={16} /></small>
+                <div className="co-ask"><img src="/crm-v1/priya.webp" alt="" width={34} height={34} /><div><p>{o.say}</p><span>Priya Nair, account owner</span></div></div>
               </div>
 
               <div className={`co-gath${shown(2) ? "" : " co-hid"}`} ref={gathEl}>
-                <small><i className="co-step">2</i>Taken from the records</small>
-                <ul>{o.gathers.map((g) => <li key={g}>{g}</li>)}</ul>
+                <small><i className="co-step">2</i>EVI checks the record</small>
+                <b className="co-rt">{o.record.title}</b>
+                <dl>{o.record.fields.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
               </div>
 
               <div className={`co-res${shown(4) ? "" : " co-hid"}`} ref={resEl}>
-                <small><i className="co-step">3</i>Result</small>
+                <small><i className="co-step">3</i>EVI prepares, you approve</small>
                 <p className="co-does">{o.does}</p>
                 <Artifact k={o.key} />
                 <div className={`co-ok${fly && step >= 5 ? " pulse" : ""}`}>
@@ -318,14 +320,20 @@ const css = `
   .co-step{flex:none;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:${BLUE};color:#fff;font-style:normal;font-size:11px;font-weight:700;letter-spacing:0}
   .co-say .co-step{background:#fff;color:${INK}}
 
-  .co-say{display:flex;align-items:center;gap:12px;background:${INK};color:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 12px 30px rgba(15,27,61,.2)}
-  .co-say img{flex:none;width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 12%}
+  .co-say{display:grid;gap:8px;background:${INK};color:#fff;border-radius:18px;padding:12px 16px 14px;box-shadow:0 12px 30px rgba(15,27,61,.2)}
   .co-say small{color:rgba(255,255,255,.66)}
-  .co-say p{font-size:16px;font-weight:600;line-height:1.35;margin-top:2px}
+  .co-evi{width:16px;height:16px;object-fit:contain;margin-left:2px}
+  .co-ask{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;border-radius:999px;background:rgba(255,255,255,.1)}
+  .co-ask img{flex:none;width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 12%}
+  .co-say p{font-size:15.5px;font-weight:600;line-height:1.3}
+  .co-ask span{display:block;margin-top:1px;font-size:11.5px;line-height:1.3;color:rgba(255,255,255,.62)}
 
   .co-gath,.co-res{background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 12px 30px rgba(15,27,61,.12),0 0 0 1px rgba(15,27,61,.05)}
-  .co-gath ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
-  .co-gath li{background:${TINT};color:${BLUE};border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:600;line-height:1.4}
+  .co-rt{display:block;margin-top:8px;font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:600;line-height:1.3;color:${INK}}
+  .co-gath dl{margin:10px 0 0;display:grid;gap:6px}
+  .co-gath dl div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 10px;border-radius:10px;background:#F5F7FC;font-size:13px;line-height:1.3}
+  .co-gath dt{color:${MUTED};white-space:nowrap}
+  .co-gath dd{margin:0;color:${INK};font-weight:600;text-align:right}
 
   .co-does{font-family:var(--font-display),system-ui,sans-serif;font-size:17px;line-height:1.35;font-weight:600;color:${INK};margin:6px 0 12px !important}
   .co-art{background:#F5F7FC;border-radius:12px;padding:12px 14px}
@@ -372,8 +380,8 @@ const css = `
     .co-bg::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:rgba(255,255,255,.34);right:-140px;top:-190px}
     .co-bg::after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.22);left:-110px;bottom:-170px}
     .co-stage{position:absolute;inset:0;display:block;padding:0;z-index:1}
-    .co-say{position:absolute;left:24px;top:24px;max-width:400px}
-    .co-gath{position:absolute;left:24px;top:132px;width:290px}
+    .co-say{position:absolute;left:24px;top:24px;width:430px}
+    .co-gath{position:absolute;left:24px;top:150px;width:340px}
     .co-res{position:absolute;right:24px;bottom:24px;width:480px;padding:18px 20px}
     .co-does{font-size:18px}
     .co-gath,.co-res{transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}

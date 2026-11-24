@@ -23,7 +23,7 @@ export function CrmV1Jobs() {
       <div className="jb-in">
         <div className="jb-head">
           <h2 id="jb-h2" className="jb-h2"><span className="l">Routine follow through,</span> <span className="b">handled.</span></h2>
-          <p>These are the jobs most sales teams hand off first. Each runs inside your roles and approval rules.</p>
+          <p>These are the jobs most sales teams hand off first. EVI agents run them inside your roles and approval rules.</p>
         </div>
         <div className="jb-grid">
           {JOBS.map((j, n) => (

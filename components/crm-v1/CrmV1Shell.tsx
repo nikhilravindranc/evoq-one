@@ -9,15 +9,15 @@ import { GetStartedModal } from "@/components/shared/GetStartedModal";
 import { track } from "@/lib/track";
 import { BLUE, BLUE_DEEP, BODY, CARD, INK, LINE, PAGE } from "./palette";
 
-/* The CRM product bar of the live microsite: the CRM logo, Features and Pricing, on a pale blue strip. Pricing is on request, so it opens the demo form. */
-function ProductBar({ onPricing, pinned = false, features = false }: { onPricing: () => void; pinned?: boolean; features?: boolean }) {
+/* The CRM product bar of the live microsite: the CRM logo, Features and Pricing, on a pale blue strip. */
+function ProductBar({ pinned = false, active }: { pinned?: boolean; active: "home" | "features" | "pricing" }) {
   return (
     <div className={pinned ? "cv-bar cv-bar-fx" : "cv-bar"}>
       <div className="cv-bar-in">
         <Link href="/products/crm-v1" className="cv-bar-logo" aria-label="EVOQ CRM overview" tabIndex={pinned ? -1 : undefined}><img src="/site/images/logo-crm-1.png" alt="CRM" width={84} height={34} /></Link>
         <nav aria-label="CRM" className="cv-bar-nav">
-          <Link href="/products/crm-v1/features" aria-current={features ? "page" : undefined} className={features ? "cur" : undefined} tabIndex={pinned ? -1 : undefined}>Features</Link>
-          <button type="button" onClick={onPricing} tabIndex={pinned ? -1 : undefined}>Pricing</button>
+          <Link href="/products/crm-v1/features" aria-current={active === "features" ? "page" : undefined} className={active === "features" ? "cur" : undefined} tabIndex={pinned ? -1 : undefined}>Features</Link>
+          <Link href="/products/crm-v1/pricing" aria-current={active === "pricing" ? "page" : undefined} className={active === "pricing" ? "cur" : undefined} tabIndex={pinned ? -1 : undefined}>Pricing</Link>
         </nav>
       </div>
     </div>
@@ -30,7 +30,7 @@ function ProductBar({ onPricing, pinned = false, features = false }: { onPricing
 const DemoCtx = createContext<(location: string, title?: string) => void>(() => {});
 export const useCrmDemo = () => useContext(DemoCtx);
 
-export function CrmV1Shell({ hero, children, active = "home" }: { hero: ReactNode; children?: ReactNode; active?: "home" | "features" }) {
+export function CrmV1Shell({ hero, children, active = "home" }: { hero: ReactNode; children?: ReactNode; active?: "home" | "features" | "pricing" }) {
   const [from, setFrom] = useState<{ loc: string; title: string } | null>(null);
   const open = useCallback((location: string, title = "Book a demo") => {
     track("click_demo_cta", { location, page: "crm_v1" });
@@ -55,11 +55,11 @@ export function CrmV1Shell({ hero, children, active = "home" }: { hero: ReactNod
             <header className="cv-top">
               <Topbar light darkCTA={false} theme={{ navBg: "#EEF1F8", navFg: INK, ctaBg: INK, ctaFg: "#FFFFFF", loginFg: INK }} />
             </header>
-            <div ref={bar}><ProductBar features={active === "features"} onPricing={() => open("pricing", "Request pricing")} /></div>
+            <div ref={bar}><ProductBar active={active} /></div>
             {hero}
           </div>
         </div>
-        <div className={`cv-pin${pinned ? " on" : ""}`}><ProductBar pinned features={active === "features"} onPricing={() => open("pricing_bar", "Request pricing")} /></div>
+        <div className={`cv-pin${pinned ? " on" : ""}`}><ProductBar pinned active={active} /></div>
         <main>{children}</main>
         <Footer background={BLUE_DEEP} />
         <GetStartedModal isOpen={from !== null} onClose={() => setFrom(null)} title={from?.title ?? "Book a demo"} source={`crm_v1_${from?.loc ?? "demo"}`} />

@@ -3,7 +3,7 @@
 import { useCrmDemo } from "./CrmV1Shell";
 import { BLUE_DEEP, INK } from "./palette";
 
-/* Closing demo section (docs/crm-v1-new-content.md, Section J). Both buttons open the demo form; pricing is on request. */
+/* Closing demo section (docs/crm-v1-new-content.md, Section J). The button opens the demo form. */
 
 export function CrmV1Close() {
   const demo = useCrmDemo();
@@ -16,7 +16,6 @@ export function CrmV1Close() {
           <p>Book a demo and we will set up your stages and approval rules around a real deal.</p>
           <div className="cl-cta">
             <button type="button" className="cl-btn primary" onClick={() => demo("closing", "Book a demo")}>Book a demo</button>
-            <button type="button" className="cl-btn ghost" onClick={() => demo("closing_pricing", "Request pricing")}>Request pricing</button>
           </div>
         </div>
       </div>
