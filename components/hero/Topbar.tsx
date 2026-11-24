@@ -233,7 +233,15 @@ const ManufacturingMark = () => (
 
 export type TopbarTheme = { navBg: string; navFg: string; ctaBg: string; ctaFg: string; loginFg: string };
 
-export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor, theme, showRegion = true, mobileMenu = false }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string; theme?: TopbarTheme; showRegion?: boolean; mobileMenu?: boolean }) {
+/* The mobile menu panel uses white text, so it only takes the theme colour when that colour is an opaque dark hex. */
+function darkHex(c?: string) {
+  if (!c || !/^#[0-9a-f]{6}$/i.test(c)) return undefined;
+  const n = parseInt(c.slice(1), 16);
+  const lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+  return lum < 0.5 ? c : undefined;
+}
+
+export function Topbar({ darkCTA = true, constrained = false, light = false, ctaColor, theme, showRegion = true, mobileMenu = true }: { darkCTA?: boolean; constrained?: boolean; light?: boolean; ctaColor?: string; theme?: TopbarTheme; showRegion?: boolean; mobileMenu?: boolean }) {
   const [open, setOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [subOpen, setSubOpen] = useState(false);
@@ -668,7 +676,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
             aria-label={mobOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobOpen}
             onClick={() => setMobOpen((o) => !o)}
-            className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#E6EAF0] bg-white/70 text-[#1F2430] lg:hidden"
+            className={`inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border lg:hidden ${light ? "border-[#E6EAF0] bg-white/70 text-[#1F2430]" : "border-white/30 bg-white/15 text-white"}`}
             style={theme ? { background: `${theme.navBg}33`, borderColor: `${theme.navBg}55`, color: theme.loginFg } : undefined}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -682,7 +690,7 @@ export function Topbar({ darkCTA = true, constrained = false, light = false, cta
       {mobileMenu && mobOpen && (
         <div
           className="absolute left-5 right-5 top-[calc(100%-6px)] z-50 max-h-[calc(100vh-110px)] overflow-y-auto rounded-[20px] p-4 text-white shadow-[0_30px_60px_-20px_rgba(31,36,48,0.45)] sm:left-6 sm:right-6 lg:hidden"
-          style={{ background: theme?.navBg ?? "#1F2430", animation: "menuIn 0.15s ease forwards" }}
+          style={{ background: darkHex(theme?.navBg) ?? "#1F2430", animation: "menuIn 0.15s ease forwards" }}
         >
           {(["products", "solutions"] as const).map((sec) => (
             <div key={sec}>
