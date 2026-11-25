@@ -4,14 +4,14 @@ import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
-import { ConstructionIndustries } from "./ConstructionTabs";
+import { CnSolutions } from "./CnSolutions";
+import { CnAround } from "./CnAround";
 
 /* Construction & Real Estate: architectural, structural, grounded. Linework, grids and site photography. */
 const TERRA = "#B4533C";
 const CLAY = "#7C2D1F";
 const SAND = "#D6B88C";
 const LSAND = "#E8D8BF";
-const TAUPE = "#A89B8C";
 const WARM = "#FAF7F2";
 const BROWN = "#292524";
 const CONCRETE = "#78716C";
@@ -29,8 +29,6 @@ const IMG = {
   site2: U("1564995408557-f12ea1e4ecf1", 1000),
 };
 const photo = (src: string, extra: CSSProperties = {}): CSSProperties => ({ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center", ...extra });
-const I = (f: string) => `/billing/images/${f}`;
-const ICON: Record<string, string> = { CRM: I("crm-menu-icn.png"), Projects: I("evoq-projects-menu-icn.png"), Inventory: I("inventory-menu-icn.png"), Billing: I("billing-menu-icn.png"), Desk: I("desk-menu-icn.png"), Campaigns: I("campaigns-menu-icn.png"), ServiceOps: I("serviceops-icon.svg"), HRMS: I("hrms-menu-icn-new.png"), Skillberry: I("Skillberry-menu-icn.png") };
 
 const grid = (c: string, s = 40): CSSProperties => ({ backgroundImage: `linear-gradient(${c} 1px, transparent 1px), linear-gradient(90deg, ${c} 1px, transparent 1px)`, backgroundSize: `${s}px ${s}px` });
 const Arrow = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>;
@@ -49,19 +47,6 @@ function Cta({ light = false, children }: { light?: boolean; children: string })
   );
 }
 const h2: CSSProperties = { margin: 0, letterSpacing: "-.025em", fontWeight: 600, color: BROWN };
-function Apps({ list, dark = false }: { list: string[]; dark?: boolean }) {
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-      {list.map((a) => (
-        <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 12px 5px 6px", borderRadius: 4, background: dark ? "rgba(255,255,255,.1)" : LSAND + "99", border: dark ? "1px solid rgba(255,255,255,.18)" : `1px solid ${LSAND}`, fontSize: 12, fontWeight: 600, color: dark ? "#fff" : CLAY }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={ICON[a]} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain", background: "#fff", borderRadius: 4, padding: 1 }} />{a}
-        </span>
-      ))}
-    </div>
-  );
-}
-
 /* ------------------------------------------------------------------ 1. Hero */
 function Hero() {
   return (
@@ -71,11 +56,11 @@ function Hero() {
         <div className="cn-hero">
           <div data-rv="0">
             <Eyebrow>Construction · Engineering · Real Estate</Eyebrow>
-            <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: CLAY }}>Site progress, client commitments and billing milestones in one view.</h1>
-            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: "#44403C", maxWidth: "50ch" }}>Follow a bid or property enquiry through project delivery, client commitments and billing milestones, then into service after handover. For contractors, engineering firms, developers and property agents.</p>
+            <h1 style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 600, color: CLAY }}>Enquiries followed up, projects coordinated, properties maintained.</h1>
+            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: "#44403C", maxWidth: "50ch" }}>Follow a bid or a property enquiry through delivery, milestone billing and handover, then into service. For contractors, engineering firms, developers, agents and property managers.</p>
             <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Cta>Talk to an expert</Cta>
-              <a href="/industries" className="cn-btn" style={{ display: "inline-flex", alignItems: "center", padding: "15px 26px", borderRadius: 4, border: `1.5px solid ${TERRA}`, color: TERRA, textDecoration: "none", fontSize: 14.5, fontWeight: 600 }}>Explore industries</a>
+              <a href="#solutions" className="cn-btn" style={{ display: "inline-flex", alignItems: "center", padding: "15px 26px", borderRadius: 4, border: `1.5px solid ${TERRA}`, color: TERRA, textDecoration: "none", fontSize: 14.5, fontWeight: 600 }}>Explore the solutions</a>
             </div>
           </div>
           <div className="cn-hero-vis" data-rv="1" role="img" aria-label="A contemporary building under construction" style={{ ...photo(IMG.site), borderRadius: "6px 90px 6px 6px", boxShadow: "0 40px 80px -44px rgba(124,45,31,.7)" }} />
@@ -85,66 +70,15 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ 3. How products work together */
-function Together() {
-  // Illustrative grouping only: no lines between apps, because integrations are not claimed here.
-  const groups: { label: string; title: string; body: string; apps: [string, string][] }[] = [
-    { label: "Project and client activity", title: "Coordinate project work", body: "Projects: tasks and milestones. CRM: the client relationships and opportunities behind the work.",
-      apps: [["Projects", "Project task coordination"], ["CRM", "Client relationships and opportunities"]] },
-    { label: "Commercial operations", title: "Support commercial processes", body: "Billing and Inventory: invoicing and stock.",
-      apps: [["Billing", "Invoicing processes"], ["Inventory", "Stock-management processes"]] },
-    { label: "Service and people", title: "Organize service and people operations", body: "Desk and ServiceOps: requests, work orders and maintenance. HRMS and Skillberry: people administration and learning.",
-      apps: [["ServiceOps", "Work orders and maintenance"], ["Desk", "Request handling"], ["HRMS", "People administration"], ["Skillberry", "Learning and development"]] },
-  ];
-  return (
-    <section id="approach" style={{ background: LSAND + "55", padding: "96px 0", borderTop: `1px solid ${LSAND}` }}>
-      <div className="cn-wrap">
-        <div className="cn-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow>How EVOQ products work together</Eyebrow><h2 style={h2}>How project, sales and service teams work together in EVOQ.</h2></div>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: "#57534E", maxWidth: "54ch" }}>Each team starts with the products it needs and adds more as the work grows.</p>
-        </div>
-
-        <div data-rv="1" style={{ marginTop: 52 }}>
-          <div className="cn-root" aria-hidden="true">
-            <span className="cn-pill">Your operation</span>
-          </div>
-          <div className="cn-g3 cn-tree" aria-hidden="true"><i /><i /><i /></div>
-          <div className="cn-g3 cn-groups">
-            {groups.map((g, i) => (
-              <article key={g.label} className="cn-group" style={{ background: "#fff", border: `1px solid ${LSAND}`, borderTop: `4px solid ${[TERRA, CLAY, SAND][i]}`, borderRadius: 6, padding: "26px 26px 28px", display: "flex", flexDirection: "column" }}>
-                <p style={{ margin: 0, fontSize: 11.5, fontWeight: 700, letterSpacing: ".16em", textTransform: "uppercase", color: TERRA }}>{g.label}</p>
-                <h3 style={{ margin: "10px 0 0", fontWeight: 600, color: BROWN, letterSpacing: "-.015em" }}>{g.title}</h3>
-                <p style={{ margin: "10px 0 0", fontSize: 14.5, lineHeight: 1.7, color: "#57534E" }}>{g.body}</p>
-                <div style={{ paddingTop: 22 }}>
-                  <div style={{ display: "grid", gap: 12, paddingTop: 18, borderTop: `1px solid ${LSAND}` }}>
-                    {g.apps.map(([a, role]) => (
-                      <div key={a} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={ICON[a]} alt="" width={32} height={32} style={{ flex: "none", width: 32, height: 32, objectFit: "contain", background: WARM, border: `1px solid ${LSAND}`, borderRadius: 8, padding: 3 }} />
-                        <div><div style={{ fontSize: 14, fontWeight: 700, color: BROWN }}>{a}</div><div style={{ fontSize: 12.5, color: CONCRETE }}>{role}</div></div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div style={{ marginTop: 28, display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 20, flexWrap: "wrap" }}>
-            <p style={{ margin: 0, fontSize: 16, fontWeight: 600, color: BROWN }}>The right combination depends on your operating model, current processes and required capabilities.</p>
-            <p style={{ margin: 0, fontSize: 12, color: CONCRETE }}>An illustrative grouping of products, not a technical integration map. Capabilities vary by product and plan.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ------------------------------------------------------------------ 4. FAQ */
 const FAQ: [string, string][] = [
-  ["Which EVOQ products are relevant to my organization?", "Project-led teams usually start with Projects and CRM. Real estate teams start with CRM and Campaigns, or Desk and ServiceOps for property operations."],
+  ["Which EVOQ products fit my business?", "Contractors and engineering firms usually start with Projects and CRM. Agencies start with CRM, Bookings and Campaigns. Developers add Billing and ConfigX. Property operations start with Desk and ServiceOps."],
   ["Can I start with the products most relevant to my needs?", "Yes. Plans and licensing set the starting scope, and an EVOQ expert will confirm it with you."],
   ["Can EVOQ support both engineering consultancies and contractors?", "Consultancies usually start with CRM and Projects. Contractors add Inventory and ServiceOps for materials and site service."],
-  ["Which EVOQ products are relevant to real estate?", "Agencies: CRM and Campaigns. Developers: CRM and Billing. Property operations: Desk and ServiceOps."],
+  ["Can prospects and buyers book viewings and site visits?", "Yes. Bookings lets a prospect pick an open slot on a booking page, with reminders where you use them."],
+  ["Can landlords and property managers offer rooms and amenities for booking?", "Yes. Bookings covers meeting rooms, halls and equipment, and courts, pools, halls and event venues, each with its own availability and rules."],
+  ["Can EVOQ raise invoices at project milestones?", "Yes. Billing supports milestone invoices, with payments recorded against them."],
+  ["Does an AI agent act on its own?", "No. The agents draft and flag, and a person sends, books or decides."],
   ["Can EVOQ replace our existing industry-specific software?", "It depends on what your current software does. Leasing, estimating and document control should be evaluated one by one."],
   ["How do we identify the right product combination?", "List the processes you want to improve, the records you need and the results you expect. An EVOQ expert can match them to products."],
 ];
@@ -152,7 +86,7 @@ function Faq() {
   return (
     <section style={{ background: "#FFFDFB", padding: "96px 0" }}>
       <div className="cn-wrap" style={{ maxWidth: 940 }}>
-        <div data-rv="0"><Eyebrow>FAQ</Eyebrow><h2 style={h2}>Questions about EVOQ for construction, engineering and real estate</h2></div>
+        <div data-rv="0"><Eyebrow>FAQ</Eyebrow><h2 style={h2}>Questions about EVOQ for construction, engineering and real estate.</h2></div>
         <div data-rv="1" style={{ marginTop: 40, borderTop: `1px solid ${LSAND}` }}>
           {FAQ.map(([q, a]) => (
             <details key={q} className="cn-faq" style={{ borderBottom: `1px solid ${LSAND}` }}>
@@ -176,7 +110,7 @@ function FinalCta() {
         <div className="cn-cta" data-rv="0" style={{ position: "relative", overflow: "hidden", background: LSAND, borderRadius: 6, borderLeft: `8px solid ${TERRA}`, display: "block" }}>
           <div style={{ position: "relative", padding: "56px 56px 60px", maxWidth: 700 }}>
             
-            <h2 style={h2}>Start with the project, client or site process you want to improve first.</h2>
+            <h2 style={h2}>Start with how your enquiries, projects and site requests work today.</h2>
             <p style={{ margin: "18px 0 0", fontSize: 15.5, lineHeight: 1.75, color: "#44403C", maxWidth: "56ch" }}>Tell us whether project coordination, client follow-up or property service comes first, and we will show where EVOQ products fit.</p>
             <div style={{ marginTop: 30 }}><Cta>Talk to an expert</Cta></div>
           </div>
@@ -201,16 +135,6 @@ export function ConstructionPage() {
         .cn-wrap{max-width:1328px;margin:0 auto;padding:0 24px}
         .cn-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center;padding:46px 0 72px}
         .cn-hero-vis{position:relative;height:460px}
-        .cn-root{display:flex;justify-content:center}
-        .cn-pill{background:#7C2D1F;color:#fff;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;border-radius:99px}
-        .cn-tree{height:44px}
-        .cn-tree i{position:relative;display:block}
-        .cn-tree i::before{content:"";position:absolute;top:21px;height:2px;background:#A89B8C}
-        .cn-tree i::after{content:"";position:absolute;left:calc(50% - 1px);width:2px;bottom:0;top:21px;background:#A89B8C}
-        .cn-tree i:nth-child(1)::before{left:50%;right:-11px}
-        .cn-tree i:nth-child(2)::before{left:-11px;right:-11px}
-        .cn-tree i:nth-child(2)::after{top:0}
-        .cn-tree i:nth-child(3)::before{left:-11px;right:50%}
         .cn-faq summary::-webkit-details-marker{display:none}
         .cn-faq[open] .cn-plus{background:#B4533C;color:#fff;transform:rotate(45deg)}
         .cn-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
@@ -223,7 +147,7 @@ export function ConstructionPage() {
         .cn-card:hover{transform:translateY(-5px);box-shadow:0 30px 56px -34px rgba(41,37,36,.6)}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1100px){.cn-root,.cn-tree{display:none}.cn-g4{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g3{grid-template-columns:1fr}.cn-apps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+        @media (max-width:1100px){.cn-g4{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g3{grid-template-columns:1fr}.cn-apps{grid-template-columns:repeat(4,minmax(0,1fr))}}
         @media (max-width:900px){.cn-hero,.cn-split{grid-template-columns:1fr;gap:34px}.cn-hero-vis{height:380px}.cn-cta{grid-template-columns:1fr!important}.cn-cta>div:first-child{padding:38px 28px 40px!important}.cn-cta-img{display:none}}
         @media (max-width:640px){.cn-apps{grid-template-columns:repeat(2,minmax(0,1fr))}.cn-g4{grid-template-columns:1fr}}
         @media (prefers-reduced-motion:reduce){.hs-rv,.cn-card,.cn-btn{transition:none}}
@@ -231,8 +155,8 @@ export function ConstructionPage() {
       <HeroShell bg={{ background: WARM, ...grid(LCON + "88", 48) }} topbar={<Topbar darkCTA={false} light ctaColor={CLAY} />}>
         <Hero />
       </HeroShell>
-      <ConstructionIndustries />
-      <Together />
+      <CnSolutions />
+      <CnAround />
       <Faq />
       <FinalCta />
       <Footer background={CLAY} />
