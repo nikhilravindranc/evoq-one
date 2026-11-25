@@ -16,3 +16,6 @@ export const CORAL_DEEP = "#B8401F";   // text on coral tint (passes contrast)
 export const MINT = "#14A37F";         // approved marks
 export const MINT_TINT = "#DDF6EE";
 export const MINT_DEEP = "#0B6B53";     // text on mint tint (passes contrast)
+
+/* The hero background, built like the Sync hero (white to a soft tint, left to right) in the CRM blues. It runs behind the top bar, the product bar and the hero. */
+export const HERO_GRADIENT = "linear-gradient(90deg, #FFFFFF, #F4F8FF 30%, #E3ECFC 65%, #C7DAFB)";

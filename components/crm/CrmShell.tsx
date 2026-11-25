@@ -7,7 +7,7 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 import { track } from "@/lib/track";
-import { BLUE, BLUE_DEEP, BLUE_HOVER, BODY, CARD, INK, LINE, PAGE } from "./palette";
+import { BLUE, BLUE_DEEP, BLUE_HOVER, BODY, HERO_GRADIENT, INK, LINE, PAGE } from "./palette";
 
 /* The CRM product bar of the live microsite: the CRM logo, Features and Pricing, on a pale blue strip. */
 function ProductBar({ pinned = false, active }: { pinned?: boolean; active: "home" | "features" | "pricing" }) {
@@ -53,7 +53,7 @@ export function CrmShell({ hero, children, active = "home" }: { hero: ReactNode;
         <div className="cv-page">
           <div className="cv-card">
             <header className="cv-top">
-              <Topbar light darkCTA={false} theme={{ navBg: "#EEF1F8", navFg: INK, ctaBg: INK, ctaFg: "#FFFFFF", loginFg: INK }} />
+              <Topbar light darkCTA={false} theme={{ navBg: "rgba(255,255,255,.72)", navFg: INK, ctaBg: INK, ctaFg: "#FFFFFF", loginFg: INK }} />
             </header>
             <div ref={bar}><ProductBar active={active} /></div>
             {hero}
@@ -78,10 +78,11 @@ const css = `
   .cv-root h4{font-size:var(--h4-size);line-height:1.3}
   .cv-root p{text-wrap:pretty;margin:0}
   .cv-page{background:${PAGE};padding:12px}
-  .cv-card{max-width:1440px;margin:0 auto;background:${CARD};border-radius:24px;border:1px solid ${LINE};overflow:hidden}
+  .cv-card{max-width:1440px;margin:0 auto;background:${HERO_GRADIENT};border-radius:24px;border:1px solid ${LINE};overflow:hidden}
   .cv-top{position:relative;z-index:30}
   .cv-root section[id]{scroll-margin-top:76px}
   .cv-bar{background:#EFF6FF;border-top:1px solid rgba(15,23,42,.08);border-bottom:1px solid rgba(15,23,42,.08)}
+  .cv-card .cv-bar{background:transparent;border-top-color:rgba(29,78,216,.1);border-bottom-color:rgba(29,78,216,.1)}
   .cv-bar-in{max-width:1232px;margin:0 auto;padding:0 16px;height:65px;display:flex;align-items:center;gap:50px}
   .cv-bar-logo{display:inline-flex;align-items:center}
   .cv-bar-logo img{display:block;height:34px;width:auto}
