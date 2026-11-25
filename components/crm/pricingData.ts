@@ -20,17 +20,17 @@ export type Plan = {
 
 export const PLANS: Plan[] = [
   {
-    key: "pro", name: "Pro", fit: "Best for startups and small teams getting started with a CRM.",
+    key: "pro", name: "Pro", fit: "Run contacts, deals and tasks for a small team.",
     included: ["Contact & Account Management", "Lead & Deal Management", "Task & Appointment Scheduling", "Email & Calendar Integration", "Basic Dashboards & Reports", "Role-based Access Control", "File & Document Management", "AI Assistant, 300 credits a month"],
     limits: ["100,000 CRM records", "2 GB storage"],
   },
   {
-    key: "max", name: "Max", fit: "Best for growing teams that need automation and better visibility.",
+    key: "max", name: "Max", fit: "Add automation, approvals and quotes as the team grows.",
     included: ["AI Assistant, 3,000 credits a month", "Workflow Automation", "Approval Workflows", "Sales Pipeline Management", "Inventory Management", "Quotes & Invoices", "Custom Reports & Dashboards", "Additional AI credit packs"],
     limits: ["500,000 CRM records", "10 GB storage"],
   },
   {
-    key: "enterprise", name: "Enterprise", fit: "Best for enterprises with complex processes and advanced needs.",
+    key: "enterprise", name: "Enterprise", fit: "Forecast by territory, score leads and connect through the API.",
     included: ["Advanced Sales Forecasting", "Lead Scoring & Auto Assignment", "Customer Segmentation", "AI-powered Insights & Win Probability", "Advanced CRM Customization", "Territory Management", "API Access", "Custom Integrations", "Priority Support", "Dedicated Customer Success Manager"],
     limits: ["1,000,000+ CRM records", "50 GB storage, expandable", "Custom AI credit allocation"],
   },
@@ -94,10 +94,10 @@ export const PRICE_FACTORS: { t: string; d: string; icon: string }[] = [
 export const FAQ: { q: string; a: string }[] = [
   { q: "How do I get started?", a: "Book a demo. We set up the CRM around a real deal and talk through the plan that fits your team." },
   { q: "Do I need to sign a long term contract?", a: "No. Plans are billed monthly or annually, and you can upgrade, downgrade or cancel at any time." },
-  { q: "What does annual billing change?", a: "Annual billing takes 15% off the monthly price per user." },
-  { q: "What happens when the team grows?", a: "Add or remove users at any time. Billing adjusts to the number of active users." },
+  { q: "How much does annual billing save?", a: "Annual billing takes 15% off the monthly price per user." },
+  { q: "How does billing work when the team grows?", a: "Add or remove users at any time. Billing adjusts to the number of active users." },
   { q: "Can I move data from another CRM?", a: "Yes. Import tools handle CSV, Excel and JSON files, and onboarding support helps with the move." },
-  { q: "What support is included?", a: "Plans include email and chat support. Enterprise adds priority support and a dedicated customer success manager." },
-  { q: "Can I move between plans later?", a: "Yes. You can move between Pro, Max and Enterprise at any time, and your data, settings and history carry over." },
-  { q: "What if I need more storage or AI credits?", a: "Extra storage and AI credit packs can be added as usage grows, without switching plans." },
+  { q: "Which support comes with my plan?", a: "Plans include email and chat support. Enterprise adds priority support and a dedicated customer success manager." },
+  { q: "Can I change plans later?", a: "Yes. You can move between Pro, Max and Enterprise at any time, and your data, settings and history carry over." },
+  { q: "Can I add storage or AI credits?", a: "Extra storage and AI credit packs can be added as usage grows, without switching plans." },
 ];

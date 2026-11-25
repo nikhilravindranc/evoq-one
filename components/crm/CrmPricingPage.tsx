@@ -107,7 +107,7 @@ function Compare() {
   return (
     <section id="compare" className="cp-sec" aria-labelledby="cp-h2">
       <div className="cp-in">
-        <h2 id="cp-h2" className="cp-h2"><span className="l">Compare</span> <span className="b">the plans.</span></h2>
+        <h2 id="cp-h2" className="cp-h2"><span className="l">Compare</span> <span className="b">Pro, Max and Enterprise.</span></h2>
         <p className="cp-sub">See what changes from Pro to Enterprise, a group at a time.</p>
         <div className="cp-bar">
           <div className="cp-tabs" role="tablist" aria-label="Comparison groups">
@@ -137,7 +137,7 @@ function Factors() {
   return (
     <section className="wc-sec" aria-labelledby="wc-h2">
       <div className="wc-in">
-        <h2 id="wc-h2" className="wc-h2"><span className="l">What changes</span> <span className="b">the price.</span></h2>
+        <h2 id="wc-h2" className="wc-h2"><span className="l">Users, storage, AI credits</span> <span className="b">and setup affect your price.</span></h2>
         <div className="wc-grid">
           {PRICE_FACTORS.map((f) => (
             <article key={f.t} className="wc-card">
