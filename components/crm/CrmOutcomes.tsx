@@ -4,7 +4,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import { BLUE, BODY, CORAL_DEEP, CORAL_TINT, INK, LINE, MINT_DEEP, MINT_TINT, MUTED, TINT, TINT_SOFT } from "./palette";
 
-/* Outcomes: the five requests a sales team makes in the CRM, and what EVI prepares for each (docs/crm-v1-new-content.md, Section B).
+/* Outcomes: the five requests a sales team makes in the CRM, and what EVI prepares for each (docs/crm-new-content.md, Section B).
    EVI is the CRM's assistant: a person asks, EVI checks the record and prepares the work, and approval follows the mode the admin sets.
    A tab list on the left, and for the selected request an EVI panel: the request, the record EVI checks, and the prepared work. */
 
@@ -129,7 +129,7 @@ function useMedia(q: string) {
    run.step: 0 request, 1 flying to the records, 2 records shown, 3 flying to the result, 4 result shown, 5 approval pulse. */
 const FLIGHT_AT = [300, 1100, 1500, 2400, 3200];
 
-export function CrmV1Outcomes() {
+export function CrmOutcomes() {
   const [run, setRun] = useState({ i: 0, step: 0, n: 0 });
   const [inView, setInView] = useState(false);
   const [auto, setAuto] = useState(true); // the tabs open one after the other until a visitor picks one
@@ -221,8 +221,8 @@ export function CrmV1Outcomes() {
       <style>{css}</style>
       <div className="co-in">
         <div className="co-head">
-          <h2 id="co-h2" className="co-h2"><span className="l">Say the outcome.</span> <span className="b">See the work.</span></h2>
-          <p>Ask EVI for the outcome. EVI checks the record and prepares the work for your approval.</p>
+          <h2 id="co-h2" className="co-h2"><span className="l">Ask EVI for a result,</span> <span className="b">then approve it.</span></h2>
+          <p>EVI reads the record, prepares the work, and you decide whether it goes ahead.</p>
         </div>
 
         <div className={`co-grid${held ? " held" : ""}`} onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
@@ -252,7 +252,7 @@ export function CrmV1Outcomes() {
             <div key={o.key} className="co-stage" data-fly={fly ? 1 : 0}>
               <div className="co-say" ref={sayEl}>
                 <small><i className="co-step">1</i>Ask EVI<img className="co-evi" src="/symbol-color.png" alt="" width={16} height={16} /></small>
-                <div className="co-ask"><img src="/crm-v1/priya.webp" alt="" width={34} height={34} /><div><p>{o.say}</p><span>Priya Nair, account owner</span></div></div>
+                <div className="co-ask"><img src="/crm/priya.webp" alt="" width={34} height={34} /><div><p>{o.say}</p><span>Priya Nair, account owner</span></div></div>
               </div>
 
               <div className={`co-gath${shown(2) ? "" : " co-hid"}`} ref={gathEl}>
@@ -295,10 +295,10 @@ const css = `
   @keyframes coIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .co-sec{background:#fff;padding:64px 0 72px;scroll-margin-top:16px}
   .co-in{max-width:1300px;margin:0 auto;padding:0 20px}
-  .co-head{max-width:820px;margin-bottom:32px}
+  .co-head{margin-bottom:32px}
   .co-h2{font-size:var(--h2-size);line-height:1.12;letter-spacing:-.03em;font-weight:700;color:${INK};margin:0;text-wrap:balance}
   .co-h2 .l{font-weight:400;color:#5C6785}
-  .co-head p{margin:16px 0 0;font-size:18px;line-height:1.6;color:${BODY};max-width:56ch}
+  .co-head p{margin:16px 0 0;font-size:18px;line-height:1.6;color:${BODY}}
 
   .co-grid{display:grid;gap:16px}
   .co-tabs{display:flex;flex-wrap:wrap;gap:8px}

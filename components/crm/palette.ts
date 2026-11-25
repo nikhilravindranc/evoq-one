@@ -1,4 +1,4 @@
-/* CRM v1: the CRM microsite blue, with coral for what has gone quiet and mint for what is approved. */
+/* CRM: the CRM microsite blue, with coral for what has gone quiet and mint for what is approved. */
 export const BLUE = "#1D4ED8";        // buttons, links, prepared work
 export const BLUE_DEEP = "#0C2472";    // footer, deepest text accents
 export const INK = "#0F1B3D";          // headings and the dark pill buttons

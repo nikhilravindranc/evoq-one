@@ -1,7 +1,7 @@
-# EVOQ CRM v1: marketing content, version 2
+# EVOQ CRM: marketing content, version 2
 
-Route: `/products/crm-v1`. The live `/products/crm` stays as it is.
-Replaces `docs/crm-v1-content.md`. Content only, no UI decisions yet.
+Route: `/products/crm`. The live `/products/crm` stays as it is.
+Replaces `docs/crm-content.md`. Content only, no UI decisions yet.
 
 What changed from the first draft:
 - Titles sell an outcome in the buyer's own words, not a generic promise.

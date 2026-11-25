@@ -2,11 +2,11 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { useCrmDemo } from "./CrmV1Shell";
+import { useCrmDemo } from "./CrmShell";
 import { ArtPipeline } from "./art";
 import { BLUE, BLUE_DEEP, BODY, CORAL, CORAL_DEEP, CORAL_TINT, INK, LINE, MINT, MINT_DEEP, MINT_TINT, MUTED, TINT, TINT_SOFT } from "./palette";
 
-/* Hero for CRM v1. A two weight headline, a short description, and a stepped mosaic of seven tiles. Photography and the real CRM screen carry the
+/* Hero for CRM. A two weight headline, a short description, and a stepped mosaic of seven tiles. Photography and the real CRM screen carry the
    image tiles. The tiles tell one story in four beats, played once and replayed when the hero scrolls back into view:
    0 quiet (6 deals went quiet, EVI is checking), 1 prepared (6 follow ups drafted, waiting for approval), 2 approved (Priya M approves),
    3 sent (the follow ups go out and a call is booked). Between beats some tiles change places. The sequence pauses on hover or focus,
@@ -40,7 +40,7 @@ const Check = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
 );
 
-export function CrmV1Hero() {
+export function CrmHero() {
   const demo = useCrmDemo();
   const [beat, setBeat] = useState(0);
   const [count, setCount] = useState(0);
@@ -94,14 +94,13 @@ export function CrmV1Hero() {
       <div className="cv-in">
         <div className="cv-head">
           <div>
-            <span className="cv-eyebrow">EVOQ CRM</span>
             <h1 id="cv-h1" className="cv-h1">
               <span className="l">How many deals</span>
               <span className="b">went quiet this week?</span>
             </h1>
           </div>
           <div className="cv-side">
-            <p>EVOQ CRM finds the proposals nobody answered and the renewals nobody called, then prepares each follow up for the owner to approve.</p>
+            <p>EVOQ CRM finds the proposals nobody answered and the renewals nobody called, then prepares the follow ups for the owner to approve.</p>
             <div className="cv-cta">
               <button type="button" className="cv-btn primary" onClick={() => demo("hero", "Book a demo")}>Book a demo</button>
               <a href="#outcomes" className="cv-btn ghost">See how it works</a>
@@ -113,7 +112,7 @@ export function CrmV1Hero() {
           <div className="cv-mos" data-b={beat} role="group" aria-label="Six quiet deals are found, EVI prepares the follow ups, the owner approves them and they are sent">
             {/* Photograph: colleagues reviewing a deal, with the deal that went quiet */}
             <div className="cv-t cv-img cv-w1" style={{ "--d": "0s" } as CSSProperties}>
-              <img src="/crm-v1/colleagues-wide.webp" alt="Two colleagues reviewing a deal on a tablet" loading="eager" decoding="async" />
+              <img src="/crm/colleagues-wide.webp" alt="Two colleagues reviewing a deal on a tablet" loading="eager" decoding="async" />
               <span className="cv-glass"><i style={{ background: DOT[beat] }} />{fade(GLASS[beat])}</span>
             </div>
 
@@ -124,7 +123,7 @@ export function CrmV1Hero() {
 
             {/* The account owner who approves */}
             <div className={`cv-t cv-img cv-w3${beat >= 2 ? " on" : ""}`} style={{ "--d": ".15s" } as CSSProperties}>
-              <img src="/crm-v1/priya.webp" alt="Priya M, account owner" loading="eager" decoding="async" style={{ objectPosition: "50% 12%" }} />
+              <img src="/crm/priya.webp" alt="Priya M, account owner" loading="eager" decoding="async" style={{ objectPosition: "50% 12%" }} />
               <span className="cv-glass cv-who"><b>Priya M</b><small>{fade(OWNER[beat])}</small></span>
             </div>
 
@@ -184,7 +183,6 @@ const css = `
   .cv-hero{padding:8px 0 28px}
   .cv-in{max-width:1300px;margin:0 auto;padding:0 20px}
   .cv-head{display:grid;gap:22px;margin:12px 0 28px}
-  .cv-eyebrow{display:inline-block;font-family:var(--font-display),system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:${BLUE};margin-bottom:14px}
   .cv-h1{font-size:var(--h1-size);line-height:1.08;letter-spacing:-.03em;font-weight:700}
   .cv-h1 span{display:block;text-wrap:balance}
   .cv-h1 .l{font-weight:400;color:#5C6785}

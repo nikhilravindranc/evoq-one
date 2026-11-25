@@ -4,7 +4,7 @@ import { CORAL, INK, MINT } from "./palette";
 /* The pipeline illustration used in the home page hero: stages that rise, with the real faces of the people who own each deal. */
 
 const FONT = "var(--font-display), system-ui, sans-serif";
-const AV = (k: string) => `/crm-v1/a-${k}.webp`;
+const AV = (k: string) => `/crm/a-${k}.webp`;
 
 function Svg({ id, label, slice = false, decorative = false, children }: { id: string; label: string; slice?: boolean; decorative?: boolean; children: ReactNode }) {
   return (

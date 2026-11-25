@@ -2,12 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
-import { CrmV1Close } from "./CrmV1Close";
-import { CrmV1Shell } from "./CrmV1Shell";
+import { CrmClose } from "./CrmClose";
+import { CrmShell } from "./CrmShell";
 import { AREAS, type Area } from "./featuresData";
 import { BLUE, BODY, INK, LINE, MUTED, TINT } from "./palette";
 
-/* The CRM v1 features page (docs/crm-v1-features-content.md). A tab bar of the areas, and one card below it for the open area: the visual on
+/* The CRM features page (docs/crm-features-content.md). A tab bar of the areas, and one card below it for the open area: the visual on
    the left, the title, description and three feature tags on the right. The three features take turns lighting up, and the areas take turns
    on their own until a visitor picks one or is reading. */
 
@@ -32,12 +32,12 @@ function LeadFragment({ step }: { step: number }) {
         <i className="lf-ghost g2" />
         <i className="lf-ghost g1" />
         <div className="lf-card">
-          <img className="lf-av" src="/crm-v1/a-asian.webp" alt="" width={64} height={64} />
+          <img className="lf-av" src="/crm/a-asian.webp" alt="" width={64} height={64} />
           <b className="lf-name">Meera Iyer</b>
           <span className="lf-role">Head of Operations, Halo Health</span>
           <div className="lf-facts">
             <div data-p="0"><small>Source</small><b>Web form</b></div>
-            <div data-p="2"><small>Owner</small><b><img src="/crm-v1/a-curly.webp" alt="" width={20} height={20} />Priya Nair</b></div>
+            <div data-p="2"><small>Owner</small><b><img src="/crm/a-curly.webp" alt="" width={20} height={20} />Priya Nair</b></div>
             <div className="wide" data-p="1">
               <small>Stage</small>
               <span className="lf-bar"><i style={{ width: `${(cur / 3) * 100}%` }} /></span>
@@ -56,7 +56,7 @@ function LeadFragment({ step }: { step: number }) {
 const Ico = ({ d, size = 16 }: { d: string; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg>
 );
-const AV = (k: string) => `/crm-v1/a-${k}.webp`;
+const AV = (k: string) => `/crm/a-${k}.webp`;
 
 function Shell({ step, label, children }: { step: number; label: ReactNode; children: ReactNode }) {
   return (
@@ -408,7 +408,7 @@ function FeaturesHero() {
           <p>The areas of the CRM in the order a deal moves, from the first lead to the closed sale, and the people and settings around it.</p>
         </div>
         <div className="fh-vis">
-          <div className="fh-photo"><img src="/crm-v1/hero-user.jpg" alt="A woman at an outdoor desk with a laptop, smiling and holding her phone" /></div>
+          <div className="fh-photo"><img src="/crm/hero-user.jpg" alt="A woman at an outdoor desk with a laptop, smiling and holding her phone" /></div>
           <span className="fh-dot" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 9h18M8 2v4M16 2v4" /></svg>
           </span>
@@ -417,7 +417,7 @@ function FeaturesHero() {
             <i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={cur.d} /></svg></i>
           </div>
           <div className="fh-card c2" key={`b${b}`} aria-hidden="true">
-            <img src="/crm-v1/priya.webp" alt="" width={36} height={36} />
+            <img src="/crm/priya.webp" alt="" width={36} height={36} />
             <div><b>{cur.o}</b><span>{cur.ot}</span></div>
           </div>
           <div className="fh-dots" role="group" aria-label="Moments">
@@ -429,15 +429,15 @@ function FeaturesHero() {
   );
 }
 
-export function CrmV1FeaturesPage() {
+export function CrmFeaturesPage() {
   return (
-    <CrmV1Shell active="features" hero={<FeaturesHero />}>
+    <CrmShell active="features" hero={<FeaturesHero />}>
       <section id="features" className="ex-sec" aria-label="Features by area">
         <style>{css}</style>
         <div className="ex-in"><Explorer /></div>
       </section>
-      <CrmV1Close />
-    </CrmV1Shell>
+      <CrmClose />
+    </CrmShell>
   );
 }
 

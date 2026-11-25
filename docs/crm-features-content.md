@@ -1,6 +1,6 @@
-# EVOQ CRM v1: features page content
+# EVOQ CRM: features page content
 
-Route: `/products/crm-v1/features` (the live `/products/crm/features` stays as it is).
+Route: `/products/crm/features` (the live `/products/crm/features` stays as it is).
 Content only, no UI decisions yet. Written from two sources: the current features page and the demo app audit in `docs/crm-features-gap.md`.
 
 Decision applied: the demo app is an internal build, so a feature that is on the current page but not in the demo is treated as real in the live app. The things the app has that the page never mentioned are added.
@@ -184,4 +184,4 @@ Totals: 36 kept, 14 added, 0 removed.
 ---
 
 ## 3. Home page link
-The "Explore all features" button on `/products/crm-v1` should point to `/products/crm-v1/features` once this page is built. Today it points to the old page.
+The "Explore all features" button on `/products/crm` should point to `/products/crm/features` once this page is built. Today it points to the old page.

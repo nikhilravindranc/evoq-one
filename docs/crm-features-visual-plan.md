@@ -1,4 +1,4 @@
-# CRM v1 features page: new visual style and a lighter left side (plan)
+# CRM features page: new visual style and a lighter left side (plan)
 
 Planning only. Nothing is changed until this is reviewed.
 

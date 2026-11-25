@@ -1,6 +1,6 @@
-# EVOQ CRM v1: marketing content draft
+# EVOQ CRM: marketing content draft
 
-Route: `/products/crm-v1` (the current `/products/crm` stays as it is).
+Route: `/products/crm` (the current `/products/crm` stays as it is).
 Status: content only. No UI decisions yet. Review the approach first, then we pick the UI against it.
 
 ---

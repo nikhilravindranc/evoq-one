@@ -1,18 +1,18 @@
 "use client";
 
-import { useCrmDemo } from "./CrmV1Shell";
+import { useCrmDemo } from "./CrmShell";
 import { BLUE_DEEP, INK } from "./palette";
 
-/* Closing demo section (docs/crm-v1-new-content.md, Section J). The button opens the demo form. */
+/* Closing demo section (docs/crm-new-content.md, Section J). The button opens the demo form. */
 
-export function CrmV1Close() {
+export function CrmClose() {
   const demo = useCrmDemo();
   return (
     <section id="demo" className="cl-sec" aria-labelledby="cl-h2">
       <style>{css}</style>
       <div className="cl-in">
         <div className="cl-card">
-          <h2 id="cl-h2" className="cl-h2">Bring a renewal you need to close.</h2>
+          <h2 id="cl-h2" className="cl-h2">See EVOQ CRM with your own deals.</h2>
           <p>Book a demo and we will set up your stages and approval rules around a real deal.</p>
           <div className="cl-cta">
             <button type="button" className="cl-btn primary" onClick={() => demo("closing", "Book a demo")}>Book a demo</button>

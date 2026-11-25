@@ -103,7 +103,7 @@ These are strengths the page does not mention. Several are worth adding.
 ## "Coming soon" inside the app
 Customer Comms, Email settings, Export, Data Backup.
 
-## Effect on the CRM v1 page
+## Effect on the CRM page
 
 The v1 feature cards promise more than the common demo shows. By card:
 

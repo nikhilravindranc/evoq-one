@@ -4,8 +4,8 @@
 import Link from "next/link";
 import { BLUE, BODY, INK, LINE, MINT } from "./palette";
 
-/* Works with EVOQ (docs/crm-v1-new-content.md, Section H): a closed deal moves on to billing, projects, support, quotes and campaigns.
-   The claim is the shared login through EVOQ CTRL only; what data moves between the apps stays out until it is confirmed. */
+/* Works with EVOQ (docs/crm-new-content.md, Section H): a closed deal moves on to billing, projects, support, quotes and campaigns.
+   The claim is the shared login only; what data moves between the apps stays out until it is confirmed. */
 
 const APPS = [
   { name: "Billing", line: "Invoice the deals you win.", logo: "billing-menu-icn.png" },
@@ -15,14 +15,14 @@ const APPS = [
   { name: "Campaigns", line: "Reach the segments you built in the CRM.", logo: "campaigns-menu-icn.png" },
 ];
 
-export function CrmV1Connected() {
+export function CrmConnected() {
   return (
     <section id="connected" className="cn-sec" aria-labelledby="cn-h2">
       <style>{css}</style>
       <div className="cn-in">
         <div className="cn-head">
-          <h2 id="cn-h2" className="cn-h2"><span className="l">A won deal does not stop</span> <span className="b">at the CRM.</span></h2>
-          <p>EVOQ CRM shares a login with your other EVOQ apps through EVOQ CTRL, so a closed deal can move on to billing, projects and support.</p>
+          <h2 id="cn-h2" className="cn-h2"><span className="l">Hand a won deal</span> <span className="b">to billing, projects and support.</span></h2>
+          <p>EVOQ CRM shares a login with your other EVOQ apps.</p>
         </div>
 
         <div className="cn-flow">
@@ -58,7 +58,7 @@ const css = `
   .cn-head{margin-bottom:34px}
   .cn-h2{font-size:var(--h2-size);line-height:1.12;letter-spacing:-.03em;font-weight:700;color:${INK};margin:0;text-wrap:balance}
   .cn-h2 .l{font-weight:400;color:#5C6785}
-  .cn-head p{margin:16px 0 0;font-size:18px;line-height:1.6;color:${BODY};max-width:66ch}
+  .cn-head p{margin:16px 0 0;font-size:18px;line-height:1.6;color:${BODY}}
 
   .cn-flow{display:grid;gap:16px;align-items:stretch;--h3-size:19px}
   .cn-crm{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:26px;border-radius:28px;background:linear-gradient(160deg,#1D4ED8,#0C2472);color:#fff;box-shadow:0 24px 54px -26px rgba(12,36,114,.6)}

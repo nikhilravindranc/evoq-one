@@ -1,4 +1,4 @@
-/* CRM v1 pricing content (docs/crm-v1-pricing-plan.md). The plans, prices, inclusions and comparison rows are the ones on the live
+/* CRM pricing content (docs/crm-pricing-plan.md). The plans, prices, inclusions and comparison rows are the ones on the live
    pricing page, shown as they are. Annual billing is 15% below the monthly price, and a trial is not offered. */
 
 export type RegionKey = "in" | "intl";

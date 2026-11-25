@@ -14,10 +14,10 @@ function ProductBar({ pinned = false, active }: { pinned?: boolean; active: "hom
   return (
     <div className={pinned ? "cv-bar cv-bar-fx" : "cv-bar"}>
       <div className="cv-bar-in">
-        <Link href="/products/crm-v1" className="cv-bar-logo" aria-label="EVOQ CRM overview" tabIndex={pinned ? -1 : undefined}><img src="/site/images/logo-crm-1.png" alt="CRM" width={84} height={34} /></Link>
+        <Link href="/products/crm" className="cv-bar-logo" aria-label="EVOQ CRM overview" tabIndex={pinned ? -1 : undefined}><img src="/site/images/logo-crm-1.png" alt="CRM" width={84} height={34} /></Link>
         <nav aria-label="CRM" className="cv-bar-nav">
-          <Link href="/products/crm-v1/features" aria-current={active === "features" ? "page" : undefined} className={active === "features" ? "cur" : undefined} tabIndex={pinned ? -1 : undefined}>Features</Link>
-          <Link href="/products/crm-v1/pricing" aria-current={active === "pricing" ? "page" : undefined} className={active === "pricing" ? "cur" : undefined} tabIndex={pinned ? -1 : undefined}>Pricing</Link>
+          <Link href="/products/crm/features" aria-current={active === "features" ? "page" : undefined} className={active === "features" ? "cur" : undefined} tabIndex={pinned ? -1 : undefined}>Features</Link>
+          <Link href="/products/crm/pricing" aria-current={active === "pricing" ? "page" : undefined} className={active === "pricing" ? "cur" : undefined} tabIndex={pinned ? -1 : undefined}>Pricing</Link>
         </nav>
       </div>
     </div>
@@ -25,18 +25,18 @@ function ProductBar({ pinned = false, active }: { pinned?: boolean; active: "hom
 }
 
 
-/* Shell for the CRM v1 page: a grey page, a rounded off white card that holds the header and the hero, the demo form and the footer. */
+/* Shell for the CRM page: a grey page, a rounded off white card that holds the header and the hero, the demo form and the footer. */
 
 const DemoCtx = createContext<(location: string, title?: string) => void>(() => {});
 export const useCrmDemo = () => useContext(DemoCtx);
 
-export function CrmV1Shell({ hero, children, active = "home" }: { hero: ReactNode; children?: ReactNode; active?: "home" | "features" | "pricing" }) {
+export function CrmShell({ hero, children, active = "home" }: { hero: ReactNode; children?: ReactNode; active?: "home" | "features" | "pricing" }) {
   const [from, setFrom] = useState<{ loc: string; title: string } | null>(null);
   const open = useCallback((location: string, title = "Book a demo") => {
-    track("click_demo_cta", { location, page: "crm_v1" });
+    track("click_demo_cta", { location, page: "crm" });
     setFrom({ loc: location, title });
   }, []);
-  useEffect(() => { track("view_crm_v1", { page: "crm" }); }, []);
+  useEffect(() => { track("view_crm", { page: "crm" }); }, []);
   const bar = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(false);
   useEffect(() => {
@@ -62,7 +62,7 @@ export function CrmV1Shell({ hero, children, active = "home" }: { hero: ReactNod
         <div className={`cv-pin${pinned ? " on" : ""}`}><ProductBar pinned active={active} /></div>
         <main>{children}</main>
         <Footer background={BLUE_DEEP} />
-        <GetStartedModal isOpen={from !== null} onClose={() => setFrom(null)} title={from?.title ?? "Book a demo"} source={`crm_v1_${from?.loc ?? "demo"}`} />
+        <GetStartedModal isOpen={from !== null} onClose={() => setFrom(null)} title={from?.title ?? "Book a demo"} source={`crm_${from?.loc ?? "demo"}`} />
       </div>
     </DemoCtx.Provider>
   );

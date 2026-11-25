@@ -1,13 +1,13 @@
-# CRM v1 pricing page: review of the live page and the plan
+# CRM pricing page: review of the live page and the plan
 
-Route to build: `/products/crm-v1/pricing` (the live `/products/crm/pricing` stays as it is).
+Route to build: `/products/crm/pricing` (the live `/products/crm/pricing` stays as it is).
 Planning only. Nothing is built until the decisions in section 4 are answered.
 
 ---
 
 ## 1. What the live pricing page has today
 
-It is a static HTML file (`public/site/products-crm-pricing.html`) shown inside the site, so it does not use the CRM v1 shell, header bar or type tokens.
+It is a static HTML file (`public/site/products-crm-pricing.html`) shown inside the site, so it does not use the CRM shell, header bar or type tokens.
 
 | Block | Content |
 |---|---|
@@ -34,7 +34,7 @@ It is a static HTML file (`public/site/products-crm-pricing.html`) shown inside 
 7. **Credits.** "AI Assistant (300 credits)" is AI led wording, and we agreed not to push AI. It also never says what a credit buys.
 8. **Design.** It is the generic template look, with a different header and a long table at the end. It is the same endless scroll problem we just removed from the features page.
 
-## 3. Proposed CRM v1 pricing page
+## 3. Proposed CRM pricing page
 
 Same shell, product bar (Pricing shown as active), site type tokens, single line section titles, no disclaimer captions and no status tags.
 
@@ -49,7 +49,7 @@ Same shell, product bar (Pricing shown as active), site type tokens, single line
 
 Questions after the rewrite: Is there a trial? (answer points to the demo), Is there a long term contract, What does annual billing change, What happens when the team grows, Can I move data from another CRM, What support is included, Can I move between plans, What if I need more storage or credits. The security and integration questions stay only if the facts are confirmed.
 
-Files: `components/crm-v1/CrmV1PricingPage.tsx`, `components/crm-v1/pricingData.ts`, `app/products/crm-v1/pricing/page.tsx`, a `noindex` entry in `lib/seo.tsx`, and the product bar change (Pricing becomes a link to this page).
+Files: `components/crm/CrmPricingPage.tsx`, `components/crm/pricingData.ts`, `app/products/crm/pricing/page.tsx`, a `noindex` entry in `lib/seo.tsx`, and the product bar change (Pricing becomes a link to this page).
 
 Visuals: a new hero photo and small cards only. Plan cards stay typographic with soft colour bands. The app screens and photos on the features page are not reused here.
 

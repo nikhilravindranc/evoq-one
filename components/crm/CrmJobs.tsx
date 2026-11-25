@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import { BLUE_DEEP } from "./palette";
 
-/* Jobs EVI can take on (docs/crm-v1-new-content.md, Section E): four routine jobs, each running inside the roles and approval rules.
+/* Jobs EVI can take on (docs/crm-new-content.md, Section E): four routine jobs, each running inside the roles and approval rules.
    A deep blue band between the light sections. */
 
 const I = (d: ReactNode) => (
@@ -10,19 +10,19 @@ const I = (d: ReactNode) => (
 );
 
 const JOBS = [
-  { name: "Idle proposals", line: "Finds proposals with no reply and prepares the follow up.", icon: I(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>) },
-  { name: "New leads", line: "Scores, assigns and moves new leads along.", icon: I(<><circle cx="9" cy="8" r="4" /><path d="M3 21v-1a6 6 0 0 1 6-6h2" /><path d="M19 8v6M16 11h6" /></>) },
-  { name: "Meeting briefs", line: "Prepares the account history before a call.", icon: I(<><rect x="4" y="5" width="16" height="15" rx="3" /><path d="M8 3v4M16 3v4M4 10h16" /><path d="M8 14h4" /></>) },
-  { name: "Renewals", line: "Flags renewals approaching their date and drafts the reminder.", icon: I(<><path d="M20 11a8 8 0 0 0-14.5-4.5L4 8" /><path d="M4 4v4h4" /><path d="M4 13a8 8 0 0 0 14.5 4.5L20 16" /><path d="M20 20v-4h-4" /></>) },
+  { name: "Nudge idle proposals", line: "Finds proposals with no reply and prepares the follow up.", icon: I(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>) },
+  { name: "Respond to new leads", line: "Scores, assigns and moves new leads along.", icon: I(<><circle cx="9" cy="8" r="4" /><path d="M3 21v-1a6 6 0 0 1 6-6h2" /><path d="M19 8v6M16 11h6" /></>) },
+  { name: "Prepare meeting briefs", line: "Prepares the account history before a call.", icon: I(<><rect x="4" y="5" width="16" height="15" rx="3" /><path d="M8 3v4M16 3v4M4 10h16" /><path d="M8 14h4" /></>) },
+  { name: "Chase renewals", line: "Flags renewals approaching their date and drafts the reminder.", icon: I(<><path d="M20 11a8 8 0 0 0-14.5-4.5L4 8" /><path d="M4 4v4h4" /><path d="M4 13a8 8 0 0 0 14.5 4.5L20 16" /><path d="M20 20v-4h-4" /></>) },
 ];
 
-export function CrmV1Jobs() {
+export function CrmJobs() {
   return (
     <section id="jobs" className="jb-sec" aria-labelledby="jb-h2">
       <style>{css}</style>
       <div className="jb-in">
         <div className="jb-head">
-          <h2 id="jb-h2" className="jb-h2"><span className="l">Routine follow through,</span> <span className="b">handled.</span></h2>
+          <h2 id="jb-h2" className="jb-h2"><span className="l">EVI agents take</span> <span className="b">the routine follow ups.</span></h2>
           <p>These are the jobs most sales teams hand off first. EVI agents run them inside your roles and approval rules.</p>
         </div>
         <div className="jb-grid">

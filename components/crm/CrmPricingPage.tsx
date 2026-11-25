@@ -3,12 +3,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { CrmV1Close } from "./CrmV1Close";
-import { CrmV1Shell, useCrmDemo } from "./CrmV1Shell";
+import { CrmClose } from "./CrmClose";
+import { CrmShell, useCrmDemo } from "./CrmShell";
 import { ANNUAL_OFF, COMPARE, FAQ, PLANS, PRICE_FACTORS, REGIONS, type Plan, type RegionKey } from "./pricingData";
 import { BLUE, BODY, INK, LINE, MUTED, TINT } from "./palette";
 
-/* The CRM v1 pricing page (docs/crm-v1-pricing-plan.md): a hero, the three plans with a monthly and annual switch and a region switch,
+/* The CRM pricing page (docs/crm-pricing-plan.md): a hero, the three plans with a monthly and annual switch and a region switch,
    a comparison split into tabs, what changes the price, questions, and the closing demo card. Every plan button books a demo. */
 
 const Tick = ({ s = 12 }: { s?: number }) => (
@@ -33,7 +33,7 @@ function PricingHero() {
           <p>Pay per user, billed monthly or annually. Book a demo and we will walk through the plan that fits.</p>
         </div>
         <div className="ph-vis">
-          <div className="ph-photo"><img src="/crm-v1/photos/team.webp" alt="A sales team reviewing work together around a table" /></div>
+          <div className="ph-photo"><img src="/crm/photos/team.webp" alt="A sales team reviewing work together around a table" /></div>
           <div className="ph-card c1"><b>Users</b><span>Add or remove users at any time</span></div>
           <div className="ph-card c2"><b>Annual billing</b><span>15% off the monthly price</span></div>
         </div>
@@ -171,16 +171,16 @@ function Questions() {
   );
 }
 
-export function CrmV1PricingPage() {
+export function CrmPricingPage() {
   return (
-    <CrmV1Shell active="pricing" hero={<PricingHero />}>
+    <CrmShell active="pricing" hero={<PricingHero />}>
       <style>{css}</style>
       <Plans />
       <Compare />
       <Factors />
       <Questions />
-      <CrmV1Close />
-    </CrmV1Shell>
+      <CrmClose />
+    </CrmShell>
   );
 }
 

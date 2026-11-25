@@ -25,13 +25,13 @@ const H = 310;
 const CX = W / 2;
 const CY = H - 10;
 
-export function CrmV1Integrations() {
+export function CrmIntegrations() {
   return (
     <section id="integrations" className="ig-sec" aria-labelledby="ig-h2">
       <style>{css}</style>
       <div className="ig-in">
         <div className="ig-copy">
-          <h2 id="ig-h2" className="ig-h2"><span className="l">Bring in the tools</span> <span className="b">your team already uses.</span></h2>
+          <h2 id="ig-h2" className="ig-h2"><span className="l">Connect the tools</span> <span className="b">you use.</span></h2>
           <p>Email, calendars, messages, payments and accounts connect to the CRM through EVOQ Sync, so a record keeps up with the work without retyping.</p>
           <div className="ig-tags" aria-label="What connects">
             {["Email", "Calendar", "Messaging", "Payments", "Accounting"].map((t) => <em key={t}>{t}</em>)}
