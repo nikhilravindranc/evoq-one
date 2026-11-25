@@ -7,7 +7,7 @@ import { Topbar } from "@/components/hero/Topbar";
 import { Footer } from "@/components/sections/Footer";
 import { GetStartedModal } from "@/components/shared/GetStartedModal";
 import { track } from "@/lib/track";
-import { BLUE, BLUE_DEEP, BODY, CARD, INK, LINE, PAGE } from "./palette";
+import { BLUE, BLUE_DEEP, BLUE_HOVER, BODY, CARD, INK, LINE, PAGE } from "./palette";
 
 /* The CRM product bar of the live microsite: the CRM logo, Features and Pricing, on a pale blue strip. */
 function ProductBar({ pinned = false, active }: { pinned?: boolean; active: "home" | "features" | "pricing" }) {
@@ -94,10 +94,10 @@ const css = `
   .cv-pin .cv-bar{border-top:0}
   .cv-shot{display:block;max-width:100%;height:auto;background:#fff}
   .cv-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 26px;border-radius:999px;font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;border:1.5px solid transparent;transition:background .18s ease,border-color .18s ease,transform .12s ease;white-space:nowrap}
-  .cv-btn.primary{background:${INK};color:#fff}
-  .cv-btn.primary:hover{background:${BLUE}}
-  .cv-btn.ghost{background:transparent;color:${INK};border-color:rgba(15,27,61,.28)}
-  .cv-btn.ghost:hover{border-color:${INK};background:rgba(15,27,61,.04)}
+  .cv-btn.primary{background:${BLUE};border-color:${BLUE};color:#fff;box-shadow:0 12px 24px -12px rgba(29,78,216,.5)}
+  .cv-btn.primary:hover{background:${BLUE_HOVER};border-color:${BLUE_HOVER};box-shadow:0 16px 30px -12px rgba(29,78,216,.55)}
+  .cv-btn.ghost{background:#fff;color:${BLUE};border-color:${BLUE}}
+  .cv-btn.ghost:hover{background:${BLUE_HOVER};border-color:${BLUE_HOVER};color:#fff}
   .cv-btn:active{transform:translateY(1px)}
   .cv-btn:focus-visible{outline:3px solid ${BLUE};outline-offset:3px}
   @media (min-width:640px){.cv-page{padding:16px}.cv-card{border-radius:32px}}

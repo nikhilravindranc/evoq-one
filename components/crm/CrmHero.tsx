@@ -235,7 +235,7 @@ const css = `
   .cv-list span{color:${MUTED};min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .cv-evi-r{display:flex;align-items:center;gap:12px}
   .cv-evi-r small{font-size:12px;color:${MUTED};line-height:1.3;white-space:nowrap}
-  .cv-approve{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:0 20px;border-radius:999px;background:${INK};color:#fff;font-size:13.5px;font-weight:600;white-space:nowrap;transition:background-color .5s ease}
+  .cv-approve{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:0 20px;border-radius:999px;background:${BLUE};color:#fff;font-size:13.5px;font-weight:600;white-space:nowrap;transition:background-color .5s ease}
   .cv-approve.off{background:#B9C3DA}
   .cv-approve.ok{background:${MINT};animation:cvPress .5s ease}
 

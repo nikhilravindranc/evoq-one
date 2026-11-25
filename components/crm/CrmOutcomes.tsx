@@ -308,7 +308,7 @@ const css = `
   @keyframes coFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
   .co-tab:hover{border-color:#B8C4DF}
   .co-tab:focus-visible{outline:3px solid ${BLUE};outline-offset:2px}
-  .co-tab.on{background:${INK};border-color:${INK};color:#fff}
+  .co-tab.on{background:${BLUE};border-color:${BLUE};color:#fff}
   .co-n{flex:none;width:24px;height:24px;border-radius:50%;background:#fff;color:${INK};font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .co-tab.on .co-n{background:rgba(255,255,255,.18);color:#fff}
 
@@ -318,14 +318,14 @@ const css = `
   .co-stage small{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:${MUTED}}
   .co-stage p{margin:0}
   .co-step{flex:none;display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:${BLUE};color:#fff;font-style:normal;font-size:11px;font-weight:700;letter-spacing:0}
-  .co-say .co-step{background:#fff;color:${INK}}
+  .co-say .co-step{background:#fff;color:${BLUE}}
 
-  .co-say{display:grid;gap:8px;background:${INK};color:#fff;border-radius:18px;padding:12px 16px 14px;box-shadow:0 12px 30px rgba(15,27,61,.2)}
-  .co-say small{color:rgba(255,255,255,.66)}
+  .co-say{display:grid;gap:8px;background:${BLUE};color:#fff;border-radius:18px;padding:12px 16px 14px;box-shadow:0 12px 30px rgba(29,78,216,.28)}
+  .co-say small{color:rgba(255,255,255,.88)}
   .co-trig{flex:none;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;display:inline-flex;align-items:center;justify-content:center}
-  .co-ask{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;border-radius:999px;background:rgba(255,255,255,.1)}
+  .co-ask{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;border-radius:999px;background:rgba(255,255,255,.16)}
   .co-say p{font-size:15.5px;font-weight:600;line-height:1.3}
-  .co-ask span{display:block;margin-top:1px;font-size:11.5px;line-height:1.3;color:rgba(255,255,255,.62)}
+  .co-ask span{display:block;margin-top:1px;font-size:11.5px;line-height:1.3;color:rgba(255,255,255,.86)}
 
   .co-gath,.co-res{background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 12px 30px rgba(15,27,61,.12),0 0 0 1px rgba(15,27,61,.05)}
   .co-rt{display:block;margin-top:8px;font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:600;line-height:1.3;color:${INK}}

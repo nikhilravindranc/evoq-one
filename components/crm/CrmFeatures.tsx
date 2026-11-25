@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { BLUE, BODY, INK, LINE, MUTED, TINT } from "./palette";
+import { BLUE, BLUE_HOVER, BODY, INK, LINE, MUTED, TINT } from "./palette";
 
 /* The journey of a deal in four moments (docs/crm-new-content.md, Section D): capture, follow up, quote and report. Four full-width slides
    in a sideways track, one after the other. Each slide has the pill, heading and features on the left, and on the right a picture: a real
@@ -206,7 +206,7 @@ const css = `
   .fx-head p{margin:16px 0 0;font-size:18px;line-height:1.6;color:${BODY}}
   .fx-nav{display:none;gap:10px;flex:none}
   .fx-nav button{all:unset;box-sizing:border-box;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fff;color:${INK};box-shadow:inset 0 0 0 1.5px #C9D2E6;transition:background .2s ease,color .2s ease,box-shadow .2s ease}
-  .fx-nav button:hover:not(:disabled){background:${INK};color:#fff;box-shadow:none}
+  .fx-nav button:hover:not(:disabled){background:${BLUE};color:#fff;box-shadow:none}
   .fx-nav button:disabled{opacity:.4;cursor:default}
   .fx-nav button:focus-visible{outline:3px solid ${BLUE};outline-offset:3px}
 
@@ -218,7 +218,7 @@ const css = `
   .fx-steps button:focus-visible{outline:3px solid ${BLUE};outline-offset:4px;border-radius:99px}
   .fx-steps i{font-style:normal;width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#fff;box-shadow:inset 0 0 0 1.5px #C9D2E6;font-size:13px;font-weight:700;transition:background .25s ease,color .25s ease,box-shadow .25s ease}
   .fx-steps li.on button{color:${INK}}
-  .fx-steps li.on i{background:${INK};color:#fff;box-shadow:none}
+  .fx-steps li.on i{background:${BLUE};color:#fff;box-shadow:none}
   .fx-steps li.done i{background:${TINT};color:${BLUE};box-shadow:none}
   .fx-steps button:hover i{box-shadow:inset 0 0 0 1.5px ${BLUE}}
 
@@ -258,7 +258,7 @@ const css = `
   .vz-chip.blue{background:${TINT};color:${BLUE}}
   .vz-chip.mint{background:#DDF5EC;color:#0F7A57}
   .vz-chip.amber{background:#FFF1CC;color:#9A6A00}
-  .vz-chip.ink{background:${INK};color:#fff}
+  .vz-chip.ink{background:${BLUE};color:#fff}
   .vz-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;border-top:1px solid #EDF0F7}
   .vz-foot small{font-size:12px;color:${MUTED}}
   .vz-tl{list-style:none;margin:0 0 4px;padding:0 0 0 4px;display:grid;gap:8px;font-size:12.5px;color:${INK}}
@@ -272,7 +272,7 @@ const css = `
   .vz-steps{display:flex;gap:6px;padding-top:12px;border-top:1px solid #EDF0F7}
   .vz-steps span{flex:1;text-align:center;font-size:11px;font-weight:700;padding:7px 0;border-radius:8px;background:#EEF2FA;color:#6B7690}
   .vz-steps .done{background:${TINT};color:${BLUE}}
-  .vz-steps .on{background:${INK};color:#fff}
+  .vz-steps .on{background:${BLUE};color:#fff}
   .vz-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 0 4px}
   .vz-stats div{background:#F4F6FB;border-radius:12px;padding:9px 11px}
   .vz-stats small{display:block;font-size:11px;color:${MUTED}}
@@ -316,8 +316,8 @@ const css = `
 
   .fx-end{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:6px}
   .fx-more{margin:0;font-size:16px;line-height:1.6;color:${BODY};text-align:center}
-  .fx-cta{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 30px;text-decoration:none;border-radius:999px;border:0;background:${INK};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:15.5px;font-weight:600;cursor:pointer;transition:background-color .18s ease}
-  .fx-cta:hover{background:${BLUE}}
+  .fx-cta{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 30px;text-decoration:none;border-radius:999px;border:2px solid ${BLUE};background:${BLUE};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:15.5px;font-weight:600;cursor:pointer;box-shadow:0 12px 24px -12px rgba(29,78,216,.5);transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .fx-cta:hover{background:${BLUE_HOVER};border-color:${BLUE_HOVER};box-shadow:0 16px 30px -12px rgba(29,78,216,.55)}
   .fx-cta:focus-visible{outline:3px solid ${BLUE};outline-offset:3px}
 
   @media (max-width:639px){

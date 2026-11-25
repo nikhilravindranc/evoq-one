@@ -451,7 +451,7 @@ const css = `
   .fh-vis::before{content:"";position:absolute;right:-10%;top:-12%;width:80%;height:130%;border-radius:50%;background:radial-gradient(closest-side,rgba(29,78,216,.16),rgba(29,78,216,0));pointer-events:none}
   .fh-photo{position:absolute;right:0;top:0;width:76%;height:calc(100% - 28px);border-radius:28px;overflow:hidden;background:#BCD3FB;box-shadow:0 36px 70px -34px rgba(15,27,61,.55)}
   .fh-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 22%;animation:fhZoom 18s ease-in-out infinite alternate}
-  .fh-dot{position:absolute;left:14%;top:12%;width:50px;height:50px;border-radius:50%;background:${INK};color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 26px -12px rgba(15,27,61,.6);animation:fhBob 5s ease-in-out infinite alternate}
+  .fh-dot{position:absolute;left:14%;top:12%;width:50px;height:50px;border-radius:50%;background:${BLUE};color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 26px -12px rgba(29,78,216,.6);animation:fhBob 5s ease-in-out infinite alternate}
   .fh-card{position:absolute;display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px 12px 16px;box-shadow:0 22px 40px -22px rgba(15,27,61,.5),0 0 0 1px ${LINE};animation:fhSwap .55s ease both}
   .fh-card div{min-width:0;display:grid;gap:2px}
   .fh-card b{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:600;line-height:1.25;color:${INK}}
@@ -462,7 +462,7 @@ const css = `
   .fh-card.c2{left:6%;bottom:22px;width:min(270px,58%);animation-delay:.12s}
   .fh-dots{position:absolute;right:0;bottom:0;width:76%;display:flex;justify-content:center;gap:8px}
   .fh-dots button{all:unset;display:block;box-sizing:border-box;width:8px;height:8px;border-radius:999px;background:#C5CEE3;cursor:pointer;transition:width .3s ease,background .3s ease}
-  .fh-dots button.on{width:24px;background:${INK}}
+  .fh-dots button.on{width:24px;background:${BLUE}}
   .fh-dots button:focus-visible{outline:3px solid ${BLUE};outline-offset:3px}
   @keyframes fhZoom{from{transform:scale(1)}to{transform:scale(1.06)}}
   @keyframes fhBob{from{transform:translateY(-4px)}to{transform:translateY(4px)}}
@@ -479,7 +479,7 @@ const css = `
   .ex-tabs::-webkit-scrollbar{display:none}
   .ex-tabs button{all:unset;flex:none;box-sizing:border-box;cursor:pointer;padding:12px 20px;border-radius:999px;text-align:center;font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:600;line-height:1.2;color:${BODY};white-space:nowrap;transition:background .25s ease,color .25s ease}
   .ex-tabs button:hover{color:${INK}}
-  .ex-tabs button.on{background:#BCD3FB;color:${INK}}
+  .ex-tabs button.on{background:${BLUE};color:#fff}
   .ex-tabs button:focus-visible{outline:3px solid ${BLUE};outline-offset:-3px}
   @media (min-width:1024px){.ex-tabs button{flex:1 1 auto}}
 
@@ -515,7 +515,7 @@ const css = `
   .fg .fg-ic{flex:none;width:34px;height:34px;border-radius:10px;background:${TINT};color:${BLUE};display:flex;align-items:center;justify-content:center}
   .fg-ic.a{background:#FFF1D1;color:#B7791F}
   .fg-btn,.fg-chip{flex:none;font-style:normal;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;line-height:1}
-  .fg-btn{background:${INK};color:#fff}
+  .fg-btn{background:${BLUE};color:#fff}
   .fg-chip{background:#DDF6EE;color:#0B6B53}
   .fg-tl,.fg-list,.fg-rep,.fg-res,.fg-tree{list-style:none;margin:0;padding:0;display:grid;gap:8px}
   .fg-tl li{display:flex;align-items:center;gap:9px;font-size:13px;line-height:1.3;color:${INK}}
