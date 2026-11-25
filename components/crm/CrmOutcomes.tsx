@@ -1,18 +1,18 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import { BLUE, BODY, CORAL_DEEP, CORAL_TINT, INK, LINE, MINT_DEEP, MINT_TINT, MUTED, TINT, TINT_SOFT } from "./palette";
 
-/* Outcomes: the five requests a sales team makes in the CRM, and what EVI prepares for each (docs/crm-new-content.md, Section B).
-   EVI is the CRM's assistant: a person asks, EVI checks the record and prepares the work, and approval follows the mode the admin sets.
-   A tab list on the left, and for the selected request an EVI panel: the request, the record EVI checks, and the prepared work. */
+/* Workflows: the five workflows a sales team runs in the CRM (docs/crm-new-content.md, Section B).
+   An event starts a workflow, the workflow checks the record and prepares the work, and approval follows the mode the admin sets.
+   A tab list on the left, and for the selected workflow a panel: the event, the record the workflow checks, and the prepared work. */
 
 type Tone = "blue" | "mint";
 type Outcome = {
   key: string;
   tab: string;
   say: string;
+  who: string;
   record: { title: string; fields: [string, string][] };
   does: string;
   approval: string;
@@ -23,37 +23,37 @@ type Outcome = {
 
 const OUTCOMES: Outcome[] = [
   {
-    key: "renewal", tab: "Close this renewal", say: "Close the Halo Health renewal.",
+    key: "renewal", tab: "Renewal follow up", say: "Renewal due in 14 days", who: "Halo Health",
     record: { title: "Halo Health, renewal", fields: [["Contract value", "₹6,00,000"], ["Renewal", "Due in 14 days"], ["Last conversation", "Call, 9 days ago"], ["Open tasks", "1"]] },
-    does: "EVI drafts the renewal follow up and adds a call task for the owner.",
-    approval: "Sent after the account owner approves, or on its own if your admin sets this job to automatic.", chip: "Waiting for approval", tone: "blue",
+    does: "The workflow drafts the renewal follow up and adds a call task for the owner.",
+    approval: "Sent after the account owner approves, or on its own if your admin sets this workflow to automatic.", chip: "Waiting for approval", tone: "blue",
     tint: "#BCD3FB",
   },
   {
-    key: "proposal", tab: "Chase this proposal", say: "Follow up on proposals waiting for a reply.",
+    key: "proposal", tab: "Proposal follow up", say: "Proposal idle for 8 days", who: "Deals in Proposal",
     record: { title: "Deals in Proposal", fields: [["Deals waiting", "3"], ["Idle for", "8 to 12 days"], ["Contact history", "Emails and calls"]] },
-    does: "EVI drafts a follow up for each and schedules a task.",
-    approval: "Sent after review, or automatically if your admin sets this job to automatic.", chip: "Review or automatic", tone: "blue",
+    does: "The workflow drafts follow ups for the waiting deals and schedules a task.",
+    approval: "Sent after review, or automatically if your admin sets this workflow to automatic.", chip: "Review or automatic", tone: "blue",
     tint: "#A9E6CE",
   },
   {
-    key: "lead", tab: "Qualify this lead", say: "Qualify the leads that came in this week.",
+    key: "lead", tab: "New lead routing", say: "New leads this week", who: "Web form and import",
     record: { title: "Leads from this week", fields: [["Lead source", "Web form and import"], ["Status", "New, no contact yet"], ["History", "Pages and emails opened"]] },
-    does: "EVI scores each lead, assigns an owner and moves the status.",
+    does: "The workflow scores the leads, assigns an owner and moves the status.",
     approval: "The manager confirms assignments, or lets the rules run.", chip: "Manager confirms", tone: "blue",
     tint: "#FFD2C2",
   },
   {
-    key: "meeting", tab: "Prepare this meeting", say: "Prepare Thursday's call with Vertex Retail.",
+    key: "meeting", tab: "Meeting brief", say: "Call booked for Thursday", who: "Vertex Retail",
     record: { title: "Vertex Retail, account", fields: [["Open deals", "2"], ["Last conversation", "3 days ago"], ["Notes", "Pricing for a second location"], ["Open tasks", "1"]] },
-    does: "EVI puts a short brief on the record, ready before the call.",
+    does: "The workflow puts a short brief on the record, ready before the call.",
     approval: "Nothing leaves the CRM, so no approval is needed.", chip: "No approval needed", tone: "mint",
     tint: "#CFCBFA",
   },
   {
-    key: "quarter", tab: "Report this quarter", say: "How does the pipeline look this quarter?",
+    key: "quarter", tab: "Pipeline report", say: "Quarter review starts", who: "Pipeline, this quarter",
     record: { title: "Pipeline, this quarter", fields: [["By stage", "Qualification to Won"], ["Forecast", "From deal probability"], ["Deals at risk", "6"]] },
-    does: "EVI answers with the figures and links each to its source report.",
+    does: "The workflow prepares the figures and links them to their source reports.",
     approval: "Read only, so no approval is needed.", chip: "No approval needed", tone: "mint",
     tint: "#FFE49E",
   },
@@ -221,12 +221,12 @@ export function CrmOutcomes() {
       <style>{css}</style>
       <div className="co-in">
         <div className="co-head">
-          <h2 id="co-h2" className="co-h2"><span className="l">Ask EVI for a result,</span> <span className="b">then approve it.</span></h2>
-          <p>EVI reads the record, prepares the work, and you decide whether it goes ahead.</p>
+          <h2 id="co-h2" className="co-h2"><span className="l">Workflows prepare the work,</span> <span className="b">then you approve it.</span></h2>
+          <p>A workflow starts on an event, checks the record and prepares the work. You decide whether it goes ahead.</p>
         </div>
 
         <div className={`co-grid${held ? " held" : ""}`} onMouseEnter={() => setHeld(true)} onMouseLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
-          <div className="co-tabs" role="tablist" aria-label="Sales requests" aria-orientation="vertical" onKeyDown={onKey}>
+          <div className="co-tabs" role="tablist" aria-label="Sales workflows" aria-orientation="vertical" onKeyDown={onKey}>
             {OUTCOMES.map((x, n) => (
               <button
                 key={x.key}
@@ -251,18 +251,18 @@ export function CrmOutcomes() {
             <div key={`bg${o.key}`} className="co-bg" aria-hidden="true" style={{ "--tint": o.tint } as CSSProperties} />
             <div key={o.key} className="co-stage" data-fly={fly ? 1 : 0}>
               <div className="co-say" ref={sayEl}>
-                <small><i className="co-step">1</i>Ask EVI<img className="co-evi" src="/symbol-color.png" alt="" width={16} height={16} /></small>
-                <div className="co-ask"><img src="/crm/priya.webp" alt="" width={34} height={34} /><div><p>{o.say}</p><span>Priya Nair, account owner</span></div></div>
+                <small><i className="co-step">1</i>An event starts the workflow</small>
+                <div className="co-ask"><i className="co-trig"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z" /></svg></i><div><p>{o.say}</p><span>{o.who}</span></div></div>
               </div>
 
               <div className={`co-gath${shown(2) ? "" : " co-hid"}`} ref={gathEl}>
-                <small><i className="co-step">2</i>EVI checks the record</small>
+                <small><i className="co-step">2</i>The workflow checks the record</small>
                 <b className="co-rt">{o.record.title}</b>
                 <dl>{o.record.fields.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
               </div>
 
               <div className={`co-res${shown(4) ? "" : " co-hid"}`} ref={resEl}>
-                <small><i className="co-step">3</i>EVI prepares, you approve</small>
+                <small><i className="co-step">3</i>Prepared, you approve</small>
                 <p className="co-does">{o.does}</p>
                 <Artifact k={o.key} />
                 <div className={`co-ok${fly && step >= 5 ? " pulse" : ""}`}>
@@ -322,9 +322,8 @@ const css = `
 
   .co-say{display:grid;gap:8px;background:${INK};color:#fff;border-radius:18px;padding:12px 16px 14px;box-shadow:0 12px 30px rgba(15,27,61,.2)}
   .co-say small{color:rgba(255,255,255,.66)}
-  .co-evi{width:16px;height:16px;object-fit:contain;margin-left:2px}
+  .co-trig{flex:none;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;display:inline-flex;align-items:center;justify-content:center}
   .co-ask{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;border-radius:999px;background:rgba(255,255,255,.1)}
-  .co-ask img{flex:none;width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 12%}
   .co-say p{font-size:15.5px;font-weight:600;line-height:1.3}
   .co-ask span{display:block;margin-top:1px;font-size:11.5px;line-height:1.3;color:rgba(255,255,255,.62)}
 

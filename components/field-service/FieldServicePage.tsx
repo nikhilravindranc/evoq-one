@@ -3,6 +3,7 @@ import { Topbar } from "@/components/hero/Topbar";
 import { HeroShell } from "@/components/shared/HeroShell";
 import { Footer } from "@/components/sections/Footer";
 import { FsSolutions } from "./FsSolutions";
+import { FsAround } from "./FsAround";
 import { EnquiryModal } from "@/components/manufacturing/EnquiryModal";
 import { HsMotion } from "@/components/hospitality/HsMotion";
 
@@ -22,11 +23,6 @@ const LINE = "rgba(15,61,117,.16)";
 
 const U = (id: string, w = 1100) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
 const photo = (src: string, extra: CSSProperties = {}): CSSProperties => ({ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center", ...extra });
-const I = (f: string) => `/billing/images/${f}`;
-const ICON: Record<string, string> = {
-  ServiceOps: I("serviceops-icon.svg"), CRM: I("crm-menu-icn.png"), Inventory: I("inventory-menu-icn.png"), Billing: I("billing-menu-icn.png"), Desk: I("desk-menu-icn.png"),
-  Projects: I("evoq-projects-menu-icn.png"), HRMS: I("hrms-menu-icn-new.png"), Campaigns: I("campaigns-menu-icn.png"), Skillberry: I("Skillberry-menu-icn.png"), Sync: I("sync-menu-icn.png"),
-};
 
 const Arrow = ({ s = 15 }: { s?: number }) => <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>;
 function Eyebrow({ children, dark = false }: { children: string; dark?: boolean }) {
@@ -35,18 +31,6 @@ function Eyebrow({ children, dark = false }: { children: string; dark?: boolean 
 function Cta({ children, dark = false }: { children: string; dark?: boolean }) {
   return (
     <a href="#" data-enquiry="" className="fs-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: "none", background: dark ? CW : BLUE, color: dark ? NAVY : CW, boxShadow: dark ? "none" : `0 18px 32px -18px ${BLUE}` }}>{children}<Arrow /></a>
-  );
-}
-function Chips({ list }: { list: string[] }) {
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-      {list.map((a) => (
-        <span key={a} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 12px 5px 6px", borderRadius: 10, background: CW, border: `1px solid ${LINE}`, fontSize: 12.5, fontWeight: 700, color: NAVY }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={ICON[a]} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain", borderRadius: 5 }} />{a}
-        </span>
-      ))}
-    </div>
   );
 }
 const h2: CSSProperties = { margin: 0, letterSpacing: "-.025em", fontWeight: 700, color: NAVY };
@@ -61,9 +45,9 @@ function Hero() {
         <div className="fs-hero">
           <div data-rv="0">
             <Eyebrow>Field Service · Facilities · Maintenance</Eyebrow>
-            <h1 className="fs-h1" style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Every request logged, every visit tracked, <span style={{ color: BLUE }}>every asset&rsquo;s history on record.</span></h1>
-            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: SOFT, maxWidth: "52ch" }}>Log service requests, assign and dispatch technicians, record parts used and raise the invoice when the job closes. Preventive maintenance sits alongside reactive jobs, across sites and assets.</p>
-            <div style={{ marginTop: 32 }}><Cta>Talk to an expert</Cta></div>
+            <h1 className="fs-h1" style={{ margin: 0, letterSpacing: "-.03em", fontWeight: 700, color: NAVY }}>Service requests logged, work assigned, <span style={{ color: BLUE }}>sites and equipment maintained.</span></h1>
+            <p style={{ margin: "24px 0 0", fontSize: 17, lineHeight: 1.75, color: SOFT, maxWidth: "52ch" }}>Log service requests, assign and dispatch technicians, record parts used and raise the invoice when the job closes. Site requests, inspections and preventive maintenance run alongside reactive jobs, across sites and assets.</p>
+            <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", gap: 14 }}><Cta>Talk to an expert</Cta><a href="#solutions" className="fs-btn" style={{ display: "inline-flex", alignItems: "center", padding: "15px 26px", borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: "none", color: NAVY, background: "#fff", boxShadow: `inset 0 0 0 1.5px ${LINE}` }}>Explore the solutions</a></div>
           </div>
 
           {/* map, route and mobile work order */}
@@ -109,50 +93,6 @@ function Hero() {
   );
 }
 
-/* ------------------------------------------------------------------ 3. Ecosystem */
-function Ecosystem() {
-  const apps: { name: string; line: string; body: string; main?: boolean }[] = [
-    { name: "ServiceOps", line: "Coordinate the work.", body: "Work orders, jobs, scheduling, technicians, assets and maintenance.", main: true },
-    { name: "Desk", line: "Handle incoming requests.", body: "Service requests received and tracked." },
-    { name: "Inventory", line: "Account for parts and stock.", body: "Stock and purchasing for parts." },
-    { name: "Billing", line: "Handle the financial side.", body: "Invoices and payments for billable service work." },
-  ];
-  return (
-    <section style={{ background: PALE, padding: "96px 0 100px" }}>
-      <div className="fs-wrap">
-        <div className="fs-split" data-rv="0" style={{ alignItems: "end" }}>
-          <div><Eyebrow>The EVOQ ecosystem</Eyebrow><h2 className="fs-h2" style={h2}>One service job involves requests, technicians, parts and invoices.</h2></div>
-          <div>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Around each work order sit the request, the technician&rsquo;s job details, the parts used and the invoice.</p>
-            <p style={{ margin: "12px 0 0", fontSize: 16, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>EVOQ products cover each part: ServiceOps for the job, Desk for the request, Inventory for parts, Billing for the invoice.</p>
-          </div>
-        </div>
-
-        <div data-rv="1" style={{ marginTop: 52 }}>
-          <div className="fs-root" aria-hidden="true"><span className="fs-pill">Service delivery</span></div>
-          <div className="fs-tree fs-g4x" aria-hidden="true"><i /><i /><i /><i /></div>
-          <div className="fs-g4x">
-            {apps.map((a) => (
-              <article key={a.name} className="fs-card" style={{ background: a.main ? NAVY : CW, color: a.main ? CW : INK, border: `1px solid ${a.main ? NAVY : LINE}`, borderRadius: 18, padding: "24px 22px 26px", boxShadow: a.main ? `0 30px 50px -30px ${NAVY}` : "none" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ICON[a.name]} alt="" width={46} height={46} style={{ width: 46, height: 46, objectFit: "contain", background: CW, borderRadius: 12, padding: 5 }} />
-                <h3 className="fs-h3s" style={{ margin: "16px 0 0", fontWeight: 700, color: a.main ? CW : NAVY }}>{a.name}</h3>
-                <div style={{ marginTop: 4, fontSize: 15, fontWeight: 700, color: a.main ? "#FDBA74" : BURNT }}>{a.line}</div>
-                <p style={{ margin: "10px 0 0", fontSize: 14, lineHeight: 1.7, color: a.main ? "rgba(248,250,252,.82)" : SOFT }}>{a.body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <div data-rv="0" style={{ marginTop: 40, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
-          <p style={{ margin: 0, paddingLeft: 18, borderLeft: `3px solid ${ORANGE}`, fontSize: 15.5, lineHeight: 1.75, color: INK, maxWidth: "72ch" }}>Start with the products your operation needs. Capabilities vary by product and plan.</p>
-          <a href="/products" className="fs-btn" style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 12, fontSize: 15, fontWeight: 700, textDecoration: "none", background: BLUE, color: CW, boxShadow: `0 18px 32px -18px ${BLUE}` }}>Explore EVOQ products<Arrow /></a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ------------------------------------------------------------------ 4. FAQ */
 const FAQ: [string, string][] = [
   ["Who is EVOQ Field Service, Facilities & Maintenance for?", "External field service providers, in-house field teams, facilities management companies, internal facilities departments and maintenance teams."],
@@ -160,14 +100,16 @@ const FAQ: [string, string][] = [
   ["Can EVOQ support both planned and corrective maintenance?", "Yes. Planned maintenance is scheduled and tracked. Corrective repairs are recorded, assigned and kept in the service history."],
   ["Can field technicians manage their work from mobile devices?", "Yes. Technicians open job details and record updates and supporting documents from a mobile device."],
   ["Can the solution support multiple sites?", "Yes. Work and open activity can be organized and reviewed across locations. Setup depends on your structure and access needs."],
-  ["Can EVOQ manage inventory and billing alongside service operations?", "ServiceOps handles the service job. Inventory handles stock and Billing handles invoices and payments. Confirm the data exchange between them for your deployment."],
+  ["Can EVOQ manage inventory and billing alongside service operations?", "ServiceOps handles the service job. Inventory handles stock and Billing handles invoices and payments. The data each product shares depends on your setup."],
+  ["Where do bookings fit?", "Bookings covers online booking of service visits, meeting rooms and equipment, and courts, pools, halls and event venues. It sits alongside ServiceOps, which runs the work itself."],
+  ["Does an AI agent act on its own?", "No. The agents draft and flag, and a person sends, books or decides."],
   ["Is the solution suitable for both service providers and internal teams?", "Yes. Providers coordinate work for customers. Internal teams organize work across their own facilities, equipment and sites."],
 ];
 function Faq() {
   return (
     <section style={{ background: CW, padding: "96px 0" }}>
       <div className="fs-wrap" style={{ maxWidth: 940 }}>
-        <div data-rv="0"><Eyebrow>FAQ</Eyebrow><h2 className="fs-h2" style={h2}>Frequently asked questions</h2></div>
+        <div data-rv="0"><Eyebrow>Questions</Eyebrow><h2 className="fs-h2" style={h2}>Questions about EVOQ for field service, facilities and maintenance.</h2></div>
         <div data-rv="1" style={{ marginTop: 40, borderTop: `1px solid ${LINE}` }}>
           {FAQ.map(([q, a]) => (
             <details key={q} className="fs-faq" style={{ borderBottom: `1px solid ${LINE}` }}>
@@ -191,8 +133,8 @@ function FinalCta() {
         <div data-rv="0" className="fs-cta" style={{ position: "relative", overflow: "hidden", borderRadius: 28, background: PALE, border: `1px solid ${LINE}`, color: INK, padding: "60px 60px", display: "block", minHeight: 340 }}>
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(15,61,117,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(15,61,117,.07) 1px, transparent 1px)", backgroundSize: "44px 44px", maskImage: "linear-gradient(90deg, #000, transparent 90%)", WebkitMaskImage: "linear-gradient(90deg, #000, transparent 90%)" }} />
           <div style={{ position: "relative", maxWidth: 580 }}>
-            <Eyebrow>Take the next step</Eyebrow>
-            <h2 className="fs-h2" style={h2}>Bring your jobs, sites and assets into one workflow.</h2>
+            <Eyebrow>Talk to us</Eyebrow>
+            <h2 className="fs-h2" style={h2}>Start with how your service requests and visits work today.</h2>
             <p style={{ margin: "18px 0 28px", fontSize: 15.5, lineHeight: 1.8, color: SOFT, maxWidth: "58ch" }}>Tell us how requests, technician scheduling and maintenance run today, and we will show where EVOQ products fit.</p>
             <Cta>Talk to an expert</Cta>
           </div>
@@ -222,21 +164,8 @@ export function FieldServicePage() {
         .fs-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;padding:52px 0 88px}
         .fs-hero-vis{position:relative;height:500px}
         .fs-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
-        .fs-g4x{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
-        .fs-root{display:flex;justify-content:center}
-        .fs-pill{background:${NAVY};color:#fff;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;border-radius:99px}
-        .fs-tree{height:44px}
-        .fs-tree i{position:relative;display:block}
-        .fs-tree i::before{content:"";position:absolute;top:21px;height:2px;background:${AZURE}}
-        .fs-tree i::after{content:"";position:absolute;left:calc(50% - 1px);width:2px;bottom:0;top:21px;background:${AZURE}}
-        .fs-tree i:nth-child(1)::before{left:50%;right:-11px}
-        .fs-tree i:nth-child(2)::before,.fs-tree i:nth-child(3)::before{left:-11px;right:-11px}
-        .fs-tree i:nth-child(4)::before{left:-11px;right:50%}
-        .fs-tree i:nth-child(2)::after{top:0}
         .fs-btn{transition:transform .2s ease,box-shadow .2s ease}
         .fs-btn:hover{transform:translateY(-2px)}
-        .fs-card{transition:transform .3s ease,box-shadow .3s ease}
-        .fs-card:hover{transform:translateY(-5px);box-shadow:0 28px 52px -30px rgba(15,61,117,.55)}
         .fs-faq summary::-webkit-details-marker{display:none}
         .fs-faq[open] .fs-plus{background:${BLUE};color:#fff;transform:rotate(45deg)}
         @keyframes fsDash{to{stroke-dashoffset:-44}}
@@ -245,16 +174,15 @@ export function FieldServicePage() {
         .fs-pulse{animation:fsPulse 2s ease-out infinite}
         .hs-rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--hs-d,0ms)}
         .hs-rv.hs-in{opacity:1;transform:none}
-        @media (max-width:1100px){.fs-g4x{grid-template-columns:repeat(2,minmax(0,1fr))}.fs-root,.fs-tree{display:none}}
         @media (max-width:980px){.fs-hero,.fs-split,.fs-cta{grid-template-columns:1fr!important;gap:34px}.fs-hero-vis{height:470px}.fs-cta{padding:38px 28px!important}}
-        @media (max-width:640px){.hs-root .fs-h2{font-size:30px!important}.hs-root .fs-h3{font-size:24px!important}.fs-g4x{grid-template-columns:1fr}.fs-phone{width:190px!important}}
-        @media (prefers-reduced-motion:reduce){.fs-route,.fs-pulse,.fs-card,.fs-btn{animation:none;transition:none}}
+        @media (max-width:640px){.hs-root .fs-h2{font-size:30px!important}.hs-root .fs-h3{font-size:24px!important}.fs-phone{width:190px!important}}
+        @media (prefers-reduced-motion:reduce){.fs-route,.fs-pulse,.fs-btn{animation:none;transition:none}}
       `}</style>
       <HeroShell bg={{ background: CW }} topbar={<Topbar darkCTA={false} light ctaColor={NAVY} />}>
         <Hero />
       </HeroShell>
       <FsSolutions />
-      <Ecosystem />
+      <FsAround />
       <Faq />
       <FinalCta />
       <Footer background={NAVY} />
