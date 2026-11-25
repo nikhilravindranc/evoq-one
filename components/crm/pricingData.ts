@@ -85,7 +85,7 @@ export const COMPARE: { k: string; rows: Row[] }[] = [
 ];
 
 export const PRICE_FACTORS: { t: string; d: string; icon: string }[] = [
-  { t: "Users", d: "Pricing is per user a month. Add or remove users at any time, and billing follows the active users.", icon: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" },
+  { t: "Users", d: "Pricing is per user/month. Add or remove users at any time, and billing follows the active users.", icon: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" },
   { t: "Storage", d: "Attachment storage and CRM record limits come with the plan. Extra storage can be added as usage grows.", icon: "M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zM4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" },
   { t: "AI credit packs", d: "Each plan includes a monthly allowance of AI credits. Extra credit packs can be added without switching plans.", icon: "M13 2L4 14h7l-1 8 9-12h-7l1-8z" },
   { t: "Implementation", d: "Setup and onboarding are scoped around your stages, roles and data. The implementation page has the details.", icon: "M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-2.4 2.6-2.6z" },

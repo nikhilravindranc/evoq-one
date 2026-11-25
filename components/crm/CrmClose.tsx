@@ -1,7 +1,7 @@
 "use client";
 
 import { useCrmDemo } from "./CrmShell";
-import { BLUE_DEEP, INK } from "./palette";
+import { BLUE, BLUE_DEEP, BLUE_HOVER } from "./palette";
 
 /* Closing demo section (docs/crm-new-content.md, Section J). The button opens the demo form. */
 
@@ -34,8 +34,8 @@ const css = `
   .cl-card p{margin:16px 0 0;font-size:18px;line-height:1.6;color:rgba(255,255,255,.82);text-wrap:balance}
   .cl-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:30px}
   .cl-btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 28px;border-radius:999px;font-family:var(--font-display),system-ui,sans-serif;font-size:15.5px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:background-color .18s ease,border-color .18s ease,transform .12s ease}
-  .cl-btn.primary{background:#fff;color:${INK}}
-  .cl-btn.primary:hover{background:#E3ECFC}
+  .cl-btn.primary{background:#fff;color:${BLUE}}
+  .cl-btn.primary:hover{background:${BLUE_HOVER};border-color:${BLUE_HOVER};color:#fff}
   .cl-btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
   .cl-btn.ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
   .cl-btn:active{transform:translateY(1px)}

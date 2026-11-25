@@ -6,7 +6,7 @@ import { useState } from "react";
 import { CrmClose } from "./CrmClose";
 import { CrmShell, useCrmDemo } from "./CrmShell";
 import { ANNUAL_OFF, COMPARE, FAQ, PLANS, PRICE_FACTORS, REGIONS, type Plan, type RegionKey } from "./pricingData";
-import { BLUE, BODY, INK, LINE, MUTED, TINT } from "./palette";
+import { BLUE, BLUE_HOVER, BODY, INK, LINE, MUTED, TINT } from "./palette";
 
 /* The CRM pricing page (docs/crm-pricing-plan.md): a hero, the three plans with a monthly and annual switch and a region switch,
    a comparison split into tabs, what changes the price, questions, and the closing demo card. Every plan button books a demo. */
@@ -29,7 +29,7 @@ function PricingHero() {
       <div className="ph-in">
         <div className="ph-copy">
           <span className="ph-eyebrow">EVOQ CRM pricing</span>
-          <h1 id="ph-h1" className="ph-h1">Plans for the size of your sales team.</h1>
+          <h1 id="ph-h1" className="ph-h1">Plans for the size of your team.</h1>
           <p>Pay per user, billed monthly or annually. Book a demo and we will walk through the plan that fits.</p>
         </div>
         <div className="ph-vis">
@@ -58,7 +58,7 @@ function PlanCard({ p, region, annual }: { p: Plan; region: RegionKey; annual: b
         ) : (
           <>
             <b>{price(region, p.key as "pro" | "max", annual)}</b>
-            <span>per user a month, billed {annual ? "annually" : "monthly"}</span>
+            <span>per user/month, billed {annual ? "annually" : "monthly"}</span>
           </>
         )}
       </div>
@@ -92,7 +92,7 @@ function Plans() {
         <div className="pl-grid">
           {PLANS.map((p) => <PlanCard key={p.key} p={p} region={region} annual={annual} />)}
         </div>
-        <p className="pl-note">Prices are per user a month. Applicable taxes, including GST, VAT, sales tax or other local indirect taxes, are charged in addition.</p>
+        <p className="pl-note">Prices are per user/month. Applicable taxes, including GST, VAT, sales tax or other local indirect taxes, are charged in addition.</p>
       </div>
     </section>
   );
@@ -207,39 +207,31 @@ const css = `
   .pl-ctl{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;margin-bottom:26px}
   .seg{display:inline-flex;gap:4px;padding:5px;border-radius:999px;background:#E2E8F4}
   .seg button{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-family:var(--font-display),system-ui,sans-serif;font-size:14.5px;font-weight:600;line-height:1.2;color:${BODY};white-space:nowrap;transition:background .2s ease,color .2s ease}
-  .seg button.on{background:#fff;color:${INK};box-shadow:0 2px 8px rgba(15,27,61,.12)}
+  .seg button.on{background:${BLUE};color:#fff;box-shadow:0 8px 18px -10px rgba(29,78,216,.7)}
+  .seg button.on small{color:rgba(255,255,255,.82)}
   .seg button:focus-visible{outline:3px solid ${BLUE};outline-offset:-3px}
   .seg em{font-style:normal;padding:3px 8px;border-radius:999px;background:#DDF6EE;color:#0B6B53;font-size:11.5px;line-height:1}
   .seg small{font-size:12px;font-weight:500;color:${MUTED}}
   .pl-grid{display:grid;gap:18px;align-items:stretch}
   .pl-card{position:relative;display:flex;flex-direction:column;padding:28px 26px 26px;border-radius:28px;background:#fff;border:1px solid ${LINE};box-shadow:0 24px 54px -36px rgba(15,27,61,.3)}
-  .pl-card.lift{background:${INK};border-color:${INK};color:#fff;box-shadow:0 36px 70px -34px rgba(15,27,61,.75)}
+  .pl-card.lift{border:2px solid ${BLUE};padding:27px 25px 25px;box-shadow:0 36px 70px -36px rgba(29,78,216,.5)}
   .pl-tag{align-self:flex-start;padding:5px 14px;border-radius:999px;background:${TINT};color:${BLUE};font-size:13px;font-weight:600;line-height:1.3}
-  .pl-card.lift .pl-tag{background:rgba(255,255,255,.14);color:#fff}
   .pl-card .pl-fit{margin:16px 0 0;font-size:16px;line-height:1.5;font-weight:500;color:${BODY};font-family:var(--font-sans),system-ui,sans-serif;min-height:3em}
-  .pl-card.lift .pl-fit{color:rgba(255,255,255,.78)}
   .pl-price{margin:22px 0 22px;display:grid;gap:4px;min-height:84px;align-content:start}
   .pl-price b.cu{font-size:32px;line-height:1.15;white-space:nowrap}
   .pl-price b{font-family:var(--font-display),system-ui,sans-serif;font-size:40px;line-height:1.05;letter-spacing:-.02em;font-weight:700;color:${INK}}
-  .pl-card.lift .pl-price b{color:#fff}
   .pl-price span{font-size:14px;line-height:1.4;color:${MUTED}}
-  .pl-card.lift .pl-price span{color:rgba(255,255,255,.7)}
-  .pl-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:999px;background:${INK};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:15.5px;font-weight:600;transition:background .2s ease}
-  .pl-btn:hover{background:${BLUE}}
-  .pl-card.lift .pl-btn{background:#fff;color:${INK}}
-  .pl-card.lift .pl-btn:hover{background:#E3ECFC}
+  .pl-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:999px;border:2px solid ${BLUE};background:${BLUE};color:#fff;font-family:var(--font-display),system-ui,sans-serif;font-size:15.5px;font-weight:600;box-shadow:0 12px 24px -12px rgba(29,78,216,.5);transition:background .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease}
+  .pl-btn:hover{background:${BLUE_HOVER};border-color:${BLUE_HOVER};box-shadow:0 16px 30px -12px rgba(29,78,216,.55)}
+  .pl-card:not(.lift) .pl-btn{background:#fff;color:${BLUE};box-shadow:none}
+  .pl-card:not(.lift) .pl-btn:hover{background:${BLUE_HOVER};border-color:${BLUE_HOVER};color:#fff;box-shadow:0 16px 30px -12px rgba(29,78,216,.45)}
   .pl-btn:focus-visible{outline:3px solid ${BLUE};outline-offset:3px}
   .pl-card .pl-lab{margin:26px 0 12px;font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${MUTED}}
-  .pl-card.lift .pl-lab{color:rgba(255,255,255,.6)}
   .pl-list{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:10px}
   .pl-list li{display:flex;gap:11px;align-items:flex-start;font-size:15px;line-height:1.4;color:${INK}}
-  .pl-card.lift .pl-list li{color:#fff}
   .pl-list i{flex:none;width:20px;height:20px;margin-top:1px;border-radius:50%;background:${TINT};color:${BLUE};display:flex;align-items:center;justify-content:center}
-  .pl-card.lift .pl-list i{background:rgba(255,255,255,.16);color:#fff}
   .pl-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:20px;border-top:1px solid ${LINE}}
-  .pl-card.lift .pl-chips{border-top-color:rgba(255,255,255,.16)}
   .pl-chips em{font-style:normal;padding:6px 12px;border-radius:999px;background:#F1F4FA;font-size:12.5px;font-weight:600;line-height:1.2;color:${INK}}
-  .pl-card.lift .pl-chips em{background:rgba(255,255,255,.12);color:#fff}
   .pl-cur{display:none}
   .pl-in .pl-note{margin:32px 0 0;font-size:13px;line-height:1.5;color:${MUTED};text-align:center}
 
@@ -252,7 +244,7 @@ const css = `
   .cp-tabs{display:flex;gap:6px;padding:6px;border-radius:999px;background:#E2E8F4;overflow-x:auto;scrollbar-width:none;max-width:100%}
   .cp-tabs::-webkit-scrollbar{display:none}
   .cp-tabs button{all:unset;flex:none;box-sizing:border-box;cursor:pointer;padding:10px 16px;border-radius:999px;font-family:var(--font-display),system-ui,sans-serif;font-size:14px;font-weight:600;line-height:1.2;color:${BODY};white-space:nowrap}
-  .cp-tabs button.on{background:#BCD3FB;color:${INK}}
+  .cp-tabs button.on{background:${BLUE};color:#fff}
   .cp-tabs button:focus-visible{outline:3px solid ${BLUE};outline-offset:-3px}
   .cp-sw{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:14.5px;font-weight:500;color:${INK}}
   .cp-sw input{position:absolute;opacity:0;width:1px;height:1px}
