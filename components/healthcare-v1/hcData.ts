@@ -28,7 +28,7 @@ const P = (f: string) => `/healthcare/stock/${f}`;
 export const PANELS: Panel[] = [
   {
     key: "clinics", tab: "Clinics and specialty practices", sub: "Appointments, providers and visits",
-    on: "#2064B6", from: "#2064B6", to: "#0B2A4F", glow: "rgba(150,200,250,.5)",
+    on: "#2064B6", from: "#F1F7FD", to: "#D6E7F9", glow: "rgba(32,100,182,.2)",
     photo: P("care-clinics-2.jpg"), pos: "50% 40%",
     title: "Fill the schedule, follow up the patient, bill the visit.",
     lead: "Appointments, enquiries and invoices for clinics and specialty practices.",
@@ -45,7 +45,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "dental", tab: "Dental practices", sub: "Appointments, recall and billing",
-    on: "#0E8FA5", from: "#0E8FA5", to: "#06303A", glow: "rgba(150,230,240,.5)",
+    on: "#0E8FA5", from: "#F0FAFC", to: "#D2EEF3", glow: "rgba(14,143,165,.22)",
     photo: P("care-dental-2.jpg"), pos: "50% 40%",
     title: "Book the chair, follow up the recall, bill the visit.",
     lead: "Appointments, patient follow ups and billing for dental practices.",
@@ -63,7 +63,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "aesthetics", tab: "Aesthetics and wellness", sub: "Consultations, treatments and return visits",
-    on: "#2F8A7F", from: "#2F8A7F", to: "#0C2F2B", glow: "rgba(160,230,215,.5)",
+    on: "#2F8A7F", from: "#F1FAF8", to: "#D5EEE9", glow: "rgba(47,138,127,.22)",
     photo: P("care-aesthetics.jpg"), pos: "50% 35%",
     title: "Convert the consultation, plan the treatments, bring patients back.",
     lead: "Enquiries, appointments and return visits for aesthetics and wellness practices.",
@@ -82,7 +82,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "hospitals", tab: "Hospitals, networks and multi-location groups", sub: "Referrals, schedules and locations",
-    on: "#31465A", from: "#3A546C", to: "#0C1B2A", glow: "rgba(160,190,220,.5)",
+    on: "#31465A", from: "#F3F6F9", to: "#DCE4EC", glow: "rgba(49,70,90,.18)",
     photo: P("care-hospitals-2.jpg"), pos: "50% 40%",
     title: "Route the referral, schedule the provider, run many locations.",
     lead: "Referrals, schedules and patient follow ups across departments and locations.",
@@ -99,7 +99,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "diagnostics", tab: "Diagnostic centres", sub: "Referrals, tests and repeat visits",
-    on: "#5B4BD5", from: "#5B4BD5", to: "#1A1450", glow: "rgba(200,190,250,.5)",
+    on: "#5B4BD5", from: "#F5F3FD", to: "#E0DBF7", glow: "rgba(91,75,213,.2)",
     photo: P("care-diagnostics-2.jpg"), pos: "50% 40%",
     title: "Track the referral, book the test, remind for the repeat.",
     lead: "Referrals, test bookings and patient follow ups for diagnostic centres.",

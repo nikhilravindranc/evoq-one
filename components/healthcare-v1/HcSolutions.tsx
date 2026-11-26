@@ -1,22 +1,22 @@
 "use client";
 
 import { useState, type KeyboardEvent } from "react";
-import { C, PANELS } from "./hcData";
+import { C, PANELS, type Panel } from "./hcData";
 import { Stage, stageCss } from "./HcStage";
 import { ProductChip, rowCss } from "./HcUi";
 
 /* Healthcare solutions (docs/healthcare-fix-plan.md): the five care settings are side tabs, as on the Construction page. The panel opens with a
    staged scene, then the lead and audiences, then the solutions as numbered rows. */
 
-export function HcSolutions() {
+export function HcSolutions({ panels = PANELS, eyebrow = "Solutions", heading = "Solutions shaped by your care setting.", sub = "Choose the setting closest to yours." }: { panels?: Panel[]; eyebrow?: string; heading?: string; sub?: string }) {
   const [tab, setTab] = useState(0);
-  const P = PANELS[tab];
+  const P = panels[tab];
 
   const onKey = (e: KeyboardEvent) => {
     const d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
     if (!d) return;
     e.preventDefault();
-    const n = (tab + d + PANELS.length) % PANELS.length;
+    const n = (tab + d + panels.length) % panels.length;
     setTab(n);
     (e.currentTarget.querySelectorAll("button")[n] as HTMLElement | undefined)?.focus();
   };
@@ -26,14 +26,14 @@ export function HcSolutions() {
       <style>{stageCss + rowCss + css}</style>
       <div className="hc-wrap">
         <div style={{ maxWidth: 900 }} data-rv="0">
-          <p style={{ margin: "0 0 14px", fontSize: 13, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: C.CYAN }}>Solutions</p>
-          <h2 style={{ margin: 0, letterSpacing: "-.02em", fontWeight: 800, color: C.NAVY }}>Solutions shaped by your care setting.</h2>
-          <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.7, color: C.SOFT, fontWeight: 600 }}>Choose the setting closest to yours.</p>
+          <p style={{ margin: "0 0 14px", fontSize: 13, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: C.CYAN }}>{eyebrow}</p>
+          <h2 style={{ margin: 0, letterSpacing: "-.02em", fontWeight: 800, color: C.NAVY }}>{heading}</h2>
+          <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.7, color: C.SOFT, fontWeight: 600 }}>{sub}</p>
         </div>
 
         <div className="ht-layout">
           <div className="ht-side" role="tablist" aria-label="Care setting" aria-orientation="vertical" onKeyDown={onKey}>
-            {PANELS.map((x, n) => {
+            {panels.map((x, n) => {
               const sel = n === tab;
               return (
                 <button key={x.key} type="button" role="tab" id={`ht-tab-${x.key}`} aria-selected={sel} aria-controls="ht-panel" tabIndex={sel ? 0 : -1} className={`ht-tab${sel ? " on" : ""}`} style={{ ["--ac" as string]: x.on }} onClick={() => setTab(n)}>

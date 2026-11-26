@@ -16,7 +16,7 @@ const ICONS: Record<string, (s: string) => React.ReactNode> = {
 export function HcConnected() {
   return (
     <section id="connected" className="scroll-mt-24" style={{ background: `linear-gradient(180deg, #fff, ${C.TINT} 40%, #fff)`, padding: "96px 0 104px" }}>
-      <style>{css}</style>
+      <style>{connectedCss}</style>
       <div className="hc-wrap">
         <div style={{ maxWidth: 820 }} data-rv="0">
           <p style={{ margin: "0 0 14px", fontSize: 13, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: C.CYAN }}>Connected</p>
@@ -24,20 +24,7 @@ export function HcConnected() {
           <p style={{ margin: "16px 0 0", fontSize: 16, lineHeight: 1.7, color: C.SOFT }}>Privacy rules, health-data standards and digital-health frameworks vary by country and deployment. Confirm the requirements that apply to your organization with the EVOQ team.</p>
         </div>
 
-        <div className="hn-cards" data-rv="1">
-          {STANDARDS.map((c) => (
-            <div key={c.key} className="hn-card" style={{ borderColor: c.border }}>
-              <div className="hn-top">
-                <span className="hn-tile" style={{ background: c.tile }}>{ICONS[c.key](c.ink)}</span>
-                <div>
-                  <h3>{c.title}</h3>
-                  <div className="hn-tags">{c.tags.map((t) => <span key={t} style={{ background: c.tile, color: c.ink }}>{t}</span>)}</div>
-                </div>
-              </div>
-              <p>{c.desc}</p>
-            </div>
-          ))}
-        </div>
+        <StandardCards />
 
         <div className="hn-int" data-rv="2">
           <div className="hn-int-copy">
@@ -59,7 +46,7 @@ export function HcConnected() {
   );
 }
 
-const css = `
+export const connectedCss = `
   .hn-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:44px}
   .hn-card{background:#fff;border:1px solid;border-radius:18px;padding:26px;box-shadow:0 24px 56px -38px rgba(16,42,67,.35)}
   .hn-top{display:flex;gap:16px;align-items:flex-start}
@@ -78,3 +65,22 @@ const css = `
   .hn-lg{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
   @media (max-width:1000px){.hn-cards{grid-template-columns:1fr}.hn-int{grid-template-columns:1fr;gap:28px;padding:28px 24px}}
 `;
+
+export function StandardCards() {
+  return (
+        <div className="hn-cards" data-rv="1">
+          {STANDARDS.map((c) => (
+            <div key={c.key} className="hn-card" style={{ borderColor: c.border }}>
+              <div className="hn-top">
+                <span className="hn-tile" style={{ background: c.tile }}>{ICONS[c.key](c.ink)}</span>
+                <div>
+                  <h3>{c.title}</h3>
+                  <div className="hn-tags">{c.tags.map((t) => <span key={t} style={{ background: c.tile, color: c.ink }}>{t}</span>)}</div>
+                </div>
+              </div>
+              <p>{c.desc}</p>
+            </div>
+          ))}
+        </div>
+  );
+}
