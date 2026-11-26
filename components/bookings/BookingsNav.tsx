@@ -9,7 +9,7 @@ import { DEEP, I, LINE, MUTED, SAGE } from "./theme";
    shows that product's mark with Overview, Features and Pricing, and a switcher on the right to move between the
    Bookings pages. Booking types without a page yet are shown as "Soon". The dark variant sits on the Spaces header. */
 
-export type BookingsProduct = "overview" | "spaces" | "appointments";
+export type BookingsProduct = "overview" | "spaces" | "appointments" | "facilities";
 export type BookingsPage = "home" | "features" | "pricing";
 
 const BASE = "/products/bookings";
@@ -18,7 +18,7 @@ const FAMILY: { key: string; name: string; desc: string; href?: string }[] = [
   { key: "spaces", name: "Spaces", desc: "Space and room reservations for offices, venues and communities.", href: `${BASE}/spaces` },
   { key: "appointments", name: "Appointments", desc: "Service-based scheduling across providers and locations.", href: `${BASE}/appointments` },
   { key: "stays", name: "Stays", desc: "Hotel rooms, resort stays and villas." },
-  { key: "facilities", name: "Facilities", desc: "Clubs, courts, studios and event venues." },
+  { key: "facilities", name: "Facilities", desc: "Clubs, courts, studios and event venues.", href: `${BASE}/facilities` },
 ];
 
 const SpacesMark = () => (
@@ -31,11 +31,17 @@ const ApptMark = () => (
     <rect x="5" y="7" width="18" height="16" rx="3" /><path d="M10 4.5v4M18 4.5v4" /><circle cx="14" cy="15.5" r="4" /><path d="M14 13.8v1.9l1.3.9" />
   </svg>
 );
+const FacMark = () => (
+  <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <rect x="3" y="6" width="22" height="16" rx="2" /><path d="M3 10h22M9 6v4M19 6v4M7 15h3M7 19h8M13 15h2M13 19h2" />
+  </svg>
+);
 
 const PRODUCTS = {
   overview: { name: "EVOQ Bookings", base: BASE, tone: SAGE, mark: null },
   spaces: { name: "Spaces", base: `${BASE}/spaces`, tone: "#B4583A", mark: <SpacesMark /> },
   appointments: { name: "Appointments", base: `${BASE}/appointments`, tone: "#4E6F58", mark: <ApptMark /> },
+  facilities: { name: "Facilities", base: `${BASE}/facilities`, tone: "#4A5E73", mark: <FacMark /> },
 } as const;
 
 function Switcher({ current }: { current: BookingsProduct }) {
@@ -90,7 +96,7 @@ export function BookingsNav({ product, page = "home", tone = "light" }: { produc
           { key: "spaces", name: "Spaces", href: `${BASE}/spaces` },
           { key: "appointments", name: "Appointments", href: `${BASE}/appointments` },
           { key: "stays", name: "Stays" },
-          { key: "facilities", name: "Facilities" },
+          { key: "facilities", name: "Facilities", href: `${BASE}/facilities` },
         ]
       : [
           { key: "home", name: "Overview", href: p.base, on: page === "home" },
