@@ -1,7 +1,4 @@
 import Image from "next/image";
-import { Caveat } from "next/font/google";
-
-const script = Caveat({ subsets: ["latin"], weight: ["600"] });
 
 type IP = { size?: number; stroke?: string };
 const I = ({ size = 20, stroke = "#2064B6", children }: IP & { children: React.ReactNode }) => (

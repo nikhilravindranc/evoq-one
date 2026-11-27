@@ -8,15 +8,14 @@ import { HcCrmHero } from "./HcCrmHero";
 import { HcCrmSlides } from "./HcCrmSlides";
 import { HcCrmOrganizations } from "./HcCrmOrganizations";
 import { HcCrmConnected } from "./HcCrmConnected";
-import { HcCrmAI } from "./HcCrmAI";
 import { HcCrmCTA } from "./HcCrmCTA";
 
 /* Patient Relationships, version 1 (docs/healthcare-patient-relationships-plan.md): eight sections, normal scroll. Hero, then one slider with the journey,
-   the shared context and the follow ups, care settings as one row of cards, connected (products and standards), AI, closing. */
+   the shared context and the follow ups, care settings as one row of cards, connected (products and standards), closing. */
 
 export function PatientRelationshipsV1Page() {
   return (
-    <div id="expert" className="hs-root" style={{ minHeight: "100vh", background: "var(--white)", fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
+    <div className="hs-root" style={{ minHeight: "100vh", background: "var(--white)", fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
       <HsMotion />
       <EnquiryModal eyebrow="EVOQ CRM for healthcare" segments={["Clinics and practices", "Dental", "Aesthetics and wellness", "Hospitals", "Diagnostics", "Multi-location groups", "Other healthcare"]} segmentLabel="Type of organization" placeholder="Tell us how you manage patient enquiries today..." accent="#31465A" accentSoft="#2064B6" />
       <style>{`
@@ -32,9 +31,8 @@ export function PatientRelationshipsV1Page() {
       <HcCrmSlides />
       <HcCrmOrganizations />
       <HcCrmConnected />
-      <HcCrmAI />
       <HcCrmCTA />
-      <Footer background="#18B8D1" />
+      <Footer background="#102A43" />
     </div>
   );
 }

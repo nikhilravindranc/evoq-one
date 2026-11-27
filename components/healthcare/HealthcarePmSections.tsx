@@ -501,39 +501,6 @@ const PRACTICES = [
   { icon: "building", title: "Specialty practices", desc: "Adapt practice operations around the services, providers, schedules, and patient journeys specific to the specialty.", tile: "bg-[#EEEFFA]", stroke: "#5B5FC7", photo: "specialty" },
 ] as const;
 
-const TILE_POS: Record<string, string> = {
-  clinics: "30% 24%",
-  dental: "50% 45%",
-  aesthetics: "50% 55%",
-  derm: "50% 45%",
-  physio: "50% 40%",
-  wellness: "50% 60%",
-  specialty: "50% 22%",
-};
-
-type Cell = { kind: "tile"; photo: string; label: string } | { kind: "blank"; tone: string } | { kind: "word"; text: string };
-
-const T = (photo: string, label: string): Cell => ({ kind: "tile", photo, label });
-const B = (tone: string): Cell => ({ kind: "blank", tone });
-const W = (text: string): Cell => ({ kind: "word", text });
-
-const MOSAIC: { shift: string; cells: Cell[] }[] = [
-  { shift: "", cells: [B("bg-white/45"), T("clinics", "Medical clinics"), W("Different"), T("dental", "Dental practices"), W("practices."), T("aesthetics", "Medical aesthetics"), B("bg-white/45")] },
-  { shift: "md:translate-x-[-90px]", cells: [T("derm", "Dermatology"), W("A"), T("physio", "Physiotherapy"), W("consistent"), B("bg-[#FFF3DF]/80"), W("way"), T("wellness", "Wellness")] },
-  { shift: "md:translate-x-[60px]", cells: [B("bg-[#DCDDF5]/80"), W("to care."), T("specialty", "Specialty practices"), B("bg-white/45")] },
-];
-
-const LABEL = "absolute bottom-2.5 left-2.5 rounded-full bg-white px-3 py-1.5 text-[11.5px] font-semibold text-[#26384B] shadow-[0_8px_18px_-10px_rgba(38,56,75,0.5)]";
-
-function Tile({ photo, label, className = "" }: { photo: string; label: string; className?: string }) {
-  return (
-    <div className={`relative h-[132px] w-[214px] shrink-0 overflow-hidden rounded-[22px] ring-[4px] ring-white/80 ${className}`}>
-      <Image src={`/healthcare/stock/pm-tile-${photo}.jpg`} alt={label} fill sizes="214px" className="object-cover" style={{ objectPosition: TILE_POS[photo] }} />
-      <span className={LABEL}>{label}</span>
-    </div>
-  );
-}
-
 export function HealthcarePmPractices() {
   return (
     <section className="bg-white">
@@ -584,40 +551,6 @@ export function HealthcarePmPractices() {
                   </span>
                 </span>
               </a>
-            </div>
-
-            {/* people mosaic */}
-            <div className="relative mt-14 hidden flex-col gap-5 md:flex">
-              {MOSAIC.map((row, ri) => (
-                <div key={ri} className="flex justify-center">
-                  <div className={`flex shrink-0 items-center gap-5 ${row.shift}`}>
-                    {row.cells.map((c, ci) =>
-                      c.kind === "tile" ? (
-                        <Tile key={ci} photo={c.photo} label={c.label} />
-                      ) : c.kind === "blank" ? (
-                        <div key={ci} className={`h-[132px] w-[214px] shrink-0 rounded-[22px] ${c.tone}`} />
-                      ) : (
-                        <span key={ci} className="whitespace-nowrap font-[var(--font-display)] text-[44px] font-extrabold leading-none tracking-[-0.035em] text-[#26384B] lg:text-[52px]">
-                          {c.text}
-                        </span>
-                      ),
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="relative mt-12 md:hidden">
-              <p className="font-[var(--font-display)] text-[34px] font-extrabold leading-[1.05] tracking-[-0.03em] text-[#26384B]">
-                Different practices. A consistent way to care.
-              </p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                {PRACTICES.map((p) => (
-                  <div key={p.photo} className="relative h-[130px] overflow-hidden rounded-[18px] ring-[3px] ring-white/80">
-                    <Image src={`/healthcare/stock/pm-tile-${p.photo}.jpg`} alt={p.title} fill sizes="200px" className="object-cover" style={{ objectPosition: TILE_POS[p.photo] }} />
-                    <span className="absolute bottom-2 left-2 rounded-full bg-white px-2.5 py-1 text-[10.5px] font-semibold text-[#26384B]">{p.title}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>

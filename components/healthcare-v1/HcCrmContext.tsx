@@ -1,7 +1,4 @@
 import Image from "next/image";
-import { Caveat } from "next/font/google";
-
-const script = Caveat({ subsets: ["latin"], weight: ["600"] });
 
 const sv = {
   width: 22,
@@ -162,24 +159,6 @@ function Donut() {
   );
 }
 
-function Script({ lines, className = "" }: { lines: string[]; className?: string }) {
-  return (
-    <div className={`pointer-events-none -rotate-[10deg] ${className}`}>
-      <p className={`${script.className} text-[30px] leading-[1.02] text-[#18B8D1]`}>
-        {lines.map((l, i) => (
-          <span key={l} className="block" style={{ marginLeft: i * 10 }}>
-            {l}
-          </span>
-        ))}
-      </p>
-      <svg width="130" height="12" viewBox="0 0 110 14" fill="none" className="mt-1">
-        <path d="M2 11C30 6 70 3 108 2" stroke="#18B8D1" strokeWidth="2.5" strokeLinecap="round" />
-      </svg>
-    </div>
-  );
-}
-
-
 const EYEBROW = "text-[12px] font-bold uppercase tracking-[0.28em] text-[#18A0B8]";
 const H2 =
   "mt-4 font-[var(--font-display)] text-[38px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#102A43]";
@@ -276,105 +255,6 @@ export function HcCrmSharedContext() {
               ))}
             </ul>
           </div>
-          </div>
-        </div>
-      </div>
-    </Frame>
-  );
-}
-
-/* ---------- enquiry to relationship ---------- */
-
-export function HealthcareCrmEnquiryFlow() {
-  return (
-    <Frame>
-      <div className={GRID}>
-        <div className="relative z-10">
-          <p className={EYEBROW}>Track. Follow up. Build relationships.</p>
-          <h2 className={`${H2} max-w-[520px]`}>From enquiry to ongoing relationship.</h2>
-          <div className="mt-6 max-w-[520px] text-[15.5px] leading-[1.6] text-[#31465A]/75">
-            <p>
-              A new enquiry should not disappear after the first conversation. EVOQ Healthcare CRM gives your team
-              visibility into what happens after every interaction.
-            </p>
-            <p className="mt-4">
-              Track where enquiries come from, what patients are interested in, who is responsible for the
-              relationship, what follow up is due, and how enquiries progress toward appointments and ongoing
-              relationships.
-            </p>
-            <p className="mt-4">
-              This creates a clearer view of the patient journey without turning your CRM into a clinical records
-              system.
-            </p>
-          </div>
-        </div>
-
-        <div className="relative min-w-0">
-          {/* enquiries dashboard */}
-          <div className="rounded-[18px] bg-white p-5 shadow-[0_24px_54px_-30px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/5">
-            <div className="flex items-center justify-between">
-              <p className="font-[var(--font-display)] text-[16px] font-bold text-[#102A43]">Enquiries</p>
-              <span className="inline-flex items-center gap-2 rounded-lg border border-[#31465A]/12 px-3 py-1.5 text-[11.5px] text-[#31465A]/80">
-                Last 30 days <Chevron />
-              </span>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {STATS.map((s) => (
-                <div key={s.label} className={`relative rounded-xl p-3 ${s.tile}`}>
-                  <span className={`absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full ${s.chip}`}>{s.icon}</span>
-                  <p className="font-[var(--font-display)] text-[22px] font-bold leading-none text-[#102A43]">{s.value}</p>
-                  <p className="mt-1.5 text-[11px] text-[#2064B6]">{s.label}</p>
-                  <p className="mt-0.5 text-[10.5px] font-medium text-[#3D9A92]">↑ {s.delta}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-5 overflow-x-auto">
-              <div className="min-w-[500px]">
-                <div className={`grid ${TABLE_COLS} gap-2 rounded-lg bg-[#F4F7FA] px-3 py-2.5 text-[11px] text-[#31465A]/70`}>
-                  <span>Name</span>
-                  <span>Source</span>
-                  <span>Interest</span>
-                  <span>Status</span>
-                  <span>Next follow up</span>
-                </div>
-                {ENQUIRIES.map((e) => (
-                  <div key={e.name} className={`grid ${TABLE_COLS} items-center gap-2 px-3 py-[9px] text-[11.5px] text-[#102A43]`}>
-                    <span className="flex items-center gap-2 font-medium">
-                      <Image src={`/healthcare/avatars/${e.img}.jpg`} alt="" width={26} height={26} className="h-[26px] w-[26px] rounded-full object-cover" />
-                      {e.name}
-                    </span>
-                    <span>{e.source}</span>
-                    <span>{e.interest}</span>
-                    <span>
-                      <span className={`rounded-md px-2.5 py-1 text-[10.5px] font-medium ${e.pill}`}>{e.status}</span>
-                    </span>
-                    <span>{e.next}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* sources + script */}
-          <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
-            <div className="w-full max-w-[300px] rounded-[18px] bg-white p-5 shadow-[0_24px_54px_-30px_rgba(16,42,67,0.3)] ring-1 ring-[#31465A]/5">
-              <p className="font-[var(--font-display)] text-[14px] font-bold text-[#102A43]">Enquiry sources</p>
-              <div className="mt-3 flex items-center gap-4">
-                <Donut />
-                <ul className="flex flex-1 flex-col gap-2 text-[11.5px] text-[#31465A]/80">
-                  {SOURCES.map((s) => (
-                    <li key={s.label} className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full" style={{ background: s.color }} />
-                      <span className="flex-1">{s.label}</span>
-                      <span className="font-medium text-[#102A43]">{s.pct}%</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <Script lines={["More Enquiries", "More Appointments", "Stronger Relationships"]} className="hidden pr-2 xl:block" />
           </div>
         </div>
       </div>

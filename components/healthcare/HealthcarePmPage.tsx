@@ -7,11 +7,9 @@ import {
   HealthcarePmWorkflow,
   HealthcarePmFeatures,
   HealthcarePmPractices,
-  HealthcarePmGrow,
   HealthcarePmMarket,
   HealthcarePmCTA,
 } from "./HealthcarePmSections";
-import { HealthcarePmAI } from "./HealthcareAISections";
 
 export function HealthcarePmPage() {
   return (
@@ -25,12 +23,10 @@ export function HealthcarePmPage() {
       </HeroShell>
       <HealthcarePmWorkflow />
       <HealthcarePmFeatures />
-      <HealthcarePmAI />
       <HealthcarePmPractices />
-      <HealthcarePmGrow />
       <HealthcarePmMarket />
       <HealthcarePmCTA />
-      <Footer background="#7ACFC5" darkText />
+      <Footer background="#102A43" />
     </div>
   );
 }

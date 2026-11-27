@@ -1,7 +1,4 @@
 import Image from "next/image";
-import { Caveat } from "next/font/google";
-
-const script = Caveat({ subsets: ["latin"], weight: ["600"] });
 
 const sv = {
   width: 28,
