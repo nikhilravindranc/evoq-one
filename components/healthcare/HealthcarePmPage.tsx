@@ -26,7 +26,7 @@ export function HealthcarePmPage() {
       <HealthcarePmPractices />
       <HealthcarePmMarket />
       <HealthcarePmCTA />
-      <Footer background="#102A43" />
+      <Footer background="#1F62B3" />
     </div>
   );
 }

@@ -437,7 +437,7 @@ export function HealthcarePePage() {
       <Chapters />
       <Ecosystem />
       <Cta />
-      <Footer background={TEAL} />
+      <Footer background="#1F62B3" />
     </div>
   );
 }

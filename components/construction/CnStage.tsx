@@ -139,16 +139,16 @@ export function Stage({ p, label }: { p: Panel; label: string }) {
 }
 
 export const stageCss = `
-  .cs-stage{position:relative;height:440px;border-radius:10px;overflow:hidden;box-shadow:0 40px 70px -46px rgba(41,20,10,.8)}
-  .cs-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:linear-gradient(120deg,#000,transparent 75%);mask-image:linear-gradient(120deg,#000,transparent 75%)}
-  .cs-photo{position:absolute;left:30px;top:30px;bottom:30px;width:46%;border-radius:6px 150px 6px 6px;background-size:cover;background-color:rgba(255,255,255,.18);box-shadow:0 30px 50px -28px rgba(0,0,0,.6)}
-  .cs-phone{position:absolute;right:54px;top:86px;width:252px;height:334px;border-radius:30px;background:#fff;padding:10px 14px 14px;box-shadow:0 0 0 7px rgba(255,255,255,.16),0 40px 70px -28px rgba(0,0,0,.7);display:flex;flex-direction:column;overflow:hidden}
+  .cs-stage{position:relative;height:440px;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(41,37,36,.07),0 40px 70px -48px rgba(41,37,36,.35)}
+  .cs-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(41,37,36,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(41,37,36,.06) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:linear-gradient(120deg,#000,transparent 75%);mask-image:linear-gradient(120deg,#000,transparent 75%)}
+  .cs-photo{position:absolute;left:30px;top:30px;bottom:30px;width:46%;border-radius:6px 150px 6px 6px;background-size:cover;background-color:rgba(41,37,36,.06);box-shadow:0 0 0 5px rgba(255,255,255,.75),0 30px 50px -28px rgba(41,37,36,.4)}
+  .cs-phone{position:absolute;right:54px;top:86px;width:252px;height:334px;border-radius:30px;background:#fff;padding:10px 14px 14px;box-shadow:0 0 0 1px ${L},0 0 0 7px rgba(255,255,255,.7),0 40px 70px -30px rgba(41,37,36,.45);display:flex;flex-direction:column;overflow:hidden}
   .cs-notch{width:64px;height:6px;border-radius:99px;background:${"#E8E2DA"};margin:2px auto 10px;flex:none}
   .cs-ph-head{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:800;color:${T};margin-bottom:6px;flex:none}
   .cs-ph-body{flex:1;min-height:0;overflow:hidden}
   .cs-ph-foot{flex:none;padding-top:10px}
   .cs-btn{display:block;text-align:center;color:#fff;font-size:12.5px;font-weight:700;padding:10px 0;border-radius:8px}
-  .cs-card{position:absolute;display:flex;align-items:center;gap:11px;background:#fff;border-radius:12px;padding:11px 16px 11px 12px;box-shadow:0 26px 48px -22px rgba(0,0,0,.6);max-width:250px}
+  .cs-card{position:absolute;display:flex;align-items:center;gap:11px;background:#fff;border-radius:12px;padding:11px 16px 11px 12px;box-shadow:0 0 0 1px ${L},0 26px 48px -24px rgba(41,37,36,.4);max-width:250px}
   .cs-card b{display:block;font-size:13px;font-weight:700;color:${T};line-height:1.3}
   .cs-card small{display:block;font-size:12px;color:${M};line-height:1.35;margin-top:1px}
   .cs-card.a{left:36%;bottom:46px}

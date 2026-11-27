@@ -18,7 +18,7 @@ export function HealthcareCrmFeaturesPage() {
       <HcCrmFeaturesIntegrations />
       <HcCrmFeaturesConfiguration />
       <HcCrmFeaturesCTA />
-      <Footer background="#102A43" />
+      <Footer background="#1F62B3" />
     </div>
   );
 }

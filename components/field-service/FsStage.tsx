@@ -46,7 +46,7 @@ const chipS = (c: string, bg: string): CSSProperties => ({ fontSize: 10.5, fontW
 
 const SCENES: Record<string, { from: string; to: string; glow: string; body: ReactNode }> = {
   field: {
-    from: "#1777F0", to: "#0B2A5C", glow: "rgba(147,197,253,.55)",
+    from: "#EEF5FE", to: "#D3E4FB", glow: "rgba(23,119,240,.2)",
     body: (
       <>
         <Phone title="Work order WO-2041" foot={<span className="st-btn" style={{ background: C.BLUE }}>Get signature</span>}>
@@ -67,7 +67,7 @@ const SCENES: Record<string, { from: string; to: string; glow: string; body: Rea
     ),
   },
   facilities: {
-    from: "#0F3D75", to: "#06162E", glow: "rgba(96,165,250,.45)",
+    from: "#EDF2F9", to: "#D2DEEE", glow: "rgba(15,61,117,.18)",
     body: (
       <>
         <Phone title="Open site requests" foot={<span className="st-btn" style={{ background: C.NAVY }}>Book a room</span>}>
@@ -82,7 +82,7 @@ const SCENES: Record<string, { from: string; to: string; glow: string; body: Rea
     ),
   },
   maintenance: {
-    from: "#C2410C", to: "#431407", glow: "rgba(253,186,116,.5)",
+    from: "#FFF3EA", to: "#FBDDC6", glow: "rgba(194,65,12,.18)",
     body: (
       <>
         <Phone title="Service plans" foot={<span className="st-btn" style={{ background: C.BURNT }}>Raise work orders</span>}>
@@ -113,16 +113,16 @@ export function Stage({ area, photo, pos, label }: { area: string; photo: string
 }
 
 export const stageCss = `
-  .st-stage{position:relative;height:440px;border-radius:28px;overflow:hidden;box-shadow:0 40px 70px -46px rgba(6,22,46,.8)}
-  .st-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:linear-gradient(120deg,#000,transparent 75%);mask-image:linear-gradient(120deg,#000,transparent 75%)}
-  .st-photo{position:absolute;left:30px;top:30px;bottom:30px;width:46%;border-radius:22px 150px 22px 22px;background-size:cover;background-color:rgba(255,255,255,.18);box-shadow:0 30px 50px -28px rgba(0,0,0,.6)}
-  .st-phone{position:absolute;right:54px;top:86px;width:252px;height:334px;border-radius:34px;background:#fff;padding:10px 14px 14px;box-shadow:0 0 0 7px rgba(255,255,255,.16),0 40px 70px -28px rgba(0,0,0,.7);display:flex;flex-direction:column;overflow:hidden}
+  .st-stage{position:relative;height:440px;border-radius:28px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(23,32,51,.07),0 40px 70px -48px rgba(23,32,51,.35)}
+  .st-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(23,32,51,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(23,32,51,.06) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:linear-gradient(120deg,#000,transparent 75%);mask-image:linear-gradient(120deg,#000,transparent 75%)}
+  .st-photo{position:absolute;left:30px;top:30px;bottom:30px;width:46%;border-radius:22px 150px 22px 22px;background-size:cover;background-color:rgba(23,32,51,.06);box-shadow:0 0 0 5px rgba(255,255,255,.75),0 30px 50px -28px rgba(23,32,51,.4)}
+  .st-phone{position:absolute;right:54px;top:86px;width:252px;height:334px;border-radius:34px;background:#fff;padding:10px 14px 14px;box-shadow:0 0 0 1px ${L},0 0 0 7px rgba(255,255,255,.7),0 40px 70px -30px rgba(23,32,51,.45);display:flex;flex-direction:column;overflow:hidden}
   .st-notch{width:64px;height:6px;border-radius:99px;background:${L};margin:2px auto 10px;flex:none}
   .st-ph-head{font-family:var(--font-display),system-ui,sans-serif;font-size:15px;font-weight:800;color:${T};margin-bottom:6px;flex:none}
   .st-ph-body{flex:1;min-height:0;overflow:hidden}
   .st-ph-foot{flex:none;padding-top:10px}
   .st-btn{display:block;text-align:center;color:#fff;font-size:12.5px;font-weight:700;padding:10px 0;border-radius:12px}
-  .st-card{position:absolute;display:flex;align-items:center;gap:11px;background:#fff;border-radius:16px;padding:11px 16px 11px 12px;box-shadow:0 26px 48px -22px rgba(0,0,0,.6);max-width:250px}
+  .st-card{position:absolute;display:flex;align-items:center;gap:11px;background:#fff;border-radius:16px;padding:11px 16px 11px 12px;box-shadow:0 0 0 1px ${L},0 26px 48px -24px rgba(23,32,51,.4);max-width:250px}
   .st-card b{display:block;font-size:13px;font-weight:700;color:${T};line-height:1.3}
   .st-card small{display:block;font-size:12px;color:${M};line-height:1.35;margin-top:1px}
   .st-card.a{left:36%;bottom:46px}

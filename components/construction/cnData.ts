@@ -30,7 +30,7 @@ const U = (id: string, w = 1400) => `https://images.unsplash.com/photo-${id}?aut
 export const PANELS: Panel[] = [
   {
     key: "construction", tab: "Construction companies and contractors", sub: "Projects, sites and handover",
-    on: "#A2563B", from: "#B4533C", to: "#3F150C", glow: "rgba(247,196,160,.5)",
+    on: "#A2563B", from: "#FBF1EC", to: "#F2D9CE", glow: "rgba(180,83,60,.2)",
     photo: U("1778074762022-c33cc42f79ae"), pos: "50% 45%",
     title: "Coordinate the project, bill the milestones, hand over the site.",
     lead: "Tasks, client commitments, materials and invoices for contractors, from the tender to handover.",
@@ -51,7 +51,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "engineering", tab: "Engineering firms", sub: "Consultancies and contractors",
-    on: "#274B7A", from: "#274B7A", to: "#0B1B33", glow: "rgba(147,190,240,.5)",
+    on: "#274B7A", from: "#EEF3F9", to: "#D5E1F0", glow: "rgba(39,75,122,.2)",
     photo: U("1774600166588-1db444bda799"), pos: "50% 40%",
     title: "Deliver the project, follow up the client, develop the team.",
     lead: "Technical deliverables, client commitments and people records for consultancies and engineering contractors.",
@@ -70,7 +70,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "agencies", tab: "Real estate agencies and brokers", sub: "Enquiries, viewings and follow up",
-    on: "#2E5A47", from: "#2E5A47", to: "#0E241A", glow: "rgba(167,222,193,.5)",
+    on: "#2E5A47", from: "#EFF6F2", to: "#D5E8DD", glow: "rgba(46,90,71,.22)",
     photo: U("1758523671301-cf64a85d0d34"), pos: "50% 40%",
     title: "Follow up the enquiry, book the viewing, keep the buyer updated.",
     lead: "Enquiries, viewings and prospect communication for agencies and brokers.",
@@ -88,7 +88,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "developers", tab: "Developers and builders", sub: "Launches, buyers and handover",
-    on: "#7C2D1F", from: "#8E3424", to: "#2E0F09", glow: "rgba(240,170,150,.5)",
+    on: "#7C2D1F", from: "#FAF1EA", to: "#EFD8CC", glow: "rgba(124,45,31,.18)",
     photo: U("1597026405082-eda9beae7513"), pos: "50% 50%",
     title: "Launch the project, follow the buyer, invoice and hand over.",
     lead: "Buyer enquiries, site visits, unit options, invoices and handover for developers and builders.",
@@ -108,7 +108,7 @@ export const PANELS: Panel[] = [
   },
   {
     key: "operations", tab: "Property operations", sub: "Requests, upkeep and bookings",
-    on: "#1F6F6B", from: "#1F6F6B", to: "#0A2A28", glow: "rgba(150,222,214,.5)",
+    on: "#1F6F6B", from: "#EEF7F6", to: "#D2E9E6", glow: "rgba(31,111,107,.2)",
     photo: U("1722650362309-2f2fdffbfbf1"), pos: "50% 55%",
     title: "Assign the request, schedule the upkeep, open spaces for booking.",
     lead: "Occupier requests, maintenance, bookings and service charges for landlords and property managers.",

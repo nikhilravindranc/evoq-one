@@ -34,7 +34,7 @@ export function HealthcarePage() {
       <HcAI />
       <HcConnected />
       <HcCTA />
-      <Footer background="#18B8D1" />
+      <Footer background="#1F62B3" />
     </div>
   );
 }
