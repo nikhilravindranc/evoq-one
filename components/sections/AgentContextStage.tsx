@@ -15,8 +15,8 @@ export const W = 1200;
 export const H = 650;
 const EVI = { x: 445, y: 30, w: 310, h: 450 }; // the half body, fading out above the proposed step
 const CHAR = "/characters";
-const IMG = `${CHAR}/evi-new.webp`;
-const SKETCH = `${CHAR}/evi-new-sketch.webp`;
+const IMG = `${CHAR}/evi-bun.webp`;
+const SKETCH = `${CHAR}/evi-bun-sketch.webp`;
 
 export type Reveal = "pencil" | "focus" | "scan" | "focus-scan" | "mosaic" | "halftone" | "silhouette" | "layers";
 

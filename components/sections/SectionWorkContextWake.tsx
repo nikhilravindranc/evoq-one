@@ -17,7 +17,7 @@ const W = 1200;
 const H = 560;
 const EVI = { x: 423, y: 36, w: 354, h: 520 };
 const CHAR = "/characters";
-const EVI_IMG = `${CHAR}/evi-new.webp`;
+const EVI_IMG = `${CHAR}/evi-bun.webp`;
 
 type Ctx = {
   key: string; label: string; apps: (AppKey | "ctrl")[];

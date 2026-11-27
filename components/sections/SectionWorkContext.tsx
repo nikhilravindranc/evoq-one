@@ -62,7 +62,7 @@ export function SectionWorkContext() {
           <div className="wc2-flat-char">
             <span className="wc2-glow" style={{ opacity: 1 }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`${CHAR}/evi-new.webp`} alt="EVI" />
+            <img src={`${CHAR}/evi-bun.webp`} alt="EVI" />
             <span className="wc-state b3">{STATUS[3]}</span>
           </div>
           <div className="wc2-flat-grid">
