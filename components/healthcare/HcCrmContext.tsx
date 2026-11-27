@@ -199,7 +199,7 @@ export function HcCrmSharedContext() {
           </div>
 
           <a
-            href="/solutions/healthcare/patient-relationships/features-v1"
+            href="/solutions/healthcare/patient-relationships/features"
             className="mt-7 inline-flex items-center gap-3 rounded-full bg-[#2064B6] px-7 py-3.5 text-[15.5px] font-semibold text-white no-underline shadow-[0_14px_30px_-14px_rgba(32,100,182,0.6)] transition-all hover:-translate-y-px hover:bg-[#1A559C]"
           >
             Explore the features

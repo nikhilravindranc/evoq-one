@@ -9,12 +9,12 @@ import { CrmIntegrations } from "./CrmIntegrations";
 import { CrmConnected } from "./CrmConnected";
 import { CrmClose } from "./CrmClose";
 
-/* The CRM home page: hero, outcomes, features, EVI jobs, integrations, works with EVOQ and the closing demo section. */
+/* The CRM home page: hero, features, outcomes, EVI jobs, integrations, works with EVOQ and the closing demo section. */
 export function CrmHome() {
   return (
     <CrmShell hero={<CrmHero />}>
-      <CrmOutcomes />
       <CrmFeatures />
+      <CrmOutcomes />
       <CrmJobs />
       <CrmIntegrations />
       <CrmConnected />

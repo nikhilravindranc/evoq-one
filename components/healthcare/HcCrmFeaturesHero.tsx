@@ -108,7 +108,7 @@ export function HcCrmFeaturesHero() {
                   has happened and what needs attention next.
                 </p>
                 <a
-                  href="/solutions/healthcare/patient-relationships-v1#expert"
+                  href="/solutions/healthcare/patient-relationships#expert"
                   className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-[#0F766E] px-7 py-3.5 text-[15px] font-semibold text-white no-underline shadow-[0_12px_28px_-12px_rgba(15,118,110,0.6)] transition-all hover:-translate-y-px hover:bg-[#0B5F58]"
                 >
                   Talk to an expert
